@@ -1,0 +1,274 @@
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="3.5">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>9.0.21022</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{684C932A-6C75-46AC-A327-F3689D89EB42}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>WebsitePanel.Providers</RootNamespace>
+    <AssemblyName>WebsitePanel.Providers.Base</AssemblyName>
+    <SignAssembly>true</SignAssembly>
+    <AssemblyOriginatorKeyFile>WebsitePanel.snk</AssemblyOriginatorKeyFile>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+    <OldToolsVersion>2.0</OldToolsVersion>
+    <UpgradeBackupLocation>
+    </UpgradeBackupLocation>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>..\..\Build\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>none</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>..\..\Build\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.DirectoryServices" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Management" />
+    <Reference Include="System.Web.Services" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="..\VersionInfo.cs">
+      <Link>VersionInfo.cs</Link>
+    </Compile>
+    <Compile Include="Common\ErrorCodes.cs" />
+    <Compile Include="HostedSolution\BaseReport.cs" />
+    <Compile Include="HostedSolution\BaseStatistics.cs" />
+    <Compile Include="HostedSolution\BlackBerryErrorsCodes.cs" />
+    <Compile Include="HostedSolution\BlackBerryStatsItem.cs" />
+    <Compile Include="HostedSolution\BlackBerryUserDeleteState.cs" />
+    <Compile Include="HostedSolution\ExchangeMobileDevice.cs" />
+    <Compile Include="HostedSolution\IOCSEdgeServer.cs" />
+    <Compile Include="HostedSolution\CRMOrganizationStatistics.cs" />
+    <Compile Include="HostedSolution\CRMUserAccessMode.cs" />
+    <Compile Include="HostedSolution\ExchangeMailboxStatistics.cs" />
+    <Compile Include="HostedSolution\CRMBaseUnit.cs" />
+    <Compile Include="HostedSolution\CrmOrganizationRole.cs" />
+    <Compile Include="HostedSolution\CRMStatisticsReport.cs" />
+    <Compile Include="HostedSolution\CrmUser.cs" />
+    <Compile Include="HostedSolution\ExchangeStatisticsReport.cs" />
+    <Compile Include="HostedSolution\EnterpriseSolutionStatisticsReport.cs" />
+    <Compile Include="HostedSolution\IBlackBerry.cs" />
+    <Compile Include="HostedSolution\IOCSServer.cs" />
+    <Compile Include="HostedSolution\MobileDeviceStatus.cs" />
+    <Compile Include="HostedSolution\OCSConstants.cs" />
+    <Compile Include="HostedSolution\OCSErrorCodes.cs" />
+    <Compile Include="HostedSolution\OCSUser.cs" />
+    <Compile Include="HostedSolution\OrganizationStatisticsReport.cs" />
+    <Compile Include="HostedSolution\OrganizationStatisticsRepotItem.cs" />
+    <Compile Include="HostedSolution\PasswordPolicy.cs" />
+    <Compile Include="HostedSolution\SharePointStatistics.cs" />
+    <Compile Include="HostedSolution\SharePointStatisticsReport.cs" />
+    <Compile Include="ResultObjects\BlackBerryUserStatsResult.cs" />
+    <Compile Include="ResultObjects\BoolResult.cs" />
+    <Compile Include="Common\Constants.cs" />
+    <Compile Include="Common\NtfsPermission.cs" />
+    <Compile Include="ResultObjects\BytesResult.cs" />
+    <Compile Include="ResultObjects\CRMBaseUnitResult.cs" />
+    <Compile Include="ResultObjects\CRMBusinessUnitsResult.cs" />
+    <Compile Include="ResultObjects\CrmOrganizationRolesResult.cs" />
+    <Compile Include="ResultObjects\CrmUserResult.cs" />
+    <Compile Include="ResultObjects\CurrencyCollectionResultObject.cs" />
+    <Compile Include="ResultObjects\ExchangeDistributionListResult.cs" />
+    <Compile Include="ResultObjects\IntResult.cs" />
+    <Compile Include="ResultObjects\JobsValue.cs" />
+    <Compile Include="HostedSolution\OCSUsersPaged.cs" />
+    <Compile Include="ResultObjects\OCSUserResult.cs" />
+    <Compile Include="ResultObjects\OCSUsersPagedResult.cs" />
+    <Compile Include="ResultObjects\OrganizationResult.cs" />
+    <Compile Include="Common\RemoteServerSettings.cs" />
+    <Compile Include="Common\DailyStatistics.cs" />
+    <Compile Include="Common\HostingServiceProviderBase.cs" />
+    <Compile Include="Common\IHostingServiceProvider.cs" />
+    <Compile Include="Common\PersistentAttribute.cs" />
+    <Compile Include="ResultObjects\OrganizationUsersPagedResult.cs" />
+    <Compile Include="ResultObjects\PasswordPolicyResult.cs" />
+    <Compile Include="ResultObjects\ResultObject.cs" />
+    <Compile Include="Common\ServerBinding.cs" />
+    <Compile Include="Common\ServerState.cs" />
+    <Compile Include="Common\ServiceProviderItemType.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Common\ServiceProviderSettings.cs" />
+    <Compile Include="Common\ServiceProviderItem.cs" />
+    <Compile Include="Common\ServiceProviderItemBandwidth.cs" />
+    <Compile Include="Common\ServiceProviderItemDiskSpace.cs" />
+    <Compile Include="Common\ServiceProviderSettingsSoapHeader.cs" />
+    <Compile Include="Common\HostingServiceProviderWebService.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Common\SettingPair.cs" />
+    <Compile Include="Common\SoapServiceProviderItem.cs" />
+    <Compile Include="Common\WindowsServerEntities.cs" />
+    <Compile Include="DNS\DnsRecord.cs" />
+    <Compile Include="DNS\DnsRecordType.cs" />
+    <Compile Include="DNS\DnsSOARecord.cs" />
+    <Compile Include="DNS\DnsZone.cs" />
+    <Compile Include="DNS\IDnsServer.cs" />
+    <Compile Include="DNS\SecondaryDnsZone.cs" />
+    <Compile Include="FTP\FtpAccount.cs" />
+    <Compile Include="FTP\FtpSite.cs" />
+    <Compile Include="FTP\IFtpServer.cs" />
+    <Compile Include="HostedSolution\ActiveDirectoryUtils.cs" />
+    <Compile Include="HostedSolution\ADAttributes.cs" />
+    <Compile Include="HostedSolution\CrmErrorCodes.cs" />
+    <Compile Include="HostedSolution\CrmOrganizationState.cs" />
+    <Compile Include="HostedSolution\Currency.cs" />
+    <Compile Include="HostedSolution\Errors.cs" />
+    <Compile Include="HostedSolution\ExchangeAccount.cs" />
+    <Compile Include="HostedSolution\ExchangeAccountsPaged.cs" />
+    <Compile Include="HostedSolution\ExchangeAccountType.cs" />
+    <Compile Include="HostedSolution\ExchangeActiveSyncPolicy.cs" />
+    <Compile Include="HostedSolution\ExchangeContact.cs" />
+    <Compile Include="HostedSolution\ExchangeDistributionList.cs" />
+    <Compile Include="HostedSolution\ExchangeDomain.cs" />
+    <Compile Include="HostedSolution\ExchangeDomainName.cs" />
+    <Compile Include="HostedSolution\ExchangeEmailAddress.cs" />
+    <Compile Include="HostedSolution\ExchangeItemStatistics.cs" />
+    <Compile Include="HostedSolution\ExchangeMailbox.cs" />
+    <Compile Include="HostedSolution\ExchangeOrganizationsPaged.cs" />
+    <Compile Include="HostedSolution\ExchangeOrganizationStatistics.cs" />
+    <Compile Include="HostedSolution\ExchangePublicFolder.cs" />
+    <Compile Include="HostedSolution\ICRM.cs" />
+    <Compile Include="HostedSolution\IExchangeServer.cs" />
+    <Compile Include="HostedSolution\IOrganization.cs" />
+    <Compile Include="HostedSolution\MailboxManagerActions.cs" />
+    <Compile Include="HostedSolution\Organization.cs" />
+    <Compile Include="HostedSolution\OrganizationDomain.cs" />
+    <Compile Include="HostedSolution\OrganizationDomainName.cs" />
+    <Compile Include="HostedSolution\OrganizationPaged.cs" />
+    <Compile Include="HostedSolution\OrganizationStatistics.cs" />
+    <Compile Include="HostedSolution\OrganizationUser.cs" />
+    <Compile Include="HostedSolution\OrganizationUsersPaged.cs" />
+    <Compile Include="Mail\IMailServer.cs" />
+    <Compile Include="Mail\MailAccount.cs" />
+    <Compile Include="Mail\MailDomain.cs" />
+    <Compile Include="Mail\MailEnums.cs" />
+    <Compile Include="Mail\MailAlias.cs" />
+    <Compile Include="Mail\MailGroup.cs" />
+    <Compile Include="Mail\MailList.cs" />
+    <Compile Include="Database\IDatabaseServer.cs" />
+    <Compile Include="Database\SqlDatabase.cs" />
+    <Compile Include="Database\SqlUser.cs" />
+    <Compile Include="OS\FileHash.cs" />
+    <Compile Include="OS\FileSyncAction.cs" />
+    <Compile Include="OS\FolderGraph.cs" />
+    <Compile Include="OS\SyncActionType.cs" />
+    <Compile Include="OS\SystemDSN.cs" />
+    <Compile Include="OS\SystemFile.cs" />
+    <Compile Include="OS\HomeFolder.cs" />
+    <Compile Include="OS\IOperatingSystem.cs" />
+    <Compile Include="OS\SystemGroup.cs" />
+    <Compile Include="OS\SystemUser.cs" />
+    <Compile Include="OS\UserPermission.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ResultObjects\StringCollectionResultObject.cs" />
+    <Compile Include="ResultObjects\UserResult.cs" />
+    <Compile Include="ResultObjects\ValueResultObject.cs" />
+    <Compile Include="ResultObjects\VirtualMachineResult.cs" />
+    <Compile Include="ResultObjects\WebAppGallery.cs" />
+    <Compile Include="SharePoint\IHostedSharePointServer.cs" />
+    <Compile Include="SharePoint\ISharePointServer.cs" />
+    <Compile Include="SharePoint\SharePointSite.cs" />
+    <Compile Include="SharePoint\SharePointSiteCollection.cs" />
+    <Compile Include="SharePoint\SharePointSiteCollectionListPaged.cs" />
+    <Compile Include="SharePoint\SharePointSiteDiskSpace.cs" />
+    <Compile Include="Statistics\IStatisticsServer.cs" />
+    <Compile Include="Statistics\StatsServer.cs" />
+    <Compile Include="Statistics\StatsSite.cs" />
+    <Compile Include="Statistics\StatsUser.cs" />
+    <Compile Include="Virtualization\ChangeJobStateReturnCode.cs" />
+    <Compile Include="Virtualization\ConcreteJob.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Virtualization\ConcreteJobRequestedState.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Virtualization\ConcreteJobState.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Virtualization\IVirtualizationServer.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Virtualization\JobResult.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Virtualization\KvpExchangeDataItem.cs" />
+    <Compile Include="Virtualization\LibraryItem.cs" />
+    <Compile Include="Virtualization\LogicalDisk.cs" />
+    <Compile Include="Virtualization\MountedDiskInfo.cs" />
+    <Compile Include="Virtualization\OperationalStatus.cs" />
+    <Compile Include="Virtualization\ReturnCode.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Virtualization\SummaryInformationRequest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Virtualization\ThumbnailSize.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Virtualization\VirtualHardDiskInfo.cs" />
+    <Compile Include="Virtualization\VirtualHardDiskType.cs" />
+    <Compile Include="Virtualization\VirtualMachine.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Virtualization\VirtualMachineNetworkAdapter.cs" />
+    <Compile Include="Virtualization\VirtualMachineProvisioningStatus.cs" />
+    <Compile Include="Virtualization\VirtualMachineRequestedState.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Virtualization\VirtualMachineSnapshot.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Virtualization\VirtualMachineState.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Virtualization\VirtualSwitch.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="WebAppGallery\DeploymentParameter.cs" />
+    <Compile Include="WebAppGallery\GalleryApplication.cs" />
+    <Compile Include="WebAppGallery\GalleryCategory.cs" />
+    <Compile Include="WebAppGallery\GalleryErrorCodes.cs" />
+    <Compile Include="Web\HttpError.cs" />
+    <Compile Include="Web\HttpHeader.cs" />
+    <Compile Include="Web\IWebServer.cs" />
+    <Compile Include="Web\MimeMap.cs" />
+    <Compile Include="Web\SharedSSLFolder.cs" />
+    <Compile Include="Web\WebFolder.cs" />
+    <Compile Include="Web\WebGroup.cs" />
+    <Compile Include="Web\WebSite.cs" />
+    <Compile Include="Web\WebUser.cs" />
+    <Compile Include="Web\WebVirtualDirectory.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="WebsitePanel.snk" />
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

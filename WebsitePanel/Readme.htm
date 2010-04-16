@@ -1,0 +1,168 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" >
+<head>
+    <title>WebsitePanel - Readme</title>
+    <style type="text/css">
+        .style1 {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+ 
+    <h1>
+        WebsitePanel - Readme</h1>
+    <p>
+        WebsitePanel is a hosting control panel for Windows servers.</p>
+ 
+    <h2>
+        License</h2>
+    <p>
+        WebsitePanel is released under BSD license. Please see LICENSE.txt file in the 
+        root folder of this project.</p>
+ 
+    <h2>
+        Project Structure</h2>
+    <p>
+        The project has the following folders structure:</p>
+    <ul>
+        <li><strong>\Trunk</strong> - project version currently in development<ul>
+            <li><strong>\Sources</strong> - project source codes.</li>
+            <li><strong>\Lib</strong> - all referenced 3rd-party assemblies required to build 
+                the solution are placed in this folder.</li>
+            <li><strong>\Database</strong> - the folder contains SQL scripts for creating 
+                initial database structure and its update to the current version.<ul>
+                    <li><strong>install_db.sql</strong> - SQL script to create full database structure 
+                        for the <em>previous</em> release.</li>
+                    <li><strong>update_db.sql</strong> - SQL script to update database structure for the 
+                        revious release to the current one.</li>
+                </ul>
+            </li>
+            <li><strong>\Docs</strong> - project documentation<ul>
+                <li><strong>\Developer</strong> - technical documentation (specs, diagrams, POCs, 
+                    etc.) for developers working on the project</li>
+                <li><strong>\User</strong> - user-related documentation (user guides, how-tows, 
+                    etc.) for end-users using the product</li>
+                </ul>
+            </li>
+            <li><strong>\Build</strong> - folder containing solution assemblies that 
+                are referenced from other projects</li>
+            </ul>
+        </li>
+        <li><strong>\Releases</strong> - contains all project releases</li>
+        <li><strong>\Branches</strong> - contains project branches for proof-of-concepts, 
+            new development, bug fixing, etc.</li>
+        <li><strong>LICENSE.txt</strong> - project license</li>
+        <li><strong>Readme.htm</strong> - the file you are reading right now</li>
+        <li><strong>ReleaseNotes.htm</strong> - project release notes</li>
+    </ul>
+    <h2>
+        Build How-To</h2>
+    <h3>
+        Downloading 3rd-Party Libraries</h3>
+    <p class="style1">
+        SimpleDNS API</p>
+    <p>
+        SDNSAPI.dll is required to build &quot;WebsitePanel.Providers.DNS.SimpleDNS50&quot; 
+        project.</p>
+    <p>
+        Download &quot;Simple DNS Plus API for .NET and COM&quot; library from &quot;Downloads&quot; section 
+        on <a href="http://www.simpledns.com">www.simpledns.com</a> web site web site (at the 
+        time of writing direct link to this library is
+        <a href="http://www.simpledns.com/outbox/sdnsapi-setup.exe">
+        http://www.simpledns.com/outbox/sdnsapi-setup.exe</a>). Install the library and 
+        then copy SDNSAPI.dll (located in &quot;C:\Program Files (x86)\Simple DNS Plus API 
+        for .NET and COM&quot; by default) from its installation folder to &quot;Lib&quot; folder of 
+        WebsitePanel project.</p>
+    <p class="style1">
+        MySQL .NET Connector</p>
+    <p>
+        MySQL .NET Connector is required to build 
+        &quot;WebsitePanel.Providers.Database.MySql&quot; project.</p>
+    <p>
+        Go to <a href="http://www.mysql.com">www.mysql.com</a> web site and download the 
+        latest release of &quot;MySQL .NET Connector&quot; library from there (at the time of 
+        writing it is located at <a href="http://dev.mysql.com/downloads/connector/net/">
+        http://dev.mysql.com/downloads/connector/net/</a>). Install MySQL connector and 
+        then copy &quot;MySQL.Data.dll&quot; assembly from its installation folder to &quot;Lib&quot; folder 
+        of WebsitePanel project.</p>
+    <p class="style1">
+        OrderBox (Directi API)</p>
+    <p>
+        Certain libraries are required to compile &quot;WebsitePanel.Plugins.Directi&quot; project 
+        of Enterprise Server solution.</p>
+    <p>
+        Open <a href="http://40083.myorderbox.com/kb/servlet/KBServlet/faq589.html">
+        http://40083.myorderbox.com/kb/servlet/KBServlet/faq589.html</a> page and 
+        download the following files:</p>
+    <ul>
+        <li>NET_CoreExamples_vX.zip</li>
+    
+        <li>NET_DomainsExamples_vX.zip</li>
+    </ul>
+        <p>
+            Unpack both archives to some temporary location and then copy the following 
+            files to &quot;Lib&quot; folder of WebsitePanel project:</p>
+    <ul>
+        <li>OrderBoxCoreLib.dll</li>
+        <li>OrderBoxDomainsLib.dll</li>
+    </ul>
+    <h3>
+                Building Solutions</h3>
+    <p>
+        Build WebsitePanel solutions in the following order:</p>
+    <ul>
+        <li>WebsitePanel.Server.sln</li>
+        <li>WebsitePanel.EnterpriseServer.sln</li>
+        <li>WebsitePanel.WebPortal.sln</li>
+    </ul>
+    <h3>
+        Creating Database</h3>
+    <p>
+        In order to run WebsitePanel Enterprise Server it&#39;s required to create SQL 
+        Server database to hold its internal data.</p>
+    <ol>
+        <li>Using SQL Server Management Studio or any other database tool create a database 
+            called &quot;WebsitePanel&quot;.</li>
+        <li>Execute &quot;install_db.sql&quot; script containing DDL and initial data from &quot;\Database&quot; 
+            folder of WebsitePanel project against created database.</li>
+        <li>Create &quot;WebsitePanel&quot; SQL user account and grant it &quot;db_owner&quot; rights on 
+            &quot;WebsitePanel&quot; database.</li>
+        <li>Open &quot;web.config&quot; file in the root of Enterprise Server application and update 
+            CryptoKey (appSettings/add/WebsitePanel.CryptoKey element) value there. It might 
+            be arbitrary non-empty string.</li>
+        <li>Run WebsitePanel.PasswordEncoder tool available in &quot;Tools&quot; folder and generate 
+            hash for &quot;serveradmin&quot; account password using CryptoKey and &quot;Encrypt&quot; button.</li>
+        <li>Update &quot;Password&quot; column in &quot;Users&quot; database table with generated hash for the 
+            record with UserID = 1 (&quot;serveradmin&quot; account).</li>
+        <li>In Enterprise Server&#39;s web.config update database connection string with proper 
+            settings in order to connect to WebsitePanel database.</li>
+    </ol>
+    <h3>
+        Configuring Web Applications</h3>
+    <p>
+        It&#39;s assumed below that root of WebsitePanel project is pointing to &quot;C:\Projects\WebsitePanel&quot; 
+        folder.</p>
+    <ul>
+        <li>Create &quot;WebsitePanel Server&quot; web site (with 127.0.0.1:9003 binding) using IIS Management Tool with the root 
+            folder pointing to &quot;C:\Projects\WebsitePanel\Trunk\Sources\WebsitePanel.Server&quot;.</li>
+        <li>Create new user account called &quot;WebsitePanelServer&quot; and update process identity 
+            with it for &quot;WebsitePanel Server&quot; application pool. This user account must have 
+            required privileges to manage computer resources (by default be a member of 
+            local &quot;Administrators&quot; group) and also must be a member of &quot;IIS_IUSRS&quot; (IIS 7).</li>
+        <li>Create &quot;WebsitePanel Enterprise Server&quot; web site (with 127.0.0.1:9002 
+            binding) using IIS Management Tool with 
+            the root folder pointing to &quot;C:\Projects\WebsitePanel\Trunk\Sources\WebsitePanel.EnterpriseServer&quot;.</li>
+        <li>Create &quot;WebsitePanel Web Portal&quot; web site (with &lt;all unassigned&gt;:9001 
+            binding) using IIS Management Tool with the 
+            root folder pointing to &quot;C:\Projects\WebsitePanel\Trunk\Sources\WebsitePanel.WebPortal&quot;.</li>
+        <li>Open &quot;App_Data\SiteSettings.config&quot; file in &quot;WebsitePanel.WebPortal&quot; folder and 
+            update URL to Enterprise Server (http://127.0.0.1:9002 by default).</li>
+        <li>Open web.config in the root of WebsitePanel.Server application and update 
+            &quot;server access password&quot; (&quot;websitepanel.server/security/password&quot; element). You 
+            should be able to generate password SHA1 hash using WebsitePanel.PasswordEncoder 
+            tool.</li>
+    </ul>
+    
+</body>
+</html>
