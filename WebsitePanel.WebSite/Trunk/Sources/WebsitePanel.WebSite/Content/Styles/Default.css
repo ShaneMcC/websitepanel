@@ -1,0 +1,136 @@
+﻿BODY
+{
+	font-family: Arial,sans-serif,Tahoma,Verdana,Helvetica,Helvetica-Narrow;
+	font-size: 0.9em;
+	color: #333333;
+	line-height: 1.166;
+	margin: 0px;
+	padding: 0px;
+	background: #ffffff url('../images/page_bg.jpg') repeat-x top left;
+}
+
+#PageOutline
+{
+	width: 950px;
+	margin-left: auto;
+	margin-right: auto;
+	margin-top: 20px;
+}
+#PageContainer
+{
+	width: 920px;
+	padding: 10px 10px 10px 20px;
+	background-color: #FFFFFF;
+	float: right;
+}
+
+#Header
+{
+	padding-top: 10px;
+	padding-bottom: 10px;
+}
+
+#SideBar
+{
+	padding: 15px;
+	float: right;
+	width: 270px;
+	background-color: #f8f8f8;
+}
+
+#Content
+{
+	margin-right: 320px;
+}
+
+.Clear
+{
+	clear: both;
+}
+
+#Footer
+{
+	font-size: 8pt;
+	padding-top: 10px;
+	text-align: center;
+}
+#Footer A
+{
+	color: #000000;
+}
+H1
+{
+	font-size: 1.8em;
+	font-weight: normal;
+	color: #336699;
+}
+H2
+{
+	font-size: 1.1em;
+	color: #336699;
+}
+
+#SideBar H2
+{
+	margin-top: 0px;
+}
+
+A
+{
+	color: #4b79aa;
+}
+LI
+{
+	padding-bottom: 4px;
+}
+INPUT.Button
+{
+	font-size: 1.2em;
+	padding: 5px;
+}
+.NewFeature
+{
+	color: #ff0000;
+}
+.Red
+{
+	color: #ff0000;
+}
+.ProductOption
+{
+	font-size: 1.3em;
+	font-weight: bold;
+}
+.Form
+{
+	background-color: #f1f7fc;
+	padding: 10px 20px 10px 20px;
+}
+.FormFooter
+{
+	text-align: center;
+	margin-top: 10px;
+}
+.Tips LI
+{
+	padding-bottom: 20px;
+}
+
+.Download
+{
+	padding: 10px 10px 10px 30px;
+	border: 1px dashed #f0f0f0;
+	background-color: #f9f9f9;
+	background-repeat: no-repeat;
+	background-position: 8px center;
+}
+
+.Download.msi
+{
+	background-image: url('../images/msi-icon.gif');
+}
+
+.Download.pdf
+{
+	background-image: url('../images/pdf-icon.png');
+}

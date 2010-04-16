@@ -1,0 +1,51 @@
+﻿<%@ Master Language="C#" AutoEventWireup="true" CodeBehind="Site.master.cs" Inherits="WebsitePanel.WebSite.Site" %>
+<%@ Register src="Controls/SideBar.ascx" tagname="SideBar" tagprefix="wsp" %>
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" >
+<head runat="server">
+    <title></title>
+    <link href="/Content/Styles/Default.css" rel="Stylesheet" type="text/css" />
+    <asp:ContentPlaceHolder ID="head" runat="server">
+    </asp:ContentPlaceHolder>
+</head>
+<body>
+    <form id="AspForm" runat="server">
+    
+        <div id="PageOutline">
+		    <div id="PageContainer">
+    		
+		        <!-- SIDE BAR -->
+                <div id="SideBar">
+                    <wsp:SideBar ID="SideBarContent" runat="server" />
+                </div>
+    		
+		        <!-- CONTENT -->
+		        <div id="Content">
+		            <div id="Header">
+			            <a href="/">
+			                <img src="/content/images/wsp_logo.png" alt="WebsitePanel - control panel for Windows hosting" style="border:none;" />
+			            </a>
+    			    </div>
+    			    
+                    <asp:ContentPlaceHolder ID="ContentColumn" runat="server">
+                    </asp:ContentPlaceHolder>
+                    
+                    
+		        </div>
+    		
+		    </div>
+		    
+		    <div class="Clear"></div>
+	        <div id="Footer">
+		        Copyright &copy; 2010 by SMB SAAS Systems Inc. All rights reserved.
+	        </div>
+	        
+        </div>
+    
+    </form>
+    
+    <!-- Google Analytics - TODO -->
+</body>
+</html>
