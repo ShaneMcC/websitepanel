@@ -10,5 +10,5 @@
         WebsitePanel Installer does not include WebsitePanel distributives - they will 
         be downloaded during the installation or upgrade process. Use link below to 
         download the installer:</p>
-    <p class="Download msi"><a href="/Files/WebsitePanelInstaller10.msi">WebsitePanel Installer (~1 MB)</a></p>
+    <p class="Download msi"><a href="http://sourceforge.net/projects/websitepanel/files/Releases/Installer/1.0/WebsitePanelInstaller10.msi/download">WebsitePanel Installer (~1 MB)</a></p>
 </asp:Content>

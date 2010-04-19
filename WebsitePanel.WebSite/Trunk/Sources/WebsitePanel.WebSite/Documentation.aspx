@@ -6,5 +6,5 @@
     
     <h2>Essential Guides</h2>
     <p>User the following guide to install and configure WebsitePanel. It's primarily for users installing WebsitePanel in a standalone mode:</p>
-    <p class="Download pdf"><a href="/Files/WebsitePanel-Installation-Guide.pdf">WebsitePanel Installation Guide (~3 MB)</a></p>
+    <p class="Download pdf"><a href="http://sourceforge.net/projects/websitepanel/files/Documentation/WebsitePanel-Installation-Guide.pdf/download">WebsitePanel Installation Guide (~3 MB)</a></p>
 </asp:Content>
