@@ -644,38 +644,46 @@ namespace WebsitePanel.Providers.Web
 
             // SCRIPT MAPS
 			// Load installed script maps.
-			HandlerActionCollection installedHandlers = this.handlersSvc.GetHandlers(virtualDir);
-			virtualDir.AspInstalled = false; // not installed
-			virtualDir.PhpInstalled = ""; // none
-			virtualDir.PerlInstalled = false; // not installed
-			virtualDir.PythonInstalled = false; // not installed
-            virtualDir.ColdFusionInstalled = false; // not installed
-
-			// Loop through available maps and fill installed processors
-			foreach(HandlerAction action in installedHandlers)
+			using (var srvman = handlersSvc.GetServerManager())
 			{
-				// Extract and evaluate scripting processor path
-				string processor = FileUtils.EvaluateSystemVariables(action.ScriptProcessor);
-				
-				// Detect whether ASP scripting is enabled
-				if (!String.IsNullOrEmpty(AspPath) && String.Equals(AspPath, processor, StringComparison.InvariantCultureIgnoreCase))
-					virtualDir.AspInstalled = true;
-				
-				// Detect whether PHP 5 scripting is enabled
-                if (!String.IsNullOrEmpty(PhpExecutablePath) && String.Equals(PhpExecutablePath, processor, StringComparison.InvariantCultureIgnoreCase))
-					virtualDir.PhpInstalled = PHP_5;
+				virtualDir.AspInstalled = false; // not installed
+				virtualDir.PhpInstalled = ""; // none
+				virtualDir.PerlInstalled = false; // not installed
+				virtualDir.PythonInstalled = false; // not installed
+				virtualDir.ColdFusionInstalled = false; // not installed
+				//
+				var config = srvman.GetWebConfiguration(virtualDir.FullQualifiedPath);
+				var handlersSection = config.GetSection(Constants.HandlersSection);
 
-				// Detect whether PHP 4 scripting is enabled
-				if (!String.IsNullOrEmpty(Php4Path) && String.Equals(Php4Path, processor, StringComparison.InvariantCultureIgnoreCase))
-					virtualDir.PhpInstalled = PHP_4;
+				// Loop through available maps and fill installed processors
+				foreach (ConfigurationElement action in handlersSection.GetCollection())
+				{
+					// Extract and evaluate scripting processor path
+					string processor = FileUtils.EvaluateSystemVariables(
+						Convert.ToString(action.GetAttributeValue("scriptProcessor")));
+					//
+					string actionName = Convert.ToString(action.GetAttributeValue("name"));
 
-                // Detect whether ColdFusion scripting is enabled
-                if (!String.IsNullOrEmpty(ColdFusionPath) && String.Compare(ColdFusionPath, processor, true) == 0 && action.Name.Contains(".cfm"))
-                    virtualDir.ColdFusionInstalled = true;
-				
-				// Detect whether Perl scripting is enabled
-				if (!String.IsNullOrEmpty(PerlPath) && String.Equals(PerlPath, processor, StringComparison.InvariantCultureIgnoreCase))
-					virtualDir.PerlInstalled = true;
+					// Detect whether ASP scripting is enabled
+					if (!String.IsNullOrEmpty(AspPath) && String.Equals(AspPath, processor, StringComparison.InvariantCultureIgnoreCase))
+						virtualDir.AspInstalled = true;
+
+					// Detect whether PHP 5 scripting is enabled
+					if (!String.IsNullOrEmpty(PhpExecutablePath) && String.Equals(PhpExecutablePath, processor, StringComparison.InvariantCultureIgnoreCase))
+						virtualDir.PhpInstalled = PHP_5;
+
+					// Detect whether PHP 4 scripting is enabled
+					if (!String.IsNullOrEmpty(Php4Path) && String.Equals(Php4Path, processor, StringComparison.InvariantCultureIgnoreCase))
+						virtualDir.PhpInstalled = PHP_4;
+
+					// Detect whether ColdFusion scripting is enabled
+					if (!String.IsNullOrEmpty(ColdFusionPath) && String.Compare(ColdFusionPath, processor, true) == 0 && actionName.Contains(".cfm"))
+						virtualDir.ColdFusionInstalled = true;
+
+					// Detect whether Perl scripting is enabled
+					if (!String.IsNullOrEmpty(PerlPath) && String.Equals(PerlPath, processor, StringComparison.InvariantCultureIgnoreCase))
+						virtualDir.PerlInstalled = true;
+				}
 			}
 			//
 			string fqPath = virtualDir.FullQualifiedPath;
@@ -974,6 +982,9 @@ namespace WebsitePanel.Providers.Web
 						enable32BitAppOnWin64 = true;
 					//
 					var poolName = WSHelper.InferAppPoolName(item.Name, site.Name, item.Mode);
+					// Ensure we are not going to add an existing app pool
+					if (webObjectsSvc.IsApplicationPoolExist(poolName))
+						continue;
 					//
 					using (var srvman = webObjectsSvc.GetServerManager())
 					{

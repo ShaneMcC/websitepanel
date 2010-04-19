@@ -115,16 +115,16 @@ namespace WebsitePanel.Providers.Web.Handlers
 			}
 		}
 
-		internal HandlerActionCollection GetHandlers(WebVirtualDirectory virtualDir)
+		internal ConfigurationElementCollection GetHandlers(WebVirtualDirectory virtualDir)
 		{
             //
 			using (var srvman = GetServerManager())
 			{
 				var config = srvman.GetWebConfiguration(virtualDir.FullQualifiedPath);
 				//
-				HandlersSection section = (HandlersSection)config.GetSection(Constants.HandlersSection, typeof(HandlersSection));
+				var section = config.GetSection(Constants.HandlersSection);
 				//
-				return section.Handlers;
+				return section.GetCollection();
 			}
 		}
 
@@ -140,6 +140,17 @@ namespace WebsitePanel.Providers.Web.Handlers
 			// Empty processor is out of interest...
 			if (String.IsNullOrEmpty(processor))
 				return;
+			// This section helps to overcome "legacy" issues
+			using (var srvman = GetServerManager())
+			{
+				var config = srvman.GetWebConfiguration(virtualDir.FullQualifiedPath);
+				//
+				var handlersSection = config.GetSection(Constants.HandlersSection);
+				// Do a complete section cleanup
+				handlersSection.RevertToParent();
+				//
+				srvman.CommitChanges();
+			}
 			//
 			using (var srvman = GetServerManager())
 			{
