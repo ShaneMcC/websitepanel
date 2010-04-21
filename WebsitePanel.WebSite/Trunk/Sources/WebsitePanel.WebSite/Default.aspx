@@ -26,7 +26,7 @@
         <li>Great community support</li>
     </ul>
     
-    <p><b>WensitePanel is an ideal solution for:</b></p>
+    <p><b>WebsitePanel is an ideal solution for:</b></p>
     <ul>
         <li><b>Developers</b> managing their own or customer servers and web sites.</li>
         <li><b>Providers</b> offering Windows hosting services.</li>
