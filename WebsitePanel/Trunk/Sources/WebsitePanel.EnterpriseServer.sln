@@ -1,5 +1,12 @@
-Microsoft Visual Studio Solution File, Format Version 10.00
-# Visual Studio 2008
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2010
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{C57D3F9F-7BA0-4D38-A159-B6EDA5C19B13}"
+	ProjectSection(SolutionItems) = preProject
+		..\..\LICENSE.txt = ..\..\LICENSE.txt
+		..\..\Readme.htm = ..\..\Readme.htm
+		..\..\ReleaseNotes.htm = ..\..\ReleaseNotes.htm
+	EndProjectSection
+EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebsitePanel.EnterpriseServer", "WebsitePanel.EnterpriseServer\WebsitePanel.EnterpriseServer.csproj", "{59C7623A-5181-48A5-880A-C9B82B48F589}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebsitePanel.EnterpriseServer.Base", "WebsitePanel.EnterpriseServer.Base\WebsitePanel.EnterpriseServer.Base.csproj", "{C09CE910-F16B-48A1-B2CC-C99B8C1CF775}"
@@ -33,13 +40,6 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebsitePanel.Plugins.PayPalStandard", "WebsitePanel.Gateways.PayPalStandard\WebsitePanel.Plugins.PayPalStandard.csproj", "{9247B024-F931-4506-8ECD-27E862C0EA1D}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebsitePanel.Templates", "WebsitePanel.Templates\WebsitePanel.Templates.csproj", "{387FA0EF-3927-45FF-8F8F-BCCD735540C6}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{C57D3F9F-7BA0-4D38-A159-B6EDA5C19B13}"
-	ProjectSection(SolutionItems) = preProject
-		..\..\LICENSE.txt = ..\..\LICENSE.txt
-		..\..\Readme.htm = ..\..\Readme.htm
-		..\..\ReleaseNotes.htm = ..\..\ReleaseNotes.htm
-	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
