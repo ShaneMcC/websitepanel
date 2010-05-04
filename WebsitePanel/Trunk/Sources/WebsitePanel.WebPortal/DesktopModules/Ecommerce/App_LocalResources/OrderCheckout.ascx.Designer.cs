@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace WebsitePanel.Ecommerce.Portal.UserControls.App_LocalResources {
+namespace WebsitePanel.Ecommerce.Portal.App_LocalResources {
     using System;
     
     
@@ -22,14 +22,14 @@ namespace WebsitePanel.Ecommerce.Portal.UserControls.App_LocalResources {
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    internal class PathBreadCrumb_ascx {
+    internal class OrderCheckout_ascx {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
         private static global::System.Globalization.CultureInfo resourceCulture;
         
         [global::System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
-        internal PathBreadCrumb_ascx() {
+        internal OrderCheckout_ascx() {
         }
         
         /// <summary>
@@ -39,8 +39,7 @@ namespace WebsitePanel.Ecommerce.Portal.UserControls.App_LocalResources {
         internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("WebsitePanel.Ecommerce.Portal.UserControls.App_LocalResources.PathBreadCrumb.ascx" +
-                            "", typeof(PathBreadCrumb_ascx).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("WebsitePanel.Ecommerce.Portal.App_LocalResources.OrderCheckout.ascx", typeof(OrderCheckout_ascx).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -62,11 +61,29 @@ namespace WebsitePanel.Ecommerce.Portal.UserControls.App_LocalResources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Root.
+        ///   Looks up a localized string similar to Cancel.
         /// </summary>
-        internal static string lnkCatalogRoot_Text {
+        internal static string btnCancel_Text {
             get {
-                return ResourceManager.GetString("lnkCatalogRoot.Text", resourceCulture);
+                return ResourceManager.GetString("btnCancel.Text", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Complete Checkout.
+        /// </summary>
+        internal static string btnComplete_Text {
+            get {
+                return ResourceManager.GetString("btnComplete.Text", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Proceed To Checkout.
+        /// </summary>
+        internal static string btnProceed_Text {
+            get {
+                return ResourceManager.GetString("btnProceed.Text", resourceCulture);
             }
         }
     }

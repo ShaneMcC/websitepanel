@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace WebsitePanel.Ecommerce.Portal.UserControls.App_LocalResources {
+namespace WebsitePanel.Ecommerce.Portal.App_LocalResources {
     using System;
     
     
@@ -22,14 +22,14 @@ namespace WebsitePanel.Ecommerce.Portal.UserControls.App_LocalResources {
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    internal class PathBreadCrumb_ascx {
+    internal class OrderComplete_ascx {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
         private static global::System.Globalization.CultureInfo resourceCulture;
         
         [global::System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
-        internal PathBreadCrumb_ascx() {
+        internal OrderComplete_ascx() {
         }
         
         /// <summary>
@@ -39,8 +39,7 @@ namespace WebsitePanel.Ecommerce.Portal.UserControls.App_LocalResources {
         internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("WebsitePanel.Ecommerce.Portal.UserControls.App_LocalResources.PathBreadCrumb.ascx" +
-                            "", typeof(PathBreadCrumb_ascx).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("WebsitePanel.Ecommerce.Portal.App_LocalResources.OrderComplete.ascx", typeof(OrderComplete_ascx).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -62,11 +61,11 @@ namespace WebsitePanel.Ecommerce.Portal.UserControls.App_LocalResources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Root.
+        ///   Looks up a localized string similar to Thank you for your order! Your transaction is in progress and once it is processed, corresponding receipt for your purchase will be emailed to you..
         /// </summary>
-        internal static string lnkCatalogRoot_Text {
+        internal static string locFinalizeMessage_Text {
             get {
-                return ResourceManager.GetString("lnkCatalogRoot.Text", resourceCulture);
+                return ResourceManager.GetString("locFinalizeMessage.Text", resourceCulture);
             }
         }
     }

@@ -1,4 +1,5 @@
-<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="3.5">
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
@@ -12,9 +13,10 @@
     <AssemblyName>WebsitePanel.Portal.Ecommerce.Modules</AssemblyName>
     <FileUpgradeFlags>
     </FileUpgradeFlags>
-    <OldToolsVersion>2.0</OldToolsVersion>
+    <OldToolsVersion>3.5</OldToolsVersion>
     <UpgradeBackupLocation>
     </UpgradeBackupLocation>
+    <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -24,6 +26,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>none</DebugType>
@@ -32,6 +35,7 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="AjaxControlToolkit, Version=1.0.10301.0, Culture=neutral, PublicKeyToken=28f01b0e84b6d53e, processorArchitecture=MSIL">
@@ -78,38 +82,64 @@
     <Compile Include="..\..\..\VersionInfo.cs">
       <Link>Code\VersionInfo.cs</Link>
     </Compile>
+    <Compile Include="App_LocalResources\CategoriesAddCategory.ascx.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>CategoriesAddCategory.ascx.resx</DependentUpon>
+    </Compile>
+    <Compile Include="App_LocalResources\CategoriesEditCategory.ascx.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>CategoriesEditCategory.ascx.resx</DependentUpon>
+    </Compile>
+    <Compile Include="App_LocalResources\OrderCheckout.ascx.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>OrderCheckout.ascx.resx</DependentUpon>
+    </Compile>
+    <Compile Include="App_LocalResources\OrderComplete.ascx.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>OrderComplete.ascx.resx</DependentUpon>
+    </Compile>
     <Compile Include="BillingCycles.ascx.cs">
       <DependentUpon>BillingCycles.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="BillingCycles.ascx.designer.cs">
       <DependentUpon>BillingCycles.ascx</DependentUpon>
     </Compile>
     <Compile Include="BillingCyclesAddCycle.ascx.cs">
       <DependentUpon>BillingCyclesAddCycle.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="BillingCyclesAddCycle.ascx.designer.cs">
       <DependentUpon>BillingCyclesAddCycle.ascx</DependentUpon>
     </Compile>
     <Compile Include="BillingCyclesEditCycle.ascx.cs">
       <DependentUpon>BillingCyclesEditCycle.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="BillingCyclesEditCycle.ascx.designer.cs">
       <DependentUpon>BillingCyclesEditCycle.ascx</DependentUpon>
     </Compile>
     <Compile Include="Categories.ascx.cs">
       <DependentUpon>Categories.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="Categories.ascx.designer.cs">
       <DependentUpon>Categories.ascx</DependentUpon>
     </Compile>
     <Compile Include="CategoriesAddCategory.ascx.cs">
       <DependentUpon>CategoriesAddCategory.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="CategoriesAddCategory.ascx.designer.cs">
       <DependentUpon>CategoriesAddCategory.ascx</DependentUpon>
     </Compile>
     <Compile Include="CategoriesEditCategory.ascx.cs">
       <DependentUpon>CategoriesEditCategory.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="CategoriesEditCategory.ascx.designer.cs">
       <DependentUpon>CategoriesEditCategory.ascx</DependentUpon>
@@ -122,8 +152,10 @@
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="Code\Framework\ecControlBase.cs">
+      <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="Code\Framework\ecModuleBase.cs">
+      <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="Code\Framework\ecPanelFormatter.cs" />
     <Compile Include="Code\Framework\ecPanelGlobals.cs" />
@@ -151,150 +183,175 @@
     </Compile>
     <Compile Include="CustomerPaymentProfile.ascx.cs">
       <DependentUpon>CustomerPaymentProfile.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="CustomerPaymentProfile.ascx.designer.cs">
       <DependentUpon>CustomerPaymentProfile.ascx</DependentUpon>
     </Compile>
     <Compile Include="CustomersInvoices.ascx.cs">
       <DependentUpon>CustomersInvoices.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="CustomersInvoices.ascx.designer.cs">
       <DependentUpon>CustomersInvoices.ascx</DependentUpon>
     </Compile>
     <Compile Include="CustomersInvoicesViewInvoice.ascx.cs">
       <DependentUpon>CustomersInvoicesViewInvoice.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="CustomersInvoicesViewInvoice.ascx.designer.cs">
       <DependentUpon>CustomersInvoicesViewInvoice.ascx</DependentUpon>
     </Compile>
     <Compile Include="CustomersPayments.ascx.cs">
       <DependentUpon>CustomersPayments.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="CustomersPayments.ascx.designer.cs">
       <DependentUpon>CustomersPayments.ascx</DependentUpon>
     </Compile>
     <Compile Include="CustomersServices.ascx.cs">
       <DependentUpon>CustomersServices.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="CustomersServices.ascx.designer.cs">
       <DependentUpon>CustomersServices.ascx</DependentUpon>
     </Compile>
     <Compile Include="CustomersServicesUpgradeService.ascx.cs">
       <DependentUpon>CustomersServicesUpgradeService.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="CustomersServicesUpgradeService.ascx.designer.cs">
       <DependentUpon>CustomersServicesUpgradeService.ascx</DependentUpon>
     </Compile>
     <Compile Include="CustomersServicesViewService.ascx.cs">
       <DependentUpon>CustomersServicesViewService.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="CustomersServicesViewService.ascx.designer.cs">
       <DependentUpon>CustomersServicesViewService.ascx</DependentUpon>
     </Compile>
     <Compile Include="DomainNames.ascx.cs">
       <DependentUpon>DomainNames.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="DomainNames.ascx.designer.cs">
       <DependentUpon>DomainNames.ascx</DependentUpon>
     </Compile>
     <Compile Include="DomainNamesAddDomain.ascx.cs">
       <DependentUpon>DomainNamesAddDomain.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="DomainNamesAddDomain.ascx.designer.cs">
       <DependentUpon>DomainNamesAddDomain.ascx</DependentUpon>
     </Compile>
     <Compile Include="DomainNamesEditDomain.ascx.cs">
       <DependentUpon>DomainNamesEditDomain.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="DomainNamesEditDomain.ascx.designer.cs">
       <DependentUpon>DomainNamesEditDomain.ascx</DependentUpon>
     </Compile>
     <Compile Include="DomainRegistrarDirecti.ascx.cs">
       <DependentUpon>DomainRegistrarDirecti.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="DomainRegistrarDirecti.ascx.designer.cs">
       <DependentUpon>DomainRegistrarDirecti.ascx</DependentUpon>
     </Compile>
     <Compile Include="DomainRegistrarEnom.ascx.cs">
       <DependentUpon>DomainRegistrarEnom.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="DomainRegistrarEnom.ascx.designer.cs">
       <DependentUpon>DomainRegistrarEnom.ascx</DependentUpon>
     </Compile>
     <Compile Include="EcommerceSystemSettings.ascx.cs">
       <DependentUpon>EcommerceSystemSettings.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="EcommerceSystemSettings.ascx.designer.cs">
       <DependentUpon>EcommerceSystemSettings.ascx</DependentUpon>
     </Compile>
     <Compile Include="HostingAddons.ascx.cs">
       <DependentUpon>HostingAddons.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="HostingAddons.ascx.designer.cs">
       <DependentUpon>HostingAddons.ascx</DependentUpon>
     </Compile>
     <Compile Include="HostingAddonsAddAddon.ascx.cs">
       <DependentUpon>HostingAddonsAddAddon.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="HostingAddonsAddAddon.ascx.designer.cs">
       <DependentUpon>HostingAddonsAddAddon.ascx</DependentUpon>
     </Compile>
     <Compile Include="HostingAddonsEditAddon.ascx.cs">
       <DependentUpon>HostingAddonsEditAddon.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="HostingAddonsEditAddon.ascx.designer.cs">
       <DependentUpon>HostingAddonsEditAddon.ascx</DependentUpon>
     </Compile>
     <Compile Include="HostingPlans.ascx.cs">
       <DependentUpon>HostingPlans.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="HostingPlans.ascx.designer.cs">
       <DependentUpon>HostingPlans.ascx</DependentUpon>
     </Compile>
     <Compile Include="HostingPlansAddPlan.ascx.cs">
       <DependentUpon>HostingPlansAddPlan.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="HostingPlansAddPlan.ascx.designer.cs">
       <DependentUpon>HostingPlansAddPlan.ascx</DependentUpon>
     </Compile>
     <Compile Include="HostingPlansEditPlan.ascx.cs">
       <DependentUpon>HostingPlansEditPlan.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="HostingPlansEditPlan.ascx.designer.cs">
       <DependentUpon>HostingPlansEditPlan.ascx</DependentUpon>
     </Compile>
     <Compile Include="NotificationNewInvoice.ascx.cs">
       <DependentUpon>NotificationNewInvoice.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="NotificationNewInvoice.ascx.designer.cs">
       <DependentUpon>NotificationNewInvoice.ascx</DependentUpon>
     </Compile>
     <Compile Include="NotificationPaymentReceived.ascx.cs">
       <DependentUpon>NotificationPaymentReceived.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="NotificationPaymentReceived.ascx.designer.cs">
       <DependentUpon>NotificationPaymentReceived.ascx</DependentUpon>
     </Compile>
     <Compile Include="NotificationServiceActivated.ascx.cs">
       <DependentUpon>NotificationServiceActivated.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="NotificationServiceActivated.ascx.designer.cs">
       <DependentUpon>NotificationServiceActivated.ascx</DependentUpon>
     </Compile>
     <Compile Include="NotificationServiceCancelled.ascx.cs">
       <DependentUpon>NotificationServiceCancelled.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="NotificationServiceCancelled.ascx.designer.cs">
       <DependentUpon>NotificationServiceCancelled.ascx</DependentUpon>
     </Compile>
     <Compile Include="NotificationServiceSuspended.ascx.cs">
       <DependentUpon>NotificationServiceSuspended.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="NotificationServiceSuspended.ascx.designer.cs">
       <DependentUpon>NotificationServiceSuspended.ascx</DependentUpon>
     </Compile>
     <Compile Include="OrderFailed.ascx.cs">
       <DependentUpon>OrderFailed.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="OrderFailed.ascx.designer.cs">
       <DependentUpon>OrderFailed.ascx</DependentUpon>
@@ -308,48 +365,56 @@
     </Compile>
     <Compile Include="PaymentMethod2Checkout.ascx.cs">
       <DependentUpon>PaymentMethod2Checkout.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="PaymentMethod2Checkout.ascx.designer.cs">
       <DependentUpon>PaymentMethod2Checkout.ascx</DependentUpon>
     </Compile>
     <Compile Include="PaymentMethodCreditCard.ascx.cs">
       <DependentUpon>PaymentMethodCreditCard.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="PaymentMethodCreditCard.ascx.designer.cs">
       <DependentUpon>PaymentMethodCreditCard.ascx</DependentUpon>
     </Compile>
     <Compile Include="PaymentMethodOffline.ascx.cs">
       <DependentUpon>PaymentMethodOffline.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="PaymentMethodOffline.ascx.designer.cs">
       <DependentUpon>PaymentMethodOffline.ascx</DependentUpon>
     </Compile>
     <Compile Include="PaymentMethodPayPalAccount.ascx.cs">
       <DependentUpon>PaymentMethodPayPalAccount.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="PaymentMethodPayPalAccount.ascx.designer.cs">
       <DependentUpon>PaymentMethodPayPalAccount.ascx</DependentUpon>
     </Compile>
     <Compile Include="PaymentMethods\2CO_Payment.ascx.cs">
       <DependentUpon>2CO_Payment.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="PaymentMethods\2CO_Payment.ascx.designer.cs">
       <DependentUpon>2CO_Payment.ascx</DependentUpon>
     </Compile>
     <Compile Include="PaymentMethods\CreditCard_Payment.ascx.cs">
       <DependentUpon>CreditCard_Payment.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="PaymentMethods\CreditCard_Payment.ascx.designer.cs">
       <DependentUpon>CreditCard_Payment.ascx</DependentUpon>
     </Compile>
     <Compile Include="PaymentMethods\Offline_Payment.ascx.cs">
       <DependentUpon>Offline_Payment.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="PaymentMethods\Offline_Payment.ascx.designer.cs">
       <DependentUpon>Offline_Payment.ascx</DependentUpon>
     </Compile>
     <Compile Include="PaymentMethods\PPAccount_Payment.ascx.cs">
       <DependentUpon>PPAccount_Payment.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="PaymentMethods\PPAccount_Payment.ascx.designer.cs">
       <DependentUpon>PPAccount_Payment.ascx</DependentUpon>
@@ -363,30 +428,35 @@
     </Compile>
     <Compile Include="ProductControls\DomainName_ServiceDetails.ascx.cs">
       <DependentUpon>DomainName_ServiceDetails.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="ProductControls\DomainName_ServiceDetails.ascx.designer.cs">
       <DependentUpon>DomainName_ServiceDetails.ascx</DependentUpon>
     </Compile>
     <Compile Include="ProductControls\HostingAddon_ServiceDetails.ascx.cs">
       <DependentUpon>HostingAddon_ServiceDetails.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="ProductControls\HostingAddon_ServiceDetails.ascx.designer.cs">
       <DependentUpon>HostingAddon_ServiceDetails.ascx</DependentUpon>
     </Compile>
     <Compile Include="ProductControls\HostingPlan_Brief.ascx.cs">
       <DependentUpon>HostingPlan_Brief.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="ProductControls\HostingPlan_Brief.ascx.designer.cs">
       <DependentUpon>HostingPlan_Brief.ascx</DependentUpon>
     </Compile>
     <Compile Include="ProductControls\HostingPlan_Highlights.ascx.cs">
       <DependentUpon>HostingPlan_Highlights.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="ProductControls\HostingPlan_Highlights.ascx.designer.cs">
       <DependentUpon>HostingPlan_Highlights.ascx</DependentUpon>
     </Compile>
     <Compile Include="ProductControls\HostingPlan_ServiceDetails.ascx.cs">
       <DependentUpon>HostingPlan_ServiceDetails.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="ProductControls\HostingPlan_ServiceDetails.ascx.designer.cs">
       <DependentUpon>HostingPlan_ServiceDetails.ascx</DependentUpon>
@@ -394,24 +464,28 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ProvisioningSettingsEdit.ascx.cs">
       <DependentUpon>ProvisioningSettingsEdit.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="ProvisioningSettingsEdit.ascx.designer.cs">
       <DependentUpon>ProvisioningSettingsEdit.ascx</DependentUpon>
     </Compile>
     <Compile Include="QuickSignup.ascx.cs">
       <DependentUpon>QuickSignup.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="QuickSignup.ascx.designer.cs">
       <DependentUpon>QuickSignup.ascx</DependentUpon>
     </Compile>
     <Compile Include="OrderComplete.ascx.cs">
       <DependentUpon>OrderComplete.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="OrderComplete.ascx.designer.cs">
       <DependentUpon>OrderComplete.ascx</DependentUpon>
     </Compile>
     <Compile Include="OrderCheckout.ascx.cs">
       <DependentUpon>OrderCheckout.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="OrderCheckout.ascx.designer.cs">
       <DependentUpon>OrderCheckout.ascx</DependentUpon>
@@ -423,102 +497,119 @@
     </Compile>
     <Compile Include="SkinControls\CatalogBreadCrumb.ascx.cs">
       <DependentUpon>CatalogBreadCrumb.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="SkinControls\CatalogBreadCrumb.ascx.designer.cs">
       <DependentUpon>CatalogBreadCrumb.ascx</DependentUpon>
     </Compile>
     <Compile Include="StorefrontMenu.ascx.cs">
       <DependentUpon>StorefrontMenu.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="StorefrontMenu.ascx.designer.cs">
       <DependentUpon>StorefrontMenu.ascx</DependentUpon>
     </Compile>
     <Compile Include="StorefrontOrderProduct.ascx.cs">
       <DependentUpon>StorefrontOrderProduct.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="StorefrontOrderProduct.ascx.designer.cs">
       <DependentUpon>StorefrontOrderProduct.ascx</DependentUpon>
     </Compile>
     <Compile Include="StorefrontViewCategory.ascx.cs">
       <DependentUpon>StorefrontViewCategory.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="StorefrontViewCategory.ascx.designer.cs">
       <DependentUpon>StorefrontViewCategory.ascx</DependentUpon>
     </Compile>
     <Compile Include="StorefrontWelcome.ascx.cs">
       <DependentUpon>StorefrontWelcome.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="StorefrontWelcome.ascx.designer.cs">
       <DependentUpon>StorefrontWelcome.ascx</DependentUpon>
     </Compile>
     <Compile Include="StorefrontWelcomeEdit.ascx.cs">
       <DependentUpon>StorefrontWelcomeEdit.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="StorefrontWelcomeEdit.ascx.designer.cs">
       <DependentUpon>StorefrontWelcomeEdit.ascx</DependentUpon>
     </Compile>
     <Compile Include="SupportedPlugins\2Checkout_Settings.ascx.cs">
       <DependentUpon>2Checkout_Settings.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="SupportedPlugins\2Checkout_Settings.ascx.designer.cs">
       <DependentUpon>2Checkout_Settings.ascx</DependentUpon>
     </Compile>
     <Compile Include="SupportedPlugins\AuthorizeNet_Settings.ascx.cs">
       <DependentUpon>AuthorizeNet_Settings.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="SupportedPlugins\AuthorizeNet_Settings.ascx.designer.cs">
       <DependentUpon>AuthorizeNet_Settings.ascx</DependentUpon>
     </Compile>
     <Compile Include="SupportedPlugins\OfflinePayment_Settings.ascx.cs">
       <DependentUpon>OfflinePayment_Settings.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="SupportedPlugins\OfflinePayment_Settings.ascx.designer.cs">
       <DependentUpon>OfflinePayment_Settings.ascx</DependentUpon>
     </Compile>
     <Compile Include="SupportedPlugins\PayPalPro_Settings.ascx.cs">
       <DependentUpon>PayPalPro_Settings.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="SupportedPlugins\PayPalPro_Settings.ascx.designer.cs">
       <DependentUpon>PayPalPro_Settings.ascx</DependentUpon>
     </Compile>
     <Compile Include="SupportedPlugins\PayPalStandard_Settings.ascx.cs">
       <DependentUpon>PayPalStandard_Settings.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="SupportedPlugins\PayPalStandard_Settings.ascx.designer.cs">
       <DependentUpon>PayPalStandard_Settings.ascx</DependentUpon>
     </Compile>
     <Compile Include="Taxations.ascx.cs">
       <DependentUpon>Taxations.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="Taxations.ascx.designer.cs">
       <DependentUpon>Taxations.ascx</DependentUpon>
     </Compile>
     <Compile Include="TaxationsAddTax.ascx.cs">
       <DependentUpon>TaxationsAddTax.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="TaxationsAddTax.ascx.designer.cs">
       <DependentUpon>TaxationsAddTax.ascx</DependentUpon>
     </Compile>
     <Compile Include="TaxationsEditTax.ascx.cs">
       <DependentUpon>TaxationsEditTax.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="TaxationsEditTax.ascx.designer.cs">
       <DependentUpon>TaxationsEditTax.ascx</DependentUpon>
     </Compile>
     <Compile Include="TermsAndConditions.ascx.cs">
       <DependentUpon>TermsAndConditions.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="TermsAndConditions.ascx.designer.cs">
       <DependentUpon>TermsAndConditions.ascx</DependentUpon>
     </Compile>
     <Compile Include="TermsAndConditionsEdit.ascx.cs">
       <DependentUpon>TermsAndConditionsEdit.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="TermsAndConditionsEdit.ascx.designer.cs">
       <DependentUpon>TermsAndConditionsEdit.ascx</DependentUpon>
     </Compile>
     <Compile Include="UserControls\AddonProducts.ascx.cs">
       <DependentUpon>AddonProducts.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="UserControls\AddonProducts.ascx.designer.cs">
       <DependentUpon>AddonProducts.ascx</DependentUpon>
@@ -535,120 +626,140 @@
     </Compile>
     <Compile Include="UserControls\ChoosePaymentMethod.ascx.cs">
       <DependentUpon>ChoosePaymentMethod.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="UserControls\ChoosePaymentMethod.ascx.designer.cs">
       <DependentUpon>ChoosePaymentMethod.ascx</DependentUpon>
     </Compile>
     <Compile Include="UserControls\CreateUserAccount.ascx.cs">
       <DependentUpon>CreateUserAccount.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="UserControls\CreateUserAccount.ascx.designer.cs">
       <DependentUpon>CreateUserAccount.ascx</DependentUpon>
     </Compile>
     <Compile Include="UserControls\CustomerInvoiceTemplated.ascx.cs">
       <DependentUpon>CustomerInvoiceTemplated.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="UserControls\CustomerInvoiceTemplated.ascx.designer.cs">
       <DependentUpon>CustomerInvoiceTemplated.ascx</DependentUpon>
     </Compile>
     <Compile Include="UserControls\DomainNameBillingCycles.ascx.cs">
       <DependentUpon>DomainNameBillingCycles.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="UserControls\DomainNameBillingCycles.ascx.designer.cs">
       <DependentUpon>DomainNameBillingCycles.ascx</DependentUpon>
     </Compile>
     <Compile Include="UserControls\EmailNotificationEditor.ascx.cs">
       <DependentUpon>EmailNotificationEditor.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="UserControls\EmailNotificationEditor.ascx.designer.cs">
       <DependentUpon>EmailNotificationEditor.ascx</DependentUpon>
     </Compile>
     <Compile Include="UserControls\HostingAddonOneTimeFee.ascx.cs">
       <DependentUpon>HostingAddonOneTimeFee.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="UserControls\HostingAddonOneTimeFee.ascx.designer.cs">
       <DependentUpon>HostingAddonOneTimeFee.ascx</DependentUpon>
     </Compile>
     <Compile Include="UserControls\HostingPlanBillingCycles.ascx.cs">
       <DependentUpon>HostingPlanBillingCycles.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="UserControls\HostingPlanBillingCycles.ascx.designer.cs">
       <DependentUpon>HostingPlanBillingCycles.ascx</DependentUpon>
     </Compile>
     <Compile Include="UserControls\HostingPlanQuotas.ascx.cs">
       <DependentUpon>HostingPlanQuotas.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="UserControls\HostingPlanQuotas.ascx.designer.cs">
       <DependentUpon>HostingPlanQuotas.ascx</DependentUpon>
     </Compile>
     <Compile Include="UserControls\LoginUserAccount.ascx.cs">
       <DependentUpon>LoginUserAccount.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="UserControls\LoginUserAccount.ascx.designer.cs">
       <DependentUpon>LoginUserAccount.ascx</DependentUpon>
     </Compile>
     <Compile Include="UserControls\ManualPaymentAdd.ascx.cs">
       <DependentUpon>ManualPaymentAdd.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="UserControls\ManualPaymentAdd.ascx.designer.cs">
       <DependentUpon>ManualPaymentAdd.ascx</DependentUpon>
     </Compile>
     <Compile Include="UserControls\PlanDomainOption.ascx.cs">
       <DependentUpon>PlanDomainOption.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="UserControls\PlanDomainOption.ascx.designer.cs">
       <DependentUpon>PlanDomainOption.ascx</DependentUpon>
     </Compile>
     <Compile Include="UserControls\PlanHostingAddons.ascx.cs">
       <DependentUpon>PlanHostingAddons.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="UserControls\PlanHostingAddons.ascx.designer.cs">
       <DependentUpon>PlanHostingAddons.ascx</DependentUpon>
     </Compile>
     <Compile Include="UserControls\ProductHighlights.ascx.cs">
       <DependentUpon>ProductHighlights.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="UserControls\ProductHighlights.ascx.designer.cs">
       <DependentUpon>ProductHighlights.ascx</DependentUpon>
     </Compile>
     <Compile Include="UserControls\QuickHostingAddon.ascx.cs">
       <DependentUpon>QuickHostingAddon.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="UserControls\QuickHostingAddon.ascx.designer.cs">
       <DependentUpon>QuickHostingAddon.ascx</DependentUpon>
     </Compile>
     <Compile Include="UserControls\QuickHostingPlanCycles.ascx.cs">
       <DependentUpon>QuickHostingPlanCycles.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="UserControls\QuickHostingPlanCycles.ascx.designer.cs">
       <DependentUpon>QuickHostingPlanCycles.ascx</DependentUpon>
     </Compile>
     <Compile Include="UserControls\QuickHostingPlans.ascx.cs">
       <DependentUpon>QuickHostingPlans.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="UserControls\QuickHostingPlans.ascx.designer.cs">
       <DependentUpon>QuickHostingPlans.ascx</DependentUpon>
     </Compile>
     <Compile Include="UserControls\PathBreadCrumb.ascx.cs">
       <DependentUpon>PathBreadCrumb.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="UserControls\PathBreadCrumb.ascx.designer.cs">
       <DependentUpon>PathBreadCrumb.ascx</DependentUpon>
     </Compile>
     <Compile Include="UserControls\ProductCategories.ascx.cs">
       <DependentUpon>ProductCategories.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="UserControls\ProductCategories.ascx.designer.cs">
       <DependentUpon>ProductCategories.ascx</DependentUpon>
     </Compile>
     <Compile Include="UserControls\UserAccountDetails.ascx.cs">
       <DependentUpon>UserAccountDetails.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="UserControls\UserAccountDetails.ascx.designer.cs">
       <DependentUpon>UserAccountDetails.ascx</DependentUpon>
     </Compile>
     <Compile Include="ViewProductDetails.ascx.cs">
       <DependentUpon>ViewProductDetails.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="ViewProductDetails.ascx.designer.cs">
       <DependentUpon>ViewProductDetails.ascx</DependentUpon>
@@ -1070,9 +1181,13 @@
           <OverrideIISAppRootUrl>True</OverrideIISAppRootUrl>
           <IISAppRootUrl>http://localhost/WebPortal</IISAppRootUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
+          <UseCustomServer>False</UseCustomServer>
+          <CustomServerUrl>
+          </CustomServerUrl>
           <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
         </WebProjectProperties>
       </FlavorProperties>
     </VisualStudio>
   </ProjectExtensions>
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" />
 </Project>
