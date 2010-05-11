@@ -632,9 +632,13 @@ namespace WebsitePanel.Providers.Database
         private void CloseDatabaseConnections(string database)
         {
             DataTable dtProcesses = ExecuteQuery("SHOW PROCESSLIST");
+			//
             string filter = String.Format("db = '{0}'", database);
+			//
+			if (dtProcesses.Columns["db"].DataType == typeof(System.Byte[]))
+				filter = String.Format("Convert(db, 'System.String') = '{0}'", database);
 
-            DataView dvProcesses = new DataView(dtProcesses, filter, "", DataViewRowState.CurrentRows);
+            DataView dvProcesses = new DataView(dtProcesses);
             foreach (DataRowView rowSid in dvProcesses)
             {
                 ExecuteNonQuery(String.Format("KILL {0}", rowSid["Id"]));

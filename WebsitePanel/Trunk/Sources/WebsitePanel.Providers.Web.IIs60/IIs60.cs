@@ -663,6 +663,10 @@ namespace WebsitePanel.Providers.Web
 				case ASPNET_40:
 					site.ApplicationPool = (dedicatedPool) ? poolName4 : Asp40Pool;
 					break;
+				default:
+					// Defaults to .NET 1.1
+					site.ApplicationPool = (dedicatedPool) ? poolName1 : Asp11Pool;
+					break;
 			}
 
             bool deleteDedicatedPools = false;
@@ -676,21 +680,30 @@ namespace WebsitePanel.Providers.Web
             // check if DedicatedApplicationPool property
             // has been changed
             bool dedicatedPoolFlagChanged = (origSite.DedicatedApplicationPool != site.DedicatedApplicationPool);
-            if (dedicatedPoolFlagChanged)
-            {
+			//
                 if (site.DedicatedApplicationPool)
                 {
                     // CREATE dedicated pool
+				if (!ApplicationPoolExists(poolName1))
+				{
                     CreateApplicationPool(poolName1, anonymousAccount, site.AnonymousUserPassword);
+				}
+				
+				if (!ApplicationPoolExists(poolName2))
+				{
 					CreateApplicationPool(poolName2, anonymousAccount, site.AnonymousUserPassword);
+				}
+				
+				if (!ApplicationPoolExists(poolName4))
+				{
 					CreateApplicationPool(poolName4, anonymousAccount, site.AnonymousUserPassword);
                 }
+            }
                 else
                 {
                     // REMOVE dedicated pool
                     deleteDedicatedPools = true;
                 }
-            }
 
             // set WEB folder permissions
             SetWebFolderPermissions(site.ContentPath, anonymousAccount, site.EnableWritePermissions, site.DedicatedApplicationPool);
@@ -812,14 +825,20 @@ namespace WebsitePanel.Providers.Web
             if (deleteDedicatedPools)
             {
                 if(ApplicationPoolExists(poolName1))
+				{
                     DeleteApplicationPool(poolName1);
+				}
 
                 if(ApplicationPoolExists(poolName2))
+				{
                     DeleteApplicationPool(poolName2);
+				}
 
 				if (ApplicationPoolExists(poolName4))
+				{
 					DeleteApplicationPool(poolName4);
             }
+        }
         }
 
         public virtual void UpdateSiteBindings(string siteId, ServerBinding[] bindings)
@@ -864,12 +883,16 @@ namespace WebsitePanel.Providers.Web
             {
                 string poolName1 = site.Name + DEDICATED_POOL_SUFFIX_ASPNET1;
                 string poolName2 = site.Name + DEDICATED_POOL_SUFFIX_ASPNET2;
+				string poolName4 = site.Name + DEDICATED_POOL_SUFFIX_ASPNET4;
 
                 if (ApplicationPoolExists(poolName1))
                     DeleteApplicationPool(poolName1);
 
                 if (ApplicationPoolExists(poolName2))
                     DeleteApplicationPool(poolName2);
+
+				if (ApplicationPoolExists(poolName4))
+					DeleteApplicationPool(poolName4);
             }
 			
 			// 
@@ -932,9 +955,11 @@ namespace WebsitePanel.Providers.Web
         {
             string poolName1 = siteName + DEDICATED_POOL_SUFFIX_ASPNET1;
             string poolName2 = siteName + DEDICATED_POOL_SUFFIX_ASPNET2;
+			string poolName4 = siteName + DEDICATED_POOL_SUFFIX_ASPNET4;
 
             return (String.Compare(poolName1, appPoolName, true) == 0
-                || String.Compare(poolName2, appPoolName, true) == 0);
+                || String.Compare(poolName2, appPoolName, true) == 0
+				|| String.Compare(poolName4, appPoolName, true) == 0);
         }
         #endregion
 
