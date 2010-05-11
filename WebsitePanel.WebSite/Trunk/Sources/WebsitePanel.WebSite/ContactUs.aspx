@@ -6,7 +6,6 @@
     
     <p>WebsitePanel project is owned and maintained by SMB SAAS Systems Inc. 
         privately-held company located in Richmond, BC, Canada.</p>
-    <p>For general inquiries please contact: <a href="mailto:info@websitepanel.net">
-        info@websitepanel.net</a></p>
+    <p>For general inquiries please contact: <a href="mailto:info@websitepanel.net">info@websitepanel.net</a></p>
     <p>Do not send support requests to the e-mail above, use <a href="http://sourceforge.net/projects/websitepanel/forums">online forums</a> please.</p>
 </asp:Content>
