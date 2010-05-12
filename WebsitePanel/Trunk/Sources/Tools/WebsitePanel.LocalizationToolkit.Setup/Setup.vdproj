@@ -7,6 +7,10 @@
 "LanguageId" = "3:1033"
 "CodePage" = "3:1252"
 "UILanguageId" = "3:1033"
+"SccProjectName" = "8:"
+"SccLocalPath" = "8:"
+"SccAuxPath" = "8:"
+"SccProvider" = "8:"
     "Hierarchy"
     {
         "Entry"
@@ -59,7 +63,7 @@
         "DisplayName" = "8:Debug"
         "IsDebugOnly" = "11:TRUE"
         "IsReleaseOnly" = "11:FALSE"
-        "OutputFilename" = "8:Debug\\DNPLocalizationToolkit2811.msi"
+        "OutputFilename" = "8:Debug\\WebsitePanelLocalizationToolkit10.msi"
         "PackageFilesAs" = "3:2"
         "PackageFileSize" = "3:-2147483648"
         "CabType" = "3:1"
@@ -86,7 +90,7 @@
         "DisplayName" = "8:Release"
         "IsDebugOnly" = "11:FALSE"
         "IsReleaseOnly" = "11:TRUE"
-        "OutputFilename" = "8:Release\\WebsitePanelLocalizationToolkit100.msi"
+        "OutputFilename" = "8:Release\\WebsitePanelLocalizationToolkit10.msi"
         "PackageFilesAs" = "3:2"
         "PackageFileSize" = "3:-2147483648"
         "CabType" = "3:1"
@@ -133,7 +137,7 @@
                 {
                 "Name" = "8:.NET Framework"
                 "Message" = "8:[VSDNETMSG]"
-                "Version" = "8:2.0.50727"
+                "FrameworkVersion" = "8:2.0.50727"
                 "AllowLaterVersions" = "11:FALSE"
                 "InstallUrl" = "8:http://go.microsoft.com/fwlink/?LinkId=9832"
                 }
@@ -168,11 +172,6 @@
             "AssemblyAsmDisplayName" = "8:Ionic.Zip.Reduced, Version=1.8.4.28, Culture=neutral, PublicKeyToken=edbe51ad942a3f5c, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
-                    "_4FB85810470810101EF8149C538E86C1"
-                    {
-                    "Name" = "8:Ionic.Zip.Reduced.dll"
-                    "Attributes" = "3:512"
-                    }
                 }
             "SourcePath" = "8:Ionic.Zip.Reduced.dll"
             "TargetName" = "8:"
@@ -320,19 +319,20 @@
         "Product"
         {
         "Name" = "8:Microsoft Visual Studio"
-        "ProductName" = "8:WebsitePanel Localization Toolkit 1.0.0"
+        "ProductName" = "8:WebsitePanel Localization Toolkit 1.0"
         "ProductCode" = "8:{B0DB02AC-2995-4FF3-B658-894AC884720A}"
         "PackageCode" = "8:{9719C5EB-DEFC-48BE-944F-8E6E81581302}"
         "UpgradeCode" = "8:{5E387E28-5748-4BF2-BEEF-2A3AE3F43FC5}"
+        "AspNetVersion" = "8:4.0.30319.0"
         "RestartWWWService" = "11:FALSE"
         "RemovePreviousVersions" = "11:FALSE"
         "DetectNewerInstalledVersion" = "11:FALSE"
         "InstallAllUsers" = "11:TRUE"
-        "ProductVersion" = "8:1.0.0"
+        "ProductVersion" = "8:1.0"
         "Manufacturer" = "8:SMB SAAS Systems"
         "ARPHELPTELEPHONE" = "8:"
         "ARPHELPLINK" = "8:"
-        "Title" = "8:WebsitePanel Localization Toolkit 1.0.0"
+        "Title" = "8:WebsitePanel Localization Toolkit 1.0"
         "Subject" = "8:"
         "ARPCONTACT" = "8:SMB SAAS Systems Inc."
         "Keywords" = "8:"
@@ -443,7 +443,7 @@
         {
             "{970C0BB2-C7D0-45D7-ABFA-7EC378858BC0}:_9084A369771D425F90C8D69AA9B95B2E"
             {
-            "Name" = "8:WebsitePanel Localization Toolkit 1.0.0"
+            "Name" = "8:WebsitePanel Localization Toolkit 1.0"
             "Arguments" = "8:"
             "Description" = "8:"
             "ShowCmd" = "3:1"
