@@ -4684,4 +4684,7 @@
   <data name="Quota.Web.AspNet40" xml:space="preserve">
     <value>ASP.NET 4.0</value>
   </data>
+  <data name="ReportResourceGroup.MsSQL2008" xml:space="preserve">
+    <value>SQL Server 2008</value>
+  </data>
 </root>
