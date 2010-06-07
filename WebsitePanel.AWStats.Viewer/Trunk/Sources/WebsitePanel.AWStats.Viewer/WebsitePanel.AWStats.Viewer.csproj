@@ -136,9 +136,7 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Web.config">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
+    <None Include="Web.config" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
