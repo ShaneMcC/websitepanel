@@ -32,7 +32,9 @@ namespace WebsitePanel.Providers.OS
     {
         public override bool IsInstalled()
         {
-            return WebsitePanel.Server.Utils.OS.GetVersion() == WebsitePanel.Server.Utils.OS.WindowsVersion.WindowsServer2008;                        
+            Server.Utils.OS.WindowsVersion version = WebsitePanel.Server.Utils.OS.GetVersion();
+            return version == WebsitePanel.Server.Utils.OS.WindowsVersion.WindowsServer2008
+                || version == WebsitePanel.Server.Utils.OS.WindowsVersion.Vista;                        
         }
     }
 }

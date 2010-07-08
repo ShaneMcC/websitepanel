@@ -188,16 +188,20 @@ namespace WebsitePanel.Providers.Web.Iis.WebObjects
 			if (subStatusCode == 0)
 				subStatusCode = -1;
 
+            // correct error content
+            string errorContent = error.ErrorContent;
+            if (error.HandlerType.Equals("File"))
+            {
+                if(error.ErrorContent.Length > virtualDir.ContentPath.Length)
+                    errorContent = errorContent.Substring(virtualDir.ContentPath.Length);
+
+                errorContent = FileUtils.CorrectRelativePath(errorContent);
+            }
+
 			item2Fill.SetAttributeValue(StatusCodeAttribute, statusCode);
 			item2Fill.SetAttributeValue(SubStatusCodeAttribute, subStatusCode);
-			item2Fill.SetAttributeValue(PathAttribute, error.ErrorContent);
+            item2Fill.SetAttributeValue(PathAttribute, errorContent);
 
-			// Set proper handler type
-			if (error.HandlerType.Equals("File"))
-			{
-				item2Fill.SetAttributeValue(PathAttribute,
-					Path.Combine(virtualDir.ContentPath, FileUtils.CorrectRelativePath(error.ErrorContent)));
-			}
 			//
 			item2Fill.SetAttributeValue(ResponseModeAttribute, error.HandlerType);
 			// We are succeeded

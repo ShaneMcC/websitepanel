@@ -34,6 +34,17 @@ using System.Runtime.Serialization;
 
 namespace WebsitePanel.Providers.WebAppGallery
 {
+    [Flags]
+    public enum GalleryApplicationWellKnownDependency
+    {
+        None = 0,
+        PHP = 1,
+        AspNet20 = 2,
+        AspNet40 = 4,
+        SQL = 8,
+        MySQL = 16
+    }
+
 	public class Author
 	{
 		[XmlElement(ElementName="name", Namespace="http://www.w3.org/2005/Atom")]
@@ -92,6 +103,9 @@ namespace WebsitePanel.Providers.WebAppGallery
 	{
 		[XmlElement(ElementName = "productId", Namespace = "http://www.w3.org/2005/Atom")]
 		public string ProductId { get; set; }
+
+        [XmlAttribute(AttributeName = "idref", Namespace = "http://www.w3.org/2005/Atom")]
+        public string IdRef { get; set; }
 
 		#region Version 0.2
 		[XmlArray(ElementName = "logicalAnd", Namespace = "http://www.w3.org/2005/Atom"),
@@ -153,6 +167,8 @@ namespace WebsitePanel.Providers.WebAppGallery
 		[XmlElement(ElementName = "dependency", Namespace = "http://www.w3.org/2005/Atom")]
 		public Dependency Dependency { get; set; }
 
+        public GalleryApplicationWellKnownDependency WellKnownDependencies { get; set; }
+
 		public DateTime LastUpdated { get; set; }
 
 		public DateTime Published { get; set; }
@@ -212,87 +228,6 @@ namespace WebsitePanel.Providers.WebAppGallery
 		[XmlElement("pageName", Namespace = "http://www.w3.org/2005/Atom")]
 		public string PageName { get; set; }
     }
-
-	/// <summary>
-	/// 
-	/// </summary>
-	/// <remarks>When extend with an additional dependencies support, 
-	/// please refer to the WebApplicationGallery.CleanupUnknownDependencies method
-	/// </remarks>
-	public sealed class SupportedAppDependencies
-	{
-		private static Dictionary<string, string[]> _dependencies;
-		//
-		public const string PHP_SCRIPTING_DEP = "PHP_SCRIPTING";
-		public const string ASPNET_SCRIPTING_DEP = "ASPNET_SCRIPTING";
-		public const string MSSQL_DATABASE_DEP = "MSSQL_DATABASE";
-		public const string MYSQL_DATABASE_DEP = "MYSQL_DATABASE";
-
-		static SupportedAppDependencies()
-		{
-			_dependencies = new Dictionary<string, string[]>()
-			{
-				// PHP
-				{ PHP_SCRIPTING_DEP, 
-					new string[] {"www.microsoft.com/web/webpi/2.0/WebProductList.xml?201",
-					"www.microsoft.com/web/webpi/2.0/WebProductList.xml?202",
-					"www.microsoft.com/web/webpi/2.0/WebProductList.xml?203",
-					"FastCGIIIS6", "FastCGI15BetaIIS6", "CGI", "PHP", "LegacyPHP"}
-				},
-				// ASP.NET
-				{ ASPNET_SCRIPTING_DEP, 
-					new string[] {"www.microsoft.com/web/webpi/2.0/WebProductList.xml?6",
-					"www.microsoft.com/web/webpi/2.0/WebProductList.xml?75",
-					"www.microsoft.com/web/webpi/2.0/WebProductList.xml?175",
-					"IIS51", "IIS60", "ASPNET"}
-				},
-				// MSSQL
-				{ MSSQL_DATABASE_DEP, 
-					new string[] {"www.microsoft.com/web/webpi/2.0/WebProductList.xml?197",
-					"www.microsoft.com/web/webpi/2.0/WebProductList.xml?198",
-					"SMO"}
-				},
-				// MySQL
-				{ MYSQL_DATABASE_DEP, 
-					new string[] {"www.microsoft.com/web/webpi/2.0/WebProductList.xml?199",
-					"200", "MySQL", "MySQLConnector"}
-				}
-			};
-		}
-
-		public static string[] PHP_SCRIPTING
-		{
-			get { return _dependencies[PHP_SCRIPTING_DEP]; }
-		}
-
-		public static string[] ASPNET_SCRIPTING
-		{
-			get { return _dependencies[ASPNET_SCRIPTING_DEP]; }
-		}
-
-		public static string[] MSSQL_DATABASE
-		{
-			get { return _dependencies[MSSQL_DATABASE_DEP]; }
-		}
-
-		public static string[] MYSQL_DATABASE
-		{
-			get { return _dependencies[MYSQL_DATABASE_DEP]; }
-		}
-
-		public static string[] _ALL_DEPENDENCIES
-		{
-			get
-			{
-				List<string> allItems = new List<string>();
-				//
-				foreach (string key in _dependencies.Keys)
-					allItems.AddRange(_dependencies[key]);
-				//
-				return allItems.ToArray();
-			}
-		}
-	}
 
 	public enum GalleryWebAppStatus
 	{

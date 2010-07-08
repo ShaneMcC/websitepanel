@@ -51,6 +51,9 @@ namespace WebsitePanel.Providers.Web
 {
 	public sealed class WebApplicationGallery
 	{
+        // MS Deploy library
+        private const string MS_DEPLOY_ASSEMBLY_NAME = "Microsoft.Web.Deployment, Version=7.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35";
+
 		private CacheManager cache;
 		private static DeploymentSkipDirective SkipMsSQL = new DeploymentSkipDirective("skipSqlDirective", "objectName=dbFullSql");
 		private static DeploymentSkipDirective SkipMySQL = new DeploymentSkipDirective("skipSqlDirective", "objectName=dbMySql");
@@ -66,6 +69,32 @@ namespace WebsitePanel.Providers.Web
 		public const int WEB_APPLICATIONS_CACHE_STORE_MINUTES = 60;
 		public const int XML_FEED_RECOVERY_ATTEMPTS = 10;
 		public const string WAG_DEFAULT_FEED_URL = "http://www.microsoft.com/web/webpi/2.0/WebApplicationList.xml";
+
+        // well-known parameters matching
+        public readonly Dictionary<string, DeploymentParameterWellKnownTag> wellKnownParameters
+            = new Dictionary<string, DeploymentParameterWellKnownTag>(StringComparer.InvariantCultureIgnoreCase)
+        {
+            {"Database Server", DeploymentParameterWellKnownTag.DBServer},
+            {"Database Administrator", DeploymentParameterWellKnownTag.DBAdminUserName},
+            {"Database Administrator Password", DeploymentParameterWellKnownTag.DBAdminPassword},
+            {"Database Name", DeploymentParameterWellKnownTag.DBName},
+            {"Database User Name", DeploymentParameterWellKnownTag.DBUserName},
+            {"Database Password", DeploymentParameterWellKnownTag.DBUserPassword}
+        };
+
+        // well-known dependencies matching
+        public readonly Dictionary<string, GalleryApplicationWellKnownDependency> wellKnownDependencies
+            = new Dictionary<string, GalleryApplicationWellKnownDependency>(StringComparer.InvariantCultureIgnoreCase)
+        {
+            {"ASPNETApp", GalleryApplicationWellKnownDependency.AspNet20},
+            {"ASPNET35App", GalleryApplicationWellKnownDependency.AspNet20},
+            {"MVCApp", GalleryApplicationWellKnownDependency.AspNet20},
+            {"ASPNET4App", GalleryApplicationWellKnownDependency.AspNet40},
+            {"PHPApp", GalleryApplicationWellKnownDependency.PHP},
+            {"SQLApp", GalleryApplicationWellKnownDependency.SQL},
+            {"SQLDriverPHPApp", GalleryApplicationWellKnownDependency.SQL},
+            {"MySQLApp", GalleryApplicationWellKnownDependency.MySQL}
+        };
 
 		private string feedXmlURI;
 
@@ -93,8 +122,7 @@ namespace WebsitePanel.Providers.Web
 					//
 					xmldoc = new XmlDocument();
 					xmldoc.Load(feedXmlURI);
-					//
-					CleanupUnknownDependencies(xmldoc);
+
 					// Add XML to the cache
 					cache.Add(WAG_XML_FEED_CACHE_KEY, xmldoc);
 				}
@@ -127,8 +155,7 @@ No action is required the message for information purposes only.", feedXmlURI), 
 							try
 							{
 								xmldoc.LoadXml(feedXmlString.Substring(numOfRetries));
-								//
-								CleanupUnknownDependencies(xmldoc);
+
 								// Add XML to the cache
 								cache.Add(WAG_XML_FEED_CACHE_KEY, xmldoc);
 								//
@@ -156,39 +183,39 @@ Please ensure that the feed is a correct XML file if you use a custom one,
 otherwise contact WebsitePanel Software for further assistance.", ex);
 					}
 				}
-				//
-				XmlNamespaceManager nsmgr = GetXmlNsManager(xmldoc.NameTable);
-				//
-				XmlNode rootNode = xmldoc.DocumentElement.SelectSingleNode("atom:dependencies", nsmgr);
-				//
-				XmlNodeList idRefNodes = rootNode.SelectNodes(".//atom:dependency[@idref]", nsmgr);
-				//
-				foreach (XmlNode idRefNode in idRefNodes)
-				{
-					//
-					XmlNode idRefRepo = xmldoc.DocumentElement.SelectSingleNode(
-						String.Format("//atom:dependency[@id='{0}']", idRefNode.Attributes["idref"].Value), nsmgr);
-					//
-					if (idRefRepo != null)
-					{
-						idRefNode.ParentNode.ReplaceChild(idRefRepo.Clone(), idRefNode);
-					}
-				}
+                ////
+                //XmlNamespaceManager nsmgr = GetXmlNsManager(xmldoc.NameTable);
+                ////
+                //XmlNode rootNode = xmldoc.DocumentElement.SelectSingleNode("atom:dependencies", nsmgr);
+                ////
+                //XmlNodeList idRefNodes = rootNode.SelectNodes(".//atom:dependency[@idref]", nsmgr);
+                ////
+                //foreach (XmlNode idRefNode in idRefNodes)
+                //{
+                //    //
+                //    XmlNode idRefRepo = xmldoc.DocumentElement.SelectSingleNode(
+                //        String.Format("//atom:dependency[@id='{0}']", idRefNode.Attributes["idref"].Value), nsmgr);
+                //    //
+                //    if (idRefRepo != null)
+                //    {
+                //        idRefNode.ParentNode.ReplaceChild(idRefRepo.Clone(), idRefNode);
+                //    }
+                //}
 
-				//
-				idRefNodes = xmldoc.DocumentElement.SelectNodes("//atom:dependency[@idref]", nsmgr);
-				//
-				foreach (XmlNode idRefNode in idRefNodes)
-				{
-					//
-					XmlNode idRefRepo = xmldoc.DocumentElement.SelectSingleNode(
-						String.Format("//atom:dependency[@id='{0}']", idRefNode.Attributes["idref"].Value), nsmgr);
-					//
-					if (idRefRepo != null)
-					{
-						idRefNode.ParentNode.ReplaceChild(idRefRepo.Clone(), idRefNode);
-					}
-				}
+                ////
+                //idRefNodes = xmldoc.DocumentElement.SelectNodes("//atom:dependency[@idref]", nsmgr);
+                ////
+                //foreach (XmlNode idRefNode in idRefNodes)
+                //{
+                //    //
+                //    XmlNode idRefRepo = xmldoc.DocumentElement.SelectSingleNode(
+                //        String.Format("//atom:dependency[@id='{0}']", idRefNode.Attributes["idref"].Value), nsmgr);
+                //    //
+                //    if (idRefRepo != null)
+                //    {
+                //        idRefNode.ParentNode.ReplaceChild(idRefRepo.Clone(), idRefNode);
+                //    }
+                //}
 			}
 			//
 			return xmldoc;
@@ -196,19 +223,17 @@ otherwise contact WebsitePanel Software for further assistance.", ex);
 
 		public bool IsMsDeployInstalled()
 		{
-			bool result = false;
 			//
 			try
 			{
-				Assembly assembly = Assembly.LoadWithPartialName("Microsoft.Web.Deployment");
-				result = (assembly != null);
+                Assembly.Load(MS_DEPLOY_ASSEMBLY_NAME);
+                return true;
 			}
 			catch
 			{
-				// nothing to-do
+                // type could not be instantiated
+                return false;
 			}
-			//
-			return result;
 		}
 
 		public List<GalleryCategory> GetCategories()
@@ -239,8 +264,8 @@ otherwise contact WebsitePanel Software for further assistance.", ex);
 			//
 			XmlNamespaceManager nsmgr = GetXmlNsManager(xmldoc.NameTable);
 			//
-			string xQuery = String.IsNullOrEmpty(categoryName) ? "//atom:entry[@type='application']"
-				: String.Format("//atom:entry[@type='application' and atom:keywords[atom:keywordId='{0}']]", categoryName);
+			string xQuery = String.IsNullOrEmpty(categoryName) ? "//atom:entry[@type='application' and atom:installers/atom:installer/atom:languageId = 'en']"
+                : String.Format("//atom:entry[@type='application' and atom:keywords[atom:keywordId='{0}'] and atom:installers/atom:installer/atom:languageId = 'en']", categoryName);
 			//
 			List<GalleryApplication> appList = new List<GalleryApplication>();
 			//
@@ -248,6 +273,10 @@ otherwise contact WebsitePanel Software for further assistance.", ex);
 			{
 				appList.Add(DeserializeGalleryApplication(node, nsmgr));
 			}
+
+            // sort apps alphabetically
+            appList.Sort( (a,b) => { return String.Compare(a.Title, b.Title, true); });
+
 			//
 			return appList;
 		}
@@ -275,22 +304,22 @@ otherwise contact WebsitePanel Software for further assistance.", ex);
 			return GetApplicationPackagePath(GetApplicationByProductId(productId));
 		}
 
-		public string GetApplicationPackagePath(GalleryApplication appObject)
+		public string GetApplicationPackagePath(GalleryApplication app)
 		{
 			//
 			string appPackagePath = null;
 			//
-			if (appObject != null)
+			if (app != null)
 			{
 				InstallerFile installerFile = null;
 				// Acquire root installer item
 				#region Atom Feed Version 0.2
-				if (appObject.InstallerItems.Count > 0)
+				if (app.InstallerItems.Count > 0)
 				{
-					InstallerItem installerItem_0 = appObject.InstallerItems[0];
+					InstallerItem installerItem_0 = app.InstallerItems[0];
 					if (installerItem_0 == null)
 					{
-						Log.WriteWarning(WEB_PI_APP_PACK_ROOT_INSTALLER_ITEM_MISSING, appObject.Title);
+						Log.WriteWarning(WEB_PI_APP_PACK_ROOT_INSTALLER_ITEM_MISSING, app.Title);
 						return appPackagePath;
 					}
 					// Ensure web app package can be reached
@@ -299,12 +328,12 @@ otherwise contact WebsitePanel Software for further assistance.", ex);
 				#endregion
 
 				#region Atom Feed Version 2.0.1.0
-				else if (appObject.Installers.Count > 0)
+				else if (app.Installers.Count > 0)
 				{
-					Installer installerItem_0 = appObject.Installers[0];
+					Installer installerItem_0 = app.Installers[0];
 					if (installerItem_0 == null)
 					{
-						Log.WriteWarning(WEB_PI_APP_PACK_ROOT_INSTALLER_ITEM_MISSING, appObject.Title);
+						Log.WriteWarning(WEB_PI_APP_PACK_ROOT_INSTALLER_ITEM_MISSING, app.Title);
 						return appPackagePath;
 					}
 					// Ensure web app package can be reached
@@ -314,7 +343,7 @@ otherwise contact WebsitePanel Software for further assistance.", ex);
 				
 				if (installerFile == null || String.IsNullOrEmpty(installerFile.InstallerUrl))
 				{
-					Log.WriteWarning(WEB_PI_APP_PACK_DISPLAY_URL_MISSING, appObject.Title);
+					Log.WriteWarning(WEB_PI_APP_PACK_DISPLAY_URL_MISSING, app.Title);
 					return appPackagePath;
 				}
 				//
@@ -383,15 +412,24 @@ otherwise contact WebsitePanel Software for further assistance.", ex);
 				//
 				foreach (DeploymentSyncParameter parameter in iisApplication.SyncParameters)
 				{
-					appParams.Add(new DeploymentParameter
+                    DeploymentParameter p = new DeploymentParameter
 					{
 						Name = parameter.Name,
-						FriendlyName = parameter.FriendlyName,
+						FriendlyName = !String.IsNullOrEmpty(parameter.FriendlyName) ? parameter.FriendlyName : parameter.Name,
 						Value = parameter.Value,
 						DefaultValue = parameter.DefaultValue,
 						Description = parameter.Description,
-						Tags = parameter.Tags
-					});
+                        ValidationKind = (DeploymentParameterValidationKind)parameter.Validation.Kind,
+                        ValidationString = parameter.Validation.ValidationString,
+                        WellKnownTags = (DeploymentParameterWellKnownTag)parameter.WellKnownTags
+					};
+
+                    // add to the list
+                    appParams.Add(p);
+
+                    // fix tags for parameters with hard-coded names
+                    if(wellKnownParameters.ContainsKey(p.Name))
+                        p.WellKnownTags |= wellKnownParameters[p.Name];
 				}
 			}
 			catch (Exception ex)
@@ -411,28 +449,32 @@ otherwise contact WebsitePanel Software for further assistance.", ex);
 			return appParams;
 		}
 
-		public string InstallApplication(string productId, List<DeploymentParameter> updatedValues)
+		public string InstallApplication(string productId, List<DeploymentParameter> updatedParameters)
 		{
 			string packageFile = GetApplicationPackagePath(productId);
 			string applicationPath = null;
-			//
+			
 			if (String.IsNullOrEmpty(packageFile))
 				return null;
-			//
+			
 			Log.WriteInfo("WebApp Package Path: {0}", packageFile);
-			//
+			
 			if (!File.Exists(packageFile))
-				throw new Exception(GalleryErrorCodes.FILE_NOT_FOUND);
-			//
+                throw new Exception(GalleryErrors.PackageFileNotFound);
+			
 			// Setup source deployment options
 			DeploymentBaseOptions sourceOptions = new DeploymentBaseOptions();
+
 			// Add tracing capabilities
 			sourceOptions.Trace += new EventHandler<DeploymentTraceEventArgs>(sourceOptions_Trace);
 			sourceOptions.TraceLevel = TraceLevel.Verbose;
+
 			// Setup deployment provider
 			DeploymentProviderOptions providerOptions = new DeploymentProviderOptions(DeploymentWellKnownProvider.Package);
+
 			// Set the package path location
 			providerOptions.Path = packageFile;
+
 			// Prepare the package deployment procedure
 			using (DeploymentObject iisApplication = DeploymentManager.CreateObject(providerOptions, sourceOptions))
 			{
@@ -442,58 +484,50 @@ otherwise contact WebsitePanel Software for further assistance.", ex);
 				destinationOptions.Trace += new EventHandler<DeploymentTraceEventArgs>(sourceOptions_Trace);
 				destinationOptions.TraceLevel = TraceLevel.Verbose;
 
-				// MSDEPLOY TEAM COMMENTS: For each parameter that was specified in the UI, set its value 
-				foreach (DeploymentParameter updatedValue in updatedValues)
-				{
-					DeploymentSyncParameter parameter = null;
-					// Assert whether a parameter assigned a value
-					Trace.Assert(!String.IsNullOrEmpty(updatedValue.Name));
-					if (!iisApplication.SyncParameters.TryGetValue(updatedValue.Name, out parameter))
-					{
-						throw new InvalidOperationException("Could not find a parameter with the name " + updatedValue.Name);
-					}
-					parameter.Value = updatedValue.Value;
-				}
+				// MSDEPLOY TEAM COMMENTS: For each parameter that was specified in the UI, set its value
+                DeploymentParameterWellKnownTag databaseEngine = DeploymentParameterWellKnownTag.None;
 
-				// Find database parameter received in updated parameters arrays
-				DeploymentParameter dbNameParam = Array.Find<DeploymentParameter>(updatedValues.ToArray(),
-					p => MatchParameterByNames(p, DeploymentParameter.DATABASE_NAME_PARAMS) 
-						|| MatchParameterTag(p, DeploymentParameter.DB_NAME_PARAM_TAG));
+                int i = 0;
+                while(i < iisApplication.SyncParameters.Count)
+                {
+                    // try to find parameter in updated parameters
+                    string name = iisApplication.SyncParameters[i].Name;
+                    DeploymentParameter updatedParameter = updatedParameters.Find( p => { return String.Compare(p.Name, name) == 0; });
 
-				// MSDEPLOY TEAM COMMENTS: There may be a bunch of hidden parameters that never got set.
-				// set these to their default values (which will probably be calculated based on the other
-				// parameters that were set).
-				foreach (DeploymentSyncParameter parameter in iisApplication.SyncParameters)
-				{
-					// Ensure all syncronization parameters are set
-					if (parameter.Value == null)
-						throw new InvalidOperationException("Parameter '" + parameter.Name + "' value was not set. This indicates an issue with the package itself. Contact your system administrator.");
-					// Detect application path parameter in order to return it to the client
-					if (MatchParameterTag(parameter, DeploymentParameter.IISAPP_PARAM_TAG))
-					{
-						applicationPath = parameter.Value;
-						continue;
-					}
-					//
-					if (dbNameParam == null)
-						continue;
-					
-					//
-					if (!MatchParameterTag(parameter, DeploymentParameter.DB_NAME_PARAM_TAG)
-						&& !MatchParameterByNames(parameter, DeploymentParameter.DATABASE_NAME_PARAMS))
-						continue;
+                    if(updatedParameter != null)
+                    {
+                        // parameter found
+                        // update its value
+                        iisApplication.SyncParameters[i].Value = updatedParameter.Value;
+                        i++; // advance to the next parameter
 
-					// Application supports both databases MySQL & MSSQL - one of them should be skipped
-					if (MatchParameterTag(parameter, DeploymentParameter.MYSQL_PARAM_TAG)
-						&& MatchParameterTag(parameter, DeploymentParameter.SQL_PARAM_TAG))
-					{
-						if (dbNameParam.Tags.ToLowerInvariant().StartsWith("mssql"))
-							sourceOptions.SkipDirectives.Add(SkipMySQL);
-						// Skip MySQL database scripts
-						else if (dbNameParam.Tags.ToLowerInvariant().StartsWith("mysql"))
-							sourceOptions.SkipDirectives.Add(SkipMsSQL);
-					}
-				}
+                        // check for selected database engine
+                        if ((updatedParameter.WellKnownTags & DeploymentParameterWellKnownTag.MySql) == DeploymentParameterWellKnownTag.MySql)
+                            databaseEngine = DeploymentParameterWellKnownTag.MySql;
+                        else if ((updatedParameter.WellKnownTags & DeploymentParameterWellKnownTag.Sql) == DeploymentParameterWellKnownTag.Sql)
+                            databaseEngine = DeploymentParameterWellKnownTag.Sql;
+                    
+                        // get application path
+                        if ((updatedParameter.WellKnownTags & DeploymentParameterWellKnownTag.IisApp) == DeploymentParameterWellKnownTag.IisApp)
+                            applicationPath = updatedParameter.Value;
+                    }
+                    else
+                    {
+                        // parameter not found
+                        // delete it
+                        iisApplication.SyncParameters.Remove(name);
+                    }
+                }
+
+
+                // Skip SQL Server database scripts if not SQL Server was selected
+                if (databaseEngine != DeploymentParameterWellKnownTag.Sql)
+                    sourceOptions.SkipDirectives.Add(SkipMsSQL);
+
+                // Skip MySQL database scripts if not MySQL was selected
+                if (databaseEngine != DeploymentParameterWellKnownTag.MySql)
+                    sourceOptions.SkipDirectives.Add(SkipMySQL);
+
 				// Setup deployment options
 				DeploymentSyncOptions syncOptions = new DeploymentSyncOptions();
 				// Add tracing capabilities
@@ -501,7 +535,7 @@ otherwise contact WebsitePanel Software for further assistance.", ex);
 				// Issue a syncronization signal between the parties
 				iisApplication.SyncTo(DeploymentWellKnownProvider.Auto, applicationPath, destinationOptions, syncOptions);
 				//
-				Log.WriteInfo("{0}: {1}", DeploymentParameter.APPICATION_PATH_PARAM, applicationPath);
+				Log.WriteInfo("{0}: {1}", "Application path", applicationPath);
 				//
 			}
 			//
@@ -509,25 +543,6 @@ otherwise contact WebsitePanel Software for further assistance.", ex);
 		}
 
 		#region Helper methods
-
-		private void CleanupUnknownDependencies(XmlDocument xmldoc)
-		{
-			List<string> knownIds = new List<string>(SupportedAppDependencies._ALL_DEPENDENCIES);
-			//
-			for (int i = 0; i < knownIds.Count; i++)
-				knownIds[i] = String.Format("atom:productId='{0}'", knownIds[i]);
-			//
-			string xPath = String.Concat("//atom:dependency[(atom:productId) and not(", 
-				String.Join(" or ", knownIds.ToArray()), ")]");
-			//
-			XmlNamespaceManager nsmgr = GetXmlNsManager(xmldoc.NameTable);
-			//
-			XmlNodeList uknownXmlNodes = xmldoc.SelectNodes(xPath, nsmgr);
-			// Cleanup unknown nodes found
-			foreach (XmlNode uxn in uknownXmlNodes)
-				uxn.ParentNode.RemoveChild(uxn);
-			//
-		}
 
 		private XmlNamespaceManager GetXmlNsManager(XmlNameTable nt)
 		{
@@ -547,9 +562,35 @@ otherwise contact WebsitePanel Software for further assistance.", ex);
 			app.Link = GetAtomNodeAttribute(node, nsmgr, "link", "href");
 			//
 			app.IconUrl = GetAtomNodeText(node, nsmgr, "images/atom:icon");
+
+            // parse well-known dependencies
+            UpdateApplicationWellKnownDependencies(app, app.Dependency);
+
 			//
 			return app;
 		}
+
+        private void UpdateApplicationWellKnownDependencies(GalleryApplication app, Dependency dependency)
+        {
+            if (dependency.IdRef != null && wellKnownDependencies.ContainsKey(dependency.IdRef))
+                app.WellKnownDependencies |= wellKnownDependencies[dependency.IdRef];
+
+            // process "And"
+            foreach (Dependency d in dependency.And)
+                UpdateApplicationWellKnownDependencies(app, d);
+
+            // process "Or"
+            foreach (Dependency d in dependency.Or)
+                UpdateApplicationWellKnownDependencies(app, d);
+
+            // process "LogicalAnd"
+            foreach (Dependency d in dependency.LogicalAnd)
+                UpdateApplicationWellKnownDependencies(app, d);
+
+            // process "LogicalOr"
+            foreach (Dependency d in dependency.LogicalOr)
+                UpdateApplicationWellKnownDependencies(app, d);
+        }
 
 		private string GetAtomNodeText(XmlNode app, XmlNamespaceManager nsmgr, string nodeName)
 		{
@@ -589,51 +630,6 @@ otherwise contact WebsitePanel Software for further assistance.", ex);
 			if (node == null)
 				return null;
 			return node.InnerText;
-		}
-
-		private bool MatchParameterByNames<T>(T param, string[] nameMatches)
-		{
-			foreach (var nameMatch in nameMatches)
-			{
-				if (MatchParameterName<T>(param, nameMatch))
-					return true;
-			}
-			//
-			return false;
-		}
-
-		private bool MatchParameterName<T>(T param, string nameMatch)
-		{
-			if (param == null || String.IsNullOrEmpty(nameMatch))
-				return false;
-			//
-			Type paramTypeOf = typeof(T);
-			//
-			PropertyInfo namePropInfo = paramTypeOf.GetProperty("Name");
-			//
-			String paramName = Convert.ToString(namePropInfo.GetValue(param, null));
-			//
-			if (String.IsNullOrEmpty(paramName))
-				return false;
-			// Compare for tag name match
-			return (paramName.ToLowerInvariant() == nameMatch.ToLowerInvariant());
-		}
-
-		private bool MatchParameterTag<T>(T param, string tagMatch)
-		{
-			if (param == null || String.IsNullOrEmpty(tagMatch))
-				return false;
-			//
-			Type paramTypeOf = typeof(T);
-			//
-			PropertyInfo tagsPropInfo = paramTypeOf.GetProperty("Tags");
-			//
-			String strTags = Convert.ToString(tagsPropInfo.GetValue(param, null));
-			//
-			if (String.IsNullOrEmpty(strTags))
-				return false;
-			// Lookup for specific tags within the parameter
-			return Array.Exists<string>(strTags.ToLowerInvariant().Split(','), x => x.Trim() == tagMatch.ToLowerInvariant());
 		}
 
 		private void sourceOptions_Trace(object sender, DeploymentTraceEventArgs e)

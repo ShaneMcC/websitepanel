@@ -267,7 +267,7 @@
     <Compile Include="WebAppGallery\DeploymentParameter.cs" />
     <Compile Include="WebAppGallery\GalleryApplication.cs" />
     <Compile Include="WebAppGallery\GalleryCategory.cs" />
-    <Compile Include="WebAppGallery\GalleryErrorCodes.cs" />
+    <Compile Include="WebAppGallery\GalleryErrors.cs" />
     <Compile Include="Web\HttpError.cs" />
     <Compile Include="Web\HttpHeader.cs" />
     <Compile Include="Web\IWebServer.cs" />

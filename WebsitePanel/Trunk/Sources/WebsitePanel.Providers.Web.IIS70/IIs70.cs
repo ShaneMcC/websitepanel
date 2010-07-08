@@ -202,59 +202,59 @@ namespace WebsitePanel.Providers.Web
 				x => x.AspNetInstalled.Equals(vdir.AspNetInstalled) && isolation(x.Mode) == sisMode);
 		}
 		//
-		private void SetupSupportedAppPools(ServiceProviderSettings s)
+		private void SetupSupportedAppPools(ServiceProviderSettings settings)
 		{
 			supportedAppPools = new List<WebAppPool>();
 
 			#region Populate Shared Application Pools
 			// ASP.NET 1.1
-			if (!String.IsNullOrEmpty(s[Constants.AspNet11Pool]))
+			if (!String.IsNullOrEmpty(settings[Constants.AspNet11Pool]))
 			{
 				supportedAppPools.Add(new WebAppPool
 				{
 					AspNetInstalled = "1",
 					Mode = SiteAppPoolMode.dotNetFramework1 | SiteAppPoolMode.Classic | SiteAppPoolMode.Shared,
-					Name = s[Constants.AspNet11Pool].Trim()
+					Name = settings[Constants.AspNet11Pool].Trim()
 				});
 			}
 			// ASP.NET 2.0 (Classic pipeline)
-			if (!String.IsNullOrEmpty(s[Constants.ClassicAspNet20Pool]))
+			if (!String.IsNullOrEmpty(settings[Constants.ClassicAspNet20Pool]))
 			{
 				supportedAppPools.Add(new WebAppPool
 				{
 					AspNetInstalled = "2",
 					Mode = SiteAppPoolMode.dotNetFramework2 | SiteAppPoolMode.Classic | SiteAppPoolMode.Shared,
-					Name = s[Constants.ClassicAspNet20Pool].Trim()
+					Name = settings[Constants.ClassicAspNet20Pool].Trim()
 				});
 			}
 			// ASP.NET 2.0 (Integrated pipeline)
-			if (!String.IsNullOrEmpty(s[Constants.IntegratedAspNet20Pool]))
+			if (!String.IsNullOrEmpty(settings[Constants.IntegratedAspNet20Pool]))
 			{
 				supportedAppPools.Add(new WebAppPool
 				{
 					AspNetInstalled = "2I",
 					Mode = SiteAppPoolMode.dotNetFramework2 | SiteAppPoolMode.Integrated | SiteAppPoolMode.Shared,
-					Name = s[Constants.IntegratedAspNet20Pool].Trim()
+					Name = settings[Constants.IntegratedAspNet20Pool].Trim()
 				});
 			}
 			// ASP.NET 4.0 (Classic pipeline)
-			if (!String.IsNullOrEmpty(s[Constants.ClassicAspNet40Pool]))
+			if (!String.IsNullOrEmpty(settings[Constants.ClassicAspNet40Pool]))
 			{
 				supportedAppPools.Add(new WebAppPool
 				{
 					AspNetInstalled = "4",
 					Mode = SiteAppPoolMode.dotNetFramework4 | SiteAppPoolMode.Classic | SiteAppPoolMode.Shared,
-					Name = s[Constants.ClassicAspNet40Pool].Trim()
+					Name = settings[Constants.ClassicAspNet40Pool].Trim()
 				});
 			}
 			// ASP.NET 4.0 (Integrated pipeline)
-			if (!String.IsNullOrEmpty(s[Constants.IntegratedAspNet40Pool]))
+			if (!String.IsNullOrEmpty(settings[Constants.IntegratedAspNet40Pool]))
 			{
 				supportedAppPools.Add(new WebAppPool
 				{
 					AspNetInstalled = "4I",
 					Mode = SiteAppPoolMode.dotNetFramework4 | SiteAppPoolMode.Integrated | SiteAppPoolMode.Shared,
-					Name = s[Constants.IntegratedAspNet40Pool].Trim()
+					Name = settings[Constants.IntegratedAspNet40Pool].Trim()
 				});
 			}
 			#endregion
@@ -300,7 +300,7 @@ namespace WebsitePanel.Providers.Web
 			// Make some corrections for frameworks with the version number greater or less than 2.0 ...
 			
 			#region No ASP.NET 1.1 has been found - so remove extra pools
-			if (String.IsNullOrEmpty(s[Constants.AspNet11PathSetting]))
+			if (String.IsNullOrEmpty(settings[Constants.AspNet11PathSetting]))
 				supportedAppPools.RemoveAll(x => dotNetVersion(x.Mode) == SiteAppPoolMode.dotNetFramework1); 
 			#endregion
 
@@ -308,11 +308,18 @@ namespace WebsitePanel.Providers.Web
 			var aspNet40PathSetting = (Constants.X64Environment)
 					? Constants.AspNet40x64PathSetting : Constants.AspNet40PathSetting;
 			//
-			if (String.IsNullOrEmpty(s[aspNet40PathSetting]))
+			if (String.IsNullOrEmpty(settings[aspNet40PathSetting]))
 				supportedAppPools.RemoveAll(x => dotNetVersion(x.Mode) == SiteAppPoolMode.dotNetFramework4); 
 			#endregion
 		}
 	}
+
+    public class WebManagementServiceSettings
+    {
+        public string Port { get; set; }
+        public string ServiceUrl { get; set; }
+        public int RequiresWindowsCredentials { get; set; }
+    }
 
 	public class IIs70 : IIs60, IWebServer//, IDefaultApplicationPoolNameProvider
 	{
@@ -1941,8 +1948,17 @@ namespace WebsitePanel.Providers.Web
         {
 			List<SettingPair> allSettings = new List<SettingPair>();
             allSettings.AddRange(extensionsSvc.GetISAPIExtensionsInstalled());
-			allSettings.AddRange(GetWmSvcServerSettings());
-			//
+
+            // add default web management settings
+            WebManagementServiceSettings wmSettings = GetWebManagementServiceSettings();
+            if (wmSettings != null)
+            {
+                allSettings.Add(new SettingPair("WmSvc.Port", wmSettings.Port));
+                allSettings.Add(new SettingPair("WmSvc.ServiceUrl", wmSettings.ServiceUrl));
+                allSettings.Add(new SettingPair("WmSvc.RequiresWindowsCredentials", wmSettings.RequiresWindowsCredentials.ToString()));
+            }
+
+            // return settings
 			return allSettings.ToArray();
         }
 
@@ -2489,40 +2505,26 @@ namespace WebsitePanel.Providers.Web
 			return isWmSvcInstalled.GetValueOrDefault();
 		}
 
-		protected SettingPair[] GetWmSvcServerSettings()
+        protected WebManagementServiceSettings GetWebManagementServiceSettings()
 		{
-			List<SettingPair> settings = new List<SettingPair>();
+            WebManagementServiceSettings settings = null;
 
 			try
 			{
 				// Trying to retrieve Web Management Server key
 				if (PInvoke.RegistryHive.HKLM.SubKeyExists_x64(@"SOFTWARE\Microsoft\WebManagement\Server"))
 				{
-					// Retrieve service port number
-					settings.Add(new SettingPair
-					{
-						Name = "WmSvc.Port",
-						Value = PInvoke.RegistryHive.HKLM.GetDwordSubKeyValue_x64(
-@"SOFTWARE\Microsoft\WebManagement\Server", "Port").ToString()
-					});
+                    settings = new WebManagementServiceSettings();
 
-					// Retrieve service IP Address
-					settings.Add(new SettingPair
-					{
-						Name = "WmSvc.ServiceUrl",
-						Value = PInvoke.RegistryHive.HKLM.GetSubKeyValue_x64(
-@"SOFTWARE\Microsoft\WebManagement\Server", "IPAddress")
-					});
-					//
+					// port number
+                    settings.Port = PInvoke.RegistryHive.HKLM.GetDwordSubKeyValue_x64(@"SOFTWARE\Microsoft\WebManagement\Server", "Port").ToString();
 
-					// Retrieve service credentials mode
-					settings.Add(new SettingPair
-					{
-						Name = "WmSvc.RequiresWindowsCredentials",
-						Value = PInvoke.RegistryHive.HKLM.GetDwordSubKeyValue_x64(
-@"SOFTWARE\Microsoft\WebManagement\Server", "RequiresWindowsCredentials").ToString()
-					});
-					//
+                    // service URL
+                    settings.ServiceUrl = PInvoke.RegistryHive.HKLM.GetSubKeyValue_x64(@"SOFTWARE\Microsoft\WebManagement\Server", "IPAddress");
+
+                    // credentials mode
+                    settings.RequiresWindowsCredentials =
+                        PInvoke.RegistryHive.HKLM.GetDwordSubKeyValue_x64(@"SOFTWARE\Microsoft\WebManagement\Server", "RequiresWindowsCredentials");
 				}
 			}
 			catch (Exception ex)
@@ -2530,7 +2532,7 @@ namespace WebsitePanel.Providers.Web
 				Log.WriteError("Failed to retrieve Web Management Service settings", ex);
 			}
 			//
-			return settings.ToArray();
+			return settings;
 		}
 
 		protected string GetFullQualifiedAccountName(string accountName)

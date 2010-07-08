@@ -76,7 +76,9 @@
     <Content Include="SharePointServer.asmx" />
     <Content Include="StatisticsServer.asmx" />
     <Content Include="VirtualizationServer.asmx" />
-    <Content Include="Web.config" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="WebServer.asmx" />
     <Content Include="WindowsServer.asmx" />
   </ItemGroup>

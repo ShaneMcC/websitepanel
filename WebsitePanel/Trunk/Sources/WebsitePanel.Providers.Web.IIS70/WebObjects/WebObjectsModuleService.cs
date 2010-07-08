@@ -433,14 +433,13 @@ namespace WebsitePanel.Providers.Web.Iis.WebObjects
 				//
 				foreach (var bindingObj in iisObject.Bindings)
 				{
-					// TO-DO: skip <All Unassigned> bindings
-					if (String.Equals(bindingObj.Protocol, Uri.UriSchemeHttp, StringComparison.OrdinalIgnoreCase) &&
-						!bindingObj.BindingInformation.StartsWith("*"))
-					{
-						string[] bunch = bindingObj.BindingInformation.Split(':');
-						// append binding
-						bindings.Add(new ServerBinding(bunch[0], bunch[1], bunch[2]));
-					}
+                    // return only "http" bindings
+                    if (String.Equals(bindingObj.Protocol, Uri.UriSchemeHttp, StringComparison.InvariantCultureIgnoreCase))
+                    {
+                        string[] parts = bindingObj.BindingInformation.Split(':');
+                        // append binding
+                        bindings.Add(new ServerBinding(bindingObj.Protocol, parts[0], parts[1], parts[2]));
+                    }
 				}
 				//
 				return bindings.ToArray();
@@ -459,21 +458,21 @@ namespace WebsitePanel.Providers.Web.Iis.WebObjects
 				//
 				lock (((ICollection)iisObject.ChildElements).SyncRoot)
 				{
-					var itemsToRemove = new List<Binding>();
-					// Determine HTTP bindings to remove
-					foreach (Binding element in iisObject.Bindings)
-					{
-						if (String.Equals(element.Protocol, Uri.UriSchemeHttp))
-						{
-							itemsToRemove.Add(element);
-						}
-					}
-					// Remove bindings
-					while (itemsToRemove.Count > 0)
-					{
-						iisObject.Bindings.Remove(itemsToRemove[0]);
-						itemsToRemove.RemoveAt(0);
-					}
+                    // remove all "http" bindings
+                    int i = 0;
+                    while (i < iisObject.Bindings.Count)
+                    {
+                        if (String.Equals(iisObject.Bindings[i].Protocol, Uri.UriSchemeHttp, StringComparison.InvariantCultureIgnoreCase))
+                        {
+                            iisObject.Bindings.RemoveAt(i);
+                            continue;
+                        }
+                        else
+                        {
+                            i++;
+                        }
+                    }
+
 					// Create HTTP bindings received
 					foreach (var serverBinding in bindings)
 					{

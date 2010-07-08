@@ -36,37 +36,27 @@ namespace WebsitePanel.Providers
 	[Serializable]
 	public class ServerBinding
 	{
-		private string ip;
-		private string port;
-		private string host;
+
+        public string Protocol { get; set; }
+        public string IP { get; set; }
+        public string Port { get; set; }
+        public string Host { get; set; }
 
 		public ServerBinding()
 		{
 		}
 
-		public ServerBinding(string ip, string port, string host)
-		{
-			this.ip = ip;
-			this.port = port;
-			this.host = host;
-		}
+        public ServerBinding(string ip, string port, string host)
+            : this("http", ip, port, host)
+        {
+        }
 
-		public string IP
+		public ServerBinding(string protocol, string ip, string port, string host)
 		{
-			get { return ip; }
-			set { ip = value; }
-		}
-
-		public string Port
-		{
-			get { return port; }
-			set { port = value; }
-		}
-
-		public string Host
-		{
-			get { return host; }
-			set { host = value; }
+            this.Protocol = protocol;
+			this.IP = ip;
+			this.Port = port;
+			this.Host = host;
 		}
 
 		public override string ToString()

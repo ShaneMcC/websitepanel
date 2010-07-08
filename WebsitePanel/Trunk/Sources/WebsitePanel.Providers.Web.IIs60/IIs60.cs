@@ -3275,6 +3275,8 @@ namespace WebsitePanel.Providers.Web
             return IsIISInstalled();
 		}
 
+
+
 		#region Microsoft Web Application Gallery
 
 		public GalleryCategoriesResult GetGalleryCategories()
@@ -3291,7 +3293,7 @@ namespace WebsitePanel.Providers.Web
 			catch (Exception ex)
 			{
 				result.IsSuccess = false;
-				result.AddError(GalleryErrorCodes.INVALID_FEED_XML, ex);
+				result.AddError(GalleryErrors.ProcessingFeedXMLError, ex);
 			}
 			//
 			return result;
@@ -3311,7 +3313,7 @@ namespace WebsitePanel.Providers.Web
 			catch (Exception ex)
 			{
 				result.IsSuccess = false;
-				result.AddError(GalleryErrorCodes.INVALID_FEED_XML, ex);
+				result.AddError(GalleryErrors.ProcessingFeedXMLError, ex);
 			}
 			//
 			return result;
@@ -3331,7 +3333,7 @@ namespace WebsitePanel.Providers.Web
 			catch (Exception ex)
 			{
 				result.IsSuccess = false;
-				result.AddError(GalleryErrorCodes.INVALID_FEED_XML, ex);
+				result.AddError(GalleryErrors.ProcessingFeedXMLError, ex);
 			}
 			//
 			return result;
@@ -3485,7 +3487,7 @@ namespace WebsitePanel.Providers.Web
 			catch (Exception ex)
 			{
 				result.IsSuccess = false;
-				result.AddError(GalleryErrorCodes.CANNOT_LOAD_PARAMETERS, ex);
+				result.AddError(GalleryErrors.ProcessingPackageError, ex);
 			}
 			//
 			return result;
@@ -3510,7 +3512,7 @@ namespace WebsitePanel.Providers.Web
 			catch (Exception ex)
 			{
 				result.IsSuccess = false;
-				result.AddError(GalleryErrorCodes.GENERAL_INSTALL_ERROR, ex);
+				result.AddError(GalleryErrors.PackageInstallationError, ex);
 			}
 			//
 			return result;
