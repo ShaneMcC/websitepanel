@@ -142,10 +142,10 @@
     <value>Enter user name:</value>
   </data>
   <data name="lblInstallOnDirectory.Text" xml:space="preserve">
-    <value>Install to Virtual Directory:</value>
+    <value>Application Name</value>
   </data>
   <data name="lblInstallOnWebSite.Text" xml:space="preserve">
-    <value>Install on Web Site:</value>
+    <value>Web Site</value>
   </data>
   <data name="lblLeaveThisFieldBlank.Text" xml:space="preserve">
     <value>Leave this field blank if you want to install the application in 
@@ -176,10 +176,10 @@
     <value>Username:</value>
   </data>
   <data name="rblDatabaseItem.ExistingDatabase" xml:space="preserve">
-    <value>Existing Database</value>
+    <value>Use existing database</value>
   </data>
   <data name="rblDatabaseItem.NewDatabase" xml:space="preserve">
-    <value>New Database</value>
+    <value>Create new database</value>
   </data>
   <data name="rblUserItem.ExistingUser" xml:space="preserve">
     <value>Existing User</value>
@@ -188,13 +188,13 @@
     <value>New User</value>
   </data>
   <data name="secAppSettings.Text" xml:space="preserve">
-    <value>Application Settings</value>
+    <value>Application Information</value>
   </data>
   <data name="secDatabase.Text" xml:space="preserve">
     <value>Database</value>
   </data>
   <data name="secLocation.Text" xml:space="preserve">
-    <value>Installation Location</value>
+    <value>Site Information</value>
   </data>
   <data name="Text.SelectDatabase" xml:space="preserve">
     <value>&lt;Select Database&gt;</value>
@@ -210,5 +210,38 @@
   </data>
   <data name="btnOK.Text" xml:space="preserve">
     <value>OK</value>
+  </data>
+  <data name="DatabaseEngine.FlatFile" xml:space="preserve">
+    <value>Flat File</value>
+  </data>
+  <data name="DatabaseEngine.SQLite" xml:space="preserve">
+    <value>SQLite</value>
+  </data>
+  <data name="DatabaseEngine.VistaDB" xml:space="preserve">
+    <value>VistaDB</value>
+  </data>
+  <data name="locDatabaseGroup.Text" xml:space="preserve">
+    <value>Database</value>
+  </data>
+  <data name="locDatabaseGroupDescr.Text" xml:space="preserve">
+    <value>Choose your database:</value>
+  </data>
+  <data name="locNewDatabase.Text" xml:space="preserve">
+    <value>Create a new or use an existing database</value>
+  </data>
+  <data name="locNewDatabaseDescr.Text" xml:space="preserve">
+    <value>Choose whether the package should create a new database during installation or use an existing database:</value>
+  </data>
+  <data name="locWebSiteDescription.Text" xml:space="preserve">
+    <value>Select web site to install the application:</value>
+  </data>
+  <data name="valRequireWebSite.Text" xml:space="preserve">
+    <value>Select web site to install the application</value>
+  </data>
+  <data name="LaunchApplication.Text" xml:space="preserve">
+    <value>Launch {0}</value>
+  </data>
+  <data name="LaunchApplicationTemp.Text" xml:space="preserve">
+    <value>If you recently created this web site it still might be not accessible by its main URL until DNS propagation is completely finished. To open installed application right now you can use this temporary URL provided by your hosting provider: &lt;br/&gt;&lt;a href="{0}" target="_blank"&gt;{0}&lt;/a&gt;</value>
   </data>
 </root>

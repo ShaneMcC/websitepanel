@@ -50,6 +50,8 @@ namespace WebsitePanel.Portal
             set { allowEmptySelection = value; }
         }
 
+        public string SelectValueText { get; set; }
+
         private bool useAddressValueAsKey = false;
         public bool UseAddressValueAsKey
         {
@@ -154,7 +156,11 @@ namespace WebsitePanel.Portal
 
             // add empty item if required
             if (AllowEmptySelection)
-                ddlIPAddresses.Items.Insert(0, new ListItem(GetLocalizedString("Text.SelectAddress"), ""));
+            {
+                if (SelectValueText == null)
+                    SelectValueText = GetLocalizedString("Text.SelectAddress");
+                ddlIPAddresses.Items.Insert(0, new ListItem(SelectValueText, ""));
+            }
 
             // select address by ID
             ListItem li = ddlIPAddresses.Items.FindByValue(addressId.ToString());

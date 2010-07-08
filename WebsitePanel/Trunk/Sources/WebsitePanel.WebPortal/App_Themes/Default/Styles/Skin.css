@@ -85,6 +85,23 @@
 	padding-bottom: 4px;
 }
 
+.FormLabel
+{
+	padding-top: 5px;
+	padding-bottom: 3px;
+	font-weight: bold;
+}
+
+.FormField
+{
+}
+
+.FormFieldDescription
+{
+	padding-top: 3px;
+	padding-bottom: 5px;
+}
+
 .FormBody
 {
 	padding: 10px;
@@ -144,9 +161,9 @@ UL.VerticalButtons LI
 	padding-bottom: 2px;
 }
 
-.FormBody fieldset
+.FormBody FIELDSET
 {
-	padding: 10px;
+	padding: 5px 10px 10px 10px;
 }
 
 .CollapsibleArea
@@ -158,7 +175,7 @@ LEGEND
 {
 	font-weight: bold;
 	color: #0153A4;
-	margin-bottom: 5px;
+	padding: 0px 2px 5px 2px;
 }
 
 INPUT.TextBox50

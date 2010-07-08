@@ -103,23 +103,16 @@ namespace WebsitePanel.Portal.ProviderControls
 		{
 			//
 			ipAddress.AddressId = (settings["SharedIP"] != null) ? Utils.ParseInt(settings["SharedIP"], 0) : 0;
+            ipAddress.SelectValueText = GetLocalizedString("ipAddress.SelectValueText");
+
 			txtWebGroupName.Text = settings["WebGroupName"];
 			chkAssignIPAutomatically.Checked = Utils.ParseBool(settings["AutoAssignDedicatedIP"], true);
 
-			litAspNet11Path.Text = String.IsNullOrEmpty(settings["AspNet11Path"])
-				? GetLocalizedString("NotInstalled.Text") : settings["AspNet11Path"];
-
-			litAspNet20Path.Text = String.IsNullOrEmpty(settings["AspNet20Path"])
-				? GetLocalizedString("NotInstalled.Text") : settings["AspNet20Path"];
-
-			litAspNet20x64Path.Text = String.IsNullOrEmpty(settings["AspNet20x64Path"])
-				? GetLocalizedString("NotInstalled.Text") : settings["AspNet20x64Path"];
-			// ASP.NET 4.0 x86
-			AspNet40Path.Text = String.IsNullOrEmpty(settings[AspNet40Path.ID])
-				? GetLocalizedString("NotInstalled.Text") : settings[AspNet40Path.ID];
-			// ASP.NET 4.0 x64
-			AspNet40x64Path.Text = String.IsNullOrEmpty(settings[AspNet40x64Path.ID])
-				? GetLocalizedString("NotInstalled.Text") : settings[AspNet40x64Path.ID];
+			txtAspNet11Path.Text = settings["AspNet11Path"];
+			txtAspNet20Path.Text = settings["AspNet20Path"];
+			txtAspNet20x64Path.Text = settings["AspNet20x64Path"];
+            txtAspNet40Path.Text = settings["AspNet40Path"];
+			txtAspNet40x64Path.Text = settings["AspNet40x64Path"];
 
 			txtAspNet11Pool.Text = settings["AspNet11Pool"];
 			// ASP.NET 2.0
@@ -133,11 +126,8 @@ namespace WebsitePanel.Portal.ProviderControls
 
 			txtGalleryFeedUrl.Text = settings["GalleryXmlFeedUrl"];
 
-			litAspPath.Text = String.IsNullOrEmpty(settings["AspPath"])
-				? GetLocalizedString("NotInstalled.Text") : settings["AspPath"];
-
+			txtAspPath.Text = settings["AspPath"];
 			php4Path.Text = settings["Php4Path"];
-
 			txtPhpPath.Text = settings["PhpPath"];
 			Utils.SelectListItem(ddlPhpMode, settings["PhpMode"]);
 
@@ -166,8 +156,8 @@ namespace WebsitePanel.Portal.ProviderControls
 			txtWmSvcServiceUrl.Text = wmsvcServiceUrl;
 
 			//
-			if (settings["WmSvc.RequiresWindowsCredentials"] == "1")
-				ddlWmSvcCredentialsMode.Items.RemoveAt(1);
+            //if (settings["WmSvc.RequiresWindowsCredentials"] == "1")
+            //    ddlWmSvcCredentialsMode.Items.RemoveAt(1);
 			//
 			Utils.SelectListItem(ddlWmSvcCredentialsMode, settings["WmSvc.CredentialsMode"]);
 			//
@@ -181,6 +171,13 @@ namespace WebsitePanel.Portal.ProviderControls
 			settings["WebGroupName"] = txtWebGroupName.Text.Trim();
 			settings["AutoAssignDedicatedIP"] = chkAssignIPAutomatically.Checked.ToString();
 
+            // paths
+            settings["AspNet11Path"] = txtAspNet11Path.Text.Trim();
+            settings["AspNet20Path"] = txtAspNet20Path.Text.Trim();
+            settings["AspNet20x64Path"] = txtAspNet20x64Path.Text.Trim();
+            settings["AspNet40Path"] = txtAspNet40Path.Text.Trim();
+            settings["AspNet40x64Path"] = txtAspNet40x64Path.Text.Trim();
+
 			settings["AspNet11Pool"] = txtAspNet11Pool.Text.Trim();
 			// ASP.NET 2.0
 			settings["ClassicAspNet20Pool"] = txtAspNet20Pool.Text.Trim();
@@ -193,6 +190,7 @@ namespace WebsitePanel.Portal.ProviderControls
 
 			settings["GalleryXmlFeedUrl"] = txtGalleryFeedUrl.Text.Trim();
 
+            settings["AspPath"] = txtAspPath.Text.Trim();
 			settings["Php4Path"] = php4Path.Text.Trim();
 			settings["PhpPath"] = txtPhpPath.Text.Trim();
 			settings["PhpMode"] = ddlPhpMode.SelectedValue;

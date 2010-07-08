@@ -937,10 +937,10 @@
     <value>User account has been successfully created</value>
   </data>
   <data name="Error.WEB_APPLICATION_GALLERY_INSTALLED" xml:space="preserve">
-    <value>The following errors have been occured:</value>
+    <value>The application could not be installed:</value>
   </data>
   <data name="Warning.WEB_APPLICATION_GALLERY_INSTALLED" xml:space="preserve">
-    <value>Application has been installed but the following errors have been occured:</value>
+    <value>The application could not be installed:</value>
   </data>
   <data name="Text.APPINSTALLER_EMPTY_SETTINGS" xml:space="preserve">
     <value>The Application does not require any specific settings</value>
@@ -4544,10 +4544,7 @@
     <value>We apologize for the inconvenience but the application download has been failed. Please contact your service provider to correct the issue.</value>
   </data>
   <data name="Error.WAG_NOT_AVAILABLE" xml:space="preserve">
-    <value>Web Application Gallery is unavailable</value>
-  </data>
-  <data name="ModuleWAG.WAG_MODULE_NOT_AVAILABLE" xml:space="preserve">
-    <value>Please contact your service provider as currently Web Application Gallery is unavailable.</value>
+    <value>Web Application Gallery module is unavailable:</value>
   </data>
   <data name="Error.APP_PACK_INSTALLATION_FAILURE" xml:space="preserve">
     <value>Please check audit log for additional  information or contact your hosting service provider to resolve the error.</value>
@@ -4557,15 +4554,6 @@
   </data>
   <data name="Error.WAG_INSTALL_GENERIC_MODULE_ERROR" xml:space="preserve">
     <value>Web Gallery Application installation failure</value>
-  </data>
-  <data name="ModuleWAG.Application installation failure" xml:space="preserve">
-    <value>There was an error while installing the application. Please see audit log for more details or contact your hosting service provider to resolve the error.</value>
-  </data>
-  <data name="ModuleWAG.WAG_GENERIC_MODULE_ERROR" xml:space="preserve">
-    <value>There was an error while interacting the module. Please see audit log for more details or contact your hosting service provider to resolve the error.</value>
-  </data>
-  <data name="ModuleWAG.WAG_INSTALL_GENERIC_MODULE_ERROR" xml:space="preserve">
-    <value>There was an error while installing the application. Please see audit log for more details or contact your hosting service provider to resolve the error.</value>
   </data>
   <data name="Quota.Web.CFVirtualDirectories" xml:space="preserve">
     <value>ColdFusion Virtual Directories</value>
@@ -4686,5 +4674,98 @@
   </data>
   <data name="ReportResourceGroup.MsSQL2008" xml:space="preserve">
     <value>SQL Server 2008</value>
+  </data>
+  <data name="WebAppGallery.ApplicationInstallationError" xml:space="preserve">
+    <value>Error while install application pack</value>
+  </data>
+  <data name="WebAppGallery.AppPathParameterNotFound" xml:space="preserve">
+    <value>"iisApp" parameter was not specified</value>
+  </data>
+  <data name="WebAppGallery.DatabaseAdminPasswordNotSpecified" xml:space="preserve">
+    <value>Database administrator password must be specified on database service properties screen</value>
+  </data>
+  <data name="WebAppGallery.DatabaseAdminUsernameNotSpecified" xml:space="preserve">
+    <value>Database administrator username must be specified on database service properties screen. To use Web App Gallery module with SQL Server you must use "SQL Server authentication"</value>
+  </data>
+  <data name="WebAppGallery.DatabaseCreationError" xml:space="preserve">
+    <value>Cannot create database</value>
+  </data>
+  <data name="WebAppGallery.DatabaseCreationException" xml:space="preserve">
+    <value>Error while creating database: {1}</value>
+  </data>
+  <data name="WebAppGallery.DatabaseServerExternalAddressIsEmpty" xml:space="preserve">
+    <value>In order to use Web App Gallery you have to specify "External Address" on database service properties screen. It must be fully-qualified name of the database server or its IP address</value>
+  </data>
+  <data name="WebAppGallery.DatabaseServiceIsNotAvailable" xml:space="preserve">
+    <value>Database service is not available</value>
+  </data>
+  <data name="WebAppGallery.DatabaseUserCannotAccessDatabase" xml:space="preserve">
+    <value>Database user '{1}' cannot access selected database</value>
+  </data>
+  <data name="WebAppGallery.DatabaseUserCreationError" xml:space="preserve">
+    <value>Cannot create database user account</value>
+  </data>
+  <data name="WebAppGallery.DatabaseUserCreationException" xml:space="preserve">
+    <value>Error while creating database user account: {1}</value>
+  </data>
+  <data name="WebAppGallery.GeneralError" xml:space="preserve">
+    <value>Error occured in Web App Gallery module:</value>
+  </data>
+  <data name="WebAppGallery.GetApplicationError" xml:space="preserve">
+    <value>Cannot get application pack details</value>
+  </data>
+  <data name="WebAppGallery.GetApplicationParametersError" xml:space="preserve">
+    <value>Cannot get application pack parameters</value>
+  </data>
+  <data name="WebAppGallery.GetApplicationsError" xml:space="preserve">
+    <value>Cannot get the list of applications</value>
+  </data>
+  <data name="WebAppGallery.GetCategoriesError" xml:space="preserve">
+    <value>Cannot get the list of application categories</value>
+  </data>
+  <data name="WebAppGallery.MsDeployIsNotInstalled" xml:space="preserve">
+    <value>"MS Deploy" library is not installed on the web server</value>
+  </data>
+  <data name="WebAppGallery.PackageFileNotFound" xml:space="preserve">
+    <value>Application package file could not be found in the cache: {1}</value>
+  </data>
+  <data name="WebAppGallery.PackageInstallationError" xml:space="preserve">
+    <value>Error while installing application package: {1}</value>
+  </data>
+  <data name="WebAppGallery.ProcessingFeedXMLError" xml:space="preserve">
+    <value>Error processing Applications XML feed: {1}</value>
+  </data>
+  <data name="WebAppGallery.ProcessingPackageError" xml:space="preserve">
+    <value>Error processing Application package: {1}</value>
+  </data>
+  <data name="WebAppGallery.WebApplicationNotFound" xml:space="preserve">
+    <value>Application with ID "{1}" was not found</value>
+  </data>
+  <data name="WebAppGallery.WebSiteNotFound" xml:space="preserve">
+    <value>Web site "{1}" was not found</value>
+  </data>
+  <data name="Warning.WAG_CANNOT_INSTALL_APPLICATION" xml:space="preserve">
+    <value>Selected application cannot be installed.</value>
+  </data>
+  <data name="WebAppGallery.AspNet20Required" xml:space="preserve">
+    <value>ASP.NET 2.0</value>
+  </data>
+  <data name="WebAppGallery.AspNet40Required" xml:space="preserve">
+    <value>ASP.NET 4.0</value>
+  </data>
+  <data name="WebAppGallery.DatabaseRequired" xml:space="preserve">
+    <value>Either SQL Server or MySQL databases</value>
+  </data>
+  <data name="WebAppGallery.MySQLRequired" xml:space="preserve">
+    <value>MySQL databases</value>
+  </data>
+  <data name="WebAppGallery.PackageDoesNotMeetRequirements" xml:space="preserve">
+    <value>Your hosting package does not meet requirements to install the application. Please contact your hosting provider to upgrade your package with the following features:</value>
+  </data>
+  <data name="WebAppGallery.PhpRequired" xml:space="preserve">
+    <value>PHP</value>
+  </data>
+  <data name="WebAppGallery.SQLRequired" xml:space="preserve">
+    <value>SQL Server databases</value>
   </data>
 </root>

@@ -115,18 +115,18 @@ namespace WebsitePanel.Portal.UserControls
         }
 
 
-        public void ShowMessage(ResultObject resultObject, string headerPrefix, string errorMessagesPrefix)
+        public void ShowMessage(ResultObject resultObject, string messageKey, string errorMessageKeyPrefix)
         {
             if (resultObject.IsSuccess)
             {
                 if (resultObject.ErrorCodes.Count == 0)
-                    ShowSuccessMessage(headerPrefix);
+                    ShowSuccessMessage(messageKey);
                 else 
-                    RenderMessage(resultObject.ErrorCodes.ToArray(), MessageBoxType.Warning, headerPrefix, errorMessagesPrefix );
+                    RenderMessage(resultObject.ErrorCodes.ToArray(), MessageBoxType.Warning, messageKey, errorMessageKeyPrefix );
             }
             else
             {
-                RenderMessage(resultObject.ErrorCodes.ToArray(), MessageBoxType.Error, headerPrefix, errorMessagesPrefix);
+                RenderMessage(resultObject.ErrorCodes.ToArray(), MessageBoxType.Error, messageKey, errorMessageKeyPrefix);
             }
 
         }
@@ -137,7 +137,7 @@ namespace WebsitePanel.Portal.UserControls
 			return localizedText == null ? "" : localizedText;
 		}
 
-		public void RenderMessage(string[] messages,MessageBoxType messageType, string headerPreffix, string  errorMessagesPerfix )
+		public void RenderMessage(string[] messages,MessageBoxType messageType, string messageKey, string  errorMessageKeyPrefix )
 		{
             divMessageBox.Visible = true;
             ViewState["JustRendered"] = true;
@@ -160,29 +160,34 @@ namespace WebsitePanel.Portal.UserControls
 
             divMessageBox.Attributes["class"] = boxStyle;
 
-            string localizedMsg = GetSharedLocalizedString(prefix + headerPreffix);
+            string localizedMsg = GetSharedLocalizedString(prefix + messageKey);
             if(String.IsNullOrEmpty(localizedMsg))
-                localizedMsg = headerPreffix;
+                localizedMsg = messageKey;
 
             litMessage.Text = localizedMsg;
 
+            // detailed messages
             StringBuilder sb = new StringBuilder();
             foreach (string str in messages)
 		    {
                 string key = str;
                 string[] parts = null;
-                if (str.IndexOf(":") != -1)
+                int idx = str.IndexOf(":");
+                if (idx != -1)
                 {
-                    parts = str.Split(':');
+                    parts = new string[] { str.Substring(0, idx), str.Substring(idx + 1) };
                     key = parts[0];
                 }
 
                 // first attempt
                 string localizedStr = GetSharedLocalizedString(string.Format("{0}{1}", prefix, key));
 
+                if(localizedStr == null)
+                    localizedStr = GetSharedLocalizedString(string.Format("{0}{1}", "Warning.", key));
+
                 // second attempt
                 if(localizedStr == null)
-                    localizedStr = GetSharedLocalizedString(string.Format("{0}.{1}", errorMessagesPerfix, key));
+                    localizedStr = GetSharedLocalizedString(string.Format("{0}.{1}", errorMessageKeyPrefix, key));
 
                 if (parts != null && localizedStr != null)
                     localizedStr = String.Format(localizedStr, parts);

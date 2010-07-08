@@ -113,7 +113,7 @@ namespace WebsitePanel.Portal
             PackageSettings settings = ES.Services.Packages.GetPackageSettings(PanelSecurity.PackageId, PackageSettings.INSTANT_ALIAS);
             instantAliasAllowed = (settings != null && !String.IsNullOrEmpty(settings["InstantAlias"]));
 
-            InstantAliasPanel.Visible = instantAliasAllowed && (type != DomainType.DomainPointer) && EnableDnsPanel.Visible;
+            InstantAliasPanel.Visible = instantAliasAllowed && (type != DomainType.DomainPointer) /*&& EnableDnsPanel.Visible*/;
             CreateInstantAlias.Checked &= InstantAliasPanel.Visible;
 
             // allow sub-domains

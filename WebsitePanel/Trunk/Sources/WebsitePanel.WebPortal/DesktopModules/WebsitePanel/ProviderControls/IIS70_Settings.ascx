@@ -49,7 +49,7 @@
 		        <asp:Label ID="lblAspNet11Path" runat="server" meta:resourcekey="lblAspNet11Path" Text="ASP.NET 1.1:"></asp:Label>
 		    </td>
 		    <td class="Normal" valign="top">
-                <asp:Literal ID="litAspNet11Path" runat="server"></asp:Literal>
+                <asp:TextBox ID="txtAspNet11Path" runat="server" CssClass="NormalTextBox" Width="450px"></asp:TextBox>
             </td>
 		</tr>
 		<tr>
@@ -57,7 +57,7 @@
 		        <asp:Label ID="lblAspNet20Path" runat="server" meta:resourcekey="lblAspNet20Path" Text="ASP.NET 2.0:"></asp:Label>
 		    </td>
 		    <td class="Normal" valign="top">
-                <asp:Literal ID="litAspNet20Path" runat="server"></asp:Literal>
+                <asp:TextBox ID="txtAspNet20Path" runat="server" CssClass="NormalTextBox" Width="450px"></asp:TextBox>
             </td>
 		</tr>
 		<tr>
@@ -65,7 +65,7 @@
 		        <asp:Label ID="lblAspNet20x64Path" runat="server" meta:resourcekey="lblAspNet20x64Path" Text="ASP.NET 2.0 64-bit:"></asp:Label>
 		    </td>
 		    <td class="Normal" valign="top">
-                <asp:Literal ID="litAspNet20x64Path" runat="server"></asp:Literal>
+                <asp:TextBox ID="txtAspNet20x64Path" runat="server" CssClass="NormalTextBox" Width="450px"></asp:TextBox>
             </td>
 		</tr>
 		<tr>
@@ -73,7 +73,7 @@
 		        <asp:Label runat="server" meta:resourcekey="AspNet40Path" Text="ASP.NET 4.0:"></asp:Label>
 		    </td>
 		    <td class="Normal" valign="top">
-                <asp:Literal ID="AspNet40Path" runat="server"></asp:Literal>
+                <asp:TextBox ID="txtAspNet40Path" runat="server" CssClass="NormalTextBox" Width="450px"></asp:TextBox>
             </td>
 		</tr>
 		<tr>
@@ -81,7 +81,7 @@
 		        <asp:Label runat="server" meta:resourcekey="AspNet40x64Path" Text="ASP.NET 4.0 64-bit:"></asp:Label>
 		    </td>
 		    <td class="Normal" valign="top">
-                <asp:Literal ID="AspNet40x64Path" runat="server"></asp:Literal>
+                <asp:TextBox ID="txtAspNet40x64Path" runat="server" CssClass="NormalTextBox" Width="450px"></asp:TextBox>
             </td>
 		</tr>
     </table>
@@ -217,7 +217,7 @@
 		        <asp:Label ID="lblAspPath" runat="server" meta:resourcekey="lblAspPath" Text="ASP Library Path:"></asp:Label>
 		    </td>
 		    <td class="Normal" valign="top">
-                <asp:Literal ID="litAspPath" runat="server"></asp:Literal>
+                <asp:TextBox ID="txtAspPath" runat="server" CssClass="NormalTextBox" Width="450px"></asp:TextBox>
             </td>
 		</tr>
 		<tr>

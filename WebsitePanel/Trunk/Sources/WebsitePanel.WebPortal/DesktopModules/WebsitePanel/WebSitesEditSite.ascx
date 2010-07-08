@@ -46,7 +46,7 @@ function confirmationWMSVC() {
                 <tr>
                     <td class="Big">
                         <asp:HyperLink ID="lnkSiteName" runat="server" NavigateUrl="#" Target="_blank">domain.com</asp:HyperLink>
-                        (<asp:Literal ID="litIPAddress" runat="server"></asp:Literal>)
+                        <asp:Literal ID="litIPAddress" runat="server"></asp:Literal>
                     </td>
                 </tr>
                 <tr>

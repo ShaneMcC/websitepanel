@@ -34,44 +34,21 @@ namespace WebsitePanel.Portal
 {
     public partial class WebApplicationGalleryHeader :  WebsitePanelModuleBase
     {
+        public void BindApplicationDetails(GalleryApplication application)
+        {
+            lblVersion.Text = application.Version;
+            lblDescription.Text = application.Description;
+            lblTitle.Text = application.Title;
+            lblSize.Text = application.Size;
+            imgLogo.ImageUrl = "~/DesktopModules/WebsitePanel/resizeimage.ashx?url=" + Server.UrlEncode(application.IconUrl) +
+                               "&width=200&height=200";
+
+            hlAuthor.Text = application.AuthorName;
+            hlAuthor.NavigateUrl = application.AuthorUrl;
+        }
+
         protected void Page_Load(object sender, EventArgs e)
         {
-            try
-            {
-                if (!IsPostBack)
-                {
-                    GalleryApplicationResult appResult =
-                        ES.Services.WebApplicationGallery.GetGalleryApplicationDetails(PanelSecurity.PackageId,
-                                                                                     PanelRequest.ApplicationID);
-					//
-					if (!appResult.IsSuccess)
-					{
-						messageBox.ShowMessage(appResult, "WAG_NOT_AVAILABLE", "ModuleWAG");
-						return;
-					}
-					//
-					GalleryApplication application = appResult.Value;
-                    if (application != null)
-                    {
-                        lblVersion.Text = application.Version;
-                        lblDescription.Text = application.Description;
-                        lblTitle.Text = application.Title;
-                        lblSize.Text = application.Size;
-                        imgLogo.ImageUrl = "~/DesktopModules/WebsitePanel/resizeimage.ashx?url=" + Server.UrlEncode(application.IconUrl) +
-                                           "&width=250&height=250";
-
-                        hlAuthor.Text = application.AuthorName;
-                        hlAuthor.NavigateUrl = application.AuthorUrl;
-
-
-
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                ShowErrorMessage("GET_GALLERY_APPLIACTION_DETAILS", ex);
-            }
         }
     }
 }

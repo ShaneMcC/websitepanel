@@ -34,6 +34,7 @@ using WebsitePanel.EnterpriseServer;
 using WebsitePanel.Providers.Common;
 using WebsitePanel.Providers.WebAppGallery;
 using WebsitePanel.Providers.ResultObjects;
+using WebsitePanel.Providers.Database;
 using System.Text.RegularExpressions;
 using System.Web.UI;
 using System.Web.UI.HtmlControls;
@@ -43,105 +44,81 @@ namespace WebsitePanel.Portal
 {
     public partial class WebApplicationGalleryParams : WebsitePanelModuleBase
     {
-		private GalleryApplicationResult webAppResult;
+        private const DeploymentParameterWellKnownTag databaseEngineTags =
+                    DeploymentParameterWellKnownTag.Sql |
+                    DeploymentParameterWellKnownTag.MySql |
+                    DeploymentParameterWellKnownTag.SqLite |
+                    DeploymentParameterWellKnownTag.VistaDB |
+                    DeploymentParameterWellKnownTag.FlatFile;
 
-		#region Adaptive parameters naming
-		protected string _DATABASE_USERNAME_PARAM
-		{
-			get { return (string)ViewState["_DATABASE_USERNAME_PARAM"]; }
-			set { ViewState["_DATABASE_USERNAME_PARAM"] = value; }
-		}
-
-		protected string _DATABASE_USERNAMEPWD_PARAM
-		{
-			get { return (string)ViewState["_DATABASE_USERNAMEPWD_PARAM"]; }
-			set { ViewState["_DATABASE_USERNAMEPWD_PARAM"] = value; }
-		}
-
-		protected string _DATABASE_NAME_PARAM
-		{
-			get { return (string)ViewState["_DATABASE_NAME_PARAM"]; }
-			set { ViewState["_DATABASE_NAME_PARAM"] = value; }
-		}
-		#endregion
+        private GalleryApplicationResult appResult;
 
 		protected void Page_Load(object sender, EventArgs e)
-        {                        
+        {
+            if (IsPostBack)
+                return;
+
             try
             {
-				webAppResult = ES.Services.WebApplicationGallery.GetGalleryApplicationDetails(PanelSecurity.PackageId, PanelRequest.ApplicationID);
-				//
-				if (!webAppResult.IsSuccess)
-				{
-					messageBox.ShowMessage(webAppResult, "WAG_NOT_AVAILABLE", "ModuleWAG");
-					return;
-				}
-				//
-                if (!IsPostBack)
+                // load application details
+                appResult = ES.Services.WebApplicationGallery.GetGalleryApplicationDetails(PanelSecurity.PackageId, PanelRequest.ApplicationID);
+                
+                if (!appResult.IsSuccess)
                 {
-                    DeploymentParametersResult appParamsResult = 
-						ES.Services.WebApplicationGallery.GetGalleryApplicationParams(PanelSecurity.PackageId, PanelRequest.ApplicationID);
-					//
-					if (!appParamsResult.IsSuccess)
-					{
-						messageBox.ShowMessage(appParamsResult, "WAG_NOT_AVAILABLE", "ModuleWAG");
-						return;
-					}
-					//
-                    BindWebSites();
-                    BindDatabaseVersions(appParamsResult.Value);
-                    BindParams(appParamsResult.Value);
-                    ToggleControls();                    
-                }                                
+                    messageBox.ShowMessage(appResult, "WAG_NOT_AVAILABLE", "WebAppGallery");
+                    return;
+                }
+
+                // bind app details
+                appHeader.BindApplicationDetails(appResult.Value);
+
+                // check for warnings
+                if (appResult.ErrorCodes.Count > 0)
+                {
+                    // app does not meet requirements
+                    messageBox.ShowMessage(appResult, "WAG_CANNOT_INSTALL_APPLICATION", "WebAppGallery");
+                    btnInstall.Enabled = false;
+                }
+
+                // bind app parameters
+                List<DeploymentParameter> parameters = GetApplicationParameters();
+                if (parameters == null)
+                    return;
+
+				//
+                BindWebSites();
+                BindDatabaseEngines(parameters);                
             }
             catch (Exception ex)
             {
-                ShowErrorMessage("WEB_GALLERY_INSTALLER_INIT_FORM", ex);                
+                ShowErrorMessage("WAG_NOT_AVAILABLE", ex);
+                DisableForm();
             }
         }
 
-        private void BindParams(List<DeploymentParameter> parameters)
+        private List<DeploymentParameter> GetApplicationParameters()
         {
-            List<DeploymentParameter> resParameters = new List<DeploymentParameter>();
-            foreach(DeploymentParameter parameter in parameters)
+            DeploymentParametersResult result =
+                        ES.Services.WebApplicationGallery.GetGalleryApplicationParams(PanelSecurity.PackageId, PanelRequest.ApplicationID);
+            
+            // check results
+            if (!result.IsSuccess)
             {
-				// Match database name parameter
-				if(MatchParameterByNames(parameter, DeploymentParameter.DATABASE_NAME_PARAMS) 
-					|| MatchParameterTag(parameter, DeploymentParameter.DB_NAME_PARAM_TAG))
-				{
-					_DATABASE_NAME_PARAM = parameter.Name;
-					continue;
-				}
-				// Match database username parameter
-				if(MatchParameterByNames(parameter, DeploymentParameter.DATABASE_USERNAME_PARAMS)
-					|| MatchParameterTag(parameter, DeploymentParameter.DB_USERNAME_PARAM_TAG))
-				{
-					_DATABASE_USERNAME_PARAM = parameter.Name;
-					continue;
-				}
-				// Match database user password parameter
-				if (MatchParameterByNames(parameter, DeploymentParameter.DATABASE_USERPWD_PARAMS)
-					|| MatchParameterTag(parameter, DeploymentParameter.DB_PASSWORD_PARAM_TAG))
-				{
-					_DATABASE_USERNAMEPWD_PARAM = parameter.Name;
-					continue;
-				}
-
-                //
-                resParameters.Add(parameter);
+                messageBox.ShowMessage(result, "WAG_NOT_AVAILABLE", "WebAppGallery");
+                DisableForm();
+                return null;
             }
 
-            if (resParameters.Count > 0)
-            {
-                gvParams.DataSource = resParameters;
-                gvParams.DataKeyNames = new[] {"Name"};
-                gvParams.DataBind();
-            }
-            else
-            {
-                secAppSettings.Visible = false;        
-            }
+            // return params
+            return result.Value;
+        }
 
+        private void DisableForm()
+        {
+            btnInstall.Enabled = false;
+            secAppSettings.Visible = false;
+            urlPanel.Visible = false;
+            tempUrlPanel.Visible = false;
         }
         
         private void BindWebSites()
@@ -154,207 +131,317 @@ namespace WebsitePanel.Portal
             directoryName.SetPackagePolicy(PanelSecurity.PackageId, UserSettings.WEB_POLICY, "VirtDirNamePolicy");
         }
 
-        private void BindDatabaseVersions(List<DeploymentParameter> parameters)
+        private void BindDatabaseEngines(List<DeploymentParameter> parameters)
         {
+            // SQL Server
+            if (FindParameterByTag(parameters, DeploymentParameterWellKnownTag.Sql) != null)
+            {
+                // load package context
+                PackageContext cntx = PackagesHelper.GetCachedPackageContext(PanelSecurity.PackageId);
+
+                // add SQL Server engines
+                if (cntx.Groups.ContainsKey(ResourceGroups.MsSql2008))
+                    AddDatabaseEngine(DeploymentParameterWellKnownTag.Sql, ResourceGroups.MsSql2008, GetSharedLocalizedString("ResourceGroup." + ResourceGroups.MsSql2008));
+                if (cntx.Groups.ContainsKey(ResourceGroups.MsSql2005))
+                    AddDatabaseEngine(DeploymentParameterWellKnownTag.Sql, ResourceGroups.MsSql2005, GetSharedLocalizedString("ResourceGroup." + ResourceGroups.MsSql2005));
+                if (cntx.Groups.ContainsKey(ResourceGroups.MsSql2000))
+                    AddDatabaseEngine(DeploymentParameterWellKnownTag.Sql, ResourceGroups.MsSql2000, GetSharedLocalizedString("ResourceGroup." + ResourceGroups.MsSql2000));
+            }
+
+            // MySQL Server
+            if (FindParameterByTag(parameters, DeploymentParameterWellKnownTag.MySql) != null)
+            {
+                // load package context
+                PackageContext cntx = PackagesHelper.GetCachedPackageContext(PanelSecurity.PackageId);
+
+                // add SQL Server engines
+                if (cntx.Groups.ContainsKey(ResourceGroups.MySql5))
+                    AddDatabaseEngine(DeploymentParameterWellKnownTag.MySql, ResourceGroups.MySql5, GetSharedLocalizedString("ResourceGroup." + ResourceGroups.MySql5));
+                if (cntx.Groups.ContainsKey(ResourceGroups.MySql4))
+                    AddDatabaseEngine(DeploymentParameterWellKnownTag.MySql, ResourceGroups.MySql4, GetSharedLocalizedString("ResourceGroup." + ResourceGroups.MySql4));
+            }
+
+            // SQLite
+            if (FindParameterByTag(parameters, DeploymentParameterWellKnownTag.SqLite) != null)
+                AddDatabaseEngine(DeploymentParameterWellKnownTag.SqLite, "", GetLocalizedString("DatabaseEngine.SQLite"));
+
+            // VistaFB
+            if (FindParameterByTag(parameters, DeploymentParameterWellKnownTag.VistaDB) != null)
+                AddDatabaseEngine(DeploymentParameterWellKnownTag.VistaDB, "", GetLocalizedString("DatabaseEngine.VistaDB"));
+
+            // Flat File
+            if (FindParameterByTag(parameters, DeploymentParameterWellKnownTag.FlatFile) != null)
+                AddDatabaseEngine(DeploymentParameterWellKnownTag.FlatFile, "", GetLocalizedString("DatabaseEngine.FlatFile"));
+
+            // hide module if no database required
+            divDatabase.Visible = (databaseEngines.Items.Count > 0);
+
+            // bind parameters
+            BindParameters(parameters);
+        }
+
+        private void AddDatabaseEngine(DeploymentParameterWellKnownTag engine, string group, string text)
+        {
+            databaseEngines.Items.Add(new ListItem(text, String.Format("{0},{1}", engine, group)));
+        }
+
+        protected void databaseEngines_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            BindParameters();
+        }
+
+        protected void databaseMode_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            BindParameters();
+        }
+
+        private void BindParameters()
+        {
+            // load parameters
+            List<DeploymentParameter> parameters = GetApplicationParameters();
             if (parameters == null)
                 return;
 
-            List<string> versions = new List<string>();
-                
-            foreach (DeploymentParameter current in parameters)
+            // bind parameters
+            BindParameters(parameters);
+        }
+
+        private void BindParameters(List<DeploymentParameter> parameters)
+        {
+            if (databaseEngines.Items.Count > 0)
             {
-                if (string.IsNullOrEmpty(current.Tags))
-                    continue;
-                
-                string[] tags = current.Tags.ToLowerInvariant().Split(',');
-                foreach (string tag in tags)
+                // filter parameters by database engine
+                DeploymentParameterWellKnownTag engine = GetSelectedDatabaseEngine();
+                string resourceGroup = GetSelectedDatabaseResourceGroup();
+
+                // remove parameters for other engines
+                parameters.RemoveAll(delegate(DeploymentParameter p)
                 {
-                    if (tag.Trim().ToLower() == DeploymentParameter.SQL_PARAM_TAG.ToLower())
+                    return (p.WellKnownTags & databaseEngineTags) > 0
+                        && (p.WellKnownTags & engine) != engine;
+                });
+
+                // hide database mode for file-based engines
+                databaseModeBlock.Visible = !String.IsNullOrEmpty(resourceGroup);
+            }
+
+            // bind
+            repParams.DataSource = parameters;
+            repParams.DataBind();
+
+            // bind existing databases and user
+            BindExistingDatabases();
+        }
+
+        private void BindExistingDatabases()
+        {
+            string resourceGroup = GetSelectedDatabaseResourceGroup();
+            if (String.IsNullOrEmpty(resourceGroup))
+                return; // application does not require database
+
+            // databases
+            WebApplicationGalleryParamControl databaseControl = FindParameterControlByTag(DeploymentParameterWellKnownTag.DBName);
+            if (databaseControl != null && databaseMode.SelectedValue == "existing")
+            {
+                // bind databases
+                SqlDatabase[] databases = ES.Services.DatabaseServers.GetSqlDatabases(PanelSecurity.PackageId, resourceGroup, false);
+
+                // disable regexp validator
+                databaseControl.ValidationKind &= ~DeploymentParameterValidationKind.RegularExpression;
+
+                // enable enumeration
+                List<string> databaseNames = new List<string>();
+                databaseNames.Add(""); // add empty database
+                foreach (SqlDatabase database in databases)
+                    databaseNames.Add(database.Name);
+
+                databaseControl.ValidationKind |= DeploymentParameterValidationKind.Enumeration;
+                databaseControl.ValidationString = String.Join(",", databaseNames.ToArray());
+
+                // fill users list
+                WebApplicationGalleryParamControl userControl = FindParameterControlByTag(DeploymentParameterWellKnownTag.DBUserName);
+                if (userControl != null)
+                {
+                    SqlUser[] users = ES.Services.DatabaseServers.GetSqlUsers(PanelSecurity.PackageId, resourceGroup, false);
+
+                    // disable regexp validator
+                    userControl.ValidationKind &= ~DeploymentParameterValidationKind.RegularExpression;
+
+                    // enable enumeration
+                    List<string> userNames = new List<string>();
+                    userNames.Add(""); // add empty username
+                    foreach (SqlUser user in users)
+                        userNames.Add(user.Name);
+
+                    userControl.ValidationKind |= DeploymentParameterValidationKind.Enumeration;
+                    userControl.ValidationString = String.Join(",", userNames.ToArray());
+
+                    // username password
+                    WebApplicationGalleryParamControl userPasswordControl = FindParameterControlByTag(DeploymentParameterWellKnownTag.DBUserPassword);
+                    if (userPasswordControl != null)
                     {
-                        versions.Add(ResourceGroups.MsSql2000);
-                        versions.Add(ResourceGroups.MsSql2005);
-                        versions.Add(ResourceGroups.MsSql2008);
-                    }
-                    else if (tag.Trim().ToLower() == DeploymentParameter.MYSQL_PARAM_TAG.ToLower())
-                    {
-                        versions.Add(ResourceGroups.MySql4);
-                        versions.Add(ResourceGroups.MySql5);
+                        userPasswordControl.WellKnownTags &= ~DeploymentParameterWellKnownTag.New;
                     }
                 }
             }
-            
-            // fill databases box
-            FillDatabaseVersions(PanelSecurity.PackageId, ddlDatabaseGroup.Items, versions);
-
-            // hide module if required
-            divDatabase.Visible = (ddlDatabaseGroup.Items.Count > 0);
-
-            
-            BindDatabases();
-            BindDatabaseUsers();
-            ApplyDatabasePolicy();
         }
 
-        private void BindDatabases()
+        protected void repParams_ItemDataBound(object sender, RepeaterItemEventArgs e)
         {
-            if (ddlDatabaseGroup.Items.Count == 0)
-                return; // no database required
-
-            ddlDatabase.DataSource = ES.Services.DatabaseServers.GetSqlDatabases(PanelSecurity.PackageId, ddlDatabaseGroup.SelectedValue, false);
-            ddlDatabase.DataBind();
-            ddlDatabase.Items.Insert(0, new ListItem(GetLocalizedString("Text.SelectDatabase"), ""));
+            WebApplicationGalleryParamControl paramControl = e.Item.FindControl("param") as WebApplicationGalleryParamControl;
+            if (paramControl != null)
+                paramControl.BindParameter(e.Item.DataItem as DeploymentParameter);
         }
 
-        private void BindDatabaseUsers()
+        private DeploymentParameter FindParameterByTag(List<DeploymentParameter> parameters, DeploymentParameterWellKnownTag tag)
         {
-            if (ddlDatabaseGroup.Items.Count == 0)
-                return; // no database required
-
-            ddlUser.DataSource = ES.Services.DatabaseServers.GetSqlUsers(PanelSecurity.PackageId, ddlDatabaseGroup.SelectedValue, false);
-            ddlUser.DataBind();
-            ddlUser.Items.Insert(0, new ListItem(GetLocalizedString("Text.SelectUser"), ""));
+            return parameters.Find(delegate(DeploymentParameter p)
+            {
+                return ((p.WellKnownTags & tag) == tag);
+            });
         }
 
-        private void ApplyDatabasePolicy()
+        private WebApplicationGalleryParamControl FindParameterControlByTag(DeploymentParameterWellKnownTag tag)
         {
-            string groupName = ddlDatabaseGroup.SelectedValue;
-            if (groupName == null)
-                return;
-
-            string settingsName = UserSettings.MYSQL_POLICY;
-            if (groupName.ToLower().StartsWith("mssql"))
-                settingsName = UserSettings.MSSQL_POLICY;
-
-            databaseName.SetPackagePolicy(PanelSecurity.PackageId, settingsName, "DatabaseNamePolicy");
-            databaseUser.SetPackagePolicy(PanelSecurity.PackageId, settingsName, "UserNamePolicy");
-            databasePassword.SetPackagePolicy(PanelSecurity.PackageId, settingsName, "UserPasswordPolicy");
+            foreach (RepeaterItem item in repParams.Items)
+            {
+                WebApplicationGalleryParamControl paramControl = item.FindControl("param") as WebApplicationGalleryParamControl;
+                if (paramControl != null && (paramControl.WellKnownTags & tag) == tag)
+                    return paramControl;
+            }
+            return null;
         }
 
-        private void ToggleControls()
+        private DeploymentParameterWellKnownTag GetSelectedDatabaseEngine()
         {
-            tblNewDatabase.Visible = (rblDatabase.SelectedIndex == 0);
-            tblExistingDatabase.Visible = (rblDatabase.SelectedIndex != 0);
-            rowNewUser.Visible = (rblUser.SelectedIndex == 0);
-            rowExistingUser.Visible = (rblUser.SelectedIndex != 0);
-			//
-			if (!String.IsNullOrEmpty(webAppResult.Value.StartPage))
-				pnlVirtualDir.Visible =  !Path.IsPathRooted(webAppResult.Value.StartPage);
+            string val = databaseEngines.SelectedValue;
+            return String.IsNullOrEmpty(val)
+                ? DeploymentParameterWellKnownTag.None
+                : (DeploymentParameterWellKnownTag)Enum.Parse(typeof(DeploymentParameterWellKnownTag), val.Split(',')[0]);
+        }
+
+        private string GetSelectedDatabaseResourceGroup()
+        {
+            string val = databaseEngines.SelectedValue.Trim();
+            return val != "" ? val.Split(',')[1] : val;
+        }
+
+        private List<DeploymentParameter> GetParameters()
+        {
+            // get the information about selected database engine
+            string resourceGroup = GetSelectedDatabaseResourceGroup();
+            DeploymentParameterWellKnownTag databaseEngine = GetSelectedDatabaseEngine();
+
+            // collect parameters
+            List<DeploymentParameter> parameters = new List<DeploymentParameter>();
+            foreach (RepeaterItem item in repParams.Items)
+            {
+                WebApplicationGalleryParamControl paramControl = item.FindControl("param") as WebApplicationGalleryParamControl;
+                if (paramControl != null)
+                {
+                    // store parameter in the collection
+                    DeploymentParameter param = paramControl.GetParameter();
+                    parameters.Add(param);
+
+                    // set database engine flag
+                    param.WellKnownTags &= ~databaseEngineTags; // reset all database flags
+                    param.WellKnownTags |= databaseEngine; // set seleced
+                }
+            }
+
+            // add the information about selected resource group
+            if (!String.IsNullOrEmpty(resourceGroup))
+            {
+                parameters.Add(new DeploymentParameter()
+                {
+                    Name = DeploymentParameter.ResourceGroupParameterName,
+                    Value = resourceGroup,
+                    WellKnownTags = databaseEngine
+                });
+            }
+
+            return parameters;
         }
 
         private void InstallApplication()
-        {                   
+        {
+            if (!Page.IsValid)
+                return; // server-side validation
+
+            // collect parameters       
             List<DeploymentParameter> parameters = GetParameters();
 
+            // install application
             ResultObject res = ES.Services.WebApplicationGallery.Install(PanelSecurity.PackageId,
-                                                                         PanelRequest.ApplicationID, 
-                                                                         ddlWebSite.SelectedItem.Text, 
-                                                                         directoryName.Text, 
+                                                                         PanelRequest.ApplicationID,
+                                                                         ddlWebSite.SelectedItem.Text,
+                                                                         directoryName.Text.Trim(),
                                                                          parameters.ToArray());
 
-            messageBox.ShowMessage(res, "WEB_APPLICATION_GALLERY_INSTALLED", "INSTALL_WEB_APPLICATION");
-            if (res.IsSuccess)
+            // show message box with results
+            messageBox.ShowMessage(res, "WEB_APPLICATION_GALLERY_INSTALLED", "WebAppGallery");
+
+            // toggle controls if there are no errors
+            if (res.ErrorCodes.Count == 0)
             {
                 secAppSettings.Visible = false;
-                secDatabase.Visible = false;
-                secLocation.Visible = false;
                 btnCancel.Visible = false;
                 btnInstall.Visible = false;
                 btnOK.Visible = true;
-                applicationUrl.Visible = true;
+                urlPanel.Visible = true;
                 try
                 {
                     GalleryApplicationResult appResult =
                         ES.Services.WebApplicationGallery.GetGalleryApplicationDetails(PanelSecurity.PackageId,
                                                                                        PanelRequest.ApplicationID);
-					//
-					GalleryApplication application = appResult.Value;
-					//
+                    //
+                    GalleryApplication application = appResult.Value;
+                    //
                     if (application != null)
                     {
-                        string url = "http://" + ddlWebSite.SelectedItem.Text;
+                        // change "Launch" link
+                        hlApplication.Text = String.Format(GetLocalizedString("LaunchApplication.Text"), application.Title);
 
-                        url = Path.Combine(url, directoryName.Text);
-						if (Path.IsPathRooted(application.StartPage))
-						{
-							if (application.StartPage != "/")
-								url = Path.Combine(url, application.StartPage.Substring(1));
-						}
-						else
-						{
-							url = Path.Combine(url, application.StartPage);
-						}
-                        
-                        hlApplication.NavigateUrl = url;
+                        // set "main" application URL
+                        hlApplication.NavigateUrl = GetAppLaunchUrl(application, ddlWebSite.SelectedItem.Text);
+
+                        // set "temp" application URL if required
+                        DomainInfo[] domains = ES.Services.WebServers.GetWebSitePointers(Int32.Parse(ddlWebSite.SelectedValue));
+                        foreach (DomainInfo domain in domains)
+                        {
+                            if (domain.IsInstantAlias)
+                            {
+                                // show temp URL
+                                tempUrlPanel.Visible = true;
+
+                                // set URL text
+                                tempUrl.Text = String.Format(GetLocalizedString("LaunchApplicationTemp.Text"), GetAppLaunchUrl(application, domain.DomainName));
+                                break;
+                            }
+                        }
                     }
                 }
-                catch(Exception ex)
+                catch (Exception ex)
                 {
                     ShowErrorMessage("GET_GALLERY_APPLIACTION_DETAILS", ex);
                 }
-
-            }            
-        }
-
-        private List<DeploymentParameter> GetParameters()
-        {
-            List<DeploymentParameter> parameters = new List<DeploymentParameter>();
-            foreach (GridViewRow row in gvParams.Rows)
-            {                
-                string name = string.Empty;
-                DataKey key = gvParams.DataKeys[row.DataItemIndex];                
-                
-                if (key != null)
-                    name = key.Value as string;
-
-                TextBox txt = row.FindControl("txtParamValue") as TextBox;
-
-                if (!String.IsNullOrEmpty(name) && txt != null)
-                {
-                    DeploymentParameter param = new DeploymentParameter();
-                    param.Name = name;
-                    param.Value = txt.Text;
-                    parameters.Add(param);
-                }
             }
-
-            DeploymentParameter userName = new DeploymentParameter();
-            userName.Name = _DATABASE_USERNAME_PARAM;
-            userName.Value = rblUser.SelectedValue == "New" ? databaseUser.Text : ddlUser.SelectedItem.Text;
-
-            DeploymentParameter password = new DeploymentParameter();
-            password.Name = _DATABASE_USERNAMEPWD_PARAM;
-            password.Value = databasePassword.Password;
-
-
-            DeploymentParameter database = new DeploymentParameter();
-            database.Name = _DATABASE_NAME_PARAM;
-            database.Value = rblDatabase.SelectedValue == "New" ? databaseName.Text : ddlDatabase.SelectedItem.Text;
-            database.Tags = ddlDatabaseGroup.SelectedValue;
-
-            
-            if (!String.IsNullOrEmpty(userName.Name) && !String.IsNullOrEmpty(userName.Value))
-                parameters.Add(userName);
-            
-            if (!String.IsNullOrEmpty(password.Name) && !String.IsNullOrEmpty(password.Value))
-                parameters.Add(password);
-
-            if (!String.IsNullOrEmpty(database.Name) && !String.IsNullOrEmpty(database.Value))
-                parameters.Add(database);
-
-
-            return parameters;
         }
 
-        protected void ddlDatabaseGroup_SelectedIndexChanged(object sender, EventArgs e)
+        private string GetAppLaunchUrl(GalleryApplication app, string siteUrl)
         {
-            BindDatabases();
-            BindDatabaseUsers();
-            ApplyDatabasePolicy();
-        }
+            // fix app start page
+            string startPage = app.StartPage != null ? app.StartPage.Replace('\\', '/').TrimStart('/') : "";
 
-        protected void rblDatabase_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            ToggleControls();
+            // build URL
+            string url = "http://" + siteUrl;
+
+            // append virtual dir
+            if (directoryName.Text != "")
+                url += "/" + directoryName.Text;
+
+            // append start page and return
+            return url + "/" + startPage;
         }
 
         protected void btnInstall_Click(object sender, EventArgs e)
@@ -371,70 +458,5 @@ namespace WebsitePanel.Portal
         {
             RedirectSpaceHomePage();
         }
-
-		static Dictionary<Regex, TextBoxMode> ParamsTextModes = new Dictionary<Regex, TextBoxMode>
-		{
-			// Match for password word to display text field in the corresponding mode
-			{ new Regex (@"\bpassword\b", RegexOptions.CultureInvariant|RegexOptions.IgnoreCase), TextBoxMode.Password }
-		};
-
-		private bool MatchParameterByNames<T>(T param, string[] nameMatches)
-		{
-			foreach (var nameMatch in nameMatches)
-			{
-				if (MatchParameterName<T>(param, nameMatch))
-					return true;
-			}
-			//
-			return false;
-		}
-
-		private bool MatchParameterName<T>(T param, string nameMatch)
-		{
-			if (param == null || String.IsNullOrEmpty(nameMatch))
-				return false;
-			//
-			Type paramTypeOf = typeof(T);
-			//
-			PropertyInfo namePropInfo = paramTypeOf.GetProperty("Name");
-			//
-			String paramName = Convert.ToString(namePropInfo.GetValue(param, null));
-			//
-			if (String.IsNullOrEmpty(paramName))
-				return false;
-			// Compare for tag name match
-			return (paramName.ToLowerInvariant() == nameMatch.ToLowerInvariant());
-		}
-
-		private bool MatchParameterTag<T>(T param, string tagMatch)
-		{
-			if (param == null || String.IsNullOrEmpty(tagMatch))
-				return false;
-			//
-			Type paramTypeOf = typeof(T);
-			//
-			PropertyInfo tagsPropInfo = paramTypeOf.GetProperty("Tags");
-			//
-			String strTags = Convert.ToString(tagsPropInfo.GetValue(param, null));
-			//
-			if (String.IsNullOrEmpty(strTags))
-				return false;
-			// Lookup for specific tags within the parameter
-			return Array.Exists<string>(strTags.ToLowerInvariant().Split(','), x => x.Trim() == tagMatch.ToLowerInvariant());
-		}
-
-		// Matches only for the first entry 
-		public TextBoxMode GetFieldTextMode(string name)
-		{
-			foreach (KeyValuePair<Regex, TextBoxMode> kvp in ParamsTextModes)
-			{
-				if (kvp.Key.IsMatch(name))
-				{
-					return kvp.Value;
-				}
-			}
-			// SingleLine by default
-			return TextBoxMode.SingleLine;
-		}
     }
 }

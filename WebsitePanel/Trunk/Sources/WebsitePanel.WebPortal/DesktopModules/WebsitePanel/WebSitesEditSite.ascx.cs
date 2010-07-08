@@ -176,7 +176,9 @@ namespace WebsitePanel.Portal
             // bind site
             lnkSiteName.Text = site.Name;
             lnkSiteName.NavigateUrl = "http://" + site.Name;
-            litIPAddress.Text = site.SiteIPAddress;
+
+            if(!String.IsNullOrEmpty(site.SiteIPAddress))
+                litIPAddress.Text = String.Format("({0})", site.SiteIPAddress);
             
             litFrontPageUnavailable.Visible = false;
             tblSharePoint.Visible = site.SharePointInstalled;

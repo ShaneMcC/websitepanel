@@ -110,8 +110,7 @@ namespace WebsitePanel.Portal
                 // instant alias
                 bool instantAliasAllowed = !String.IsNullOrEmpty(domain.InstantAliasName);
                 bool instantAliasExists = (domain.InstantAliasId > 0);
-                if (dnsEnabled
-                    && instantAliasAllowed
+                if (instantAliasAllowed
                     && !domain.IsDomainPointer && !domain.IsInstantAlias)
                 {
                     InstantAliasPanel.Visible = true;

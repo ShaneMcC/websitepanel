@@ -28,14 +28,49 @@
 
 ﻿using System;
 using WebsitePanel.Providers.WebAppGallery;
+using WebsitePanel.Providers.ResultObjects;
 
 namespace WebsitePanel.Portal
 {
     public partial class WebApplicationGalleryInstall : WebsitePanelModuleBase
     {
         protected void Page_Load(object sender, EventArgs e)
-        {                            
-            
+        {
+            if (!IsPostBack)
+            {
+                BindApplicationDetails();
+            }
+        }
+
+        private void BindApplicationDetails()
+        {
+            try
+            {
+                GalleryApplicationResult appResult = ES.Services.WebApplicationGallery.GetGalleryApplicationDetails(PanelSecurity.PackageId,
+                                                                                    PanelRequest.ApplicationID);
+                // check for errors
+                if (!appResult.IsSuccess)
+                {
+                    messageBox.ShowMessage(appResult, "WAG_NOT_AVAILABLE", "WebAppGallery");
+                    return;
+                }
+
+                // bind details
+                if (appResult.Value != null)
+                    appHeader.BindApplicationDetails(appResult.Value);
+
+                // check for warnings
+                if (appResult.ErrorCodes.Count > 0)
+                {
+                    // app does not meet requirements
+                    messageBox.ShowMessage(appResult, "WAG_CANNOT_INSTALL_APPLICATION", "WebAppGallery");
+                    btnInstall.Enabled = false;
+                }
+            }
+            catch (Exception ex)
+            {
+                ShowErrorMessage("GET_GALLERY_APPLIACTION_DETAILS", ex);
+            }
         }
 
         protected void btnInstall_Click(object sender, EventArgs e)

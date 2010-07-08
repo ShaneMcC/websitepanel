@@ -231,4 +231,7 @@
   <data name="lblAspNet40Pool.Text" xml:space="preserve">
     <value>ASP.NET 4.0 Application Pool:</value>
   </data>
+  <data name="ipAddress.SelectValueText" xml:space="preserve">
+    <value>&lt;All unassigned&gt;</value>
+  </data>
 </root>

@@ -3,6 +3,29 @@
 /* This style sheet is intended to contain OFTEN CHANGED rules used when the GridView control adapter is enabled. */
 /* Empty rules are provided merely as a convenience for your future use or experimentation. */
 
+.LightGridView .AspNet-GridView
+{
+    width: 100%;
+}
+
+.LightGridView .AspNet-GridView div.AspNet-GridView-Pagination
+{
+    padding: 8px;
+	background: #F7F6F3 url(../images/grid_footer_bkg.gif) left top repeat-x;
+	font-size: 8pt;
+}
+
+.LightGridView .AspNet-GridView table tbody tr td
+{
+    background: White;
+    padding: 5px;
+    text-align: left;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+
+
+
 .NormalGridView .AspNet-GridView
 {
     width: 100%;

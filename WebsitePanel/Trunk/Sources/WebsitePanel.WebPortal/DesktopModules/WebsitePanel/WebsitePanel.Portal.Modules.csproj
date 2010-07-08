@@ -3140,6 +3140,13 @@
     <Compile Include="WebApplicationGalleryInstall.ascx.designer.cs">
       <DependentUpon>WebApplicationGalleryInstall.ascx</DependentUpon>
     </Compile>
+    <Compile Include="WebApplicationGalleryParamControl.ascx.cs">
+      <DependentUpon>WebApplicationGalleryParamControl.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="WebApplicationGalleryParamControl.ascx.designer.cs">
+      <DependentUpon>WebApplicationGalleryParamControl.ascx</DependentUpon>
+    </Compile>
     <Compile Include="WebApplicationGalleryParams.ascx.cs">
       <DependentUpon>WebApplicationGalleryParams.ascx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -3727,6 +3734,7 @@
     <Content Include="VirtualServersAddServer.ascx" />
     <Content Include="VirtualServersAddServices.ascx" />
     <Content Include="VirtualServersEditServer.ascx" />
+    <Content Include="WebApplicationGalleryParamControl.ascx" />
     <Content Include="WebSites.ascx" />
     <Content Include="WebSitesAddPointer.ascx" />
     <Content Include="WebSitesAddSite.ascx" />
@@ -4208,6 +4216,9 @@
       <SubType>Designer</SubType>
     </Content>
     <Content Include="App_LocalResources\UsersDeleteUser.ascx.resx">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="App_LocalResources\WebApplicationGalleryParamControl.ascx.resx">
       <SubType>Designer</SubType>
     </Content>
     <EmbeddedResource Include="UserControls\App_LocalResources\EditDomainsList.ascx.resx">

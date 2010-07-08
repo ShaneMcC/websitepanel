@@ -100,36 +100,36 @@ namespace WebsitePanel.Portal
 					//
 					if (img != null)
 					{
-						int width = Utils.ParseInt(context.Request.QueryString[WIDTH], img.Width);
-						int height = Utils.ParseInt(context.Request.QueryString[HEIGHT], img.Height);
+                        int width = Utils.ParseInt(context.Request.QueryString[WIDTH], img.Width);
+                        int height = Utils.ParseInt(context.Request.QueryString[HEIGHT], img.Height);
 
-						// rotate 360
-						img.RotateFlip(RotateFlipType.Rotate180FlipNone);
-						img.RotateFlip(RotateFlipType.Rotate180FlipNone);
+                        // calculate new size
+                        int h = img.Height;
+                        int w = img.Width;
+                        int b = Math.Max(h, w);
+                        double per = b > Math.Max(width, height) ? (Math.Max(width, height) * 1.0) / b : 1.0;
 
-						int h = img.Height;
-						int w = img.Width;
-						int b = Math.Max(h, w);
-						double per = b > Math.Max(width, height) ? (Math.Max(width, height) * 1.0) / b : 1.0;
+                        h = (int)(h * per);
+                        w = (int)(w * per);
 
-						h = (int)(h * per);
-						w = (int)(w * per);
+                        Bitmap bitmap = new Bitmap(width, height);
+                        Graphics new_g = Graphics.FromImage(bitmap);
+                        new_g.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.HighQuality;
+                        new_g.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.HighQualityBicubic;
+                        new_g.DrawImage(img, 0, 0, w, h);
+                        img.Dispose();
 
-						// create the thumbnail image
-						using (System.Drawing.Image imgThumb = img.GetThumbnailImage(w, h, Abort, IntPtr.Zero))
-						{
-							// emit it to the response stream
-							System.IO.MemoryStream ms = new System.IO.MemoryStream();
-							imgThumb.Save(ms, System.Drawing.Imaging.ImageFormat.Png);
-							context.Response.OutputStream.Write(ms.GetBuffer(), 0, ms.GetBuffer().Length);
-						}
+                        // emit it to the response stream
+                        bitmap.Save(context.Response.OutputStream, System.Drawing.Imaging.ImageFormat.Png);
+
+                        // clean-up
+                        bitmap.Dispose();
+                        new_g.Dispose();
 
 						// set cache info
-						string ETag = GetImageETag(imageUrl);
-						context.Response.Cache.SetCacheability(HttpCacheability.Public);
-						context.Response.Cache.SetExpires(DateTime.Now.AddSeconds(BitmapCacheDurationInSeconds));
-						context.Response.Cache.VaryByParams[URL] = true;
-						context.Response.Cache.SetETag(ETag);
+                        context.Response.Cache.SetExpires(DateTime.Now.AddSeconds(BitmapCacheDurationInSeconds));
+                        context.Response.Cache.SetCacheability(HttpCacheability.Public);
+                        context.Response.Cache.SetValidUntilExpires(true);
 						context.Response.End();
 					}
 				}

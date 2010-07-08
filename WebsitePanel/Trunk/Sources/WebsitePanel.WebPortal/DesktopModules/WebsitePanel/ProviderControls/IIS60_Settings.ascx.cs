@@ -101,6 +101,8 @@ namespace WebsitePanel.Portal.ProviderControls
         public void BindSettings(StringDictionary settings)
         {
             ipAddress.AddressId = (settings["SharedIP"] != null) ? Utils.ParseInt(settings["SharedIP"], 0) : 0;
+            ipAddress.SelectValueText = GetLocalizedString("ipAddress.SelectValueText");
+
             txtWebGroupName.Text = settings["WebGroupName"];
             chkAssignIPAutomatically.Checked = Utils.ParseBool(settings["AutoAssignDedicatedIP"], true);
 

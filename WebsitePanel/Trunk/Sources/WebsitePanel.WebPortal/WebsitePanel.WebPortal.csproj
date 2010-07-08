@@ -135,7 +135,9 @@
     <Content Include="Global.asax" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="App_Data\SiteSettings.config" />
+    <None Include="App_Data\SiteSettings.config">
+      <SubType>Designer</SubType>
+    </None>
     <Content Include="App_Containers\Default\Browse.ascx" />
     <Content Include="App_Containers\Default\Edit.ascx" />
     <Content Include="Default.aspx" />

@@ -4,11 +4,14 @@
 <%@ Register TagPrefix="wsp" TagName="CollapsiblePanel" Src="UserControls/CollapsiblePanel.ascx" %>
 <%@ Register Src="UserControls/EnableAsyncTasksSupport.ascx" TagName="EnableAsyncTasksSupport" TagPrefix="wsp" %>
 <%@ Register src="WebApplicationGalleryHeader.ascx" tagname="WebApplicationGalleryHeader" tagprefix="uc1" %>
+<%@ Register Src="UserControls/SimpleMessageBox.ascx" TagName="SimpleMessageBox" TagPrefix="uc1" %>
+    
 <wsp:EnableAsyncTasksSupport id="asyncTasks" runat="server"/>
 <div class="FormBody">
+
+    <uc1:SimpleMessageBox ID="messageBox" runat="server" />
 	 		
-    <uc1:WebApplicationGalleryHeader ID="WebApplicationGalleryHeader1" 
-        runat="server" />
+    <uc1:WebApplicationGalleryHeader ID="appHeader" runat="server" />
 	 		
 </div>
 <div class="FormFooter">
