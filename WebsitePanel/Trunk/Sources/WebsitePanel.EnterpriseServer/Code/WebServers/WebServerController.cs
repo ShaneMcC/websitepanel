@@ -121,9 +121,10 @@ namespace WebsitePanel.EnterpriseServer
             site.PackageId = siteItem.PackageId;
 
             // load IP address
-            IPAddressInfo ip = ServerController.GetIPAddress(siteItem.SiteIPAddressId);
-            site.SiteIPAddress = ip.ExternalIP;
             site.SiteIPAddressId = siteItem.SiteIPAddressId;
+            IPAddressInfo ip = ServerController.GetIPAddress(siteItem.SiteIPAddressId);
+            if(ip != null)
+                site.SiteIPAddress = ip.ExternalIP;
 
             // truncate home folder
             site.ContentPath = FilesController.GetVirtualPackagePath(siteItem.PackageId, site.ContentPath);
@@ -203,24 +204,23 @@ namespace WebsitePanel.EnterpriseServer
                 StringDictionary webSettings = ServerController.GetServiceSettings(serviceId);
                 int addressId = Utils.ParseInt(webSettings["SharedIP"], 0);
 
+                bool dedicatedIp = false;
                 if (packageAddressId != 0)
                 {
                     // dedicated IP
-                    addressId = ServerController.GetPackageIPAddress(packageAddressId).AddressID;
+                    PackageIPAddress packageIp = ServerController.GetPackageIPAddress(packageAddressId);
+                    if (packageIp != null)
+                    {
+                        addressId = packageIp.AddressID;
+                        dedicatedIp = true;
+                    }
                 }
-                else if (addressId == 0)
-                {
-                    // shared IP
-                    return BusinessErrorCodes.ERROR_WEB_SITE_SHARED_IP_ADDRESS_NOT_SPECIFIED;
-                }
-
-                bool dedicatedIp = (packageAddressId != 0);
 
                 // load assigned IP address
+                string ipAddr = "*";
                 IPAddressInfo ip = ServerController.GetIPAddress(addressId);
-                string ipAddr = ip.InternalIP;
-                if (String.IsNullOrEmpty(ipAddr))
-                    ipAddr = ip.ExternalIP;
+                if (ip != null)
+                    ipAddr = !String.IsNullOrEmpty(ip.InternalIP) ? ip.InternalIP : ip.ExternalIP;
 
                 // load domain instant alias
                 string instantAlias = ServerController.GetDomainAlias(packageId, domainName);
@@ -699,21 +699,11 @@ namespace WebsitePanel.EnterpriseServer
             if (domain == null)
                 return BusinessErrorCodes.ERROR_DOMAIN_PACKAGE_ITEM_NOT_FOUND;
 
-            // load appropriate zone
-            DnsZone zone = (DnsZone)PackageController.GetPackageItem(domain.ZoneItemId);
-            //if (zone == null)
-            //    return BusinessErrorCodes.ERROR_DNS_PACKAGE_ITEM_NOT_FOUND;
-
             // get zone records for the service
             List<GlobalDnsRecord> dnsRecords = ServerController.GetDnsRecordsByService(siteItem.ServiceId);
 
-            // change DNS zone
+            // load web site IP address
             IPAddressInfo ip = ServerController.GetIPAddress(siteItem.SiteIPAddressId);
-            if (ip == null)
-                return BusinessErrorCodes.ERROR_WEB_SITE_IP_ADDRESS_NOT_SPECIFIED;
-
-            List<DnsRecord> resourceRecords = DnsServerController.BuildDnsResourceRecords(
-                dnsRecords, domain.DomainName, ip.ExternalIP);
 
             // place log record
             TaskManager.StartTask("WEB_SITE", "ADD_POINTER", siteItem.Name);
@@ -722,18 +712,26 @@ namespace WebsitePanel.EnterpriseServer
 
             try
             {
+                // load appropriate zone
+                DnsZone zone = (DnsZone)PackageController.GetPackageItem(domain.ZoneItemId);
 
                 if (zone != null)
                 {
+                    // change DNS zone
+                    string serviceIp = (ip != null) ? ip.ExternalIP : null;
+
+                    List<DnsRecord> resourceRecords = DnsServerController.BuildDnsResourceRecords(
+                        dnsRecords, domain.DomainName, serviceIp);
+
                     try
                     {
                         DNSServer dns = new DNSServer();
                         ServiceProviderProxy.Init(dns, zone.ServiceId);
 
-						// add new resource records
+                        // add new resource records
                         dns.AddZoneRecords(zone.Name, resourceRecords.ToArray());
                     }
-                    catch(Exception ex1)
+                    catch (Exception ex1)
                     {
                         TaskManager.WriteError(ex1, "Error updating DNS records");
                     }
@@ -742,26 +740,23 @@ namespace WebsitePanel.EnterpriseServer
                 // update host headers
                 if (updateWebSite)
                 {
-                    // load web settings
-                    StringDictionary webSettings = ServerController.GetServiceSettings(siteItem.ServiceId);
-                    int sharedIpId = Utils.ParseInt(webSettings["SharedIP"], 0);
+                    // get existing web site bindings
+                    WebServer web = new WebServer();
+                    ServiceProviderProxy.Init(web, siteItem.ServiceId);
 
-                    bool dedicatedIp = (siteItem.SiteIPAddressId != sharedIpId);
+                    List<ServerBinding> bindings = new List<ServerBinding>();
+                    bindings.AddRange(web.GetSiteBindings(siteItem.SiteId));
 
+                    // check if web site has dedicated IP assigned
+                    bool dedicatedIp = bindings.Exists(binding => { return String.IsNullOrEmpty(binding.Host) && binding.IP != "*"; });
+
+                    // update binding only for "shared" ip addresses
                     if (!dedicatedIp)
                     {
-                        WebServer web = new WebServer();
-                        ServiceProviderProxy.Init(web, siteItem.ServiceId);
-
-                        List<ServerBinding> bindings = new List<ServerBinding>();
-                        ServerBinding[] siteBindings = web.GetSiteBindings(siteItem.SiteId);
-                        if(siteBindings != null)
-                            bindings.AddRange(siteBindings);
-
                         // add new host headers
-                        string ipAddr = ip.InternalIP;
-                        if (ipAddr == null || ipAddr == "")
-                            ipAddr = ip.ExternalIP;
+                        string ipAddr = "*";
+                        if (ip != null)
+                            ipAddr = !String.IsNullOrEmpty(ip.InternalIP) ? ip.InternalIP : ip.ExternalIP;
 
                         // fill bindings
                         FillWebServerBindings(bindings, dnsRecords, ipAddr, domain.DomainName);
@@ -810,19 +805,12 @@ namespace WebsitePanel.EnterpriseServer
 
             // load appropriate zone
             DnsZone zone = (DnsZone)PackageController.GetPackageItem(domain.ZoneItemId);
-            //if (zone == null)
-            //    return BusinessErrorCodes.ERROR_DNS_PACKAGE_ITEM_NOT_FOUND;
 
             // get zone records for the service
             List<GlobalDnsRecord> dnsRecords = ServerController.GetDnsRecordsByService(siteItem.ServiceId);
 
-            // change DNS zone
+            // load web site IP address
             IPAddressInfo ip = ServerController.GetIPAddress(siteItem.SiteIPAddressId);
-            if (ip == null)
-                return BusinessErrorCodes.ERROR_WEB_SITE_IP_ADDRESS_NOT_SPECIFIED;
-
-            List<DnsRecord> resourceRecords = DnsServerController.BuildDnsResourceRecords(
-                dnsRecords, domain.DomainName, ip.ExternalIP);
 
             // place log record
             TaskManager.StartTask("WEB_SITE", "DELETE_POINTER", siteItem.Name);
@@ -833,6 +821,12 @@ namespace WebsitePanel.EnterpriseServer
             {
                 if (zone != null)
                 {
+                    // change DNS zone
+                    string serviceIp = (ip != null) ? ip.ExternalIP : null;
+
+                    List<DnsRecord> resourceRecords = DnsServerController.BuildDnsResourceRecords(
+                        dnsRecords, domain.DomainName, serviceIp);
+
                     try
                     {
                         DNSServer dns = new DNSServer();
@@ -845,48 +839,36 @@ namespace WebsitePanel.EnterpriseServer
                     }
                 }
 
-                // load web settings
-                StringDictionary webSettings = ServerController.GetServiceSettings(siteItem.ServiceId);
-                int sharedIpId = Utils.ParseInt(webSettings["SharedIP"], 0);
-
-                bool dedicatedIp = (siteItem.SiteIPAddressId != sharedIpId);
-
-                if (updateWebSite && !dedicatedIp)
+                if (updateWebSite)
                 {
-
-                    // update host headers
+                    // get existing web site bindings
                     WebServer web = new WebServer();
                     ServiceProviderProxy.Init(web, siteItem.ServiceId);
 
                     List<ServerBinding> bindings = new List<ServerBinding>();
                     bindings.AddRange(web.GetSiteBindings(siteItem.SiteId));
 
-                    // remove host headers
-                    List<ServerBinding> domainBindings = new List<ServerBinding>();
-                    FillWebServerBindings(domainBindings, dnsRecords, "", domain.DomainName);
+                    // check if web site has dedicated IP assigned
+                    bool dedicatedIp = bindings.Exists(binding => { return String.IsNullOrEmpty(binding.Host) && binding.IP != "*"; });
 
-                    // fill to remove list
-                    List<string> headersToRemove = new List<string>();
-                    foreach (ServerBinding domainBinding in domainBindings)
+                    // update binding only for "shared" ip addresses
+                    if (!dedicatedIp)
                     {
-                        headersToRemove.Add(domainBinding.Host);
-                    }
+                        // remove host headers
+                        List<ServerBinding> domainBindings = new List<ServerBinding>();
+                        FillWebServerBindings(domainBindings, dnsRecords, "", domain.DomainName);
 
-                    int pos = 0;
-                    while (pos < bindings.Count)
-                    {
-                        if (headersToRemove.Contains(bindings[pos].Host))
-                        {
-                            bindings.RemoveAt(pos);
-                            continue;
-                        }
-                        else
-                        {
-                            pos++;
-                        }
-                    }
+                        // fill to remove list
+                        List<string> headersToRemove = new List<string>();
+                        foreach (ServerBinding domainBinding in domainBindings)
+                            headersToRemove.Add(domainBinding.Host);
 
-                    web.UpdateSiteBindings(siteItem.SiteId, bindings.ToArray());
+                        // remove bndings
+                        bindings.RemoveAll(b => { return headersToRemove.Contains(b.Host) && b.Port == "80"; } );
+
+                        // update bindings
+                        web.UpdateSiteBindings(siteItem.SiteId, bindings.ToArray());
+                    }
                 }
 
                 // update domain
@@ -2084,24 +2066,29 @@ namespace WebsitePanel.EnterpriseServer
 			#region Resolving web site ip
 			// Loading package context to evaluate IP Addresses quota
 			PackageContext packageCtx = PackageController.GetPackageContext(packageId);
+
+            // We are unable to step further because there are 
+            // no bindings on the web site to choose from
+            if (site.Bindings == null || site.Bindings.Length == 0)
+            {
+                TaskManager.WriteError("Could not import the web site because it has no bindings assigned.");
+                return;
+            }
+
 			// Loading service provider settings
 			StringDictionary webSettings = ServerController.GetServiceSettings(serviceId);
 			int sharedIpId = Utils.ParseInt(webSettings["SharedIP"], 0);
 			IPAddressInfo sharedIp = ServerController.GetIPAddress(sharedIpId);
-			// We are unable to step further because there are 
-			// no bindings on the web site to choose from
-			if (site.Bindings == null || site.Bindings.Length == 0)
-			{
-				TaskManager.WriteError("Could not import the web site because it has no bindings assigned.");
-				return;
-			}
+
 			// Trying to match site's bindings to against either 
 			// external or internal address of the shared ip
 			bool sharedIpMatch = Array.Exists(site.Bindings, 
-				x => x.IP.Equals(sharedIp.ExternalIP) || x.IP.Equals(sharedIp.InternalIP));
+				x => sharedIp != null && (x.IP.Equals(sharedIp.ExternalIP) || x.IP.Equals(sharedIp.InternalIP)));
+
 			// Quering dedicated ips package quota allotted
 			bool dedicatedIpsAllotted = Array.Exists(packageCtx.QuotasArray,
 				x => x.QuotaName == Quotas.WEB_IP_ADDRESSES && x.QuotaAllocatedValue != 0);
+
 			// By default we fallback to the service provider's shared ip,
 			// so the web site being imported is "hooked up" to the proper ip,
 			// even if current bindings match different ip for some reason
@@ -2109,6 +2096,7 @@ namespace WebsitePanel.EnterpriseServer
 			{
 				site.SiteIPAddressId = sharedIpId;
 			}
+
 			// Trying to find a match in dedicated ips list if any.
 			if (dedicatedIpsAllotted && !sharedIpMatch)
 			{

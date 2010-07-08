@@ -1692,7 +1692,7 @@ namespace WebsitePanel.EnterpriseServer
                 return domainId;
 
             // add instant alias
-            createInstantAlias &= (domainType != DomainType.DomainPointer) & dnsEnabled;
+            createInstantAlias &= (domainType != DomainType.DomainPointer);
             if (createInstantAlias)
             {
                 // check if instant alias is configured

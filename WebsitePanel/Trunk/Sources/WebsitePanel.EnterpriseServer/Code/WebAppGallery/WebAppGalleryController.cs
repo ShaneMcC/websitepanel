@@ -28,11 +28,11 @@
 
 ﻿using System;
 using System.Collections.Generic;
-using WebsitePanel.Providers.WebAppGallery;
 using System.Threading;
 using WebsitePanel.Providers.Web;
 using WebsitePanel.Providers.ResultObjects;
 using WebsitePanel.Providers.Database;
+using WebsitePanel.Providers.WebAppGallery;
 using System.Collections.Specialized;
 using System.Reflection;
 using WebsitePanel.Providers.Common;
@@ -69,30 +69,23 @@ namespace WebsitePanel.EnterpriseServer
 			try
 			{
 				TaskManager.StartTask(TASK_MANAGER_SOURCE, GET_GALLERY_CATEGORIES_TASK);
-				//
+				
+                // check if Web App Gallery is installed
 				WebServer webServer = GetAssociatedWebServer(packageId);
-				// ERROR: WAG is unavailable;
-				if (!webServer.IsMsDeployInstalled())
-				{
-					return WAG_MODULE_NOT_AVAILABLE<GalleryCategoriesResult>();
-				}
-				//
+
+                if (!webServer.IsMsDeployInstalled())
+                    return Error<GalleryCategoriesResult>(GalleryErrors.MsDeployIsNotInstalled);
+
+                // get categories
 				result = webServer.GetGalleryCategories();
-				//
+				
 				if (!result.IsSuccess)
-				{
-					//
-					foreach (string errorMessage in result.ErrorCodes)
-						TaskManager.WriteError(errorMessage);
-					//
-					return WAG_GENERIC_MODULE_ERROR<GalleryCategoriesResult>();
-				}
+                    return Error<GalleryCategoriesResult>(result, GalleryErrors.GetCategoriesError);
 			}
 			catch (Exception ex)
 			{
 				TaskManager.WriteError(ex);
-				//
-				return WAG_GENERIC_MODULE_ERROR<GalleryCategoriesResult>();
+                return Error<GalleryCategoriesResult>(GalleryErrors.GeneralError, ex.Message);
 			}
 			finally
 			{
@@ -109,34 +102,27 @@ namespace WebsitePanel.EnterpriseServer
 			try
 			{
 				TaskManager.StartTask(TASK_MANAGER_SOURCE, GET_SRV_GALLERY_APPS_TASK);
-				//
-				if (SecurityContext.CheckAccount(DemandAccount.IsAdmin) != 0)
-				{
-					return WAG_MODULE_NOT_AVAILABLE<GalleryApplicationsResult>();
-				}
-				//
+				
+                int accountCheck = SecurityContext.CheckAccount(DemandAccount.IsAdmin);
+                if (accountCheck < 0)
+                    return Warning<GalleryApplicationsResult>((-accountCheck).ToString());
+				
+                // check if WAG is installed
 				WebServer webServer = WebServerController.GetWebServer(serviceId);
-				// ERROR: WAG is unavailable
+				
 				if (!webServer.IsMsDeployInstalled())
-				{
-					return WAG_MODULE_NOT_AVAILABLE<GalleryApplicationsResult>();
-				}
-				//
+                    return Error<GalleryApplicationsResult>(GalleryErrors.MsDeployIsNotInstalled);
+
+				// get applications
 				result = webServer.GetGalleryApplications(String.Empty);
-				//
+				
 				if (!result.IsSuccess)
-				{
-					foreach (string errorMessage in result.ErrorCodes)
-						TaskManager.WriteError(errorMessage);
-					//
-					return WAG_GENERIC_MODULE_ERROR<GalleryApplicationsResult>();
-				}
+					return Error<GalleryApplicationsResult>(result, GalleryErrors.GetApplicationsError);
 			}
 			catch (Exception ex)
 			{
-				TaskManager.WriteError(ex);
-				//
-				return WAG_GENERIC_MODULE_ERROR<GalleryApplicationsResult>();
+                TaskManager.WriteError(ex);
+                return Error<GalleryApplicationsResult>(GalleryErrors.GeneralError, ex.Message);
 			}
 			finally
 			{
@@ -153,58 +139,53 @@ namespace WebsitePanel.EnterpriseServer
 			try
 			{
 				TaskManager.StartTask(TASK_MANAGER_SOURCE, GET_GALLERY_APPS_TASK);
-				//
-				WebServer webServer = GetAssociatedWebServer(packageId);
-				// ERROR: WAG is unavailable
-				if (!webServer.IsMsDeployInstalled())
-				{
-					return WAG_MODULE_NOT_AVAILABLE<GalleryApplicationsResult>();
-				}
-				//
+				
+                // check if WAG is installed
+                WebServer webServer = GetAssociatedWebServer(packageId);
+                if (!webServer.IsMsDeployInstalled())
+                    return Error<GalleryApplicationsResult>(GalleryErrors.MsDeployIsNotInstalled);
+
+				// get applications
 				result = webServer.GetGalleryApplications(categoryId);
-				//
-				if (!result.IsSuccess)
-				{
-					foreach (string errorMessage in result.ErrorCodes)
-						TaskManager.WriteError(errorMessage);
-					//
-					return WAG_GENERIC_MODULE_ERROR<GalleryApplicationsResult>();
-				}
-				//
+
+                if (!result.IsSuccess)
+                    return Error<GalleryApplicationsResult>(result, GalleryErrors.GetApplicationsError);
+
+				// get space quotas
 				PackageContext context = PackageController.GetPackageContext(packageId);
 
-				//
-				List<string> appsFilter = new List<string>();
-				// if either ASP.NET 1.1 or 2.0 enabled in the hosting plan
-				if (context.Quotas[Quotas.WEB_ASPNET11].QuotaAllocatedValue == 1 ||
-					context.Quotas[Quotas.WEB_ASPNET20].QuotaAllocatedValue == 1 ||
-					context.Quotas[Quotas.WEB_ASPNET40].QuotaAllocatedValue == 1)
-				{
-					appsFilter.AddRange(SupportedAppDependencies.ASPNET_SCRIPTING);
-				}
-				// if either PHP 4 or 5 enabled in the hosting plan
-				if (context.Quotas[Quotas.WEB_PHP4].QuotaAllocatedValue == 1 ||
-					context.Quotas[Quotas.WEB_PHP5].QuotaAllocatedValue == 1)
-				{
-					appsFilter.AddRange(SupportedAppDependencies.PHP_SCRIPTING);
-				}
-				// if either MSSQL 2000, 2005 or 2008 enabled in the hosting plan
-				if (context.Groups.ContainsKey(ResourceGroups.MsSql2000) ||
-					context.Groups.ContainsKey(ResourceGroups.MsSql2005) ||
-					context.Groups.ContainsKey(ResourceGroups.MsSql2008))
-				{
-					appsFilter.AddRange(SupportedAppDependencies.MSSQL_DATABASE);
-				}
-				// if either MySQL 4 or 5 enabled in the hosting plan
-				if (context.Groups.ContainsKey(ResourceGroups.MySql4) ||
-					context.Groups.ContainsKey(ResourceGroups.MySql5))
-				{
-					appsFilter.AddRange(SupportedAppDependencies.MYSQL_DATABASE);
-				}
-				// Match applications based on the hosting plan restrictions collected
-				result.Value = new List<GalleryApplication>(Array.FindAll<GalleryApplication>(result.Value.ToArray(),
-					x => MatchGalleryAppDependencies(x.Dependency, appsFilter.ToArray())
-						|| MatchMenaltoGalleryApp(x, appsFilter.ToArray())));
+                //// filter applications
+                //List<string> appsFilter = new List<string>();
+                //// if either ASP.NET 1.1 or 2.0 enabled in the hosting plan
+                //if (context.Quotas[Quotas.WEB_ASPNET11].QuotaAllocatedValue == 1 ||
+                //    context.Quotas[Quotas.WEB_ASPNET20].QuotaAllocatedValue == 1 ||
+                //    context.Quotas[Quotas.WEB_ASPNET40].QuotaAllocatedValue == 1)
+                //{
+                //    appsFilter.AddRange(SupportedAppDependencies.ASPNET_SCRIPTING);
+                //}
+                //// if either PHP 4 or 5 enabled in the hosting plan
+                //if (context.Quotas[Quotas.WEB_PHP4].QuotaAllocatedValue == 1 ||
+                //    context.Quotas[Quotas.WEB_PHP5].QuotaAllocatedValue == 1)
+                //{
+                //    appsFilter.AddRange(SupportedAppDependencies.PHP_SCRIPTING);
+                //}
+                //// if either MSSQL 2000, 2005 or 2008 enabled in the hosting plan
+                //if (context.Groups.ContainsKey(ResourceGroups.MsSql2000) ||
+                //    context.Groups.ContainsKey(ResourceGroups.MsSql2005) ||
+                //    context.Groups.ContainsKey(ResourceGroups.MsSql2008))
+                //{
+                //    appsFilter.AddRange(SupportedAppDependencies.MSSQL_DATABASE);
+                //}
+                //// if either MySQL 4 or 5 enabled in the hosting plan
+                //if (context.Groups.ContainsKey(ResourceGroups.MySql4) ||
+                //    context.Groups.ContainsKey(ResourceGroups.MySql5))
+                //{
+                //    appsFilter.AddRange(SupportedAppDependencies.MYSQL_DATABASE);
+                //}
+                //// Match applications based on the hosting plan restrictions collected
+                //result.Value = new List<GalleryApplication>(Array.FindAll<GalleryApplication>(result.Value.ToArray(),
+                //    x => MatchGalleryAppDependencies(x.Dependency, appsFilter.ToArray())
+                //        || MatchMenaltoGalleryApp(x, appsFilter.ToArray())));
 
 				{
 					int userId = SecurityContext.User.UserId;
@@ -225,9 +206,8 @@ namespace WebsitePanel.EnterpriseServer
 			}
 			catch (Exception ex)
 			{
-				TaskManager.WriteError(ex);
-				//
-				return WAG_GENERIC_MODULE_ERROR<GalleryApplicationsResult>();
+                TaskManager.WriteError(ex);
+                return Error<GalleryApplicationsResult>(GalleryErrors.GeneralError, ex.Message);
 			}
 			finally
 			{
@@ -235,40 +215,6 @@ namespace WebsitePanel.EnterpriseServer
 			}
 			//
 			return result;
-		}
-
-		/// <summary>
-		/// Matches Gallery 2 app from menalto.com author. This method has been developed to eliminate
-		/// a discrepancy between the application dependencies (requirements) definition - because it's the only
-		/// distributive that can be run on both MySQL and MSSQL db server.
-		/// </summary>
-		/// <param name="appObject">Gallery application object.</param>
-		/// <param name="dependencyIds">Provides information of dependencies available.</param>
-		/// <returns>True or false if either PHP + (MySQL or MSSQL) are available through dependencyIds.</returns>
-		internal static bool MatchMenaltoGalleryApp(GalleryApplication appObject, string[] dependencyIds)
-		{
-			if (appObject.AuthorName == "menalto.com" && appObject.Title == "Gallery")
-			{
-				// Ensure PHP is allowed in a hosting plan
-				if (Array.Exists<String>(dependencyIds, x =>
-					Array.Exists<String>(SupportedAppDependencies.PHP_SCRIPTING, n =>
-						String.Equals(n, x, StringComparison.InvariantCultureIgnoreCase))))
-				{
-					// Lookup for MSSQL dependencies
-					bool mssqlEnabled = Array.Exists<String>(dependencyIds, x =>
-							Array.Exists<String>(SupportedAppDependencies.MSSQL_DATABASE, n =>
-								String.Equals(n, x, StringComparison.InvariantCultureIgnoreCase)));
-					// Lookup for MySQL dependencies
-					bool mysqlEnabled = Array.Exists<String>(dependencyIds, x =>
-						Array.Exists<String>(SupportedAppDependencies.MYSQL_DATABASE, n =>
-							String.Equals(n, x, StringComparison.InvariantCultureIgnoreCase)));
-					// If either one of db type is enabled, return true
-					if (mysqlEnabled || mssqlEnabled)
-						return true;
-				}
-			}
-			//
-			return false;
 		}
 
 		internal static bool MatchParticularAppDependency(Dependency dependency, string[] dependencyIds)
@@ -352,33 +298,78 @@ namespace WebsitePanel.EnterpriseServer
 		public static GalleryApplicationResult GetGalleryApplicationDetails(int packageId, string applicationId)
 		{
 			GalleryApplicationResult result;
+
 			//
 			try
 			{
 				TaskManager.StartTask(TASK_MANAGER_SOURCE, GET_GALLERY_APP_DETAILS_TASK);
-				//
-				WebServer webServer = GetAssociatedWebServer(packageId);
-				// ERROR: WAG is not available
-				if (!webServer.IsMsDeployInstalled())
-				{
-					return WAG_MODULE_NOT_AVAILABLE<GalleryApplicationResult>();
-				}
-				//
+
+                // check if WAG is installed
+                WebServer webServer = GetAssociatedWebServer(packageId);
+                if (!webServer.IsMsDeployInstalled())
+                    return Error<GalleryApplicationResult>(GalleryErrors.MsDeployIsNotInstalled);
+				
+                // get application details
 				result = webServer.GetGalleryApplication(applicationId);
-				//
+				
 				if (!result.IsSuccess)
-				{
-					foreach (string errorMessage in result.ErrorCodes)
-						TaskManager.WriteError(errorMessage);
-					//
-					return WAG_GENERIC_MODULE_ERROR<GalleryApplicationResult>();
-				}
+                    return Error<GalleryApplicationResult>(result, GalleryErrors.GetApplicationError);
+
+                // check application requirements
+                PackageContext context = PackageController.GetPackageContext(packageId);
+
+                GalleryApplication app = result.Value;
+
+                // ASP.NET 2.0
+                if ((app.WellKnownDependencies & GalleryApplicationWellKnownDependency.AspNet20) == GalleryApplicationWellKnownDependency.AspNet20
+                    && context.Quotas.ContainsKey(Quotas.WEB_ASPNET20) && context.Quotas[Quotas.WEB_ASPNET20].QuotaAllocatedValue < 1)
+                    result.ErrorCodes.Add(GalleryErrors.AspNet20Required);
+
+                // ASP.NET 4.0
+                else if ((app.WellKnownDependencies & GalleryApplicationWellKnownDependency.AspNet40) == GalleryApplicationWellKnownDependency.AspNet40
+                    && context.Quotas.ContainsKey(Quotas.WEB_ASPNET40) && context.Quotas[Quotas.WEB_ASPNET40].QuotaAllocatedValue < 1)
+                    result.ErrorCodes.Add(GalleryErrors.AspNet40Required);
+
+                // PHP
+                else if ((app.WellKnownDependencies & GalleryApplicationWellKnownDependency.PHP) == GalleryApplicationWellKnownDependency.PHP
+                    && context.Quotas.ContainsKey(Quotas.WEB_PHP4) && context.Quotas[Quotas.WEB_PHP4].QuotaAllocatedValue < 1
+                    && context.Quotas.ContainsKey(Quotas.WEB_PHP5) && context.Quotas[Quotas.WEB_PHP5].QuotaAllocatedValue < 1)
+                    result.ErrorCodes.Add(GalleryErrors.PhpRequired);
+
+                // any database
+                GalleryApplicationWellKnownDependency anyDatabaseFlag = GalleryApplicationWellKnownDependency.SQL | GalleryApplicationWellKnownDependency.MySQL;
+                if ((app.WellKnownDependencies & anyDatabaseFlag) == anyDatabaseFlag &&
+                    !(context.Groups.ContainsKey(ResourceGroups.MsSql2000)
+                    || context.Groups.ContainsKey(ResourceGroups.MsSql2005)
+                    || context.Groups.ContainsKey(ResourceGroups.MsSql2008)
+                    || context.Groups.ContainsKey(ResourceGroups.MySql4)
+                    || context.Groups.ContainsKey(ResourceGroups.MySql5)))
+                    result.ErrorCodes.Add(GalleryErrors.DatabaseRequired);
+
+                // SQL Server
+                else if ((app.WellKnownDependencies & GalleryApplicationWellKnownDependency.SQL) == GalleryApplicationWellKnownDependency.SQL
+                    && !(context.Groups.ContainsKey(ResourceGroups.MsSql2000)
+                    || context.Groups.ContainsKey(ResourceGroups.MsSql2005)
+                    || context.Groups.ContainsKey(ResourceGroups.MsSql2008)))
+                    result.ErrorCodes.Add(GalleryErrors.SQLRequired);
+
+                // MySQL
+                else if ((app.WellKnownDependencies & GalleryApplicationWellKnownDependency.MySQL) == GalleryApplicationWellKnownDependency.MySQL
+                    && !(context.Groups.ContainsKey(ResourceGroups.MySql4)
+                    || context.Groups.ContainsKey(ResourceGroups.MySql5)))
+                    result.ErrorCodes.Add(GalleryErrors.MySQLRequired);
+
+                if (result.ErrorCodes.Count > 0)
+                {
+                    GalleryApplicationResult warning = Warning<GalleryApplicationResult>(result, GalleryErrors.PackageDoesNotMeetRequirements);
+                    warning.Value = app;
+                    return warning;
+                }
 			}
 			catch (Exception ex)
 			{
-				TaskManager.WriteError(ex);
-				//
-				return WAG_GENERIC_MODULE_ERROR<GalleryApplicationResult>();
+                TaskManager.WriteError(ex);
+                return Error<GalleryApplicationResult>(GalleryErrors.GeneralError, ex.Message);
 			}
 			finally
 			{
@@ -390,419 +381,358 @@ namespace WebsitePanel.EnterpriseServer
 
 		public static DeploymentParametersResult GetGalleryApplicationParams(int packageId, string webAppId)
 		{
-			DeploymentParametersResult appParamsResult = GetGalleryApplicationParamsInternally(packageId, webAppId);
-			//
-			if (appParamsResult.IsSuccess)
-			{
-				List<DeploymentParameter> appParams = new List<DeploymentParameter>();
-				//
-				foreach (DeploymentParameter parameter in appParamsResult.Value)
-				{
-					// Exclude non-public parameters
-					if (MatchNonPublicParamByTags(parameter))
-						continue;
-					if (MatchNonPublicParamByNames(parameter))
-						continue;
-					//
-					appParams.Add(parameter);
-				}
-				//
-				appParamsResult.Value = appParams;
-			}
-			//
-			return appParamsResult;
-		}
-
-		public static DeploymentParametersResult GetGalleryApplicationParamsInternally(int packageId, string webAppId)
-		{
 			DeploymentParametersResult result = null;
 			//
 			try
 			{
-				//
 				TaskManager.StartTask(TASK_MANAGER_SOURCE, GET_APP_PARAMS_TASK);
-				//
-				WebServer webServer = GetAssociatedWebServer(packageId);
-				//
-				if (!webServer.IsMsDeployInstalled())
-					return WAG_MODULE_NOT_AVAILABLE<DeploymentParametersResult>();
-				//
+
+                // check if WAG is installed
+                WebServer webServer = GetAssociatedWebServer(packageId);
+                if (!webServer.IsMsDeployInstalled())
+                    return Error<DeploymentParametersResult>(GalleryErrors.MsDeployIsNotInstalled);
+
+				// get parameters
 				result = webServer.GetGalleryApplicationParameters(webAppId);
-				//
+				
 				if (!result.IsSuccess)
-				{
-					//
-					foreach (string errorMessage in result.ErrorCodes)
-						TaskManager.WriteError(errorMessage);
-					//
-					return WAG_GENERIC_MODULE_ERROR<DeploymentParametersResult>();
-				}
+                    return Error<DeploymentParametersResult>(result, GalleryErrors.GetApplicationParametersError);
 			}
 			catch (Exception ex)
 			{
-				TaskManager.WriteError(ex);
-				//
-				return WAG_GENERIC_MODULE_ERROR<DeploymentParametersResult>();
+                TaskManager.WriteError(ex);
+                return Error<DeploymentParametersResult>(GalleryErrors.GeneralError, ex.Message);
 			}
 			finally
 			{
 				TaskManager.CompleteTask();
 			}
-			//
+			
 			return result;
 		}
 
-		public static StringResultObject Install(int packageId, string webAppId, string siteName, string virtualDir, List<DeploymentParameter> updatedParameters)
+		public static StringResultObject Install(int packageId, string webAppId, string siteName, string virtualDir, List<DeploymentParameter> parameters)
 		{
 			StringResultObject result = new StringResultObject();
-			//
-			int dbItemResult = -1, dbUserResult = -1;
-			WebSite webSite = default(WebSite);
-			WebVirtualDirectory webVirtualDir = default(WebVirtualDirectory);
-			WebVirtualDirectory iisAppNode = default(WebVirtualDirectory);
-			//
-			try
-			{
-				SecurityContext.SetThreadSupervisorPrincipal();
-				//
+
+            try
+            {
+                // database operation results
+                int databaseResult = -1;
+                int databaseUserResult = -1;
+
+                // initialize task manager
 				TaskManager.StartTask(TASK_MANAGER_SOURCE, "INSTALL_WEB_APP");
-				//
 				TaskManager.WriteParameter("Package ID", packageId);
 				TaskManager.WriteParameter("Site Name", siteName);
 
-				//
+                #region Check Space and Account
+                // Check account
+                int accountCheck = SecurityContext.CheckAccount(DemandAccount.NotDemo | DemandAccount.IsActive);
+                if (accountCheck < 0)
+                    return Warning<StringResultObject>((-accountCheck).ToString());
+
+                // Check space
+                int packageCheck = SecurityContext.CheckPackage(packageId, DemandPackage.IsActive);
+                if (packageCheck < 0)
+                    return Warning<StringResultObject>((-packageCheck).ToString());
+                #endregion
+
+                #region Check MS Deploy, web site and application pack
+                // get target web server
 				WebServer webServer = GetAssociatedWebServer(packageId);
 
-				// ERROR: WAG is not available
+				// Check if Web App Gallery is installed
 				if (!webServer.IsMsDeployInstalled())
-					return WAG_MODULE_NOT_AVAILABLE<StringResultObject>();
+					return Error<StringResultObject>(GalleryErrors.MsDeployIsNotInstalled);
 
-				//
-				GalleryApplicationResult appResult = webServer.GetGalleryApplication(webAppId);
+                // Check web site for existence
+                WebSite webSite = WebServerController.GetWebSite(packageId, siteName);
+                if (webSite == null)
+                    return Error<StringResultObject>(GalleryErrors.WebSiteNotFound, siteName);
 
-				#region Preparations and tracing
-				// Trace at least Web Application Id for troubleshooting purposes
-				if (!appResult.IsSuccess || appResult.Value == null)
-				{
-					TaskManager.WriteError("Could not find an application to install with ID: {0}.", webAppId);
-					//
-					return WAG_INSTALL_GENERIC_MODULE_ERROR<StringResultObject>();
-				}
-				// Assign web app pack title to the currently running task
-				TaskManager.ItemName = appResult.Value.Title;
+				// get application pack details
+				GalleryApplicationResult app = webServer.GetGalleryApplication(webAppId);
+                if (!app.IsSuccess)
+                    return Error<StringResultObject>(app, GalleryErrors.GeneralError);
+                if (app.Value == null)
+                    return Error<StringResultObject>(GalleryErrors.WebApplicationNotFound, webAppId);
+                #endregion
+
+				#region Trace app details
+
+                // Assign web app pack title to the currently running task
+                TaskManager.ItemName = app.Value.Title;
+
 				// Trace additional details from the feed
-				TraceGalleryAppPackInfo(appResult.Value);
+                TaskManager.WriteParameter("Title", app.Value.Title);
+                TaskManager.WriteParameter("Version", app.Value.Version);
+                TaskManager.WriteParameter("Download URL", app.Value.DownloadUrl);
+                TaskManager.WriteParameter("Author", app.Value.AuthorName);
+                TaskManager.WriteParameter("Last Updated", app.Value.LastUpdated);
 
 				// Trace out all deployment parameters
-				Array.ForEach<DeploymentParameter>(updatedParameters.ToArray(), p => TaskManager.WriteParameter(p.Name, p.Value));
-				// Check account
-				int accountCheck = SecurityContext.CheckAccount(DemandAccount.NotDemo | DemandAccount.IsActive);
-				if (accountCheck < 0)
-				{
-					TaskManager.WriteError("Account check has been failed. Status: {0};", accountCheck.ToString());
-					//
-					return WAG_INSTALL_GENERIC_MODULE_ERROR<StringResultObject>();
-				}
-				// Check package
-				int packageCheck = SecurityContext.CheckPackage(packageId, DemandPackage.IsActive);
-				if (packageCheck < 0)
-				{
-					TaskManager.WriteError("Package check has been failed. Status: {0};", packageCheck.ToString());
-					//
-					return WAG_INSTALL_GENERIC_MODULE_ERROR<StringResultObject>();
-				}
-				// Check web site for existence
-				webSite = WebServerController.GetWebSite(packageId, siteName);
-				if (webSite == null)
-				{
-					TaskManager.WriteError("Web site check has been failed. Status: {0};", BusinessErrorCodes.ERROR_WEB_INSTALLER_WEBSITE_NOT_EXISTS.ToString());
-					//
-					return WAG_INSTALL_GENERIC_MODULE_ERROR<StringResultObject>();
-				}
-				#endregion
+				Array.ForEach<DeploymentParameter>(parameters.ToArray(), p => TaskManager.WriteParameter(p.Name, p.Value));
+                #endregion
 
-				DeploymentParametersResult appParamsResult = GetGalleryApplicationParamsInternally(packageId, webAppId);
+                // elevate security context
+                SecurityContext.SetThreadSupervisorPrincipal();
 
-				//
-				if (!appParamsResult.IsSuccess)
-				{
-					foreach (string errorMessage in appParamsResult.ErrorCodes)
-						TaskManager.WriteError(errorMessage);
-					//
-					return WAG_INSTALL_GENERIC_MODULE_ERROR<StringResultObject>();
-				}
+                #region Set AppPath
+                // set correct application path
+                DeploymentParameter appPath = FindParameterByTag(parameters, DeploymentParameterWellKnownTag.IisApp);
+                if (appPath == null)
+                    return Error<StringResultObject>(GalleryErrors.AppPathParameterNotFound);
 
-				List<DeploymentParameter> origParams = appParamsResult.Value;
-				//
-				if (Array.Exists<DeploymentParameter>(origParams.ToArray(),
-					p => MatchParameterTag(p, DeploymentParameter.SQL_PARAM_TAG)
-						|| MatchParameterTag(p, DeploymentParameter.MYSQL_PARAM_TAG)))
-				{
-					// Match input parameters from the client
-					DeploymentParameter dbNameParam = Array.Find<DeploymentParameter>(updatedParameters.ToArray(),
-						p => MatchParameterByNames(p, DeploymentParameter.DATABASE_NAME_PARAMS)
-							|| MatchParameterTag(p, DeploymentParameter.DB_NAME_PARAM_TAG));
-					//
-					DeploymentParameter dbUserParam = Array.Find<DeploymentParameter>(updatedParameters.ToArray(),
-						p => MatchParameterByNames(p, DeploymentParameter.DATABASE_USERNAME_PARAMS)
-							|| MatchParameterTag(p, DeploymentParameter.DB_USERNAME_PARAM_TAG));
-					//
-					DeploymentParameter dbUserPwParam = Array.Find<DeploymentParameter>(updatedParameters.ToArray(),
-						p => MatchParameterByNames(p, DeploymentParameter.DATABASE_USERPWD_PARAMS)
-							|| MatchParameterTag(p, DeploymentParameter.DB_PASSWORD_PARAM_TAG));
+                appPath.Value = String.IsNullOrEmpty(virtualDir) ? siteName : String.Format("{0}/{1}", siteName, virtualDir);
+                #endregion
 
-					#region Pre-conditions verification...
-					//
-					if (dbNameParam == null)
-					{
-						//
-						TaskManager.WriteError(PARAMETER_IS_NULL_OR_EMPTY, DeploymentParameter.DATABASE_NAME_PARAM);
-						//
-						return WAG_INSTALL_GENERIC_MODULE_ERROR<StringResultObject>();
-					}
-					//
-					if (String.IsNullOrEmpty(dbNameParam.Tags))
-					{
-						//
-						TaskManager.WriteError("{0} parameter tags does not contain information about the database resource group should be used", DeploymentParameter.DATABASE_NAME_PARAM);
-						//
-						return WAG_INSTALL_GENERIC_MODULE_ERROR<StringResultObject>();
-					}
-					//
-					int dbServiceId = PackageController.GetPackageServiceId(packageId, dbNameParam.Tags);
-					//
-					if (dbServiceId <= 0)
-					{
-						//
-						TaskManager.WriteError("{0} parameter tags contains wrong information about the database resource group should be used. Resource group: " + dbNameParam.Tags, DeploymentParameter.DATABASE_NAME_PARAM);
-						//
-						return WAG_INSTALL_GENERIC_MODULE_ERROR<StringResultObject>();
-					}
-					#endregion
-					//
-					DeploymentParameter dbServerParam = Array.Find<DeploymentParameter>(origParams.ToArray(),
-						p => MatchParameterByNames(p, DeploymentParameter.DB_SERVER_PARAMS)
-							|| MatchParameterTag(p, DeploymentParameter.DB_SERVER_PARAM_TAG));
-					//
-					DeploymentParameter dbAdminParam = Array.Find<DeploymentParameter>(origParams.ToArray(),
-						p => MatchParameterByNames(p, DeploymentParameter.DB_ADMIN_PARAMS)
-							|| MatchParameterTag(p, DeploymentParameter.DB_ADMIN_USERNAME_PARAM_TAG));
-					//
-					DeploymentParameter dbAdminPwParam = Array.Find<DeploymentParameter>(origParams.ToArray(),
-						p => MatchParameterByNames(p, DeploymentParameter.DB_ADMINPWD_PARAMS)
-							|| MatchParameterTag(p, DeploymentParameter.DB_ADMIN_PASSWORD_PARAM_TAG));
+                // database context
+                // find database resource parameter
+                DeploymentParameter databaseResoure = parameters.Find( p =>
+                {
+                    return (p.Name == DeploymentParameter.ResourceGroupParameterName);
+                });
 
-					#region Pre-conditions verification...
-					//
-					if (dbAdminParam == null)
-					{
-						//
-						TaskManager.WriteError(NO_DB_PARAMETER_MATCHES_MSG, NAMES_MATCH,
-							String.Join(", ", DeploymentParameter.DB_ADMIN_PARAMS));
-						//
-						return WAG_INSTALL_GENERIC_MODULE_ERROR<StringResultObject>();
-					}
-					//
-					if (dbServerParam == null)
-					{
-						//
-						TaskManager.WriteError(NO_DB_PARAMETER_MATCHES_MSG, NAMES_MATCH,
-							String.Join(", ", DeploymentParameter.DB_SERVER_PARAMS));
-						//
-						return WAG_INSTALL_GENERIC_MODULE_ERROR<StringResultObject>();
-					}
-					//
-					if (dbAdminPwParam == null)
-					{
-						//
-						TaskManager.WriteError(NO_DB_PARAMETER_MATCHES_MSG, NAMES_MATCH,
-							String.Join(", ", DeploymentParameter.DB_ADMINPWD_PARAMS));
-						//
-						return WAG_INSTALL_GENERIC_MODULE_ERROR<StringResultObject>();
-					}
-					#endregion
+                // database is required for this application
+                if (databaseResoure != null)
+                {
+                    // try to get database service
+                    int dbServiceId = PackageController.GetPackageServiceId(packageId, databaseResoure.Value);
+                    if (dbServiceId == 0)
+                        return Error<StringResultObject>(GalleryErrors.DatabaseServiceIsNotAvailable);
 
-					#region Read & substitute database server settings
-					//
-					StringDictionary dbSettings = ServerController.GetServiceSettingsAdmin(dbServiceId);
+                    #region Setup Database server and DB Admin credentials
+                    // get database service settings
+                    StringDictionary dbSettings = ServerController.GetServiceSettingsAdmin(dbServiceId);
 
-					// InternalAddress setting is common for all DB service providers
-					dbServerParam.Value = dbSettings["InternalAddress"];
-					// Set database administrator login
-					if (!String.IsNullOrEmpty(dbSettings["RootLogin"]))
-						dbAdminParam.Value = dbSettings["RootLogin"];
-					else if (!String.IsNullOrEmpty(dbSettings["SaLogin"]))
-						dbAdminParam.Value = dbSettings["SaLogin"];
-					else
-					{
-						//
-						TaskManager.WriteError(CANNOT_SET_PARAMETER_VALUE, dbAdminParam.Name);
-						//
-						return WAG_INSTALL_GENERIC_MODULE_ERROR<StringResultObject>();
-					}
-					// Set database administrator password
-					if (!String.IsNullOrEmpty(dbSettings["RootPassword"]))
-						dbAdminPwParam.Value = dbSettings["RootPassword"];
-					else if (!String.IsNullOrEmpty(dbSettings["SaPassword"]))
-						dbAdminPwParam.Value = dbSettings["SaPassword"];
-					else
-					{
-						//
-						TaskManager.WriteError(CANNOT_SET_PARAMETER_VALUE, dbAdminPwParam.Name);
-						//
-						return WAG_INSTALL_GENERIC_MODULE_ERROR<StringResultObject>();
-					}
-					#endregion
+                    // database server
+                    DeploymentParameter databaseServer = FindParameterByTag(parameters, DeploymentParameterWellKnownTag.DBServer);
+                    if (databaseServer != null)
+                    {
+                        databaseServer.Value = dbSettings["ExternalAddress"];
+                        if (String.IsNullOrEmpty(databaseServer.Value))
+                            return Error<StringResultObject>(GalleryErrors.DatabaseServerExternalAddressIsEmpty);
+                    }
 
-					//
-					updatedParameters.AddRange(new List<DeploymentParameter> { dbServerParam, dbAdminParam, dbAdminPwParam });
+                    // database admin
+                    DeploymentParameter databaseAdminUsername = FindParameterByTag(parameters, DeploymentParameterWellKnownTag.DBAdminUserName);
+                    if (databaseAdminUsername != null)
+                    {
+                        databaseAdminUsername.Value = dbSettings["RootLogin"];
+                        if(String.IsNullOrEmpty(databaseAdminUsername.Value))
+                            databaseAdminUsername.Value = dbSettings["SaLogin"];
 
-					#region Create database and db user account if new selected
-					//
-					SqlDatabase db = PackageController.GetPackageItemByName(packageId, dbNameParam.Value,
-						typeof(SqlDatabase)) as SqlDatabase;
-					//
-					if (db == null)
-					{
-						db = new SqlDatabase();
-						db.PackageId = packageId;
-						db.Name = dbNameParam.Value;
-						//
-						dbItemResult = DatabaseServerController.AddSqlDatabase(db, dbNameParam.Tags);
-						//
-						if (dbItemResult < 0)
-						{
-							// Put specific error message into the trace log
-							TaskManager.WriteError("Could not create {0} database. Error code: {1}.", dbNameParam.Tags, dbItemResult.ToString());
-							// Return generic error
-							return WAG_INSTALL_GENERIC_MODULE_ERROR<StringResultObject>();
-						}
-					}
+                        // raise error if database service is in Integrated Security mode (for SQL Server)
+                        // or DB Admin username is not provided
+                        if (String.IsNullOrEmpty(databaseAdminUsername.Value))
+                            return Error<StringResultObject>(GalleryErrors.DatabaseAdminUsernameNotSpecified);
+                    }
 
-					//
-					SqlUser user = PackageController.GetPackageItemByName(packageId, dbUserParam.Value,
-						typeof(SqlUser)) as SqlUser;
-					//
-					if (user == null)
-					{
-						user = new SqlUser();
-						user.PackageId = packageId;
-						user.Name = dbUserParam.Value;
-						user.Databases = new string[] { dbNameParam.Value };
-						user.Password = dbUserPwParam.Value;
-						//
-						dbUserResult = DatabaseServerController.AddSqlUser(user, dbNameParam.Tags);
-						//
-						if (dbUserResult < 0)
-						{
-							// Rollback and remove db if created
-							if (dbItemResult > 0)
-								DatabaseServerController.DeleteSqlDatabase(dbItemResult);
-							// Put specific error message into the trace log
-							TaskManager.WriteError("Could not create {0} user account. Error code: {1}.", dbNameParam.Tags, dbUserResult.ToString());
-							// Return generic error
-							return WAG_INSTALL_GENERIC_MODULE_ERROR<StringResultObject>();
-						}
-					}
-					#endregion
-				}
+                    // database admin password
+                    DeploymentParameter databaseAdminPassword = FindParameterByTag(parameters, DeploymentParameterWellKnownTag.DBAdminPassword);
+                    if (databaseAdminPassword != null)
+                    {
+                        databaseAdminPassword.Value = dbSettings["RootPassword"];
+                        if (String.IsNullOrEmpty(databaseAdminPassword.Value))
+                            databaseAdminPassword.Value = dbSettings["SaPassword"];
 
-				//
-				DeploymentParameter appPathParam = Array.Find<DeploymentParameter>(origParams.ToArray(),
-					p => MatchParameterName(p, DeploymentParameter.APPICATION_PATH_PARAM)
-						|| MatchParameterTag(p, DeploymentParameter.IISAPP_PARAM_TAG));
-				//
-				if (String.IsNullOrEmpty(virtualDir))
-					appPathParam.Value = siteName;
-				else
-					appPathParam.Value = String.Format("{0}/{1}", siteName, virtualDir);
-				//
-				updatedParameters.Add(appPathParam);
+                        // raise error if database service is in Integrated Security mode (for SQL Server)
+                        // or DB Admin password is not provided
+                        if (String.IsNullOrEmpty(databaseAdminPassword.Value))
+                            return Error<StringResultObject>(GalleryErrors.DatabaseAdminPasswordNotSpecified);
+                    }
+                    #endregion
 
-				//
-				result = webServer.InstallGalleryApplication(webAppId, updatedParameters.ToArray());
-				//
+                    #region Create database and db user account if new selected
+
+                    // create database
+                    DeploymentParameter databaseName = FindParameterByTag(parameters, DeploymentParameterWellKnownTag.DBName);
+                    if (databaseName != null)
+                    {
+                        SqlDatabase db = PackageController.GetPackageItemByName(packageId, databaseResoure.Value, databaseName.Value, typeof(SqlDatabase)) as SqlDatabase;
+                        
+                        if (db == null)
+                        {
+                            try
+                            {
+                                db = new SqlDatabase();
+                                db.PackageId = packageId;
+                                db.Name = databaseName.Value;
+
+                                // create
+                                databaseResult = DatabaseServerController.AddSqlDatabase(db, databaseResoure.Value);
+                                if (databaseResult < 0)
+                                {
+                                    result.ErrorCodes.Add((-databaseResult).ToString());
+                                    return Error<StringResultObject>(result, GalleryErrors.DatabaseCreationError);
+                                }
+                            }
+                            catch (Exception ex)
+                            {
+                                // log exception
+                                TaskManager.WriteError(ex);
+
+                                // return error
+                                return Error<StringResultObject>(GalleryErrors.DatabaseCreationException, ex.Message); 
+                            }
+                        }
+                    }
+
+                    // create database user
+                    DeploymentParameter databaseUsername = FindParameterByTag(parameters, DeploymentParameterWellKnownTag.DBUserName);
+                    DeploymentParameter databaseUserPassword = FindParameterByTag(parameters, DeploymentParameterWellKnownTag.DBUserPassword);
+
+                    if (databaseUsername != null && databaseUserPassword != null)
+                    {
+                        SqlUser user = PackageController.GetPackageItemByName(packageId, databaseResoure.Value, databaseUsername.Value, typeof(SqlUser)) as SqlUser;
+                        //
+                        if (user == null)
+                        {
+                            // create new user account
+                            try
+                            {
+                                user = new SqlUser();
+                                user.PackageId = packageId;
+                                user.Name = databaseUsername.Value;
+                                user.Databases = (databaseName != null) ? new string[] { databaseName.Value } : new string[0];
+                                user.Password = databaseUserPassword.Value;
+
+                                // create
+                                databaseUserResult = DatabaseServerController.AddSqlUser(user, databaseResoure.Value);
+
+                                // check results
+                                if (databaseUserResult < 0)
+                                {
+                                    // Rollback and remove db if created
+                                    if (databaseResult > 0)
+                                        DatabaseServerController.DeleteSqlDatabase(databaseResult);
+
+                                    // raise error
+                                    result.ErrorCodes.Add((-databaseUserResult).ToString());
+                                    return Error<StringResultObject>(result, GalleryErrors.DatabaseUserCreationError);
+                                }
+                            }
+                            catch (Exception ex)
+                            {
+                                // log exception
+                                TaskManager.WriteError(ex);
+
+                                // return error
+                                return Error<StringResultObject>(GalleryErrors.DatabaseUserCreationException, ex.Message);
+                            }
+                        }
+                        else
+                        {
+                            // check existing user account
+                            DatabaseServer databaseService = DatabaseServerController.GetDatabaseServer(dbServiceId);
+                            if (!databaseService.CheckConnectivity(databaseName.Value, databaseUsername.Value, databaseUserPassword.Value))
+                            {
+                                return Error<StringResultObject>(GalleryErrors.DatabaseUserCannotAccessDatabase, databaseUsername.Value);
+                            }
+                        }
+                    }
+                    #endregion
+
+                    // remove database resource parameter from the list
+                    // before calling "install" method
+                    parameters.Remove(databaseResoure);
+                }
+				
+                // install application
+				result = webServer.InstallGalleryApplication(webAppId, parameters.ToArray());
+
 				#region Rollback in case of failure
 				// Rollback - remove resources have been created previously
 				if (!result.IsSuccess)
 				{
-					//
-					if (dbUserResult > 0)
-						DatabaseServerController.DeleteSqlUser(dbUserResult);
-					//
-					if (dbItemResult > 0)
-						DatabaseServerController.DeleteSqlDatabase(dbItemResult);
-					//
-					foreach (string errorCode in result.ErrorCodes)
-						TaskManager.WriteError(errorCode);
-					//
-					return result;
+					// delete database
+					if (databaseUserResult > 0)
+						DatabaseServerController.DeleteSqlUser(databaseUserResult);
+
+					// delete database user
+					if (databaseResult > 0)
+						DatabaseServerController.DeleteSqlDatabase(databaseResult);
+
+                    // exit with errors
+                    return Error<StringResultObject>(result, GalleryErrors.ApplicationInstallationError);
 				}
 				#endregion
 
-				// Reload web site details
-				webSite = WebServerController.GetWebSite(packageId, siteName);
-				// Reload virtual directory defaults
-				if (!String.IsNullOrEmpty(virtualDir))
-					webVirtualDir = WebServerController.GetVirtualDirectory(webSite.Id, virtualDir);
-				
-				// We are going to install application on website or virtual directory
-				iisAppNode = (webVirtualDir != null) ? webVirtualDir : webSite;
-				// Put correct ASP.NET version depending on a web server's version
-				iisAppNode.AspNetInstalled = (iisAppNode.IIs7) ? "2I" : "2";
-				
-				//
-				if (MatchParticularAppDependency(appResult.Value.Dependency, SupportedAppDependencies.PHP_SCRIPTING))
-				{
-					// Enable PHP 5 extensions for web site
-					iisAppNode.PhpInstalled = "5";
-					// Set the correct default document for PHP apps
-					if (iisAppNode.DefaultDocs.IndexOf("index.php", StringComparison.InvariantCultureIgnoreCase) == -1)
-						iisAppNode.DefaultDocs += ",index.php";
-					//
-					int docsResult = 0;
-					//
-					if (webVirtualDir == null)
-						docsResult = WebServerController.UpdateWebSite(webSite);
-					else
-						docsResult = WebServerController.UpdateVirtualDirectory(webSite.Id, webVirtualDir);
-					//
-					if (docsResult < 0)
-						TaskManager.WriteWarning("Could not update website/virtual directory default documents with the value of index.php. Result code: {0}", docsResult.ToString());
-				}
-				//
-				if (MatchParticularAppDependency(appResult.Value.Dependency, SupportedAppDependencies.ASPNET_SCRIPTING))
-				{
-					// Set the correct default document for ASP.NET apps
-					if (iisAppNode.DefaultDocs.IndexOf("Default.aspx", StringComparison.InvariantCultureIgnoreCase) == -1)
-						iisAppNode.DefaultDocs += ",Default.aspx";
-					//
-					int aspnetResult = 0;
-					//
-					if (webVirtualDir == null)
-						aspnetResult = WebServerController.UpdateWebSite(webSite);
-					else
-						aspnetResult = WebServerController.UpdateVirtualDirectory(webSite.Id, webVirtualDir);
-					//
-					if (aspnetResult < 0)
-						TaskManager.WriteWarning("Could not set default documents/enable ASP.NET 2.0 (Integrated Mode) for website/virtual directory. Result code: {0}", aspnetResult.ToString());
-				}
+                #region Update Web Application settings
 
-				//
+                WebVirtualDirectory iisApp = null;
+                if(String.IsNullOrEmpty(virtualDir))
+                    // load web site
+                    iisApp = WebServerController.GetWebSite(packageId, siteName);
+                else
+                    // load virtual directory
+                    iisApp = WebServerController.GetVirtualDirectory(webSite.Id, virtualDir);
+
+                // put correct extensions
+                if ((app.Value.WellKnownDependencies & GalleryApplicationWellKnownDependency.AspNet20) == GalleryApplicationWellKnownDependency.AspNet20)
+                {
+                    // ASP.NET 2.0
+                    iisApp.AspNetInstalled = (iisApp.IIs7) ? "2I" : "2";
+                    AddDefaultDocument(iisApp, "default.aspx");
+                }
+                else if ((app.Value.WellKnownDependencies & GalleryApplicationWellKnownDependency.AspNet40) == GalleryApplicationWellKnownDependency.AspNet40)
+                {
+                    // ASP.NET 4.0
+                    iisApp.AspNetInstalled = (iisApp.IIs7) ? "4I" : "4";
+                    AddDefaultDocument(iisApp, "default.aspx");
+                }
+                else if ((app.Value.WellKnownDependencies & GalleryApplicationWellKnownDependency.PHP) == GalleryApplicationWellKnownDependency.PHP)
+                {
+                    // PHP 5
+                    iisApp.PhpInstalled = "5";
+                    AddDefaultDocument(iisApp, "index.php");
+                }
+
+                // update web site or virtual directory
+                int updateResult = 0;
+                if (String.IsNullOrEmpty(virtualDir))
+                    // update web site
+                    updateResult = WebServerController.UpdateWebSite(iisApp as WebSite);
+                else
+                    // update virtual directory
+                    updateResult = WebServerController.UpdateVirtualDirectory(webSite.Id, iisApp);
+
+                if(updateResult < 0)
+                    TaskManager.WriteWarning("Cannot update website or virtual directory programming extensions and default documents. Result code: {0}", updateResult.ToString());
+
+                #endregion
+
 				return result;
-			}
-			catch (Exception ex)
-			{
-				//
-				TaskManager.WriteError(ex);
-				//
-				return WAG_INSTALL_GENERIC_MODULE_ERROR<StringResultObject>();
-			}
-			finally
-			{
-				TaskManager.CompleteTask();
-			}
+            }
+            catch (Exception ex)
+            {
+                // log error
+                TaskManager.WriteError(ex);
+
+                // exit with error code
+                return Error<StringResultObject>(GalleryErrors.GeneralError, ex.Message);
+            }
+            finally
+            {
+                TaskManager.CompleteTask();
+            }
 		}
+
+        private static void AddDefaultDocument(WebVirtualDirectory iisApp, string document)
+        {
+            // parse list
+            List<string> documents = new List<string>();
+
+            if (!String.IsNullOrEmpty(iisApp.DefaultDocs))
+                documents.AddRange(iisApp.DefaultDocs.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries));
+
+            // add document if required
+            if (documents.Find(d => { return String.Compare(d, document, true) == 0; }) == null)
+                documents.Add(document);
+
+            iisApp.DefaultDocs = String.Join(",", documents.ToArray());
+        }
 
 		public static GalleryWebAppStatus GetGalleryApplicationStatus(int packageId, string webAppId)
 		{
@@ -811,7 +741,7 @@ namespace WebsitePanel.EnterpriseServer
 				WebServer webServer = GetAssociatedWebServer(packageId);
 				//
 				if (!webServer.IsMsDeployInstalled())
-					throw new ApplicationException(WAG_MODULE_NOT_AVAILABLE<StringResultObject>().ErrorCodes[0]);
+                    return Error<GalleryWebAppStatus>(GalleryErrors.MsDeployIsNotInstalled);
 				//
 				GalleryWebAppStatus appStatus = webServer.GetGalleryApplicationStatus(webAppId);
 				//
@@ -839,19 +769,6 @@ namespace WebsitePanel.EnterpriseServer
 			}
 		}
 
-		internal static void TraceGalleryAppPackInfo(GalleryApplication webAppPack)
-		{
-			if (webAppPack != null)
-			{
-				//
-				TaskManager.WriteParameter("Title", webAppPack.Title);
-				TaskManager.WriteParameter("Version", webAppPack.Version);
-				TaskManager.WriteParameter("Download URL", webAppPack.DownloadUrl);
-				TaskManager.WriteParameter("Author", webAppPack.AuthorName);
-				TaskManager.WriteParameter("Last Updated", webAppPack.LastUpdated);
-			}
-		}
-
 		internal static WebServer GetAssociatedWebServer(int packageId)
 		{
 			int serviceId = PackageController.GetPackageServiceId(packageId, ResourceGroups.Web);
@@ -874,20 +791,6 @@ namespace WebsitePanel.EnterpriseServer
 				StringSplitOptions.RemoveEmptyEntries);
 		}
 
-		public static bool MatchNonPublicParamByTags(DeploymentParameter param)
-		{
-			foreach (string nonPublicParamTag in DeploymentParameter.NON_PUBLIC_PARAM_TAGS)
-				if (MatchParameterTag(param, nonPublicParamTag))
-					return true;
-			//
-			return false;
-		}
-
-		public static bool MatchNonPublicParamByNames(DeploymentParameter param)
-		{
-			return MatchParameterByNames(param, DeploymentParameter.NON_PUBLIC_PARAM_NAMES);
-		}
-
 		public static bool MatchParameterByNames(DeploymentParameter param, string[] namesMatches)
 		{
 			foreach (string nameMatch in namesMatches)
@@ -897,16 +800,15 @@ namespace WebsitePanel.EnterpriseServer
 			return false;
 		}
 
-		public static bool MatchParameterTag(DeploymentParameter param, string tagMatch)
-		{
-			if (param == null || String.IsNullOrEmpty(tagMatch))
-				return false;
-			//
-			if (String.IsNullOrEmpty(param.Tags))
-				return false;
-			// Lookup for specific tags within the parameter
-			return Array.Exists<string>(param.Tags.ToLowerInvariant().Split(','), x => x.Trim() == tagMatch.ToLowerInvariant());
-		}
+        private static DeploymentParameter FindParameterByTag(List<DeploymentParameter> parameters, DeploymentParameterWellKnownTag tag)
+        {
+            return parameters.Find( p => { return (p.WellKnownTags & tag) == tag; });
+        }
+
+        private static DeploymentParameter FindParameterByName(List<DeploymentParameter> parameters, string name)
+        {
+            return parameters.Find( p => { return String.Compare(p.Name, name, true) == 0; });
+        }
 
 		public static bool MatchParameterName(DeploymentParameter param, string nameMatch)
 		{
@@ -919,53 +821,46 @@ namespace WebsitePanel.EnterpriseServer
 			return (param.Name.ToLowerInvariant() == nameMatch.ToLowerInvariant());
 		}
 
-		internal static T WAG_GENERIC_MODULE_ERROR<T>()
-		{
-			Type typeOf = typeof(T);
-			//
-			T resultObj = Activator.CreateInstance<T>();
-			//
-			ResultObject _ro = resultObj as ResultObject;
-			if (_ro != null)
-			{
-				_ro.ErrorCodes = new List<string> { "WAG_GENERIC_MODULE_ERROR" };
-				_ro.IsSuccess = false;
-			}
-			//
-			return resultObj;
-		}
+        #region Result object routines
+        private static T Warning<T>(params string[] messageParts)
+        {
+            return Warning<T>(null, messageParts);
+        }
 
-		internal static T WAG_MODULE_NOT_AVAILABLE<T>()
-		{
-			Type typeOf = typeof(T);
-			//
-			T resultObj = Activator.CreateInstance<T>();
-			//
-			ResultObject _ro = resultObj as ResultObject;
-			if (_ro != null)
-			{
-				_ro.ErrorCodes = new List<string> { "WAG_MODULE_NOT_AVAILABLE" };
-				_ro.IsSuccess = false;
-			}
-			//
-			return resultObj;
-		}
+        private static T Warning<T>(ResultObject innerResult, params string[] messageParts)
+        {
+            return Result<T>(innerResult, false, messageParts);
+        }
 
-		internal static T WAG_INSTALL_GENERIC_MODULE_ERROR<T>()
-		{
-			Type typeOf = typeof(T);
-			//
-			T resultObj = Activator.CreateInstance<T>();
-			//
-			ResultObject _ro = resultObj as ResultObject;
-			if (_ro != null)
-			{
-				_ro.ErrorCodes = new List<string> { "WAG_INSTALL_GENERIC_MODULE_ERROR", "APP_PACK_INSTALLATION_FAILURE" };
-				_ro.IsSuccess = false;
-			}
-			//
-			return resultObj;
-		}
+        private static T Error<T>(params string[] messageParts)
+        {
+            return Error<T>(null, messageParts);
+        }
+
+        private static T Error<T>(ResultObject innerResult, params string[] messageParts)
+        {
+            return Result<T>(innerResult, true, messageParts);
+        }
+
+        private static T Result<T>(ResultObject innerResult, bool isError, params string[] messageParts)
+        {
+            object obj = Activator.CreateInstance<T>();
+            ResultObject result = (ResultObject)obj;
+
+            // set error
+            result.IsSuccess = !isError;
+
+            // add message
+            if (messageParts != null)
+                result.ErrorCodes.Add(String.Join(":", messageParts));
+
+            // copy errors from inner result
+            if (innerResult != null)
+                result.ErrorCodes.AddRange(innerResult.ErrorCodes);
+
+            return (T)obj;
+        }
+        #endregion
 	}
 
 	public class WebAppGalleryAsyncWorker

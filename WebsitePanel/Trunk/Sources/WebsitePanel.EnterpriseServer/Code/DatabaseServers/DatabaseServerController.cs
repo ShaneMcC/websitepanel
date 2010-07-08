@@ -47,7 +47,7 @@ namespace WebsitePanel.EnterpriseServer
     {
         private const int FILE_BUFFER_LENGTH = 5000000; // ~5MB
 
-        private static DatabaseServer GetDatabaseServer(int serviceId)
+        public static DatabaseServer GetDatabaseServer(int serviceId)
         {
             DatabaseServer db = new DatabaseServer();
             ServiceProviderProxy.Init(db, serviceId);
