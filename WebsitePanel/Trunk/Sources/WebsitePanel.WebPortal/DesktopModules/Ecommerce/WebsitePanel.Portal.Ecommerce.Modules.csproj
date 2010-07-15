@@ -46,16 +46,6 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\Lib\AntiXssLibrary.dll</HintPath>
     </Reference>
-    <Reference Include="WebsitePanel.EnterpriseServer.Base, Version=2.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\Build\WebsitePanel.EnterpriseServer.Base.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="WebsitePanel.EnterpriseServer.Client, Version=2.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\Build\WebsitePanel.EnterpriseServer.Client.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
     <Reference Include="Microsoft.Web.Services3, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\Lib\Microsoft.Web.Services3.dll</HintPath>
@@ -70,6 +60,14 @@
     <Reference Include="System.Web.Services" />
     <Reference Include="System.EnterpriseServices" />
     <Reference Include="System.Web.Mobile" />
+    <Reference Include="WebsitePanel.EnterpriseServer.Base, Version=1.0.1.0, Culture=neutral, PublicKeyToken=da8782a6fc4d0081, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\Bin\WebsitePanel.EnterpriseServer.Base.dll</HintPath>
+    </Reference>
+    <Reference Include="WebsitePanel.EnterpriseServer.Client, Version=1.0.1.0, Culture=neutral, PublicKeyToken=da8782a6fc4d0081, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\Bin\WebsitePanel.EnterpriseServer.Client.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Content Include="Categories.ascx" />
@@ -831,11 +829,6 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\WebsitePanel.WebPortal.Base\WebsitePanel.WebPortal.Base.csproj">
-      <Project>{A3D42D5A-ED96-49CB-B81E-66FE9B441C8D}</Project>
-      <Name>WebsitePanel.WebPortal.Base</Name>
-      <Private>True</Private>
-    </ProjectReference>
     <ProjectReference Include="..\..\WebsitePanel.WebPortal.csproj">
       <Project>{C99EFB18-FFE7-45BB-8CA8-29336F3E8C68}</Project>
       <Name>WebsitePanel.WebPortal</Name>
@@ -844,7 +837,6 @@
     <ProjectReference Include="..\WebsitePanel\WebsitePanel.Portal.Modules.csproj">
       <Project>{12232731-5C45-4ED6-98F8-D47ABE728280}</Project>
       <Name>WebsitePanel.Portal.Modules</Name>
-      <Private>True</Private>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

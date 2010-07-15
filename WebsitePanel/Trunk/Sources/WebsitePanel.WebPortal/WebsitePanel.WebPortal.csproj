@@ -81,6 +81,14 @@
     <Reference Include="System.Web.Services" />
     <Reference Include="System.EnterpriseServices" />
     <Reference Include="System.Web.Mobile" />
+    <Reference Include="WebsitePanel.EnterpriseServer.Base, Version=1.0.1.0, Culture=neutral, PublicKeyToken=da8782a6fc4d0081, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Bin\WebsitePanel.EnterpriseServer.Base.dll</HintPath>
+    </Reference>
+    <Reference Include="WebsitePanel.EnterpriseServer.Client, Version=1.0.1.0, Culture=neutral, PublicKeyToken=da8782a6fc4d0081, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Bin\WebsitePanel.EnterpriseServer.Client.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Content Include="Web.config" />
@@ -105,6 +113,10 @@
     <Compile Include="Code\Adapters\WebControlAdapterExtender.cs" />
     <Compile Include="Code\ContentPane.cs" />
     <Compile Include="Code\Controls\DesktopContextValidator.cs" />
+    <Compile Include="Code\PortalUtils.cs" />
+    <Compile Include="Code\WebPortalControlBase.cs">
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
     <Compile Include="Code\WebsitePanelSiteMapProvider.cs" />
     <Compile Include="Code\PageTitleProvider.cs" />
     <Compile Include="Code\PortalThemeProvider.cs" />

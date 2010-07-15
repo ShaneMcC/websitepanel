@@ -27,89 +27,52 @@
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 using System;
+using System.Resources;
+using System.IO;
+using System.Collections;
 using System.Collections.Generic;
+using System.Web;
+using System.Web.Compilation;
+using System.Web.UI;
 using System.Text;
 
 namespace WebsitePanel.Portal
 {
-    public class IconInfo
-    {
-        int portalId;
-        int moduleId;
-        int itemId;
-        string title;
-        string description;
-        int viewOrder;
-        string imageUrl;
-        string linkUrl;
-        string groupName;
-        string quotaName;
-        bool newWindow;
+	public class WebPortalControlBase : WebsitePanel.WebPortal.PortalControlBase
+	{
+		protected Hashtable Settings
+		{
+			get { return base.ModuleSettings; }
+		}
 
-        public int PortalId
+        public string GetThemedImage(string imageUrl)
         {
-            get { return portalId; }
-            set { portalId = value; }
+            return PortalUtils.GetThemedImage(imageUrl);
         }
 
-        public int ModuleId
+		public string GetSharedLocalizedString(string moduleName, string resourceKey)
+		{
+			return PortalUtils.GetSharedLocalizedString(moduleName, resourceKey);
+		}
+
+		public string GetLocalizedString(string resourceKey)
+		{
+			return (string)GetLocalResourceObject(resourceKey);
+		}
+
+        public string NavigateURL()
         {
-            get { return moduleId; }
-            set { moduleId = value; }
+            return PortalUtils.NavigateURL();
         }
 
-        public int ItemId
+        public string NavigateURL(string keyName, string keyValue, params string[] additionalParams)
         {
-            get { return itemId; }
-            set { itemId = value; }
+            return PortalUtils.NavigateURL(keyName, keyValue, additionalParams);
         }
 
-        public string Title
+        public string NavigatePageURL(string pageId, string keyName, string keyValue, params string[] additionalParams)
         {
-            get { return title; }
-            set { title = value; }
+            return PortalUtils.NavigatePageURL(pageId, keyName, keyValue, additionalParams);
         }
-
-        public string Description
-        {
-            get { return description; }
-            set { description = value; }
-        }
-
-        public int ViewOrder
-        {
-            get { return viewOrder; }
-            set { viewOrder = value; }
-        }
-
-        public string ImageUrl
-        {
-            get { return imageUrl; }
-            set { imageUrl = value; }
-        }
-
-        public string LinkUrl
-        {
-            get { return linkUrl; }
-            set { linkUrl = value; }
-        }
-
-        public string GroupName
-        {
-            get { return this.groupName; }
-            set { this.groupName = value; }
-        }
-
-        public string QuotaName
-        {
-            get { return this.quotaName; }
-            set { this.quotaName = value; }
-        }
-
-        public bool NewWindow
-        {
-            get { return this.newWindow; }
-            set { this.newWindow = value; }
-        }
-    }
+	}
 }

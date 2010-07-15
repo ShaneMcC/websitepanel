@@ -11,8 +11,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebsitePanel.Portal.Modules
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebsitePanel.WebPortal", "WebsitePanel.WebPortal\WebsitePanel.WebPortal.csproj", "{C99EFB18-FFE7-45BB-8CA8-29336F3E8C68}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebsitePanel.WebPortal.Base", "WebsitePanel.WebPortal.Base\WebsitePanel.WebPortal.Base.csproj", "{A3D42D5A-ED96-49CB-B81E-66FE9B441C8D}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebsitePanel.Portal.Ecommerce.Modules", "WebsitePanel.WebPortal\DesktopModules\Ecommerce\WebsitePanel.Portal.Ecommerce.Modules.csproj", "{F01989EA-A888-41E1-9185-872E1455A07E}"
 EndProject
 Global
@@ -29,10 +27,6 @@ Global
 		{C99EFB18-FFE7-45BB-8CA8-29336F3E8C68}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C99EFB18-FFE7-45BB-8CA8-29336F3E8C68}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C99EFB18-FFE7-45BB-8CA8-29336F3E8C68}.Release|Any CPU.Build.0 = Release|Any CPU
-		{A3D42D5A-ED96-49CB-B81E-66FE9B441C8D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{A3D42D5A-ED96-49CB-B81E-66FE9B441C8D}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{A3D42D5A-ED96-49CB-B81E-66FE9B441C8D}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{A3D42D5A-ED96-49CB-B81E-66FE9B441C8D}.Release|Any CPU.Build.0 = Release|Any CPU
 		{F01989EA-A888-41E1-9185-872E1455A07E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{F01989EA-A888-41E1-9185-872E1455A07E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F01989EA-A888-41E1-9185-872E1455A07E}.Release|Any CPU.ActiveCfg = Release|Any CPU
