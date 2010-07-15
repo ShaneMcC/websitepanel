@@ -55,42 +55,55 @@
   <ItemGroup>
     <Reference Include="Microsoft.Crm">
       <HintPath>..\..\Lib\References\Microsoft\Microsoft.Crm.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="Microsoft.Crm.Admin.AdminService">
       <HintPath>..\..\Lib\References\Microsoft\Microsoft.Crm.Admin.AdminService.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="Microsoft.Crm.Setup.DatabaseInstaller">
       <HintPath>..\..\Lib\References\Microsoft\Microsoft.Crm.Setup.DatabaseInstaller.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="Microsoft.Crm.Setup.Server.Utility">
       <HintPath>..\..\Lib\References\Microsoft\Microsoft.Crm.Setup.Server.Utility.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="Microsoft.Crm.Tools.Admin.DMSnapinLib">
       <HintPath>..\..\Lib\References\Microsoft\Microsoft.Crm.Tools.Admin.DMSnapinLib.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="Microsoft.Exchange.Common">
       <HintPath>..\..\Lib\References\Microsoft\Microsoft.Exchange.Common.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="Microsoft.Exchange.Data">
       <HintPath>..\..\Lib\References\Microsoft\Microsoft.Exchange.Data.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="Microsoft.Exchange.Data.Directory">
       <HintPath>..\..\Lib\References\Microsoft\Microsoft.Exchange.Data.Directory.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="Microsoft.Exchange.Data.Storage">
       <HintPath>..\..\Lib\References\Microsoft\Microsoft.Exchange.Data.Storage.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="Microsoft.Exchange.Diagnostics">
       <HintPath>..\..\Lib\References\Microsoft\Microsoft.Exchange.Diagnostics.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="Microsoft.Exchange.Extensibility.Internal">
       <HintPath>..\..\Lib\References\Microsoft\Microsoft.Exchange.Extensibility.Internal.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="Microsoft.Exchange.Net">
       <HintPath>..\..\Lib\References\Microsoft\Microsoft.Exchange.Net.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="Microsoft.SharePoint">
       <HintPath>..\..\Lib\References\Microsoft\Microsoft.SharePoint.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
