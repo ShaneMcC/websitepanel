@@ -242,17 +242,27 @@ otherwise contact WebsitePanel Software for further assistance.", ex);
 			//
 			if (xmldoc == null)
 				return null;
-			//
-			List<GalleryCategory> list = new List<GalleryCategory>();
-			//
-			XmlNamespaceManager nsmgr = GetXmlNsManager(xmldoc.NameTable);
-			//
+
+            // get namespace manager
+            XmlNamespaceManager nsmgr = GetXmlNsManager(xmldoc.NameTable);
+
+            // get the list of all categories that are used by applications
+            List<string> appCategories = new List<string>();
+            foreach (XmlNode node in xmldoc.SelectNodes("//atom:entry[@type='application']/atom:keywords/atom:keywordId", nsmgr))
+                appCategories.Add(node.InnerText);
+
+			// get the list of all categories defined in the feed
+            // and filter them
+			List<GalleryCategory> categories = new List<GalleryCategory>();
 			foreach (XmlNode node in xmldoc.SelectNodes("/atom:feed/atom:keywords/atom:keyword", nsmgr))
 			{
-				list.Add(new GalleryCategory { Id = node.Attributes["id"].Value, Name = node.InnerText });
+                string id = node.Attributes["id"].Value;
+                string name = node.InnerText;
+                if(appCategories.Contains(id))
+				    categories.Add(new GalleryCategory { Id = id, Name = name });
 			}
-			//
-			return list;
+			
+			return categories;
 		}
 
 		public List<GalleryApplication> GetApplications(string categoryName)
