@@ -42,14 +42,6 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\Lib\AntiXssLibrary.dll</HintPath>
     </Reference>
-    <Reference Include="WebsitePanel.Providers.Base, Version=1.0.4.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\Build\WebsitePanel.Providers.Base.dll</HintPath>
-    </Reference>
-    <Reference Include="WebsitePanel.Server.Client, Version=1.0.4.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\Build\WebsitePanel.Server.Client.dll</HintPath>
-    </Reference>
     <Reference Include="Ionic.Zip.Reduced, Version=1.8.4.28, Culture=neutral, PublicKeyToken=edbe51ad942a3f5c, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\Lib\Ionic.Zip.Reduced.dll</HintPath>
@@ -70,6 +62,14 @@
     <Reference Include="System.Web.Services" />
     <Reference Include="System.EnterpriseServices" />
     <Reference Include="System.Web.Mobile" />
+    <Reference Include="WebsitePanel.Providers.Base, Version=1.0.1.0, Culture=neutral, PublicKeyToken=da8782a6fc4d0081, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Bin\WebsitePanel.Providers.Base.dll</HintPath>
+    </Reference>
+    <Reference Include="WebsitePanel.Server.Client, Version=1.0.1.0, Culture=neutral, PublicKeyToken=da8782a6fc4d0081, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Bin\WebsitePanel.Server.Client.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Content Include="Default.aspx" />
