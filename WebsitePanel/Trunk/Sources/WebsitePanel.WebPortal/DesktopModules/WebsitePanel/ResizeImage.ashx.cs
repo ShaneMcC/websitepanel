@@ -75,63 +75,55 @@ namespace WebsitePanel.Portal
 					imageUrl = context.Server.UrlDecode(imageUrl);
 					//
 					Image img = null;
-					//
-					int numOfAttempts = 0;
-					do
+
+					try
 					{
-						try
-						{
-							WebRequest request = WebRequest.Create(imageUrl);
-							WebResponse response = request.GetResponse();
-							// Load image stream from the response
-							img = new Bitmap(response.GetResponseStream());
-							//
-							break;
-						}
-						catch (Exception ex)
-						{
-							Trace.TraceError(ex.StackTrace);
-							//
-							numOfAttempts++;
-						}
+						WebRequest request = WebRequest.Create(imageUrl);
+						WebResponse response = request.GetResponse();
+						// Load image stream from the response
+						img = new Bitmap(response.GetResponseStream());
 					}
-					while (numOfAttempts <= MaxDownloadAttempts);
-
-					//
-					if (img != null)
+					catch (Exception ex)
 					{
-                        int width = Utils.ParseInt(context.Request.QueryString[WIDTH], img.Width);
-                        int height = Utils.ParseInt(context.Request.QueryString[HEIGHT], img.Height);
+						Trace.TraceError(ex.StackTrace);
+					}
 
-                        // calculate new size
-                        int h = img.Height;
-                        int w = img.Width;
-                        int b = Math.Max(h, w);
-                        double per = b > Math.Max(width, height) ? (Math.Max(width, height) * 1.0) / b : 1.0;
+                    int width = Utils.ParseInt(context.Request.QueryString[WIDTH], 20);
+                    int height = Utils.ParseInt(context.Request.QueryString[HEIGHT], 20);
 
-                        h = (int)(h * per);
-                        w = (int)(w * per);
+                    // calculate new size
+                    int h = (img != null) ? img.Height : height;
+                    int w = (img != null) ? img.Width : width;
+                    int b = Math.Max(h, w);
+                    double per = b > Math.Max(width, height) ? (Math.Max(width, height) * 1.0) / b : 1.0;
 
-                        Bitmap bitmap = new Bitmap(width, height);
-                        Graphics new_g = Graphics.FromImage(bitmap);
-                        new_g.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.HighQuality;
-                        new_g.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.HighQualityBicubic;
+                    h = (int)(h * per);
+                    w = (int)(w * per);
+
+                    Bitmap bitmap = new Bitmap(width, height);
+                    Graphics new_g = Graphics.FromImage(bitmap);
+                    new_g.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.HighQuality;
+                    new_g.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.HighQualityBicubic;
+
+                    if (img != null)
+                    {
+                        // draw image
                         new_g.DrawImage(img, 0, 0, w, h);
                         img.Dispose();
+                    }
 
-                        // emit it to the response stream
-                        bitmap.Save(context.Response.OutputStream, System.Drawing.Imaging.ImageFormat.Png);
+                    // emit it to the response stream
+                    bitmap.Save(context.Response.OutputStream, System.Drawing.Imaging.ImageFormat.Png);
 
-                        // clean-up
-                        bitmap.Dispose();
-                        new_g.Dispose();
+                    // clean-up
+                    bitmap.Dispose();
+                    new_g.Dispose();
 
-						// set cache info
-                        context.Response.Cache.SetExpires(DateTime.Now.AddSeconds(BitmapCacheDurationInSeconds));
-                        context.Response.Cache.SetCacheability(HttpCacheability.Public);
-                        context.Response.Cache.SetValidUntilExpires(true);
-						context.Response.End();
-					}
+					// set cache info
+                    context.Response.Cache.SetExpires(DateTime.Now.AddSeconds(BitmapCacheDurationInSeconds));
+                    context.Response.Cache.SetCacheability(HttpCacheability.Public);
+                    context.Response.Cache.SetValidUntilExpires(true);
+					context.Response.End();
 				}
 				catch (Exception ex)
 				{
