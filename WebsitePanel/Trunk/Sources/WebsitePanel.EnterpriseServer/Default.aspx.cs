@@ -46,7 +46,7 @@ namespace WebsitePanel.EnterpriseServer
         {
             // set url
             string url = Request.Url.ToString();
-            litUrl.Text = Microsoft.Security.Application.AntiXss.HtmlEncode(url.Substring(0, url.LastIndexOf("/")));
+            litUrl.Text = url.Substring(0, url.LastIndexOf("/"));
 
             // set version
             litVersion.Text =  Assembly.GetExecutingAssembly().GetName().Version.ToString(3);
