@@ -14,7 +14,7 @@
     <PreviousBuildFolder>C:\Projects\Sourceforge\WebsitePanel\Releases\1.0\Build</PreviousBuildFolder>
 
 
-    <DiffCmd>$(TrunkFolder)\Utils\Diff.exe</DiffCmd>
+    <DiffCmd>$(TrunkFolder)\Tools\Diff.exe</DiffCmd>
     <SqlCmd>"C:\Program Files\Microsoft SQL Server\100\Tools\Binn\sqlcmd.exe" -S (local)\SQLEXPRESS -E</SqlCmd>
 
     <MSDeployPath>"C:\Program Files\IIS\Microsoft Web Deploy\msdeploy.exe"</MSDeployPath>
