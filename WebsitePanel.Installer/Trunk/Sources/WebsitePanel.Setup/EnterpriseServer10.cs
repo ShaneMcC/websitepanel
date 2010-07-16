@@ -27,7 +27,7 @@ namespace WebsitePanel.Setup
 
         public static new DialogResult Update(object obj)
         {
-            return UpdateBase(obj, "1.0.0", "1.0.0", true);
+            return UpdateBase(obj, "1.0.0", "1.0", true);
         }
     }
 
