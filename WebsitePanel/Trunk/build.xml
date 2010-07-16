@@ -18,7 +18,6 @@
     <SqlCmd>"C:\Program Files\Microsoft SQL Server\100\Tools\Binn\sqlcmd.exe" -S (local)\SQLEXPRESS -E</SqlCmd>
 
     <MSDeployPath>"C:\Program Files\IIS\Microsoft Web Deploy\msdeploy.exe"</MSDeployPath>
-    <SvnPath>C:\Program Files (x86)\CollabNet\Subversion Client\</SvnPath>
 
     <DataBaseName>WebsitePanel_build</DataBaseName>
     <MSDeployConnectionString>server=(local)\SQLEXPRESS;database=$(DataBaseName);Integrated Security=true;</MSDeployConnectionString>
@@ -34,10 +33,6 @@
     <PortalBuild>$(BuildFolder)\Portal</PortalBuild>
 
   </PropertyGroup>
-  
-  <!--<Target Name="UpdateSources">
-	 <SvnUpdate LocalPath="$(BuildFolder)" ToolPath="$(SvnPath)" />     
-  </Target>-->
   
   <Target Name="CompileSources">
     <MSBuild Projects="$(TrunkFolder)\Sources\WebSitePanel.Server.sln;$(TrunkFolder)\Sources\WebsitePanel.EnterpriseServer.sln;$(TrunkFolder)\Sources\WebsitePanel.WebPortal.sln"  Properties="Configuration=$(BuildConfiguration)" />    
