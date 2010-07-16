@@ -263,11 +263,14 @@
     <!-- Copy Setup.dll -->
     <MakeDir Directories="$(ServerInstall)\Setup"/>
     <Copy SourceFiles="$(SetupBuildFolder)\setup.dll" DestinationFolder="$(ServerInstall)\Setup" />
+    <Copy SourceFiles="$(SetupBuildFolder)\setup.dll" DestinationFolder="$(ServerUpdate)\Setup" />
 
     <Copy SourceFiles="$(SetupBuildFolder)\setup.dll" DestinationFolder="$(EnterpriseServerInstall)\Setup" />
+    <Copy SourceFiles="$(SetupBuildFolder)\setup.dll" DestinationFolder="$(EnterpriseServerUpdate)\Setup" />
     
     <MakeDir Directories="$(PortalInstall)\Setup"/>
     <Copy SourceFiles="$(SetupBuildFolder)\setup.dll" DestinationFolder="$(PortalInstall)\Setup" />
+    <Copy SourceFiles="$(SetupBuildFolder)\setup.dll" DestinationFolder="$(PortalUpdate)\Setup" />
 
     <RemoveDir Directories="$(StandaloneInstall)"/>
     <MakeDir Directories="$(StandaloneInstall)"/>
@@ -286,7 +289,7 @@
     
     <!-- Assemble "Standalone" package -->
     <Copy SourceFiles="@(PortalInstallFiles)" DestinationFolder="$(StandaloneInstall)\Portal\%(RecursiveDir)" />
-    <Copy SourceFiles="@(EnterpriseServerInstallFiles)" DestinationFolder="$(StandaloneInstall)\EnterpriseServer\%(RecursiveDir)" />
+    <Copy SourceFiles="@(EnterpriseServerInstallFiles)" DestinationFolder="$(StandaloneInstall)\Enterprise Server\%(RecursiveDir)" />
     <Copy SourceFiles="@(ServerInstallFiles)" DestinationFolder="$(StandaloneInstall)\Server\%(RecursiveDir)" />
     
     
