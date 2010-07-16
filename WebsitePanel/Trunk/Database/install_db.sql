@@ -1,4 +1,4 @@
-USE [${install.database}]
+﻿USE [${install.database}]
 GO
 
 if exists (select * from dbo.sysobjects where id = object_id(N'[dbo].[AuditLog]') and OBJECTPROPERTY(id, N'IsUserTable') = 1)

@@ -1,4 +1,4 @@
-﻿USE [WebsitePanel_build]
+﻿USE [${install.database}]
 GO
 
 -- update zone template for "WEB" services (IIS 6 and IIS 7) to support "Al unassigned"
