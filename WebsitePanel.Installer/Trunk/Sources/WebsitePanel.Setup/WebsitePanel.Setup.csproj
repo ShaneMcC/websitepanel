@@ -36,7 +36,7 @@
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
+    <OutputPath>..\..\Build\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -45,7 +45,7 @@
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>none</DebugType>
     <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
+    <OutputPath>..\..\Build\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -80,17 +80,17 @@
     <Reference Include="System.Web.Services" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
-    <Reference Include="WebsitePanel.EnterpriseServer.Base, Version=2.8.12.0, Culture=neutral, PublicKeyToken=da8782a6fc4d0081, processorArchitecture=MSIL">
+    <Reference Include="WebsitePanel.EnterpriseServer.Base, Version=1.0.0.0, Culture=neutral, PublicKeyToken=da8782a6fc4d0081, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\Lib\WebsitePanel.EnterpriseServer.Base.dll</HintPath>
+      <HintPath>..\..\..\..\WebsitePanel\Trunk\Bin\WebsitePanel.EnterpriseServer.Base.dll</HintPath>
     </Reference>
-    <Reference Include="WebsitePanel.EnterpriseServer.Client, Version=2.8.12.0, Culture=neutral, PublicKeyToken=da8782a6fc4d0081, processorArchitecture=MSIL">
+    <Reference Include="WebsitePanel.EnterpriseServer.Client, Version=1.0.0.0, Culture=neutral, PublicKeyToken=da8782a6fc4d0081, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\Lib\WebsitePanel.EnterpriseServer.Client.dll</HintPath>
+      <HintPath>..\..\..\..\WebsitePanel\Trunk\Bin\WebsitePanel.EnterpriseServer.Client.dll</HintPath>
     </Reference>
-    <Reference Include="WebsitePanel.Providers.Base, Version=2.8.12.0, Culture=neutral, PublicKeyToken=da8782a6fc4d0081, processorArchitecture=MSIL">
+    <Reference Include="WebsitePanel.Providers.Base, Version=1.0.0.0, Culture=neutral, PublicKeyToken=da8782a6fc4d0081, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\Lib\WebsitePanel.Providers.Base.dll</HintPath>
+      <HintPath>..\..\..\..\WebsitePanel\Trunk\Bin\WebsitePanel.Providers.Base.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -121,6 +121,9 @@
     <Compile Include="Common\WmiHelper.cs" />
     <Compile Include="Common\XmlUtils.cs" />
     <Compile Include="Common\ZipIndicator.cs" />
+    <Compile Include="EnterpriseServer10.cs" />
+    <Compile Include="Portal10.cs" />
+    <Compile Include="Server10.cs" />
     <Compile Include="StandaloneServerSetup.cs" />
     <Compile Include="EnterpriseServer.cs" />
     <Compile Include="Portal.cs" />
@@ -138,6 +141,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <Compile Include="StandaloneServerSetup10.cs" />
     <Compile Include="Web\AspNetVersion.cs" />
     <Compile Include="Web\ServerBinding.cs" />
     <Compile Include="Web\ServerState.cs" />

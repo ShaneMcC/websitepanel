@@ -36,27 +36,6 @@ using System.Text;
 
 namespace WebsitePanel.Setup
 {
-	/// <summary>
-	/// Version 1.0
-	/// </summary>
-	public class Portal10 : Portal
-	{
-		public static new DialogResult Install(object obj)
-		{
-			return Portal.InstallBase(obj, "1.0.0");
-		}
-
-		public static new DialogResult Uninstall(object obj)
-		{
-			return Portal.Uninstall(obj);
-		}
-
-		public static new DialogResult Setup(object obj)
-		{
-			return Portal.Setup(obj);
-		}
-	}
-
 	public class Portal : BaseSetup
 	{
 		public static DialogResult Install(object obj)
@@ -241,14 +220,16 @@ namespace WebsitePanel.Setup
 		public static DialogResult Update(object obj)
 		{
 			Hashtable args = Utils.GetSetupParameters(obj);
-			string shellVersion = Utils.GetStringSetupParameter(args, "ShellVersion");
 
-			Version version = new Version(shellVersion);
-			if (version < new Version("1.0.1"))
-			{
-				MessageBox.Show("WebsitePanel Installer 1.0.1 or higher required.", "Setup Wizard", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-				return DialogResult.Cancel;
-			}
+            // check installer version
+            //string shellVersion = Utils.GetStringSetupParameter(args, "ShellVersion");
+            //Version version = new Version(shellVersion);
+            //if (version < new Version("1.0.1"))
+            //{
+            //    MessageBox.Show("WebsitePanel Installer 1.0.1 or higher required.", "Setup Wizard", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            //    return DialogResult.Cancel;
+            //}
+
 			string componentId = Utils.GetStringSetupParameter(args, "ComponentId");
 
 			AppConfig.LoadConfiguration();
@@ -256,11 +237,11 @@ namespace WebsitePanel.Setup
 			InstallerForm form = new InstallerForm();
 			Wizard wizard = form.Wizard;
 			LoadSetupVariablesFromConfig(wizard, componentId);
-			if (wizard.SetupVariables.Version != "1.5.3")
-			{
-				MessageBox.Show("Please update to version 1.5.3", "Setup Wizard", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-				return DialogResult.Cancel;
-			}
+            //if (wizard.SetupVariables.Version != "1.5.3")
+            //{
+            //    MessageBox.Show("Please update to version 1.5.3", "Setup Wizard", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            //    return DialogResult.Cancel;
+            //}
 
 			wizard.SetupVariables.SetupAction = SetupActions.Update;
 			wizard.SetupVariables.BaseDirectory = Utils.GetStringSetupParameter(args, "BaseDirectory");

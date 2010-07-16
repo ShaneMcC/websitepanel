@@ -37,17 +37,6 @@ using WebsitePanel.Setup.Web;
 
 namespace WebsitePanel.Setup
 {
-	/// <summary>
-	/// Version 1.0
-	/// </summary>
-	public class StandaloneServerSetup10 : StandaloneServerSetup
-	{
-		public static new DialogResult Install(object obj)
-		{
-			return StandaloneServerSetup.InstallBase(obj, "1.0.0");
-		}
-	}
-
 	public class StandaloneServerSetup : BaseSetup
 	{
 		public static DialogResult Install(object obj)

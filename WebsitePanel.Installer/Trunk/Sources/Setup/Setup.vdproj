@@ -7,6 +7,10 @@
 "LanguageId" = "3:1033"
 "CodePage" = "3:1252"
 "UILanguageId" = "3:1033"
+"SccProjectName" = "8:"
+"SccLocalPath" = "8:"
+"SccAuxPath" = "8:"
+"SccProvider" = "8:"
     "Hierarchy"
     {
         "Entry"
@@ -35,26 +39,20 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_8DFEDEE7ECBF1663383BBCABC27C3439"
-        "OwnerKey" = "8:_737080A074FA46CCBE6AB4C323B684C0"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
         "MsmKey" = "8:_BD9DC4338DFD4472BE5D099C388608B6"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
-        "MsmKey" = "8:_UNDEFINED"
+        "MsmKey" = "8:_C277E427A2F87670DF32DF6B7278BC4D"
         "OwnerKey" = "8:_737080A074FA46CCBE6AB4C323B684C0"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_8DFEDEE7ECBF1663383BBCABC27C3439"
+        "OwnerKey" = "8:_737080A074FA46CCBE6AB4C323B684C0"
         "MsmSig" = "8:_UNDEFINED"
         }
     }
@@ -65,7 +63,7 @@
         "DisplayName" = "8:Debug"
         "IsDebugOnly" = "11:TRUE"
         "IsReleaseOnly" = "11:FALSE"
-        "OutputFilename" = "8:Debug\\WebsitePanelInstaller10.msi"
+        "OutputFilename" = "8:..\\..\\Build\\WebsitePanelInstaller10.msi"
         "PackageFilesAs" = "3:2"
         "PackageFileSize" = "3:-2147483648"
         "CabType" = "3:1"
@@ -97,7 +95,7 @@
         "DisplayName" = "8:Release"
         "IsDebugOnly" = "11:FALSE"
         "IsReleaseOnly" = "11:TRUE"
-        "OutputFilename" = "8:Release\\WebsitePanelInstaller10.msi"
+        "OutputFilename" = "8:..\\..\\Build\\WebsitePanelInstaller10.msi"
         "PackageFilesAs" = "3:2"
         "PackageFileSize" = "3:-2147483648"
         "CabType" = "3:1"
@@ -139,7 +137,7 @@
                 {
                 "Name" = "8:.NET Framework"
                 "Message" = "8:[VSDNETMSG]"
-                "Version" = "8:2.0.50727"
+                "FrameworkVersion" = "8:2.0.50727"
                 "AllowLaterVersions" = "11:FALSE"
                 "InstallUrl" = "8:http://go.microsoft.com/fwlink/?LinkId=9832"
                 }
@@ -205,37 +203,6 @@
             "Register" = "3:1"
             "Exclude" = "11:FALSE"
             "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            }
-            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_8DFEDEE7ECBF1663383BBCABC27C3439"
-            {
-            "AssemblyRegister" = "3:1"
-            "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:Ionic.Zip.Reduced, Version=1.8.4.28, Culture=neutral, PublicKeyToken=edbe51ad942a3f5c, processorArchitecture=MSIL"
-                "ScatterAssemblies"
-                {
-                    "_8DFEDEE7ECBF1663383BBCABC27C3439"
-                    {
-                    "Name" = "8:Ionic.Zip.Reduced.dll"
-                    "Attributes" = "3:512"
-                    }
-                }
-            "SourcePath" = "8:Ionic.Zip.Reduced.dll"
-            "TargetName" = "8:"
-            "Tag" = "8:"
-            "Folder" = "8:_E742E59BFE4D43C59AA65A07792B89FB"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
             }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_BD9DC4338DFD4472BE5D099C388608B6"
@@ -328,6 +295,7 @@
         "ProductCode" = "8:{0240D26B-56C8-428E-95FF-D5D5644A6A6D}"
         "PackageCode" = "8:{5FBCDEC8-AFB8-42E5-9F0A-872343D783FB}"
         "UpgradeCode" = "8:{2950A907-11E7-436C-86CE-049C414AFD08}"
+        "AspNetVersion" = "8:4.0.30319.0"
         "RestartWWWService" = "11:FALSE"
         "RemovePreviousVersions" = "11:FALSE"
         "DetectNewerInstalledVersion" = "11:FALSE"
@@ -884,7 +852,7 @@
         {
             "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_737080A074FA46CCBE6AB4C323B684C0"
             {
-            "SourcePath" = "8:..\\WebsitePanel.Installer\\obj\\Debug\\WebsitePanel.Installer.exe"
+            "SourcePath" = "8:..\\WebsitePanel.Installer\\obj\\Release\\WebsitePanel.Installer.exe"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_E742E59BFE4D43C59AA65A07792B89FB"
