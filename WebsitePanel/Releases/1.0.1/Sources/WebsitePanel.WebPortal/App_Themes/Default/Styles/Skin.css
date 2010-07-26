@@ -1,0 +1,1301 @@
+/* FORMS */
+.RightBlockTitle
+{
+	color: #1F4978;
+	font-size: 16pt;
+	padding-bottom: 3px;
+	margin-left: 8px;
+}
+.RightBlockTable
+{
+	margin-left: 5px;
+}
+.RightBlockTable TD
+{
+	padding: 3px;
+}
+.FormRightIcon
+{
+	text-align: right;
+}
+.FormButtonsBar
+{
+	clear: both;
+	background: #f5f5f5; /* url(../Images/buttons_bar2_bkg.gif) repeat-x;*/
+	padding: 4px;
+	border-top: solid 1px #CCCCCC;
+}
+
+.FormButtonsBar INPUT,
+.FormButtonsBar SELECT
+{
+	vertical-align: middle;
+}
+
+.FormButtonsBar .Left
+{
+	float: left;
+}
+
+.FormButtonsBar .Right
+{
+	text-align: right;
+}
+
+.FormButtonsBarClean
+{
+	clear: both;
+	padding-bottom: 4px;
+}
+
+.FormButtonsBarCleanLeft
+{
+	float: left;
+}
+
+.FormButtonsBarCleanRight
+{
+	text-align: right;
+}
+
+.GridFooter
+{
+	clear: both;
+	background: #ffffff;/*#f1f9ff;*/
+	padding: 7px;
+	font-size: 8pt;
+	border-left: solid 1px #CCCCCC;
+	border-bottom: solid 1px #CCCCCC;
+	border-right: solid 1px #CCCCCC;
+}
+
+.GridFooter .Left
+{
+	float: left;
+}
+
+.GridFooter .Right
+{
+	text-align: right;
+}
+
+.FormRow
+{
+	padding-top: 4px;
+	padding-bottom: 4px;
+}
+
+.FormLabel
+{
+	padding-top: 5px;
+	padding-bottom: 3px;
+	font-weight: bold;
+}
+
+.FormField
+{
+}
+
+.FormFieldDescription
+{
+	padding-top: 3px;
+	padding-bottom: 5px;
+}
+
+.FormBody
+{
+	padding: 10px;
+	font-size: 8pt;
+}
+
+SPAN.Checkbox.Bold
+{
+	font-weight: bold;
+}
+
+.Checkbox INPUT
+{
+	vertical-align: middle;
+}
+
+.FormFooter
+{
+	font-size: 9pt;
+	padding: 7px;
+	border-top: solid 1px #DFDFDF;
+	background-color: #F0F0F0;
+}
+
+.FormFooterClean
+{
+	font-size: 9pt;
+	margin-top: 10px;
+	padding: 10px 10px 0px 0px;
+	border-top: solid 1px #DFDFDF;
+}
+
+.FormLabel150
+{
+	font-size: 8pt;
+	width: 150px;
+}
+
+.FormLabel200
+{
+	font-size: 8pt;
+	width: 200px;
+}
+
+UL.VerticalButtons
+{
+	margin: 0px;
+	list-style: none;
+	padding-left: 20px;
+	float: right;
+	width: 150px;
+}
+
+UL.VerticalButtons LI
+{
+	padding-top: 2px;
+	padding-bottom: 2px;
+}
+
+.FormBody FIELDSET
+{
+	padding: 5px 10px 10px 10px;
+}
+
+.CollapsibleArea
+{
+	padding: 3px;
+}
+
+LEGEND
+{
+	font-weight: bold;
+	color: #0153A4;
+	padding: 0px 2px 5px 2px;
+}
+
+INPUT.TextBox50
+{
+	border: solid 1px #909090;
+	height: 18px;
+	padding-left: 2px;
+	padding-top: 1px;
+	width: 50px;
+}
+
+INPUT.TextBox100
+{
+	border: solid 1px #909090;
+	height: 18px;
+	padding-left: 2px;
+	padding-top: 1px;
+	width: 100px;
+}
+
+INPUT.TextBox200
+{
+	border: solid 1px #909090;
+	height: 18px;
+	padding-left: 2px;
+	padding-top: 1px;
+	width: 200px;
+}
+
+TEXTAREA.TextBox200
+{
+	border: solid 1px #909090;
+	padding-left: 2px;
+	padding-top: 1px;
+	width: 200px;
+}
+
+.HugeTextBox
+{
+	font-family: Tahoma;
+	font-size: 14pt;
+	font-weight: normal;
+	color: Black;
+	border: solid 1px #909090;
+	padding-left: 2px;
+}
+
+INPUT.HugeTextBox100
+{
+	font-family: Tahoma;
+	font-size: 14pt;
+	font-weight: normal;
+	color: Black;
+	border: solid 1px #909090;
+	padding-left: 2px;
+	width: 100px;
+}
+
+INPUT.HugeTextBox200
+{
+	font-family: Tahoma;
+	font-size: 14pt;
+	font-weight: normal;
+	color: Black;
+	border: solid 1px #909090;
+	padding-left: 2px;
+	width: 200px;
+}
+
+.ScrollableArea
+{
+	height: 350px;
+	overflow: auto;
+	border: solid 1px #e5e5e5;
+	padding: 3px;
+}
+
+.PreviewArea
+{
+	border: solid 1px #e5e5e5;
+	padding: 5px;
+}
+
+.ToolLink
+{
+	padding: 5px 0px 5px 10px;
+}
+
+TEXTAREA
+{
+	font-family: Tahoma,Arial;
+	font-size: 8pt;
+}
+
+.OrgStatsRow
+{
+		height: 24px;
+}
+
+.OrgStatsGroup
+{
+	height: 24px;
+	padding-top: 5px;
+	padding-left: 7px;
+	color:Black;
+	font-size: 8pt;
+	margin-bottom: 1px;
+	background: #E5F2FF;
+	font-weight: bold;
+}
+
+
+.HostingPlanGroup
+{
+	margin-bottom: 1px;	
+}
+
+.HostingPlanGroup .Header
+{
+	clear: both;
+	background: #E5F2FF;
+	border-bottom: solid 1px #E0E5F0;
+	padding: 2px;
+	height: 20px;
+}
+
+.HostingPlanGroup .Header .Left
+{
+	float: left;
+	font-weight: bold;
+}
+
+.HostingPlanGroup .Header .GroupName
+{
+	padding: 4px;
+	font-weight: bold;
+}
+
+.HostingPlanGroup .Header .Right
+{
+	text-align: right;
+	padding-right: 5px;
+}
+
+.HostingPlanGroup .Quota
+{
+	clear: both;
+}
+
+.HostingPlanGroup .Quota .Left
+{
+	float: left;
+	width: 200px;
+	padding: 5px;
+	text-align: right;
+}
+
+.HostingPlanGroup .Quota .Right
+{
+	float: left;
+	white-space: nowrap;
+}
+
+.HostingPlanGroup .Quota .Viewer
+{
+	padding: 5px;
+}
+
+.SideBar
+{
+	padding-right: 10px;
+}
+
+.SideBar TD
+{
+	padding-bottom: 10px;
+}
+
+.SideBarButton
+{
+}
+
+/*Modal Popup*/
+.modalBackground {
+	background-color:Gray;
+	filter:alpha(opacity=70);
+	opacity:0.7;
+}
+
+/* Progress Panel */
+.ProgressPanel
+{
+	width: 350px;
+}
+
+.ProgressBarContainer
+{
+	border-left: solid 1px #a0a0a0;
+	border-right: solid 1px #a0a0a0;
+	height: 11px;
+	background: #e5e5e5 url(../Images/gauge_bkg.gif) center center repeat-x;
+}
+
+.ProgressBarIndicator
+{
+	background: #e5e5e5 url(../Images/gauge_green.gif) center center repeat-x;
+	height: 11px;
+}
+
+.ProgressPanelArea
+{
+	padding: 10px;
+}
+
+.TreeNode
+{
+	padding-left: 2px;
+	padding-right: 2px;
+	color: #000000;
+}
+
+.SelectedTreeNode
+{
+	background-color: #d5d5d5;
+}
+
+/*
+================================
+WebsitePanel Styles
+================================	
+*/
+/* Overriden DNN styles */
+A
+{
+	text-decoration: underline;
+	color: #0153A4;
+}
+.LogArea
+{
+	font-family: Courier New;
+	font-size: 8pt;
+}
+.Normal
+{
+	font-size: 8pt;
+}
+.NormalGreen
+{
+	color: Green;
+}
+.NormalRed
+{
+	font-size: 8pt;
+	color: Red;
+}
+
+.Centered
+{
+	text-align: center!important;
+}
+
+/*
+SELECT.NormalDropDown
+{
+	height: 18px;
+	font-family: Tahoma;
+	font-size: 8pt;
+	border: solid 1px #909090;
+	padding-left: 2px;
+	padding-top: 1px;
+}
+*/
+
+INPUT.NormalTextBox
+{
+	height: 18px;
+	border: solid 1px #909090;
+	padding-left: 2px;
+	padding-top: 1px;	
+}
+
+SELECT.NormalTextBox
+{
+	height: 22px;
+	border: solid 1px #909090;
+}
+
+INPUT.HugeTextBox
+{
+	font-family: Tahoma;
+	font-size: 14pt;
+	font-weight: normal;
+	color: Black;
+	border: solid 1px #909090;
+	padding-left: 2px;
+}
+
+INPUT.LoginTextBox
+{
+	font-family: Tahoma;
+	font-size: 14pt;
+	font-weight: normal;
+	padding: 3px;
+	border: solid 1px #909090;
+	padding-left: 2px;
+}
+.LoginLabel
+{
+	font-family: Arial, Tahoma;
+	font-size: 10pt;
+	font-weight: bold;
+}
+INPUT.LoginButton
+{
+	font-family: Tahoma;
+	font-size: 9pt;
+	background: #ffffff url(../Images/button_bkg2.png) left center repeat-x;
+	border: solid 1px #8E8F8F;
+	height: 31px;
+	padding-left: 3px;
+	padding-right: 3px;
+}
+
+INPUT.LoginButton:hover
+{
+	background: #ffffff url(../Images/button_hover_bkg2.png) left center repeat-x;
+	border: solid 1px #3C7FB1;
+}
+
+.HugeTextBoxWatermark
+{
+	font-family: Tahoma;
+	font-size: 20pt;
+	font-weight: normal;
+	color: #d0d0d0;
+}
+
+.NormalBold
+{
+	font-size: 8pt;
+	font-weight: bold;
+}
+
+.ErrorText
+{
+	font-size: 11px;
+	font-weight: bold;
+	color: red;
+}
+
+.Medium
+{
+	font-size: 11pt;
+	font-weight: normal;
+}
+
+.MediumBold
+{
+	font-size: 11pt;
+	font-weight: bold;
+}
+
+.Big
+{
+	font-size: 14pt;
+	font-weight: normal;
+	color: Black;
+}
+
+A.Black
+{
+	color: Black!important;
+	text-decoration: none!important;
+}
+
+UL.LinksList
+{
+    margin: 0;
+    padding: 0;
+    display: block;
+}
+UL.LinksList LI
+{
+	list-style: none;
+	padding: 7px;
+}
+
+.BigBold
+{
+	font-size: 14pt;
+	font-weight: bold;
+	color: Black;
+}
+
+.Huge
+{
+	font-family: Tahoma;
+	font-size: 14pt;
+	font-weight: normal;
+	color: Black;
+}
+
+.SubHead
+{
+	font-size: 11px;
+	color: Black;
+}
+
+/* WebsitePanel styles */
+.BlueBorder
+{
+	border: solid 1px #C4D6BB;
+	border-bottom: none;
+	background-color: #edf9e8;
+}
+.Hint
+{
+	text-decoration: none!important;
+	border-bottom-style: double;
+	border-bottom-width: 3px;
+	border-bottom-color: #d0d0d0;
+	cursor: pointer;
+}
+.HintActive
+{
+	text-decoration: none!important;
+	border-bottom-style: double;
+	border-bottom-width: 3px;
+	border-bottom-color: #d0d0d0;
+	background-color: #efefef;
+}
+.Small
+{
+	font-family: Tahoma;
+	font-size: 8pt;
+	color: #000000;
+}
+.SmallBold
+{
+	font-family: Tahoma;
+	font-size: 10px;
+	font-weight: bold;
+	color: #000000;
+}
+.DropdownMenu
+{
+	border: solid 1px #e0e0e0;
+	background-color: #f0f0f0;
+}
+.NormalError
+{
+	font-family: Verdana;
+	font-size: 12px;
+	color: Red;
+}
+
+.BorderFillBox
+{
+	background-color: #E5F2FF;
+	border: solid 1px #86B9F7;
+}
+.RedBorderFillBox
+{
+	background-color: #ffe1e1;
+	border-right: #ff5254 2px solid;
+	border-top: #ff5254 2px solid;
+	border-left: #ff5254 2px solid;
+	border-bottom: #ff5254 2px solid;
+	padding: 50px;
+	width: 200px;
+	margin-top: 30px;
+	margin-bottom: 30px;
+	margin-left: auto;
+	margin-right: auto;
+	text-align: center;
+}
+.QuotaName
+{
+	font-family: Verdana;
+	font-size: 11px;
+	font-weight: normal;
+	padding-left: 8px;
+}
+.QuotaValue
+{
+	font-family: Verdana;
+	font-size: 11px;
+	font-weight: normal;
+	color: #0153A4;
+}
+.Toolbox
+{
+	background-color: #E5F2FF;
+}
+.Toolbox A
+{
+	color: Black!important;
+}
+
+.IconsBlock
+{
+	padding: 5px;
+}
+
+.IconsTitle
+{
+	background-color: #efefef;
+	padding: 3px 5px 3px 5px;
+	font-size: 10pt;
+}
+
+.Icon
+{
+	width: 75px;
+	height: 72px;
+	padding: 4px;
+	border: solid 1px transparent;
+	text-align: center;
+	vertical-align: top;
+	font-size: 11px;
+}
+
+.Icon.Hover
+{
+	border-color: #99DEFD;
+	background-color: #E9F8FE;
+}
+
+.Icon A
+{
+	text-decoration: none;
+	color: #000000;
+}
+
+.IconMenu
+{
+	position: absolute;
+	visibility:hidden;
+	padding: 1px;
+	border: solid 1px #99DEFD;
+	background-color: #E9F8FE;
+	font-size: 11px;
+}
+
+.IconMenu UL
+{
+	display: block;
+	list-style: none;
+	margin: 0px;
+	padding: 0px;
+}
+
+.IconMenu UL LI A
+{
+	display: inline-block;
+	width: auto;
+	padding: 4px 8px 4px 8px;
+	text-decoration: none;
+	color: #000000;
+}
+
+.IconMenu UL LI:Hover
+{
+	background-color: #B6D9FC;
+}
+
+.Brick
+{
+	background-color: white;
+	font-family: Verdana;
+	font-size: 11px;
+}
+.Brick A
+{
+	color: #0153A4!important;
+}
+.ChartLegendElement
+{
+	display: block;
+	width: 7px;
+	height: 7px;
+	border: solid 1px #000000;
+}
+.ChartArea
+{
+	border: solid 2px #e0e0e0;
+	padding: 10px;
+}
+
+.Shevron
+{
+	padding: 4px 6px 4px 6px;
+	margin-bottom: 2px;
+	margin-top: 2px;
+	font-family: Tahoma;
+	font-size: 8pt;
+	font-weight: bold;
+	color: #000000;
+	width:100%;
+}
+
+.ShevronActive
+{
+	background: transparent url(../images/shevron_bkg.gif) left bottom repeat-x;
+	border: solid 1px #99DEFD;
+	padding: 3px 5px 3px 5px;
+	margin-bottom: 2px;
+	margin-top: 2px;
+	font-family: Tahoma;
+	font-size: 8pt;
+	font-weight: bold;
+	color: #000000;
+	width:100%;
+}
+
+.ShevronLine
+{
+	background: transparent url(../images/shevron_line.gif) left center repeat-x;
+	width: 100%;
+}
+
+.SectionHeader
+{ 
+	background-image: url(green_bkg.gif);
+	background-repeat: repeat-x;
+	margin-bottom: 3;
+	margin-top: 2;
+	font-family: Tahoma;
+	font-size: 11px;
+	font-weight: bold;
+	border-bottom: solid 1px #C4D6BB;
+	color: #005c4d;
+}
+
+/* Calendar */
+.Calendar
+{
+	border: solid 1px #909090;
+	background-color: White;
+}
+.Calendar TD
+{
+	vertical-align: middle;
+}
+.CalendarTitle
+{
+	background-image: url(green_bkg.gif);
+	background-repeat: repeat-x;
+	height: 100%;
+}
+.CalendarTitle TD
+{
+	font-weight: bold;
+	padding: 2px;
+}
+.CalendarWeekend
+{
+	background-color: #edf9e8;
+}
+.CalendarSelectedDate
+{
+	background-color: #E5F2FF;
+	font-weight: bold;
+	color: White!important;
+}
+.CalendarDayHeader
+{
+	background-image: url(green_bkg.gif);
+	background-repeat: repeat-x;
+	vertical-align: middle;
+}
+
+.ActivityBox
+{
+	padding: 10px;
+	margin-bottom: 10px;
+	background-color: #f0f0f0;
+}
+
+/* STATUSES */
+.YellowStatus
+{
+	background-image: url(warning_bkg.gif);
+	background-repeat: repeat-x;
+	font-family: Tahoma;
+	font-size: 8pt;
+	font-weight: bold;
+	color: white;
+	background-color: #ff9900;
+	text-align: center;
+	padding: 6px;
+}
+.RedStatus
+{
+	background-image: url(error_bkg.gif);
+	background-repeat: repeat-x;
+	font-family: Tahoma;
+	font-size: 8pt;
+	font-weight: bold;
+	color: White;
+	background-color: #ff3300;
+	text-align: center;
+	padding: 6px;
+}
+/* END STATUSES */
+
+/* MESSAGE BOXES */
+.MessageBox
+{
+	font-family: Tahoma;
+	font-size: 8pt;
+	font-weight: bold;
+	color: #505050;
+	margin: 0px 3px 5px 3px;
+	padding: 15px 10px 15px 50px;
+	text-align: left;
+}
+.MessageBox.Green
+{
+	background: #E2F7DC url(../images/information_big.gif) 6px center no-repeat;
+	border: 1px solid #B3DFA4;
+}
+.MessageBox.Yellow
+{
+	background: #FFFFBA url(../images/warning_big.gif) 6px center no-repeat;
+	border: 1px solid #FDDF79;
+}
+.MessageBox.Red
+{
+	background: #FFE8E8 url(../images/error_big.gif) 6px center no-repeat;
+	border: 1px solid #FFA8A8;
+}
+.MessageBox SPAN.description
+{
+	font-weight: normal!important;
+}
+.MessageBox .TechnicalDetails
+{
+	padding-top: 4px;
+	font-weight: normal!important;
+}
+.MessageBoxSection
+{
+	font-family: Tahoma;
+	font-size: 8pt;
+	font-weight: bold;
+}
+/* END MESSAGE BOXES */
+
+/* POPUP styles */
+/* Default DOM Tooltip Style */
+.popupHint
+{
+	border: 2px solid #C4D6BB;
+	font-family: Verdana;
+	padding: 3px;
+	background-color: #F1F1FF;
+}
+.popupComments
+{
+	border: 2px solid #C4D6BB;
+	font-family: Verdana;
+	font-size: 9px;
+	padding: 3px;
+	background-color: #F1F1FF;
+}
+
+/* TOOLBAR MENU */
+.ToolbarMenuRootItem
+{
+	font-family: Tahoma, Arial; 
+	font-size: 11px; 
+	font-weight: normal;
+	padding: 2 1 3 1;
+	text-decoration: none!important;
+}
+.ToolbarMenuRootItem IMG
+{
+	margin-right: 2px;
+}
+.ToolbarMenuRootItemSelected
+{
+	font-family: Tahoma, Arial; 
+	font-size: 11px; 
+	font-weight: normal;
+	padding: 2 1 3 1;
+	text-decoration: none!important;
+	background-color: #edf9e8!important;
+}
+.ToolbarMenuRootItemSelected IMG
+{
+	margin-right: 2px;
+}
+/* END TOOLBAR MENU */
+INPUT.Button1, INPUT.Button2, INPUT.Button3
+{
+	font-family: Tahoma;
+	font-size: 8pt;
+	background: #ffffff url(../Images/button_bkg.png) left bottom repeat-x;
+	border: solid 1px #8E8F8F;
+	height: 23px;
+	padding-left: 7px;
+	padding-right: 7px;
+}
+
+INPUT.SmallButton
+{
+	font-family: Tahoma;
+	font-size: 8pt;
+	background: #ffffff url(../Images/button_bkg.png) left center repeat-x;
+	border: solid 1px #8E8F8F;
+	padding: 3px;
+}
+
+INPUT.Button1:hover, INPUT.Button2:hover, INPUT.Button3:hover, INPUT.SmallButton:hover
+{
+	background-image: url(../Images/button_hover_bkg.png);
+	border: solid 1px #3C7FB1;
+}
+
+/* TABS */
+.Tabs
+{
+	background: transparent url(../Images/tabs_bkg.gif) bottom left repeat-x;
+}
+
+.Separator
+{
+	 vertical-align:top;
+	height:26px;
+	border: solid 1px #8E8E8E;
+	border-left:none;
+	border-right:none;
+	border-top:none;
+	text-decoration: none;
+	
+	
+}
+
+A.ActiveTab
+{
+	display: inline-block;
+	vertical-align: bottom;
+	line-height: 22px;
+	padding: 0 6px 0 6px;
+	background-color: #ffffff;
+	border: solid 1px #8E8E8E;
+	border-bottom: none;
+	color: #000000;
+	text-decoration: none;
+}
+A.Tab
+{
+	display: inline-block;
+	vertical-align: bottom;
+	line-height: 21px;
+	padding: 0 6px 0 6px;	
+	background-color: #ffffff;
+	background: #ffffff url(../Images/button_bkg.png) left bottom repeat-x;
+	border: solid 1px #8E8E8E;
+	color: #000000;
+	text-decoration: none;
+}
+A.Tab:Hover
+{
+	display: inline-block;
+	background: #ffffff url(../Images/button_hover_bkg.png) left bottom repeat-x;
+	border-color: #3C7FB1 #3C7FB1 #8E8E8E #3C7FB1;
+}
+
+/* END TABS */
+
+/* FileLookup styles */
+A.FileManagerButton
+{
+	display: inline-block;
+	padding: 2px;
+	font-size: 8pt;
+	color: #000000;
+	text-decoration: none;
+	border: solid 1px #f5f5f5;
+}
+A.FileManagerButton:Hover
+{
+	background: #ffffff url(../Images/button_hover_bkg2.png) left center repeat-x;
+	border: solid 1px #3C7FB1;
+}
+
+.FileManagerTreeNode 
+{
+	padding: 2px 2px 2px 1px;
+    font-family: Tahoma, Arial, Helvetica;
+    font-size: 8pt;
+    font-weight: normal;
+    text-decoration: none!important;
+}
+
+.FileManagerTreeNodeSelected 
+{
+	padding: 2px 2px 2px 1px;
+    font-family: Tahoma, Arial, Helvetica;
+    font-size: 8pt;
+    font-weight: normal;
+	background-color: #dcdcdc; 
+}
+
+A.FileManagerTreeNode:link, A.FileManagerTreeNodeSelected:link {
+    text-decoration: none;
+    color: #003366;
+}
+
+A.FileManagerTreeNode:visited, A.FileManagerTreeNodeSelected:visited  {
+    text-decoration: none;
+    color: #003366;
+}
+
+A.FileManagerTreeNode:active, A.FileManagerTreeNodeSelected:active   {
+    text-decoration: none;
+    color: #003366;
+}
+
+A.FileManagerTreeNode:hover, A.FileManagerTreeNodeSelected:hover
+{
+	text-decoration: none;
+	color: black;
+	background-color: #e0f4ff;
+}
+
+/* LOG RECORDS */
+.LogRecord
+{
+    border-bottom: solid 1px #efefef;
+    font-size: 10px;
+}
+
+.LogRecord .Time
+{
+    width: 70px;
+    background-color: #f5f5f5;
+    float: left;
+    padding: 2px;
+}
+
+.LogRecord .Information
+{
+    color: black;
+    padding: 2px;
+}
+.LogRecord .Warning
+{
+    color: orange;
+    padding: 2px;
+}
+.LogRecord .Error
+{
+    color: red;
+    padding: 2px;
+}
+
+.FormSectionHeader
+{
+	font-size: 9pt;
+	font-weight: bold;
+}
+
+.PopupExtender
+{
+	background-color: #ffffff;
+	padding: 7px;
+	border:solid 1px #c0c0c0;
+}
+
+/* STOREFRONT CATALOG */
+
+.ProductBlock {
+	background-image:url(../Images/Ecommerce/product_head_bg.gif);
+	background-repeat: repeat-x;
+	padding-top: 11px;
+	width: 250px;
+}
+
+.WhiteSpacer
+{
+	width: 20px;
+	height: 20px;
+	visibility: hidden;
+	font-size: 5px;
+}
+
+.ProductInfo 
+{
+	border-left: solid 6px #E2E2E2;
+	padding-left: 13px;
+	text-transform: uppercase;
+	color: #6A6A6A;
+	font-family: Tahoma;
+	font-size: 10pt;
+	font-weight: bold;
+	vertical-align: top;
+	width: 100%;
+}
+
+.NormalText
+{
+	font-size: 8pt;
+	text-transform: none;
+	font-weight: normal;
+}
+
+.PriceBlock 
+{
+	float: left;
+	margin-top: 15px;
+}
+
+.PriceBlock .Left
+{
+	float: left;
+}
+
+.PriceBlock .Right
+{
+	float: right;
+}
+
+.ProductPrice {
+	color: #46B030;
+}
+
+ul.HighLights {
+	padding: 10px 0 0 0;
+	margin: 0 0 0 15px;
+	font-size: 8pt;
+	font-weight: normal;
+}
+
+.QuickLabel 
+{
+	font-size: 10pt;
+}
+
+.QuickOutlineTbl
+{
+	margin-bottom: 15px;
+	width: 100%;
+}
+
+.QuickOutlineTbl TD
+{
+	padding: 5px 0px 5px 15px;
+}
+
+.Width15Pcs { width: 15%; }
+.Width20Pcs { width: 20%; }
+.Width35Pcs { width: 35%; }
+.Width100Pcs { width: 100%; }
+
+.MarginTop5Px { margin-top: 5px; }
+
+.StrongHeaderLabel
+{
+	font-size: 12pt;
+	font-weight: bold;
+}
+
+.InventoryDescription
+{
+	font-size: 10pt;
+	text-align: justify;
+}
+
+.BlueLabel
+{
+	background-color: #77ACE7!important;
+}
+
+.Scrollable500
+{
+	height: 500px;
+	overflow: auto;
+}
+
+/* Action buttons */
+UL.ActionButtons
+{
+	list-style-type: none;
+	margin-top: 5px;
+	margin-left: 0px;
+}
+
+UL.ActionButtons LI
+{
+	margin-bottom: 12px;
+}
+
+.ActionButton
+{
+	padding: 3px 2px 3px 20px;
+}
+
+.ActionButtonApplySnapshot
+{
+	padding: 3px 2px 3px 20px;
+	background: transparent url(../images/VPS/apply2.png) left center no-repeat;
+}
+
+.ActionButtonRename
+{
+	padding: 3px 2px 3px 20px;
+	background: transparent url(../images/VPS/rename.gif) left center no-repeat;
+}
+
+.ActionButtonDeleteSnapshot
+{
+	padding: 3px 2px 3px 20px;
+	background: transparent url(../images/VPS/delete3.png) left center no-repeat;
+}
+
+.ActionButtonDeleteSnapshotTree
+{
+	padding: 3px 2px 3px 20px;
+	background: transparent url(../images/VPS/delete4.png) left center no-repeat;
+}
