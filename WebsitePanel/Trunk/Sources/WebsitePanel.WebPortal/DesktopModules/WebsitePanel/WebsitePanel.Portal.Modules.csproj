@@ -4219,6 +4219,9 @@
     <Content Include="App_LocalResources\WebApplicationGalleryParamControl.ascx.resx">
       <SubType>Designer</SubType>
     </Content>
+    <Content Include="App_LocalResources\SettingsOrganizationUserSummaryLetter.ascx.resx">
+      <SubType>Designer</SubType>
+    </Content>
     <EmbeddedResource Include="UserControls\App_LocalResources\EditDomainsList.ascx.resx">
       <SubType>Designer</SubType>
     </EmbeddedResource>
