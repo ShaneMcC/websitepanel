@@ -13,14 +13,15 @@
 <h2>Support Options</h2>
 <ul>
     <li><a href="/Documentation.aspx">Documentation</a></li>
-    <li><a href="http://sourceforge.net/projects/websitepanel/forums">Online Forums</a></li>
+    <li><a href="http://social.msdn.microsoft.com/Forums/en-US/category/websitepanel">Online Forums</a></li>
 </ul>
 
 <h2>Get Involved</h2>
 <ul>
     <li><a href="http://sourceforge.net/projects/websitepanel/">Project Home</a></li>
-    <li><a href="http://sourceforge.net/tracker/?group_id=316247&atid=1330290">Bug Tracker</a></li>
-    <li><a href="http://sourceforge.net/tracker/?group_id=316247&atid=1330293">Feature Requests</a></li>
+    <li><a href="http://social.msdn.microsoft.com/Forums/en-US/wspsupport/thread/a5b92449-0583-4840-917a-83abde83a693">Report Bug</a></li>
+    <li><a href="http://social.msdn.microsoft.com/Forums/en-US/wspdiscuss/thread/e8d18b28-d828-469e-a585-f1606528b2b3">Request Feature</a></li>
+    <li><a href="http://social.msdn.microsoft.com/Forums/en-US/wspdev/thread/9a2171f5-d051-4cf1-8258-1cd56292af9b">Contribute Code</a></li>
     <li><a href="http://websitepanel.svn.sourceforge.net/viewvc/websitepanel/">Source Codes</a></li>
 </ul>
 
