@@ -14,6 +14,7 @@
 <ul>
     <li><a href="/Documentation.aspx">Documentation</a></li>
     <li><a href="http://social.msdn.microsoft.com/Forums/en-US/category/websitepanel">Online Forums</a></li>
+    <li><a href="http://social.msdn.microsoft.com/Forums/en-US/wspsupport/thread/4be2e624-fe4d-4375-a969-3fbde585e4bd">Paid Support</a></li>
 </ul>
 
 <h2>Get Involved</h2>

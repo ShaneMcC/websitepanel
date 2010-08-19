@@ -24,6 +24,7 @@
         <li>Tight integration with <a href="http://www.microsoft.com/web/gallery/" target="_blank">Microsoft Web App Gallery</a></li>
         <li>Easy to install and use</li>
         <li>Great community support</li>
+        <li>Supported by Microsoft</li>
     </ul>
     
     <p><b>WebsitePanel is an ideal solution for:</b></p>
