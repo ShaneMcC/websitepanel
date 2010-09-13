@@ -92,6 +92,13 @@
 	font-weight: bold;
 }
 
+.Label
+{
+	padding-top: 5px;
+	padding-bottom: 5px;
+	width: 150px;
+}
+
 .FormField
 {
 }

@@ -135,10 +135,13 @@
   <data name="lnkPasswordReminder.Text" xml:space="preserve">
     <value>Password Reminder Letter</value>
   </data>
- <data name="lnkHostedSolutionReport.Text" xml:space="preserve">
+  <data name="lnkHostedSolutionReport.Text" xml:space="preserve">
     <value>Enterprise Solution Report</value>
   </data>
   <data name="lnkVpsSummaryLetter.Text" xml:space="preserve">
     <value>VPS Summary Letter</value>
+  </data>
+  <data name="lnkExchangeHostedEditionOrganizationSummary.Text" xml:space="preserve">
+    <value>Exchange Hosted Edition Organization Summary</value>
   </data>
 </root>

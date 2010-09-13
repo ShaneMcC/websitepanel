@@ -119,10 +119,15 @@ namespace WebsitePanel.Portal
                     bitmap.Dispose();
                     new_g.Dispose();
 
-					// set cache info
-                    context.Response.Cache.SetExpires(DateTime.Now.AddSeconds(BitmapCacheDurationInSeconds));
-                    context.Response.Cache.SetCacheability(HttpCacheability.Public);
-                    context.Response.Cache.SetValidUntilExpires(true);
+					// set cache info if image was loaded
+                    if (img != null)
+                    {
+                        context.Response.Cache.SetExpires(DateTime.Now.AddSeconds(BitmapCacheDurationInSeconds));
+                        context.Response.Cache.SetCacheability(HttpCacheability.Public);
+                        context.Response.Cache.SetValidUntilExpires(true);
+                    }
+
+                    // end response
 					context.Response.End();
 				}
 				catch (Exception ex)

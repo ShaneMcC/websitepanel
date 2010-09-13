@@ -44,20 +44,24 @@ namespace WebsitePanel.Portal
         public bool DisplayGauge
         {
             get { return gauge.DisplayGauge; }
-            set { gauge.DisplayGauge = value; }
+            set { gauge.DisplayGauge = value; UpdateControl(); }
         }
 
         public int QuotaTypeId
         {
-            get { return (int)ViewState["QuotaTypeId"]; }
-            set { ViewState["QuotaTypeId"] = value; }
+            get { return (ViewState["QuotaTypeId"] != null) ? (int)ViewState["QuotaTypeId"] : 2; }
+            set { ViewState["QuotaTypeId"] = value; UpdateControl(); }
         }
 
         public int QuotaUsedValue
         {
             set
             {
+                // store value
                 gauge.Progress = value;
+
+                // upodate control
+                UpdateControl();
             }
         }
 
@@ -65,26 +69,34 @@ namespace WebsitePanel.Portal
         {
             set
             {
+                // store value
                 gauge.Total = value;
 
-                if (QuotaTypeId == 1)
-                {
-                    litValue.Text = (value == 0) ? GetLocalizedString("Text.Disabled") : GetLocalizedString("Text.Enabled");
-                    litValue.CssClass = (value == 0) ? "NormalRed" : "NormalGreen";
-                    gauge.Visible = false;
-                }
-                else if (QuotaTypeId == 2)
-                {
-                    litValue.Text = String.Format("{0} {1} {2}",
-                        gauge.Progress, GetLocalizedString("Text.Of"), ((value == -1) ? GetLocalizedString("Text.Unlimited") : value.ToString()));
-                    gauge.Visible = (value != -1);
-                    //litValue.Visible = (value == -1);
-                }
-                else if (QuotaTypeId == 3)
-                {
-                    litValue.Text = (value == -1) ? GetLocalizedString("Text.Unlimited") : value.ToString();
-                    gauge.Visible = false;
-                }
+                // update control
+                UpdateControl();
+            }
+        }
+
+        private void UpdateControl()
+        {
+            int total = gauge.Total;
+            if (QuotaTypeId == 1)
+            {
+                litValue.Text = (total == 0) ? GetLocalizedString("Text.Disabled") : GetLocalizedString("Text.Enabled");
+                litValue.CssClass = (total == 0) ? "NormalRed" : "NormalGreen";
+                gauge.Visible = false;
+            }
+            else if (QuotaTypeId == 2)
+            {
+                litValue.Text = String.Format("{0} {1} {2}",
+                    gauge.Progress, GetLocalizedString("Text.Of"), ((total == -1) ? GetLocalizedString("Text.Unlimited") : total.ToString()));
+                gauge.Visible = (total != -1);
+                //litValue.Visible = (value == -1);
+            }
+            else if (QuotaTypeId == 3)
+            {
+                litValue.Text = (total == -1) ? GetLocalizedString("Text.Unlimited") : total.ToString();
+                gauge.Visible = false;
             }
         }
 

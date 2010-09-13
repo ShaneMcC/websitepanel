@@ -36,7 +36,7 @@
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>bin\</OutputPath>
+    <OutputPath>bin\debug\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -45,7 +45,7 @@
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
-    <OutputPath>bin\</OutputPath>
+    <OutputPath>bin\release\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -60,17 +60,17 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Web.Services" />
     <Reference Include="System.Xml" />
-    <Reference Include="WebsitePanel.EnterpriseServer.Base, Version=2.8.14.0, Culture=neutral, PublicKeyToken=da8782a6fc4d0081, processorArchitecture=MSIL">
+    <Reference Include="WebsitePanel.EnterpriseServer.Base, Version=1.0.0.0, Culture=neutral, PublicKeyToken=da8782a6fc4d0081, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\Build\WebsitePanel.EnterpriseServer.Base.dll</HintPath>
+      <HintPath>..\..\..\Bin\WebsitePanel.EnterpriseServer.Base.dll</HintPath>
     </Reference>
-    <Reference Include="WebsitePanel.EnterpriseServer.Client, Version=2.8.14.0, Culture=neutral, PublicKeyToken=da8782a6fc4d0081, processorArchitecture=MSIL">
+    <Reference Include="WebsitePanel.EnterpriseServer.Client, Version=1.0.0.0, Culture=neutral, PublicKeyToken=da8782a6fc4d0081, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\Build\WebsitePanel.EnterpriseServer.Client.dll</HintPath>
+      <HintPath>..\..\..\Bin\WebsitePanel.EnterpriseServer.Client.dll</HintPath>
     </Reference>
-    <Reference Include="WebsitePanel.Providers.Base, Version=2.8.14.0, Culture=neutral, PublicKeyToken=da8782a6fc4d0081, processorArchitecture=MSIL">
+    <Reference Include="WebsitePanel.Providers.Base, Version=1.0.0.0, Culture=neutral, PublicKeyToken=da8782a6fc4d0081, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\Build\WebsitePanel.Providers.Base.dll</HintPath>
+      <HintPath>..\..\..\Bin\WebsitePanel.Providers.Base.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -85,7 +85,9 @@
     <Compile Include="ExchangeImport.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="App.config" />
+    <None Include="App.config">
+      <SubType>Designer</SubType>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include="Microsoft.Net.Client.3.5">

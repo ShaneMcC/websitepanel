@@ -4768,4 +4768,133 @@
   <data name="WebAppGallery.SQLRequired" xml:space="preserve">
     <value>SQL Server databases</value>
   </data>
+  <data name="Quota.ExchangeHostedEdition.Contacts" xml:space="preserve">
+    <value>Contacts</value>
+  </data>
+  <data name="Quota.ExchangeHostedEdition.DistributionLists" xml:space="preserve">
+    <value>Distribution Lists</value>
+  </data>
+  <data name="Quota.ExchangeHostedEdition.Domains" xml:space="preserve">
+    <value>Domains</value>
+  </data>
+  <data name="Quota.ExchangeHostedEdition.Mailboxes" xml:space="preserve">
+    <value>Mailboxes</value>
+  </data>
+  <data name="ReportResourceGroup.ExchangeHostedEdition" xml:space="preserve">
+    <value>Exchange 2010 Hosted Edition</value>
+  </data>
+  <data name="ResourceGroup.ExchangeHostedEdition" xml:space="preserve">
+    <value>Exchange Hosted Edition</value>
+  </data>
+  <data name="Error.EXCHANGE_HOSTED_CREATE_ORGANIZATION" xml:space="preserve">
+    <value>Error creating Exchange organization</value>
+  </data>
+  <data name="Error.EXCHANGE_HOSTED_DELETE_ORGANIZATION" xml:space="preserve">
+    <value>Exchange organization cannot be deleted</value>
+  </data>
+  <data name="Error.EXCHANGE_HOSTED_SEND_SUMMARY" xml:space="preserve">
+    <value>Error sending Exchange organization summary information</value>
+  </data>
+  <data name="ErrorDescription.EXCHANGE_HOSTED_CREATE_ORGANIZATION" xml:space="preserve">
+    <value>Please contact your hosting provider.</value>
+  </data>
+  <data name="ErrorDescription.EXCHANGE_HOSTED_SEND_SUMMARY" xml:space="preserve">
+    <value>Please contact your hosting provider.</value>
+  </data>
+  <data name="ServiceItemType.ExchangeOrganization" xml:space="preserve">
+    <value>Exchange Organization</value>
+  </data>
+  <data name="Success.EXCHANGE_HOSTED_SEND_SUMMARY" xml:space="preserve">
+    <value>Exchange organization summary information has been sent</value>
+  </data>
+  <data name="Warning.EXCHANGE_HOSTED_CONFIRM_DELETE_ORGANIZATION" xml:space="preserve">
+    <value>You have to tick a checkbox to confirm organization deletion</value>
+  </data>
+  <data name="Error.EXCHANGE_HOSTED_ADD_DOMAIN" xml:space="preserve">
+    <value>Organization domain cannot be added</value>
+  </data>
+  <data name="Error.EXCHANGE_HOSTED_CHANGE_QUOTAS" xml:space="preserve">
+    <value>Organization quotas cannot be changed</value>
+  </data>
+  <data name="Error.EXCHANGE_HOSTED_CHANGE_SERVICE_PLAN" xml:space="preserve">
+    <value>Organization Service Plan cannot be changed</value>
+  </data>
+  <data name="Error.EXCHANGE_HOSTED_GET_DOMAINS" xml:space="preserve">
+    <value>Error reading Exchange organization domains</value>
+  </data>
+  <data name="Error.EXCHANGE_HOSTED_GET_ORGANIZATION" xml:space="preserve">
+    <value>Organization details cannot be loaded.</value>
+  </data>
+  <data name="ErrorDescription.EXCHANGE_HOSTED_ADD_DOMAIN" xml:space="preserve">
+    <value>Please contact your hosting provider.</value>
+  </data>
+  <data name="ErrorDescription.EXCHANGE_HOSTED_CHANGE_QUOTAS" xml:space="preserve">
+    <value>Please contact your hosting provider.</value>
+  </data>
+  <data name="ErrorDescription.EXCHANGE_HOSTED_CHANGE_SERVICE_PLAN" xml:space="preserve">
+    <value>Please contact your hosting provider.</value>
+  </data>
+  <data name="ErrorDescription.EXCHANGE_HOSTED_GET_ORGANIZATION" xml:space="preserve">
+    <value>Please contact your hosting provider.</value>
+  </data>
+  <data name="Error.EXCHANGE_HOSTED_DELETE_DOMAIN" xml:space="preserve">
+    <value>Organization domain cannot be deleted</value>
+  </data>
+  <data name="ExchangeHostedEdition.AddDomainAlreadyUsedError" xml:space="preserve">
+    <value>Specified domain name already added into organization.</value>
+  </data>
+  <data name="ExchangeHostedEdition.AddDomainError" xml:space="preserve">
+    <value>Error adding organization domain.</value>
+  </data>
+  <data name="ExchangeHostedEdition.AddDomainExistsError" xml:space="preserve">
+    <value>Specified domain name already exists.</value>
+  </data>
+  <data name="ExchangeHostedEdition.AddDomainQuotaExceededError" xml:space="preserve">
+    <value>Maximum domains quota has been reached.</value>
+  </data>
+  <data name="ExchangeHostedEdition.CreateOrganizationError" xml:space="preserve">
+    <value>Error creating organization. See system logs for detailed messages.</value>
+  </data>
+  <data name="ExchangeHostedEdition.DeleteDomainError" xml:space="preserve">
+    <value>Error deleting organization domain.</value>
+  </data>
+  <data name="ExchangeHostedEdition.DeleteOrganizationError" xml:space="preserve">
+    <value>Error deleting organization. See system logs for detailed messages.</value>
+  </data>
+  <data name="ExchangeHostedEdition.ExchangeServiceNotEnabledError" xml:space="preserve">
+    <value>Exchange Hosted Edition service is not enabled for the hosting space.</value>
+  </data>
+  <data name="ExchangeHostedEdition.GeneralError" xml:space="preserve">
+    <value>General module error.</value>
+  </data>
+  <data name="ExchangeHostedEdition.OfferIdIsNotSetError" xml:space="preserve">
+    <value>Offer ID is not specified on Exchange service settings.</value>
+  </data>
+  <data name="ExchangeHostedEdition.OrganizationNotFoundError" xml:space="preserve">
+    <value>Organization not found.</value>
+  </data>
+  <data name="ExchangeHostedEdition.ProgramIdIsNotSetError" xml:space="preserve">
+    <value>Program ID is not specified on Exchange service settings.</value>
+  </data>
+  <data name="ExchangeHostedEdition.SendOrganizationSummaryError" xml:space="preserve">
+    <value>Error sending organization summary information.</value>
+  </data>
+  <data name="ExchangeHostedEdition.SendOrganizationTemplateNotSetError" xml:space="preserve">
+    <value>Organization summary information template is not set.</value>
+  </data>
+  <data name="ExchangeHostedEdition.UpdateCatchAllError" xml:space="preserve">
+    <value>Error updating catch-all account.</value>
+  </data>
+  <data name="ExchangeHostedEdition.UpdateQuotasError" xml:space="preserve">
+    <value>Error updating organization quotas.</value>
+  </data>
+  <data name="ExchangeHostedEdition.UpdateQuotasWrongQuotaError" xml:space="preserve">
+    <value>One of the specified quotas exceed maximum value allowed.</value>
+  </data>
+  <data name="ExchangeHostedEdition.UpdateServicePlanError" xml:space="preserve">
+    <value>Error changing organization service plan. See system logs for detailed messages.</value>
+  </data>
+  <data name="Quota.Mail.DisableSizeEdit" xml:space="preserve">
+    <value>Disable Mailbox Size Edit</value>
+  </data>
 </root>

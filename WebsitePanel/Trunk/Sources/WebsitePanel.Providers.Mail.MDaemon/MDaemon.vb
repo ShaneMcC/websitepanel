@@ -1353,15 +1353,20 @@ Public Class MDaemon
         Dim newMailAlias As New MailAlias
 
         If AccountExists(mailAliasName) Then
-            Dim mailAccount As MailAccount = GetAccount(mailAliasName)
-            newMailAlias.Name = mailAccount.Name
-            newMailAlias.ForwardTo = mailAccount.ForwardingAddresses(0)
-            'delete incorrect account
-            DeleteAccount(mailAliasName)
-            'recreate mail alias 
-            CreateMailAlias(newMailAlias)
-            Return newMailAlias
+            Try
+                Dim mailAccount As MailAccount = GetAccount(mailAliasName)
+                newMailAlias.Name = mailAccount.Name
+                newMailAlias.ForwardTo = mailAccount.ForwardingAddresses(0)
+                'delete incorrect account
+                DeleteAccount(mailAliasName)
+                'recreate mail alias 
+                CreateMailAlias(newMailAlias)
+                Return newMailAlias
+            Catch ex As Exception
+                'do nothing
+            End Try
         End If
+
         Dim path As String = GetAppFolderPath() + "Alias.dat"
         Dim split As String()
         Using sr As StreamReader = New StreamReader(path)
@@ -1369,10 +1374,10 @@ Public Class MDaemon
             Do
                 line = sr.ReadLine()
                 If (Not String.IsNullOrEmpty(line)) Then
-					split = line.Split(New [Char]() {"="c})
-				Else
-					Continue Do
-				End If
+                    split = line.Split(New [Char]() {"="c})
+                Else
+                    Continue Do
+                End If
                 If mailAliasName.Equals(split(0).Trim) Then
                     mailAlias.Name = split(0).Trim
                     mailAlias.ForwardTo = split(1).Trim

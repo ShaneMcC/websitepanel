@@ -78,6 +78,7 @@
     <Content Include="esComments.asmx" />
     <Content Include="esCRM.asmx" />
     <Content Include="esDatabaseServers.asmx" />
+    <Content Include="esExchangeHostedEdition.asmx" />
     <Content Include="esExchangeServer.asmx" />
     <Content Include="esFiles.asmx" />
     <Content Include="esFtpServers.asmx" />
@@ -147,6 +148,7 @@
     <Compile Include="Code\Ecommerce\TaskEventHandlers\SystemTriggersAgent.cs" />
     <Compile Include="Code\Ecommerce\TriggerSystem\CommonTrigger.cs" />
     <Compile Include="Code\Ecommerce\TriggerSystem\TriggerController.cs" />
+    <Compile Include="Code\ExchangeHostedEdition\ExchangeHostedEditionController.cs" />
     <Compile Include="Code\ExchangeServer\ExchangeServerController.cs" />
     <Compile Include="Code\Files\FilesController.cs" />
     <Compile Include="Code\FtpServers\FtpServerController.cs" />
@@ -269,6 +271,10 @@
     </Compile>
     <Compile Include="esDatabaseServers.asmx.cs">
       <DependentUpon>esDatabaseServers.asmx</DependentUpon>
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="esExchangeHostedEdition.asmx.cs">
+      <DependentUpon>esExchangeHostedEdition.asmx</DependentUpon>
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="esExchangeServer.asmx.cs">

@@ -17,14 +17,14 @@ function confirmation()
     <wsp:ServerHeaderControl ID="ServerHeaderControl" runat="server" />
     <table cellSpacing="0" cellPadding="2" width="100%">
         <tr>
-            <td class="SubHead" width="200" nowrap height="24"><asp:Label ID="lblGroup" runat="server" meta:resourcekey="lblGroup" Text="Group:"></asp:Label>
+            <td class="SubHead" style="width:150px;"><asp:Label ID="lblGroup" runat="server" meta:resourcekey="lblGroup" Text="Group:"></asp:Label>
             </td>
-            <td class="Normal" width="100%"><asp:literal id="litGroup" Runat="server"></asp:literal></td>
+            <td class="Normal"><asp:literal id="litGroup" Runat="server"></asp:literal></td>
         </tr>
         <tr>
-            <td class="SubHead" width="200" nowrap height="24"><asp:Label ID="lblProvider" runat="server" meta:resourcekey="lblProvider" Text="Provider:"></asp:Label>
+            <td class="SubHead" height="24"><asp:Label ID="lblProvider" runat="server" meta:resourcekey="lblProvider" Text="Provider:"></asp:Label>
             </td>
-            <td class="Normal" width="100%"><asp:literal id="litProvider" Runat="server"></asp:literal></td>
+            <td class="Normal"><asp:literal id="litProvider" Runat="server"></asp:literal></td>
         </tr>
         <tr>
             <td class="SubHead"><asp:Label ID="lblName" runat="server" meta:resourcekey="lblName" Text="Name:"></asp:Label>

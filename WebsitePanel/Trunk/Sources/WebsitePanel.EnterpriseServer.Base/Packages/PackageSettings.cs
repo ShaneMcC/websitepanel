@@ -42,6 +42,7 @@ namespace WebsitePanel.EnterpriseServer
         public const string NAME_SERVERS = "NameServers";
         public const string SHARED_SSL_SITES = "SharedSslSites";
 		public const string EXCHANGE_SERVER = "ExchangeServer";
+        public const string EXCHANGE_HOSTED_EDITION = "ExchangeHostedEdition";
         public const string HOSTED_SOLLUTION = "HostedSollution";
         public const string VIRTUAL_PRIVATE_SERVERS = "VirtualPrivateServers";
 

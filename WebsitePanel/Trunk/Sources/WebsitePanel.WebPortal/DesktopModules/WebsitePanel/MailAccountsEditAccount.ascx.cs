@@ -39,7 +39,6 @@ namespace WebsitePanel.Portal
         protected void Page_Load(object sender, EventArgs e)
         {
             btnDelete.Visible = (PanelRequest.ItemID > 0);
-
             // bind item
             BindItem();
         }
@@ -85,7 +84,14 @@ namespace WebsitePanel.Portal
 
                 // load provider control
                 LoadProviderControl((int)ViewState["PackageId"], "Mail", providerControl, "EditAccount.ascx");
-
+                // load package context
+                PackageContext cntx = PackagesHelper.GetCachedPackageContext((int)ViewState["PackageId"]);
+                // set messagebox size textbox visibility
+                if (cntx.Quotas.ContainsKey(Quotas.MAIL_DISABLESIZEEDIT))
+                {
+                    txtMailBoxSizeLimit.Visible = cntx.Quotas[Quotas.MAIL_DISABLESIZEEDIT].QuotaAllocatedValue == 0;
+                    lblMailboxSizeLimit.Visible = txtMailBoxSizeLimit.Visible;
+                }
                 if (!IsPostBack)
                 {
                     // bind item to controls
@@ -95,11 +101,16 @@ namespace WebsitePanel.Portal
                         mailEditAddress.Email = item.Name;
                         mailEditAddress.EditMode = true;
                         passwordControl.EditMode = true;
-                        txtMailBoxSizeLimit.Text = item.MaxMailboxSize.ToString();
-
+                        if (txtMailBoxSizeLimit.Visible)
+                        {
+                            txtMailBoxSizeLimit.Text = item.MaxMailboxSize.ToString();
+                        }
                         // other controls
                         IMailEditAccountControl ctrl = (IMailEditAccountControl)providerControl.Controls[0];
                         ctrl.BindItem(item);
+                    }
+                    if (string.IsNullOrEmpty(txtMailBoxSizeLimit.Text)) {
+                        txtMailBoxSizeLimit.Text = cntx.Quotas[Quotas.MAIL_MAXBOXSIZE].QuotaAllocatedValue.ToString();
                     }
                 }
             }

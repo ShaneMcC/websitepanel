@@ -25,7 +25,11 @@
         <li>
             <asp:HyperLink ID="HyperLink2" runat="server" meta:resourcekey="lnkHostedSolutionReport"
                 Text="Exchange Mailbox Setup Letter" NavigateUrl='<%# GetSettingsLink("HostedSoluitonReportSummaryLetter", "HostedSoluitonReportSummaryLetter") %>'></asp:HyperLink>
-        </li>            
+        </li>
+        <li>
+            <asp:HyperLink ID="lnkExchangeHostedEditionOrganizationSummary" runat="server" meta:resourcekey="lnkExchangeHostedEditionOrganizationSummary"
+                Text="Exchange Hosted Edition Organization Summary" NavigateUrl='<%# GetSettingsLink("ExchangeHostedEditionOrganizationSummary", "SettingsExchangeHostedEditionOrganizationSummary") %>'></asp:HyperLink>
+        </li>           
         <li>
             <asp:HyperLink ID="lnkVpsSummaryLetter" runat="server" meta:resourcekey="lnkVpsSummaryLetter"
                 Text="VPS Summary Letter" NavigateUrl='<%# GetSettingsLink("VpsSummaryLetter", "SettingsVpsSummaryLetter") %>'></asp:HyperLink>

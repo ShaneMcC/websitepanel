@@ -86,6 +86,7 @@
     <Compile Include="ecServiceHandlerProxy.cs" />
     <Compile Include="ecStorefrontProxy.cs" />
     <Compile Include="ecStorehouseProxy.cs" />
+    <Compile Include="ExchangeHostedEditionProxy.cs" />
     <Compile Include="ExchangeServerProxy.cs" />
     <Compile Include="FilesProxy.cs" />
     <Compile Include="FtpServersProxy.cs" />

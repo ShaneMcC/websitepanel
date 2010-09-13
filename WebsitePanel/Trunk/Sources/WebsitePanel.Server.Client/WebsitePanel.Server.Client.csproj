@@ -75,6 +75,7 @@
     <Compile Include="CRMProxy.cs" />
     <Compile Include="DatabaseServerProxy.cs" />
     <Compile Include="DnsServerProxy.cs" />
+    <Compile Include="ExchangeServerHostedEditionProxy.cs" />
     <Compile Include="ExchangeServerProxy.cs" />
     <Compile Include="FtpServerProxy.cs" />
     <Compile Include="HostedSharePointServerProxy.cs" />

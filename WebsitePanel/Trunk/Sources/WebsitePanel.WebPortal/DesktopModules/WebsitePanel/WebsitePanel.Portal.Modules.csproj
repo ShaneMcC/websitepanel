@@ -191,6 +191,76 @@
     <Compile Include="Code\ReportingServices\FileSystemReportLocalizer.cs" />
     <Compile Include="Code\ReportingServices\IResourceStorage.cs" />
     <Compile Include="Code\ReportingServices\ReportingServicesUtils.cs" />
+    <Compile Include="SettingsExchangeHostedEditionOrganizationSummary.ascx.cs">
+      <DependentUpon>SettingsExchangeHostedEditionOrganizationSummary.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="SettingsExchangeHostedEditionOrganizationSummary.ascx.designer.cs">
+      <DependentUpon>SettingsExchangeHostedEditionOrganizationSummary.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="SpaceSettingsExchangeHostedEdition.ascx.cs">
+      <DependentUpon>SpaceSettingsExchangeHostedEdition.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="SpaceSettingsExchangeHostedEdition.ascx.designer.cs">
+      <DependentUpon>SpaceSettingsExchangeHostedEdition.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="SettingsExchangeHostedEditionPolicy.ascx.cs">
+      <DependentUpon>SettingsExchangeHostedEditionPolicy.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="SettingsExchangeHostedEditionPolicy.ascx.designer.cs">
+      <DependentUpon>SettingsExchangeHostedEditionPolicy.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="ExchangeHostedEdition\AddOrganizationDomain.ascx.cs">
+      <DependentUpon>AddOrganizationDomain.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="ExchangeHostedEdition\AddOrganizationDomain.ascx.designer.cs">
+      <DependentUpon>AddOrganizationDomain.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="ExchangeHostedEdition\CreateOrganization.ascx.cs">
+      <DependentUpon>CreateOrganization.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="ExchangeHostedEdition\CreateOrganization.ascx.designer.cs">
+      <DependentUpon>CreateOrganization.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="ExchangeHostedEdition\DeleteOrganization.ascx.cs">
+      <DependentUpon>DeleteOrganization.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="ExchangeHostedEdition\DeleteOrganization.ascx.designer.cs">
+      <DependentUpon>DeleteOrganization.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="ExchangeHostedEdition\OrganizationDetails.ascx.cs">
+      <DependentUpon>OrganizationDetails.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="ExchangeHostedEdition\OrganizationDetails.ascx.designer.cs">
+      <DependentUpon>OrganizationDetails.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="ExchangeHostedEdition\UpdateOrganizationCatchAll.ascx.cs">
+      <DependentUpon>UpdateOrganizationCatchAll.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="ExchangeHostedEdition\UpdateOrganizationCatchAll.ascx.designer.cs">
+      <DependentUpon>UpdateOrganizationCatchAll.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="ExchangeHostedEdition\UpdateOrganizationQuotas.ascx.cs">
+      <DependentUpon>UpdateOrganizationQuotas.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="ExchangeHostedEdition\UpdateOrganizationQuotas.ascx.designer.cs">
+      <DependentUpon>UpdateOrganizationQuotas.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="ExchangeHostedEdition\UpdateOrganizationServicePlan.ascx.cs">
+      <DependentUpon>UpdateOrganizationServicePlan.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="ExchangeHostedEdition\UpdateOrganizationServicePlan.ascx.designer.cs">
+      <DependentUpon>UpdateOrganizationServicePlan.ascx</DependentUpon>
+    </Compile>
     <Compile Include="ExchangeServer\ExchangeMailboxMobile.ascx.cs">
       <DependentUpon>ExchangeMailboxMobile.ascx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -394,6 +464,13 @@
     </Compile>
     <Compile Include="ProviderControls\BlackBerry_Settings.ascx.designer.cs">
       <DependentUpon>BlackBerry_Settings.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="ProviderControls\Exchange2010SP1_Settings.ascx.cs">
+      <DependentUpon>Exchange2010SP1_Settings.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="ProviderControls\Exchange2010SP1_Settings.ascx.designer.cs">
+      <DependentUpon>Exchange2010SP1_Settings.ascx</DependentUpon>
     </Compile>
     <Compile Include="ProviderControls\Exchange_Settings.ascx.cs">
       <DependentUpon>Exchange_Settings.ascx</DependentUpon>
@@ -3280,7 +3357,18 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="SettingsExchangeHostedEditionOrganizationSummary.ascx" />
+    <Content Include="SpaceSettingsExchangeHostedEdition.ascx" />
+    <Content Include="SettingsExchangeHostedEditionPolicy.ascx" />
+    <Content Include="ExchangeHostedEdition\AddOrganizationDomain.ascx" />
+    <Content Include="ExchangeHostedEdition\CreateOrganization.ascx" />
+    <Content Include="ExchangeHostedEdition\DeleteOrganization.ascx" />
+    <Content Include="ExchangeHostedEdition\OrganizationDetails.ascx" />
+    <Content Include="ExchangeHostedEdition\UpdateOrganizationCatchAll.ascx" />
+    <Content Include="ExchangeHostedEdition\UpdateOrganizationQuotas.ascx" />
+    <Content Include="ExchangeHostedEdition\UpdateOrganizationServicePlan.ascx" />
     <Content Include="LoginForgotPassword.ascx" />
+    <Content Include="ProviderControls\Exchange2010SP1_Settings.ascx" />
     <Content Include="UserControls\CalendarControl.ascx" />
     <Content Include="UserControls\Comments.ascx" />
     <Content Include="UserControls\ContactDetails.ascx" />
@@ -4220,6 +4308,39 @@
       <SubType>Designer</SubType>
     </Content>
     <Content Include="App_LocalResources\SettingsOrganizationUserSummaryLetter.ascx.resx">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="ProviderControls\App_LocalResources\Exchange2010SP1_Settings.ascx.resx">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="ExchangeHostedEdition\App_LocalResources\AddOrganizationDomain.ascx.resx">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="ExchangeHostedEdition\App_LocalResources\UpdateOrganizationServicePlan.ascx.resx">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="ExchangeHostedEdition\App_LocalResources\CreateOrganization.ascx.resx">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="ExchangeHostedEdition\App_LocalResources\DeleteOrganization.ascx.resx">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="ExchangeHostedEdition\App_LocalResources\OrganizationDetails.ascx.resx">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="ExchangeHostedEdition\App_LocalResources\UpdateOrganizationCatchAll.ascx.resx">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="ExchangeHostedEdition\App_LocalResources\UpdateOrganizationQuotas.ascx.resx">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="App_LocalResources\SettingsExchangeHostedEditionPolicy.ascx.resx">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="App_LocalResources\SpaceSettingsExchangeHostedEdition.ascx.resx">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="App_LocalResources\SettingsExchangeHostedEditionOrganizationSummary.ascx.resx">
       <SubType>Designer</SubType>
     </Content>
     <EmbeddedResource Include="UserControls\App_LocalResources\EditDomainsList.ascx.resx">
@@ -5170,6 +5291,7 @@
     <Content Include="ResizeImage.ashx" />
     <None Include="Web.config" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

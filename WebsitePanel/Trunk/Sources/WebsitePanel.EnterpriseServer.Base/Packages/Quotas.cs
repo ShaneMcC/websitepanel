@@ -84,6 +84,7 @@ order by rg.groupOrder
 		public const string MAIL_MAXBOXSIZE = "Mail.MaxBoxSize";  // Max Mailbox Size
 		public const string MAIL_MAXGROUPMEMBERS = "Mail.MaxGroupMembers";  // Max Group Recipients
 		public const string MAIL_MAXLISTMEMBERS = "Mail.MaxListMembers";  // Max List Recipients
+        public const string MAIL_DISABLESIZEEDIT = "Mail.DisableSizeEdit"; // Disable Mailbox Size Edit
 		public const string EXCHANGE2007_ORGANIZATIONS = "Exchange2007.Organizations";  // Exchange 2007 Organizations
 		public const string EXCHANGE2007_DISKSPACE = "Exchange2007.DiskSpace";  // Organization Disk Space, MB
 		public const string EXCHANGE2007_MAILBOXES = "Exchange2007.Mailboxes";  // Mailboxes per Organization
@@ -102,6 +103,10 @@ order by rg.groupOrder
 		public const string EXCHANGE2007_OWAENABLED = "Exchange2007.OWAEnabled";  // OWA  Enabled by default
 		public const string EXCHANGE2007_MAPIENABLED = "Exchange2007.MAPIEnabled";  // MAPI  Enabled by default
 		public const string EXCHANGE2007_ACTIVESYNCENABLED = "Exchange2007.ActiveSyncEnabled";  // ActiveSync Enabled by default
+        public const string EXCHANGEHOSTEDEDITION_DOMAINS = "ExchangeHostedEdition.Domains";
+        public const string EXCHANGEHOSTEDEDITION_MAILBOXES = "ExchangeHostedEdition.Mailboxes";
+        public const string EXCHANGEHOSTEDEDITION_CONTACTS = "ExchangeHostedEdition.Contacts";
+        public const string EXCHANGEHOSTEDEDITION_DISTRIBUTIONLISTS = "ExchangeHostedEdition.DistributionLists";
 		public const string MSSQL2000_DATABASES = "MsSQL2000.Databases";  // Databases
 		public const string MSSQL2000_USERS = "MsSQL2000.Users";  // Users
 		public const string MSSQL2000_MAXDATABASESIZE = "MsSQL2000.MaxDatabaseSize";  // Max Database Size

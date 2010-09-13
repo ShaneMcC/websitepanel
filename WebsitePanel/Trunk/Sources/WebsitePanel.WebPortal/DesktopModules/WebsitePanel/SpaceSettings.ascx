@@ -25,6 +25,9 @@
             <asp:HyperLink ID="lnkExchangeServer" runat="server" meta:resourcekey="lnkExchangeServer" Text="Exchange Server"></asp:HyperLink>
         </div>
         <div class="ToolLink">
+            <asp:HyperLink ID="lnkExchangeHostedEdition" runat="server" meta:resourcekey="lnkExchangeHostedEdition" Text="Exchange Hosted Edition"></asp:HyperLink>
+        </div>
+        <div class="ToolLink">
             <asp:HyperLink ID="lnkVps" runat="server" meta:resourcekey="lnkVps" Text="Virtual Private Servers"></asp:HyperLink>
         </div>
     </div>

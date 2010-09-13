@@ -38,6 +38,10 @@
                     Text="Exchange Server Policy" NavigateUrl='<%# GetSettingsLink("ExchangePolicy", "SettingsExchangePolicy") %>'></asp:HyperLink>
         </li>
         <li>
+            <asp:HyperLink ID="lnkExchangeHostedEditionPolicy" runat="server" meta:resourcekey="lnkExchangeHostedEditionPolicy"
+                    Text="Exchange Hosted Edition Policy" NavigateUrl='<%# GetSettingsLink("ExchangeHostedEditionPolicy", "SettingsExchangeHostedEditionPolicy") %>'></asp:HyperLink>
+        </li>
+        <li>
             <asp:HyperLink ID="lnkVpsPolicy" runat="server" meta:resourcekey="lnkVpsPolicy"
                     Text="Virtual Private Servers Policy" NavigateUrl='<%# GetSettingsLink("VpsPolicy", "SettingsVpsPolicy") %>'></asp:HyperLink>
         </li>

@@ -68,6 +68,9 @@
       <Link>VersionInfo.cs</Link>
     </Compile>
     <Compile Include="Common\ErrorCodes.cs" />
+    <Compile Include="ExchangeHostedEdition\ExchangeOrganization.cs" />
+    <Compile Include="ExchangeHostedEdition\ExchangeOrganizationDomain.cs" />
+    <Compile Include="ExchangeHostedEdition\IExchangeHostedEdition.cs" />
     <Compile Include="HostedSolution\BaseReport.cs" />
     <Compile Include="HostedSolution\BaseStatistics.cs" />
     <Compile Include="HostedSolution\BlackBerryErrorsCodes.cs" />
@@ -299,6 +302,7 @@
       <Install>true</Install>
     </BootstrapperPackage>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

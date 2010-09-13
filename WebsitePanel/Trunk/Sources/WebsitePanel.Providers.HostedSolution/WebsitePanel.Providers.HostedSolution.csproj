@@ -125,6 +125,7 @@
     <Compile Include="BlackBerry5Provider.cs" />
     <Compile Include="BlackBerryProvider.cs" />
     <Compile Include="Exchange2010.cs" />
+    <Compile Include="HostedSharePointServer2010.cs" />
     <Compile Include="OCSEdge2007R2.cs" />
     <Compile Include="OCS2007R2.cs" />
     <Compile Include="CRMProvider.cs" />

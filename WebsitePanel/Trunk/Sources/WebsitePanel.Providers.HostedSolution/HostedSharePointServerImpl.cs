@@ -43,16 +43,14 @@ namespace WebsitePanel.Providers.HostedSolution
 	/// </summary>
 	public class HostedSharePointServerImpl : MarshalByRefObject
 	{
-		private static readonly string LanguagePacksPath = @"%commonprogramfiles%\microsoft shared\Web Server Extensions\12\HCCab\";
-
 		/// <summary>
 		/// Gets list of supported languages by this installation of SharePoint.
 		/// </summary>
 		/// <returns>List of supported languages</returns>
-		public int[] GetSupportedLanguages()
+        public int[] GetSupportedLanguages(string languagePacksPath)
 		{
 			List<int> languages = new List<int>();
-			string rootDirectory = FileUtils.EvaluateSystemVariables(LanguagePacksPath);
+            string rootDirectory = FileUtils.EvaluateSystemVariables(languagePacksPath);
 			foreach (string dir in Directory.GetDirectories(rootDirectory))
 			{
 				int languageId = 0;

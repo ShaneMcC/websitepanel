@@ -1329,7 +1329,7 @@ namespace WebsitePanel.Providers.Mail
 
                 AliasInfoResult result = aliases.GetAlias(AdminUsername, AdminPassword, GetDomainName(mailAliasName), mailAliasName);
 
-                if ((result.AliasInfo.Name.Equals("Empty")) && (result.AliasInfo.Addresses.Length == 0))
+                if ((!result.Result || (result.AliasInfo.Name.Equals("Empty")) && (result.AliasInfo.Addresses.Length == 0)))
                     return false;
 
                 return true;

@@ -582,6 +582,9 @@ otherwise contact WebsitePanel Software for further assistance.", ex);
 
         private void UpdateApplicationWellKnownDependencies(GalleryApplication app, Dependency dependency)
         {
+            if (dependency == null)
+                return;
+
             if (dependency.IdRef != null && wellKnownDependencies.ContainsKey(dependency.IdRef))
                 app.WellKnownDependencies |= wellKnownDependencies[dependency.IdRef];
 

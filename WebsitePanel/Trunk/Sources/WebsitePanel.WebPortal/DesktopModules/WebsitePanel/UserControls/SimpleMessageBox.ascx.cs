@@ -230,7 +230,7 @@ namespace WebsitePanel.Portal.UserControls
             // error
             if (ex != null)
             {
-                description += "<br><br>" + ex.ToString();
+                description += "<br><br>" + ex.Message;
             }
 
             litDescription.Text = !String.IsNullOrEmpty(description)

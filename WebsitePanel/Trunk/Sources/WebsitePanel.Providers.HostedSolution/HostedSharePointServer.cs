@@ -43,10 +43,16 @@ namespace WebsitePanel.Providers.HostedSolution
 	{
 		private delegate TReturn SharePointAction<TReturn>(HostedSharePointServerImpl impl);
 
-		private static readonly string Wss3RegistryKey = @"SOFTWARE\Microsoft\Shared Tools\Web Server Extensions\12.0";
+		protected string Wss3RegistryKey;
+        protected string Wss3Registry32Key;
+        protected string LanguagePacksPath;
 
-        private static readonly string Wss3Registry32Key = @"SOFTWARE\Wow6432Node\Microsoft\Shared Tools\Web Server Extensions\12.0";
-
+        public HostedSharePointServer()
+        {
+            this.Wss3RegistryKey = @"SOFTWARE\Microsoft\Shared Tools\Web Server Extensions\12.0";
+            this.Wss3Registry32Key = @"SOFTWARE\Wow6432Node\Microsoft\Shared Tools\Web Server Extensions\12.0";
+            this.LanguagePacksPath = @"%commonprogramfiles%\microsoft shared\Web Server Extensions\12\HCCab\";
+        }
 
 		/// <summary>
 		/// Gets root web application uri.
@@ -74,7 +80,7 @@ namespace WebsitePanel.Providers.HostedSolution
 		public int[] GetSupportedLanguages()
 		{
 			HostedSharePointServerImpl impl = new HostedSharePointServerImpl();
-			return impl.GetSupportedLanguages();
+			return impl.GetSupportedLanguages(LanguagePacksPath);
 		}
 
 		/// <summary>
@@ -270,7 +276,7 @@ namespace WebsitePanel.Providers.HostedSolution
 		/// Checks whether Wss 3.0 is installed.
 		/// </summary>
 		/// <returns>true - if it is installed; false - otherwise.</returns>
-		private static bool IsSharePointInstalled()
+		private bool IsSharePointInstalled()
 		{
 			RegistryKey spKey = Registry.LocalMachine.OpenSubKey(Wss3RegistryKey);
             RegistryKey spKey32 = Registry.LocalMachine.OpenSubKey(Wss3Registry32Key);

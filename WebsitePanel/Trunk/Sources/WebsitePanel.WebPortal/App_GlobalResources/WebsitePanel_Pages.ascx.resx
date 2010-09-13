@@ -447,4 +447,10 @@
   <data name="PageTitle.SpaceWeb" xml:space="preserve">
     <value>{user} - {space} - Web</value>
   </data>
+  <data name="PageName.SpaceExchangeHostedEdition" xml:space="preserve">
+    <value>Exchange Hosted Edition</value>
+  </data>
+  <data name="PageTitle.SpaceExchangeHostedEdition" xml:space="preserve">
+    <value>{user} - {space} - Exchange Hosted Edition</value>
+  </data>
 </root>

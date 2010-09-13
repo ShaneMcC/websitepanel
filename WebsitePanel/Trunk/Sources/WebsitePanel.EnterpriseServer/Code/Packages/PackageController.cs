@@ -1514,6 +1514,19 @@ namespace WebsitePanel.EnterpriseServer
                     }
                 }
 
+                // Exchange Hosted Edition
+                else if (String.Compare(PackageSettings.EXCHANGE_HOSTED_EDITION, settingsName, true) == 0)
+                {
+                    // load Exchange service settings
+                    int exchServiceId = GetPackageServiceId(packageId, ResourceGroups.ExchangeHostedEdition);
+                    if (exchServiceId > 0)
+                    {
+                        StringDictionary exchSettings = ServerController.GetServiceSettings(exchServiceId);
+                        settings["temporaryDomain"] = exchSettings["temporaryDomain"];
+                        settings["ecpURL"] = exchSettings["ecpURL"];
+                    }
+                }
+
                 // VPS
                 else if (String.Compare(PackageSettings.VIRTUAL_PRIVATE_SERVERS, settingsName, true) == 0)
                 {

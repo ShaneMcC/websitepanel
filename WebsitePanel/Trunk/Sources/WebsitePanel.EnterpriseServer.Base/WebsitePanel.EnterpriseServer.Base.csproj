@@ -70,6 +70,7 @@
     <Compile Include="Common\GenericStringResult.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Common\MailTemplate.cs" />
     <Compile Include="DatabaseServers\DatabaseBrowserConfiguration.cs" />
     <Compile Include="Ecommerce\BillingCycle.cs" />
     <Compile Include="Ecommerce\Category.cs" />

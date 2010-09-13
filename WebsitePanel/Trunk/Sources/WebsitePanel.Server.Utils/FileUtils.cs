@@ -553,6 +553,8 @@ namespace WebsitePanel.Providers.Utils
 			{
 				//use unicode if necessary
 				zip.UseUnicodeAsNecessary = true;
+                zip.UseZip64WhenSaving = Zip64Option.AsNecessary;
+
 				//skip locked files
 				zip.ZipErrorAction = ZipErrorAction.Skip;
 				foreach (string file in files)

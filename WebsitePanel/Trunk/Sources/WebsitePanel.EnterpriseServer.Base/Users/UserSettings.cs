@@ -41,6 +41,7 @@ namespace WebsitePanel.EnterpriseServer
         public const string PACKAGE_SUMMARY_LETTER = "PackageSummaryLetter";
         public const string PASSWORD_REMINDER_LETTER = "PasswordReminderLetter";
         public const string EXCHANGE_MAILBOX_SETUP_LETTER = "ExchangeMailboxSetupLetter";
+        public const string EXCHANGE_HOSTED_EDITION_ORGANIZATION_SUMMARY = "ExchangeHostedEditionOrganizationSummary";
         public const string HOSTED_SOLUTION_REPORT = "HostedSoluitonReportSummaryLetter";
         public const string ORGANIZATION_USER_SUMMARY_LETTER = "OrganizationUserSummaryLetter";
         public const string VPS_SUMMARY_LETTER = "VpsSummaryLetter";
@@ -52,6 +53,7 @@ namespace WebsitePanel.EnterpriseServer
         public const string SHAREPOINT_POLICY = "SharePointPolicy";
         public const string OS_POLICY = "OsPolicy";
 		public const string EXCHANGE_POLICY = "ExchangePolicy";
+        public const string EXCHANGE_HOSTED_EDITION_POLICY = "ExchangeHostedEditionPolicy";
         public const string WEBSITEPANEL_POLICY = "WebsitePanelPolicy";
         public const string VPS_POLICY = "VpsPolicy";
         public const string DISPLAY_PREFS = "DisplayPreferences";

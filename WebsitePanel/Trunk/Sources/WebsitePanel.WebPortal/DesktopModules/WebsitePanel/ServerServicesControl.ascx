@@ -4,13 +4,22 @@
 	<ItemTemplate>
 		<table width="100%" class="BorderFillBox">
 			<tr>
-				<td class="MediumBold" valign="top" width="140" nowrap>
+				<td class="NormalBold" valign="top" width="140" nowrap>
 					<%# GetSharedLocalizedString("ResourceGroup." + (string)Eval("GroupName")) %>
 				</td>
-				<td align="center" width=100%>
+
+				<td align="right" valign="top" class="Normal">
+				    <asp:hyperlink id="lnkAddService" runat="server"
+				        NavigateUrl='<%# EditServiceUrl("GroupID", Eval("GroupID").ToString(), "add_service") %>'
+				        Text="Add" meta:resourcekey="lnkAddService">
+					</asp:hyperlink>
+				</td>
+			</tr>
+			<tr>
+				<td colspan="2">
 					<asp:DataList ID="dlServices" Runat="server" RepeatDirection="Vertical"
 					    DataSource='<%# GetGroupServices((int)Eval("GroupID")) %>'
-					    CellPadding="4" CellSpacing="1" Width="60%">
+					    CellPadding="4" CellSpacing="1" Width="100%">
 						<ItemStyle CssClass="Brick" HorizontalAlign="Left"></ItemStyle>
 						<ItemTemplate>
 							<b>
@@ -22,14 +31,6 @@
 						</ItemTemplate>
 					</asp:DataList>
 				</td>
-				<td align="right" valign="top" class="NormalBold">
-				    <asp:hyperlink id="lnkAddService" runat="server"
-				        NavigateUrl='<%# EditServiceUrl("GroupID", Eval("GroupID").ToString(), "add_service") %>'
-				        Text="Add" meta:resourcekey="lnkAddService">
-					</asp:hyperlink>
-				</td>
-			</tr>
-			<tr>
 			</tr>
 		</table>
 	</ItemTemplate>
