@@ -646,14 +646,16 @@ namespace WebsitePanel.LocalizationToolkit
 				importedFileName = dialog.FileName;
 
 				string file = Path.GetFileNameWithoutExtension(importedFileName);
-				if (file.StartsWith("WebsitePanel Language Pack "))
+                string filePrefix1 = "WebsitePanel Language Pack ";
+                string filePrefix2 = "WebsitePanel_Language_Pack_";
+                if (file.StartsWith(filePrefix1))
 				{
-					file = file.Substring(18);
+                    file = file.Substring(filePrefix1.Length);
 					importedLocale = file.Substring(0, file.IndexOf(" "));
 				}
-				else if (file.StartsWith("WebsitePanel_Language_Pack_"))
+                else if (file.StartsWith(filePrefix2))
 				{
-					file = file.Substring(18);
+                    file = file.Substring(filePrefix2.Length);
 					importedLocale = file.Substring(0, file.IndexOf("_"));
 				}
 				else

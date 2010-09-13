@@ -3680,6 +3680,46 @@
     <DefaultValue>Allocate Web Site IP Addresses</DefaultValue>
   </Resource>
   <Resource>
+    <File>App_GlobalResources\WebsitePanel_Modules.ascx.resx</File>
+    <Key>ModuleTitle.ExchangeHostedEdition</Key>
+    <DefaultValue>Exchange Hosted Edition</DefaultValue>
+  </Resource>
+  <Resource>
+    <File>App_GlobalResources\WebsitePanel_Modules.ascx.resx</File>
+    <Key>ModuleTitle.HostedExchangeAddOrganizationDomain</Key>
+    <DefaultValue>Add Organization Domain</DefaultValue>
+  </Resource>
+  <Resource>
+    <File>App_GlobalResources\WebsitePanel_Modules.ascx.resx</File>
+    <Key>ModuleTitle.HostedExchangeCreateOrganization</Key>
+    <DefaultValue>Create New Exchange 2010 Organization</DefaultValue>
+  </Resource>
+  <Resource>
+    <File>App_GlobalResources\WebsitePanel_Modules.ascx.resx</File>
+    <Key>ModuleTitle.HostedExchangeDeleteOrganization</Key>
+    <DefaultValue>Delete Organization</DefaultValue>
+  </Resource>
+  <Resource>
+    <File>App_GlobalResources\WebsitePanel_Modules.ascx.resx</File>
+    <Key>ModuleTitle.HostedExchangeOrganizationDetails</Key>
+    <DefaultValue>Organization Details</DefaultValue>
+  </Resource>
+  <Resource>
+    <File>App_GlobalResources\WebsitePanel_Modules.ascx.resx</File>
+    <Key>ModuleTitle.HostedExchangeUpdateOrganizationCatchAll</Key>
+    <DefaultValue>Update Organization Catch-All</DefaultValue>
+  </Resource>
+  <Resource>
+    <File>App_GlobalResources\WebsitePanel_Modules.ascx.resx</File>
+    <Key>ModuleTitle.HostedExchangeUpdateOrganizationQuotas</Key>
+    <DefaultValue>Update Organization Quotas</DefaultValue>
+  </Resource>
+  <Resource>
+    <File>App_GlobalResources\WebsitePanel_Modules.ascx.resx</File>
+    <Key>ModuleTitle.HostedExchangeUpdateOrganizationServicePlan</Key>
+    <DefaultValue>Update Organization Service Plan</DefaultValue>
+  </Resource>
+  <Resource>
     <File>App_GlobalResources\WebsitePanel_Pages.ascx.resx</File>
     <Key>PageName.Login</Key>
     <DefaultValue>Sign In</DefaultValue>
@@ -4228,6 +4268,16 @@
     <File>App_GlobalResources\WebsitePanel_Pages.ascx.resx</File>
     <Key>PageTitle.SpaceWeb</Key>
     <DefaultValue>{user} - {space} - Web</DefaultValue>
+  </Resource>
+  <Resource>
+    <File>App_GlobalResources\WebsitePanel_Pages.ascx.resx</File>
+    <Key>PageName.SpaceExchangeHostedEdition</Key>
+    <DefaultValue>Exchange Hosted Edition</DefaultValue>
+  </Resource>
+  <Resource>
+    <File>App_GlobalResources\WebsitePanel_Pages.ascx.resx</File>
+    <Key>PageTitle.SpaceExchangeHostedEdition</Key>
+    <DefaultValue>{user} - {space} - Exchange Hosted Edition</DefaultValue>
   </Resource>
   <Resource>
     <File>App_GlobalResources\WebsitePanel_SharedResources.ascx.resx</File>
@@ -5597,12 +5647,12 @@
   <Resource>
     <File>App_GlobalResources\WebsitePanel_SharedResources.ascx.resx</File>
     <Key>Error.WEB_APPLICATION_GALLERY_INSTALLED</Key>
-    <DefaultValue>The following errors have been occured:</DefaultValue>
+    <DefaultValue>The application could not be installed:</DefaultValue>
   </Resource>
   <Resource>
     <File>App_GlobalResources\WebsitePanel_SharedResources.ascx.resx</File>
     <Key>Warning.WEB_APPLICATION_GALLERY_INSTALLED</Key>
-    <DefaultValue>Application has been installed but the following errors have been occured:</DefaultValue>
+    <DefaultValue>The application could not be installed:</DefaultValue>
   </Resource>
   <Resource>
     <File>App_GlobalResources\WebsitePanel_SharedResources.ascx.resx</File>
@@ -11608,12 +11658,7 @@
   <Resource>
     <File>App_GlobalResources\WebsitePanel_SharedResources.ascx.resx</File>
     <Key>Error.WAG_NOT_AVAILABLE</Key>
-    <DefaultValue>Web Application Gallery is unavailable</DefaultValue>
-  </Resource>
-  <Resource>
-    <File>App_GlobalResources\WebsitePanel_SharedResources.ascx.resx</File>
-    <Key>ModuleWAG.WAG_MODULE_NOT_AVAILABLE</Key>
-    <DefaultValue>Please contact your service provider as currently Web Application Gallery is unavailable.</DefaultValue>
+    <DefaultValue>Web Application Gallery module is unavailable:</DefaultValue>
   </Resource>
   <Resource>
     <File>App_GlobalResources\WebsitePanel_SharedResources.ascx.resx</File>
@@ -11629,21 +11674,6 @@
     <File>App_GlobalResources\WebsitePanel_SharedResources.ascx.resx</File>
     <Key>Error.WAG_INSTALL_GENERIC_MODULE_ERROR</Key>
     <DefaultValue>Web Gallery Application installation failure</DefaultValue>
-  </Resource>
-  <Resource>
-    <File>App_GlobalResources\WebsitePanel_SharedResources.ascx.resx</File>
-    <Key>ModuleWAG.Application installation failure</Key>
-    <DefaultValue>There was an error while installing the application. Please see audit log for more details or contact your hosting service provider to resolve the error.</DefaultValue>
-  </Resource>
-  <Resource>
-    <File>App_GlobalResources\WebsitePanel_SharedResources.ascx.resx</File>
-    <Key>ModuleWAG.WAG_GENERIC_MODULE_ERROR</Key>
-    <DefaultValue>There was an error while interacting the module. Please see audit log for more details or contact your hosting service provider to resolve the error.</DefaultValue>
-  </Resource>
-  <Resource>
-    <File>App_GlobalResources\WebsitePanel_SharedResources.ascx.resx</File>
-    <Key>ModuleWAG.WAG_INSTALL_GENERIC_MODULE_ERROR</Key>
-    <DefaultValue>There was an error while installing the application. Please see audit log for more details or contact your hosting service provider to resolve the error.</DefaultValue>
   </Resource>
   <Resource>
     <File>App_GlobalResources\WebsitePanel_SharedResources.ascx.resx</File>
@@ -11839,6 +11869,381 @@
     <File>App_GlobalResources\WebsitePanel_SharedResources.ascx.resx</File>
     <Key>Quota.Web.AspNet40</Key>
     <DefaultValue>ASP.NET 4.0</DefaultValue>
+  </Resource>
+  <Resource>
+    <File>App_GlobalResources\WebsitePanel_SharedResources.ascx.resx</File>
+    <Key>ReportResourceGroup.MsSQL2008</Key>
+    <DefaultValue>SQL Server 2008</DefaultValue>
+  </Resource>
+  <Resource>
+    <File>App_GlobalResources\WebsitePanel_SharedResources.ascx.resx</File>
+    <Key>WebAppGallery.ApplicationInstallationError</Key>
+    <DefaultValue>Error while install application pack</DefaultValue>
+  </Resource>
+  <Resource>
+    <File>App_GlobalResources\WebsitePanel_SharedResources.ascx.resx</File>
+    <Key>WebAppGallery.AppPathParameterNotFound</Key>
+    <DefaultValue>"iisApp" parameter was not specified</DefaultValue>
+  </Resource>
+  <Resource>
+    <File>App_GlobalResources\WebsitePanel_SharedResources.ascx.resx</File>
+    <Key>WebAppGallery.DatabaseAdminPasswordNotSpecified</Key>
+    <DefaultValue>Database administrator password must be specified on database service properties screen</DefaultValue>
+  </Resource>
+  <Resource>
+    <File>App_GlobalResources\WebsitePanel_SharedResources.ascx.resx</File>
+    <Key>WebAppGallery.DatabaseAdminUsernameNotSpecified</Key>
+    <DefaultValue>Database administrator username must be specified on database service properties screen. To use Web App Gallery module with SQL Server you must use "SQL Server authentication"</DefaultValue>
+  </Resource>
+  <Resource>
+    <File>App_GlobalResources\WebsitePanel_SharedResources.ascx.resx</File>
+    <Key>WebAppGallery.DatabaseCreationError</Key>
+    <DefaultValue>Cannot create database</DefaultValue>
+  </Resource>
+  <Resource>
+    <File>App_GlobalResources\WebsitePanel_SharedResources.ascx.resx</File>
+    <Key>WebAppGallery.DatabaseCreationException</Key>
+    <DefaultValue>Error while creating database: {1}</DefaultValue>
+  </Resource>
+  <Resource>
+    <File>App_GlobalResources\WebsitePanel_SharedResources.ascx.resx</File>
+    <Key>WebAppGallery.DatabaseServerExternalAddressIsEmpty</Key>
+    <DefaultValue>In order to use Web App Gallery you have to specify "External Address" on database service properties screen. It must be fully-qualified name of the database server or its IP address</DefaultValue>
+  </Resource>
+  <Resource>
+    <File>App_GlobalResources\WebsitePanel_SharedResources.ascx.resx</File>
+    <Key>WebAppGallery.DatabaseServiceIsNotAvailable</Key>
+    <DefaultValue>Database service is not available</DefaultValue>
+  </Resource>
+  <Resource>
+    <File>App_GlobalResources\WebsitePanel_SharedResources.ascx.resx</File>
+    <Key>WebAppGallery.DatabaseUserCannotAccessDatabase</Key>
+    <DefaultValue>Database user '{1}' cannot access selected database</DefaultValue>
+  </Resource>
+  <Resource>
+    <File>App_GlobalResources\WebsitePanel_SharedResources.ascx.resx</File>
+    <Key>WebAppGallery.DatabaseUserCreationError</Key>
+    <DefaultValue>Cannot create database user account</DefaultValue>
+  </Resource>
+  <Resource>
+    <File>App_GlobalResources\WebsitePanel_SharedResources.ascx.resx</File>
+    <Key>WebAppGallery.DatabaseUserCreationException</Key>
+    <DefaultValue>Error while creating database user account: {1}</DefaultValue>
+  </Resource>
+  <Resource>
+    <File>App_GlobalResources\WebsitePanel_SharedResources.ascx.resx</File>
+    <Key>WebAppGallery.GeneralError</Key>
+    <DefaultValue>Error occured in Web App Gallery module:</DefaultValue>
+  </Resource>
+  <Resource>
+    <File>App_GlobalResources\WebsitePanel_SharedResources.ascx.resx</File>
+    <Key>WebAppGallery.GetApplicationError</Key>
+    <DefaultValue>Cannot get application pack details</DefaultValue>
+  </Resource>
+  <Resource>
+    <File>App_GlobalResources\WebsitePanel_SharedResources.ascx.resx</File>
+    <Key>WebAppGallery.GetApplicationParametersError</Key>
+    <DefaultValue>Cannot get application pack parameters</DefaultValue>
+  </Resource>
+  <Resource>
+    <File>App_GlobalResources\WebsitePanel_SharedResources.ascx.resx</File>
+    <Key>WebAppGallery.GetApplicationsError</Key>
+    <DefaultValue>Cannot get the list of applications</DefaultValue>
+  </Resource>
+  <Resource>
+    <File>App_GlobalResources\WebsitePanel_SharedResources.ascx.resx</File>
+    <Key>WebAppGallery.GetCategoriesError</Key>
+    <DefaultValue>Cannot get the list of application categories</DefaultValue>
+  </Resource>
+  <Resource>
+    <File>App_GlobalResources\WebsitePanel_SharedResources.ascx.resx</File>
+    <Key>WebAppGallery.MsDeployIsNotInstalled</Key>
+    <DefaultValue>"MS Deploy" library is not installed on the web server</DefaultValue>
+  </Resource>
+  <Resource>
+    <File>App_GlobalResources\WebsitePanel_SharedResources.ascx.resx</File>
+    <Key>WebAppGallery.PackageFileNotFound</Key>
+    <DefaultValue>Application package file could not be found in the cache: {1}</DefaultValue>
+  </Resource>
+  <Resource>
+    <File>App_GlobalResources\WebsitePanel_SharedResources.ascx.resx</File>
+    <Key>WebAppGallery.PackageInstallationError</Key>
+    <DefaultValue>Error while installing application package: {1}</DefaultValue>
+  </Resource>
+  <Resource>
+    <File>App_GlobalResources\WebsitePanel_SharedResources.ascx.resx</File>
+    <Key>WebAppGallery.ProcessingFeedXMLError</Key>
+    <DefaultValue>Error processing Applications XML feed: {1}</DefaultValue>
+  </Resource>
+  <Resource>
+    <File>App_GlobalResources\WebsitePanel_SharedResources.ascx.resx</File>
+    <Key>WebAppGallery.ProcessingPackageError</Key>
+    <DefaultValue>Error processing Application package: {1}</DefaultValue>
+  </Resource>
+  <Resource>
+    <File>App_GlobalResources\WebsitePanel_SharedResources.ascx.resx</File>
+    <Key>WebAppGallery.WebApplicationNotFound</Key>
+    <DefaultValue>Application with ID "{1}" was not found</DefaultValue>
+  </Resource>
+  <Resource>
+    <File>App_GlobalResources\WebsitePanel_SharedResources.ascx.resx</File>
+    <Key>WebAppGallery.WebSiteNotFound</Key>
+    <DefaultValue>Web site "{1}" was not found</DefaultValue>
+  </Resource>
+  <Resource>
+    <File>App_GlobalResources\WebsitePanel_SharedResources.ascx.resx</File>
+    <Key>Warning.WAG_CANNOT_INSTALL_APPLICATION</Key>
+    <DefaultValue>Selected application cannot be installed.</DefaultValue>
+  </Resource>
+  <Resource>
+    <File>App_GlobalResources\WebsitePanel_SharedResources.ascx.resx</File>
+    <Key>WebAppGallery.AspNet20Required</Key>
+    <DefaultValue>ASP.NET 2.0</DefaultValue>
+  </Resource>
+  <Resource>
+    <File>App_GlobalResources\WebsitePanel_SharedResources.ascx.resx</File>
+    <Key>WebAppGallery.AspNet40Required</Key>
+    <DefaultValue>ASP.NET 4.0</DefaultValue>
+  </Resource>
+  <Resource>
+    <File>App_GlobalResources\WebsitePanel_SharedResources.ascx.resx</File>
+    <Key>WebAppGallery.DatabaseRequired</Key>
+    <DefaultValue>Either SQL Server or MySQL databases</DefaultValue>
+  </Resource>
+  <Resource>
+    <File>App_GlobalResources\WebsitePanel_SharedResources.ascx.resx</File>
+    <Key>WebAppGallery.MySQLRequired</Key>
+    <DefaultValue>MySQL databases</DefaultValue>
+  </Resource>
+  <Resource>
+    <File>App_GlobalResources\WebsitePanel_SharedResources.ascx.resx</File>
+    <Key>WebAppGallery.PackageDoesNotMeetRequirements</Key>
+    <DefaultValue>Your hosting package does not meet requirements to install the application. Please contact your hosting provider to upgrade your package with the following features:</DefaultValue>
+  </Resource>
+  <Resource>
+    <File>App_GlobalResources\WebsitePanel_SharedResources.ascx.resx</File>
+    <Key>WebAppGallery.PhpRequired</Key>
+    <DefaultValue>PHP</DefaultValue>
+  </Resource>
+  <Resource>
+    <File>App_GlobalResources\WebsitePanel_SharedResources.ascx.resx</File>
+    <Key>WebAppGallery.SQLRequired</Key>
+    <DefaultValue>SQL Server databases</DefaultValue>
+  </Resource>
+  <Resource>
+    <File>App_GlobalResources\WebsitePanel_SharedResources.ascx.resx</File>
+    <Key>Quota.ExchangeHostedEdition.Contacts</Key>
+    <DefaultValue>Contacts</DefaultValue>
+  </Resource>
+  <Resource>
+    <File>App_GlobalResources\WebsitePanel_SharedResources.ascx.resx</File>
+    <Key>Quota.ExchangeHostedEdition.DistributionLists</Key>
+    <DefaultValue>Distribution Lists</DefaultValue>
+  </Resource>
+  <Resource>
+    <File>App_GlobalResources\WebsitePanel_SharedResources.ascx.resx</File>
+    <Key>Quota.ExchangeHostedEdition.Domains</Key>
+    <DefaultValue>Domains</DefaultValue>
+  </Resource>
+  <Resource>
+    <File>App_GlobalResources\WebsitePanel_SharedResources.ascx.resx</File>
+    <Key>Quota.ExchangeHostedEdition.Mailboxes</Key>
+    <DefaultValue>Mailboxes</DefaultValue>
+  </Resource>
+  <Resource>
+    <File>App_GlobalResources\WebsitePanel_SharedResources.ascx.resx</File>
+    <Key>ReportResourceGroup.ExchangeHostedEdition</Key>
+    <DefaultValue>Exchange 2010 Hosted Edition</DefaultValue>
+  </Resource>
+  <Resource>
+    <File>App_GlobalResources\WebsitePanel_SharedResources.ascx.resx</File>
+    <Key>ResourceGroup.ExchangeHostedEdition</Key>
+    <DefaultValue>Exchange Hosted Edition</DefaultValue>
+  </Resource>
+  <Resource>
+    <File>App_GlobalResources\WebsitePanel_SharedResources.ascx.resx</File>
+    <Key>Error.EXCHANGE_HOSTED_CREATE_ORGANIZATION</Key>
+    <DefaultValue>Error creating Exchange organization</DefaultValue>
+  </Resource>
+  <Resource>
+    <File>App_GlobalResources\WebsitePanel_SharedResources.ascx.resx</File>
+    <Key>Error.EXCHANGE_HOSTED_DELETE_ORGANIZATION</Key>
+    <DefaultValue>Exchange organization cannot be deleted</DefaultValue>
+  </Resource>
+  <Resource>
+    <File>App_GlobalResources\WebsitePanel_SharedResources.ascx.resx</File>
+    <Key>Error.EXCHANGE_HOSTED_SEND_SUMMARY</Key>
+    <DefaultValue>Error sending Exchange organization summary information</DefaultValue>
+  </Resource>
+  <Resource>
+    <File>App_GlobalResources\WebsitePanel_SharedResources.ascx.resx</File>
+    <Key>ErrorDescription.EXCHANGE_HOSTED_CREATE_ORGANIZATION</Key>
+    <DefaultValue>Please contact your hosting provider.</DefaultValue>
+  </Resource>
+  <Resource>
+    <File>App_GlobalResources\WebsitePanel_SharedResources.ascx.resx</File>
+    <Key>ErrorDescription.EXCHANGE_HOSTED_SEND_SUMMARY</Key>
+    <DefaultValue>Please contact your hosting provider.</DefaultValue>
+  </Resource>
+  <Resource>
+    <File>App_GlobalResources\WebsitePanel_SharedResources.ascx.resx</File>
+    <Key>ServiceItemType.ExchangeOrganization</Key>
+    <DefaultValue>Exchange Organization</DefaultValue>
+  </Resource>
+  <Resource>
+    <File>App_GlobalResources\WebsitePanel_SharedResources.ascx.resx</File>
+    <Key>Success.EXCHANGE_HOSTED_SEND_SUMMARY</Key>
+    <DefaultValue>Exchange organization summary information has been sent</DefaultValue>
+  </Resource>
+  <Resource>
+    <File>App_GlobalResources\WebsitePanel_SharedResources.ascx.resx</File>
+    <Key>Warning.EXCHANGE_HOSTED_CONFIRM_DELETE_ORGANIZATION</Key>
+    <DefaultValue>You have to tick a checkbox to confirm organization deletion</DefaultValue>
+  </Resource>
+  <Resource>
+    <File>App_GlobalResources\WebsitePanel_SharedResources.ascx.resx</File>
+    <Key>Error.EXCHANGE_HOSTED_ADD_DOMAIN</Key>
+    <DefaultValue>Organization domain cannot be added</DefaultValue>
+  </Resource>
+  <Resource>
+    <File>App_GlobalResources\WebsitePanel_SharedResources.ascx.resx</File>
+    <Key>Error.EXCHANGE_HOSTED_CHANGE_QUOTAS</Key>
+    <DefaultValue>Organization quotas cannot be changed</DefaultValue>
+  </Resource>
+  <Resource>
+    <File>App_GlobalResources\WebsitePanel_SharedResources.ascx.resx</File>
+    <Key>Error.EXCHANGE_HOSTED_CHANGE_SERVICE_PLAN</Key>
+    <DefaultValue>Organization Service Plan cannot be changed</DefaultValue>
+  </Resource>
+  <Resource>
+    <File>App_GlobalResources\WebsitePanel_SharedResources.ascx.resx</File>
+    <Key>Error.EXCHANGE_HOSTED_GET_DOMAINS</Key>
+    <DefaultValue>Error reading Exchange organization domains</DefaultValue>
+  </Resource>
+  <Resource>
+    <File>App_GlobalResources\WebsitePanel_SharedResources.ascx.resx</File>
+    <Key>Error.EXCHANGE_HOSTED_GET_ORGANIZATION</Key>
+    <DefaultValue>Organization details cannot be loaded.</DefaultValue>
+  </Resource>
+  <Resource>
+    <File>App_GlobalResources\WebsitePanel_SharedResources.ascx.resx</File>
+    <Key>ErrorDescription.EXCHANGE_HOSTED_ADD_DOMAIN</Key>
+    <DefaultValue>Please contact your hosting provider.</DefaultValue>
+  </Resource>
+  <Resource>
+    <File>App_GlobalResources\WebsitePanel_SharedResources.ascx.resx</File>
+    <Key>ErrorDescription.EXCHANGE_HOSTED_CHANGE_QUOTAS</Key>
+    <DefaultValue>Please contact your hosting provider.</DefaultValue>
+  </Resource>
+  <Resource>
+    <File>App_GlobalResources\WebsitePanel_SharedResources.ascx.resx</File>
+    <Key>ErrorDescription.EXCHANGE_HOSTED_CHANGE_SERVICE_PLAN</Key>
+    <DefaultValue>Please contact your hosting provider.</DefaultValue>
+  </Resource>
+  <Resource>
+    <File>App_GlobalResources\WebsitePanel_SharedResources.ascx.resx</File>
+    <Key>ErrorDescription.EXCHANGE_HOSTED_GET_ORGANIZATION</Key>
+    <DefaultValue>Please contact your hosting provider.</DefaultValue>
+  </Resource>
+  <Resource>
+    <File>App_GlobalResources\WebsitePanel_SharedResources.ascx.resx</File>
+    <Key>Error.EXCHANGE_HOSTED_DELETE_DOMAIN</Key>
+    <DefaultValue>Organization domain cannot be deleted</DefaultValue>
+  </Resource>
+  <Resource>
+    <File>App_GlobalResources\WebsitePanel_SharedResources.ascx.resx</File>
+    <Key>ExchangeHostedEdition.AddDomainAlreadyUsedError</Key>
+    <DefaultValue>Specified domain name already added into organization.</DefaultValue>
+  </Resource>
+  <Resource>
+    <File>App_GlobalResources\WebsitePanel_SharedResources.ascx.resx</File>
+    <Key>ExchangeHostedEdition.AddDomainError</Key>
+    <DefaultValue>Error adding organization domain.</DefaultValue>
+  </Resource>
+  <Resource>
+    <File>App_GlobalResources\WebsitePanel_SharedResources.ascx.resx</File>
+    <Key>ExchangeHostedEdition.AddDomainExistsError</Key>
+    <DefaultValue>Specified domain name already exists.</DefaultValue>
+  </Resource>
+  <Resource>
+    <File>App_GlobalResources\WebsitePanel_SharedResources.ascx.resx</File>
+    <Key>ExchangeHostedEdition.AddDomainQuotaExceededError</Key>
+    <DefaultValue>Maximum domains quota has been reached.</DefaultValue>
+  </Resource>
+  <Resource>
+    <File>App_GlobalResources\WebsitePanel_SharedResources.ascx.resx</File>
+    <Key>ExchangeHostedEdition.CreateOrganizationError</Key>
+    <DefaultValue>Error creating organization. See system logs for detailed messages.</DefaultValue>
+  </Resource>
+  <Resource>
+    <File>App_GlobalResources\WebsitePanel_SharedResources.ascx.resx</File>
+    <Key>ExchangeHostedEdition.DeleteDomainError</Key>
+    <DefaultValue>Error deleting organization domain.</DefaultValue>
+  </Resource>
+  <Resource>
+    <File>App_GlobalResources\WebsitePanel_SharedResources.ascx.resx</File>
+    <Key>ExchangeHostedEdition.DeleteOrganizationError</Key>
+    <DefaultValue>Error deleting organization. See system logs for detailed messages.</DefaultValue>
+  </Resource>
+  <Resource>
+    <File>App_GlobalResources\WebsitePanel_SharedResources.ascx.resx</File>
+    <Key>ExchangeHostedEdition.ExchangeServiceNotEnabledError</Key>
+    <DefaultValue>Exchange Hosted Edition service is not enabled for the hosting space.</DefaultValue>
+  </Resource>
+  <Resource>
+    <File>App_GlobalResources\WebsitePanel_SharedResources.ascx.resx</File>
+    <Key>ExchangeHostedEdition.GeneralError</Key>
+    <DefaultValue>General module error.</DefaultValue>
+  </Resource>
+  <Resource>
+    <File>App_GlobalResources\WebsitePanel_SharedResources.ascx.resx</File>
+    <Key>ExchangeHostedEdition.OfferIdIsNotSetError</Key>
+    <DefaultValue>Offer ID is not specified on Exchange service settings.</DefaultValue>
+  </Resource>
+  <Resource>
+    <File>App_GlobalResources\WebsitePanel_SharedResources.ascx.resx</File>
+    <Key>ExchangeHostedEdition.OrganizationNotFoundError</Key>
+    <DefaultValue>Organization not found.</DefaultValue>
+  </Resource>
+  <Resource>
+    <File>App_GlobalResources\WebsitePanel_SharedResources.ascx.resx</File>
+    <Key>ExchangeHostedEdition.ProgramIdIsNotSetError</Key>
+    <DefaultValue>Program ID is not specified on Exchange service settings.</DefaultValue>
+  </Resource>
+  <Resource>
+    <File>App_GlobalResources\WebsitePanel_SharedResources.ascx.resx</File>
+    <Key>ExchangeHostedEdition.SendOrganizationSummaryError</Key>
+    <DefaultValue>Error sending organization summary information.</DefaultValue>
+  </Resource>
+  <Resource>
+    <File>App_GlobalResources\WebsitePanel_SharedResources.ascx.resx</File>
+    <Key>ExchangeHostedEdition.SendOrganizationTemplateNotSetError</Key>
+    <DefaultValue>Organization summary information template is not set.</DefaultValue>
+  </Resource>
+  <Resource>
+    <File>App_GlobalResources\WebsitePanel_SharedResources.ascx.resx</File>
+    <Key>ExchangeHostedEdition.UpdateCatchAllError</Key>
+    <DefaultValue>Error updating catch-all account.</DefaultValue>
+  </Resource>
+  <Resource>
+    <File>App_GlobalResources\WebsitePanel_SharedResources.ascx.resx</File>
+    <Key>ExchangeHostedEdition.UpdateQuotasError</Key>
+    <DefaultValue>Error updating organization quotas.</DefaultValue>
+  </Resource>
+  <Resource>
+    <File>App_GlobalResources\WebsitePanel_SharedResources.ascx.resx</File>
+    <Key>ExchangeHostedEdition.UpdateQuotasWrongQuotaError</Key>
+    <DefaultValue>One of the specified quotas exceed maximum value allowed.</DefaultValue>
+  </Resource>
+  <Resource>
+    <File>App_GlobalResources\WebsitePanel_SharedResources.ascx.resx</File>
+    <Key>ExchangeHostedEdition.UpdateServicePlanError</Key>
+    <DefaultValue>Error changing organization service plan. See system logs for detailed messages.</DefaultValue>
+  </Resource>
+  <Resource>
+    <File>App_GlobalResources\WebsitePanel_SharedResources.ascx.resx</File>
+    <Key>Quota.Mail.DisableSizeEdit</Key>
+    <DefaultValue>Disable Mailbox Size Edit</DefaultValue>
   </Resource>
   <Resource>
     <File>DesktopModules\Ecommerce\App_LocalResources\BillingCycles.ascx.resx</File>
@@ -20688,6 +21093,56 @@ for your installation of ResellerClub .NET API Kit.&lt;/div&gt;</DefaultValue>
     <DefaultValue>Use Host Settings</DefaultValue>
   </Resource>
   <Resource>
+    <File>DesktopModules\WebsitePanel\App_LocalResources\SettingsExchangeHostedEditionOrganizationSummary.ascx.resx</File>
+    <Key>ddlPriorityItem.High</Key>
+    <DefaultValue>High</DefaultValue>
+  </Resource>
+  <Resource>
+    <File>DesktopModules\WebsitePanel\App_LocalResources\SettingsExchangeHostedEditionOrganizationSummary.ascx.resx</File>
+    <Key>ddlPriorityItem.Low</Key>
+    <DefaultValue>Low</DefaultValue>
+  </Resource>
+  <Resource>
+    <File>DesktopModules\WebsitePanel\App_LocalResources\SettingsExchangeHostedEditionOrganizationSummary.ascx.resx</File>
+    <Key>ddlPriorityItem.Normal</Key>
+    <DefaultValue>Normal</DefaultValue>
+  </Resource>
+  <Resource>
+    <File>DesktopModules\WebsitePanel\App_LocalResources\SettingsExchangeHostedEditionOrganizationSummary.ascx.resx</File>
+    <Key>lblCC.Text</Key>
+    <DefaultValue>CC:</DefaultValue>
+  </Resource>
+  <Resource>
+    <File>DesktopModules\WebsitePanel\App_LocalResources\SettingsExchangeHostedEditionOrganizationSummary.ascx.resx</File>
+    <Key>lblFrom.Text</Key>
+    <DefaultValue>From:</DefaultValue>
+  </Resource>
+  <Resource>
+    <File>DesktopModules\WebsitePanel\App_LocalResources\SettingsExchangeHostedEditionOrganizationSummary.ascx.resx</File>
+    <Key>lblHtmlBody.Text</Key>
+    <DefaultValue>HTML Body:</DefaultValue>
+  </Resource>
+  <Resource>
+    <File>DesktopModules\WebsitePanel\App_LocalResources\SettingsExchangeHostedEditionOrganizationSummary.ascx.resx</File>
+    <Key>lblPriority.Text</Key>
+    <DefaultValue>Priority:</DefaultValue>
+  </Resource>
+  <Resource>
+    <File>DesktopModules\WebsitePanel\App_LocalResources\SettingsExchangeHostedEditionOrganizationSummary.ascx.resx</File>
+    <Key>lblSubject.Text</Key>
+    <DefaultValue>Subject:</DefaultValue>
+  </Resource>
+  <Resource>
+    <File>DesktopModules\WebsitePanel\App_LocalResources\SettingsExchangeHostedEditionOrganizationSummary.ascx.resx</File>
+    <Key>lblTextBody.Text</Key>
+    <DefaultValue>Text Body:</DefaultValue>
+  </Resource>
+  <Resource>
+    <File>DesktopModules\WebsitePanel\App_LocalResources\SettingsExchangeHostedEditionPolicy.ascx.resx</File>
+    <Key>secMailboxPassword.Text</Key>
+    <DefaultValue>Mailbox Password Policy</DefaultValue>
+  </Resource>
+  <Resource>
     <File>DesktopModules\WebsitePanel\App_LocalResources\SettingsExchangeMailboxSetupLetter.ascx.resx</File>
     <Key>ddlPriorityItem.High</Key>
     <DefaultValue>High</DefaultValue>
@@ -20841,6 +21296,51 @@ for your installation of ResellerClub .NET API Kit.&lt;/div&gt;</DefaultValue>
     <File>DesktopModules\WebsitePanel\App_LocalResources\SettingsOperatingSystemPolicy.ascx.resx</File>
     <Key>secOdbc.Text</Key>
     <DefaultValue>ODBC DSNs Policy</DefaultValue>
+  </Resource>
+  <Resource>
+    <File>DesktopModules\WebsitePanel\App_LocalResources\SettingsOrganizationUserSummaryLetter.ascx.resx</File>
+    <Key>ddlPriorityItem.High</Key>
+    <DefaultValue>High</DefaultValue>
+  </Resource>
+  <Resource>
+    <File>DesktopModules\WebsitePanel\App_LocalResources\SettingsOrganizationUserSummaryLetter.ascx.resx</File>
+    <Key>ddlPriorityItem.Low</Key>
+    <DefaultValue>Low</DefaultValue>
+  </Resource>
+  <Resource>
+    <File>DesktopModules\WebsitePanel\App_LocalResources\SettingsOrganizationUserSummaryLetter.ascx.resx</File>
+    <Key>ddlPriorityItem.Normal</Key>
+    <DefaultValue>Normal</DefaultValue>
+  </Resource>
+  <Resource>
+    <File>DesktopModules\WebsitePanel\App_LocalResources\SettingsOrganizationUserSummaryLetter.ascx.resx</File>
+    <Key>lblCC.Text</Key>
+    <DefaultValue>CC:</DefaultValue>
+  </Resource>
+  <Resource>
+    <File>DesktopModules\WebsitePanel\App_LocalResources\SettingsOrganizationUserSummaryLetter.ascx.resx</File>
+    <Key>lblFrom.Text</Key>
+    <DefaultValue>From:</DefaultValue>
+  </Resource>
+  <Resource>
+    <File>DesktopModules\WebsitePanel\App_LocalResources\SettingsOrganizationUserSummaryLetter.ascx.resx</File>
+    <Key>lblHtmlBody.Text</Key>
+    <DefaultValue>HTML Body:</DefaultValue>
+  </Resource>
+  <Resource>
+    <File>DesktopModules\WebsitePanel\App_LocalResources\SettingsOrganizationUserSummaryLetter.ascx.resx</File>
+    <Key>lblPriority.Text</Key>
+    <DefaultValue>Priority:</DefaultValue>
+  </Resource>
+  <Resource>
+    <File>DesktopModules\WebsitePanel\App_LocalResources\SettingsOrganizationUserSummaryLetter.ascx.resx</File>
+    <Key>lblSubject.Text</Key>
+    <DefaultValue>Subject:</DefaultValue>
+  </Resource>
+  <Resource>
+    <File>DesktopModules\WebsitePanel\App_LocalResources\SettingsOrganizationUserSummaryLetter.ascx.resx</File>
+    <Key>lblTextBody.Text</Key>
+    <DefaultValue>Text Body:</DefaultValue>
   </Resource>
   <Resource>
     <File>DesktopModules\WebsitePanel\App_LocalResources\SettingsPackageSummaryLetter.ascx.resx</File>
@@ -22378,6 +22878,11 @@ for your installation of ResellerClub .NET API Kit.&lt;/div&gt;</DefaultValue>
     <DefaultValue>Virtual Private Servers</DefaultValue>
   </Resource>
   <Resource>
+    <File>DesktopModules\WebsitePanel\App_LocalResources\SpaceSettings.ascx.resx</File>
+    <Key>lnkExchangeHostedEdition.Text</Key>
+    <DefaultValue>Exchange Hosted Edition</DefaultValue>
+  </Resource>
+  <Resource>
     <File>DesktopModules\WebsitePanel\App_LocalResources\SpaceSettingsEditor.ascx.resx</File>
     <Key>btnCancel.Text</Key>
     <DefaultValue>Cancel</DefaultValue>
@@ -22401,6 +22906,26 @@ for your installation of ResellerClub .NET API Kit.&lt;/div&gt;</DefaultValue>
     <File>DesktopModules\WebsitePanel\App_LocalResources\SpaceSettingsEditor.ascx.resx</File>
     <Key>gvDomains.Empty</Key>
     <DefaultValue>The list is empty.</DefaultValue>
+  </Resource>
+  <Resource>
+    <File>DesktopModules\WebsitePanel\App_LocalResources\SpaceSettingsExchangeHostedEdition.ascx.resx</File>
+    <Key>locDomainTemplates.Text</Key>
+    <DefaultValue>Domain Templates</DefaultValue>
+  </Resource>
+  <Resource>
+    <File>DesktopModules\WebsitePanel\App_LocalResources\SpaceSettingsExchangeHostedEdition.ascx.resx</File>
+    <Key>locEcpDomain.Text</Key>
+    <DefaultValue>Exchange Control Panel URL:</DefaultValue>
+  </Resource>
+  <Resource>
+    <File>DesktopModules\WebsitePanel\App_LocalResources\SpaceSettingsExchangeHostedEdition.ascx.resx</File>
+    <Key>locEcpURLDescr.Text</Key>
+    <DefaultValue>You can use [DOMAIN_NAME] variable for organization default domain.</DefaultValue>
+  </Resource>
+  <Resource>
+    <File>DesktopModules\WebsitePanel\App_LocalResources\SpaceSettingsExchangeHostedEdition.ascx.resx</File>
+    <Key>locTemporaryDomain.Text</Key>
+    <DefaultValue>Temporary domain:</DefaultValue>
   </Resource>
   <Resource>
     <File>DesktopModules\WebsitePanel\App_LocalResources\SpaceSettingsExchangeServer.ascx.resx</File>
@@ -23115,6 +23640,11 @@ The following substitution variables can be used in the pattern:&lt;br/&gt;
     <DefaultValue>VPS Summary Letter</DefaultValue>
   </Resource>
   <Resource>
+    <File>DesktopModules\WebsitePanel\App_LocalResources\UserAccountMailTemplateSettings.ascx.resx</File>
+    <Key>lnkExchangeHostedEditionOrganizationSummary.Text</Key>
+    <DefaultValue>Exchange Hosted Edition Organization Summary</DefaultValue>
+  </Resource>
+  <Resource>
     <File>DesktopModules\WebsitePanel\App_LocalResources\UserAccountMenu.ascx.resx</File>
     <Key>locMenuTitle.Text</Key>
     <DefaultValue>Account Menu</DefaultValue>
@@ -23173,6 +23703,11 @@ The following substitution variables can be used in the pattern:&lt;br/&gt;
     <File>DesktopModules\WebsitePanel\App_LocalResources\UserAccountPolicySettings.ascx.resx</File>
     <Key>lnkWebPolicy.Text</Key>
     <DefaultValue>WEB Policy</DefaultValue>
+  </Resource>
+  <Resource>
+    <File>DesktopModules\WebsitePanel\App_LocalResources\UserAccountPolicySettings.ascx.resx</File>
+    <Key>lnkExchangeHostedEditionPolicy.Text</Key>
+    <DefaultValue>Exchange Hosted Edition Policy</DefaultValue>
   </Resource>
   <Resource>
     <File>DesktopModules\WebsitePanel\App_LocalResources\UserAccountSettings.ascx.resx</File>
@@ -24015,6 +24550,31 @@ The following substitution variables can be used in the pattern:&lt;br/&gt;
     <DefaultValue>Next</DefaultValue>
   </Resource>
   <Resource>
+    <File>DesktopModules\WebsitePanel\App_LocalResources\WebApplicationGalleryParamControl.ascx.resx</File>
+    <Key>comparePasswords.Text</Key>
+    <DefaultValue>Both passwords should match</DefaultValue>
+  </Resource>
+  <Resource>
+    <File>DesktopModules\WebsitePanel\App_LocalResources\WebApplicationGalleryParamControl.ascx.resx</File>
+    <Key>locConfirm.Text</Key>
+    <DefaultValue>Confirm:</DefaultValue>
+  </Resource>
+  <Resource>
+    <File>DesktopModules\WebsitePanel\App_LocalResources\WebApplicationGalleryParamControl.ascx.resx</File>
+    <Key>RegexpValidator.Text</Key>
+    <DefaultValue>Cannot use entered value for parameter '{0}'. The value must match the regular expression '{1}'.</DefaultValue>
+  </Resource>
+  <Resource>
+    <File>DesktopModules\WebsitePanel\App_LocalResources\WebApplicationGalleryParamControl.ascx.resx</File>
+    <Key>requireConfirmPassword.Text</Key>
+    <DefaultValue>Confirm password</DefaultValue>
+  </Resource>
+  <Resource>
+    <File>DesktopModules\WebsitePanel\App_LocalResources\WebApplicationGalleryParamControl.ascx.resx</File>
+    <Key>RequiredValidator.Text</Key>
+    <DefaultValue>{0} parameter cannot be empty</DefaultValue>
+  </Resource>
+  <Resource>
     <File>DesktopModules\WebsitePanel\App_LocalResources\WebApplicationGalleryParams.ascx.resx</File>
     <Key>btnCancel.Text</Key>
     <DefaultValue>Cancel</DefaultValue>
@@ -24057,12 +24617,12 @@ The following substitution variables can be used in the pattern:&lt;br/&gt;
   <Resource>
     <File>DesktopModules\WebsitePanel\App_LocalResources\WebApplicationGalleryParams.ascx.resx</File>
     <Key>lblInstallOnDirectory.Text</Key>
-    <DefaultValue>Install to Virtual Directory:</DefaultValue>
+    <DefaultValue>Application Name</DefaultValue>
   </Resource>
   <Resource>
     <File>DesktopModules\WebsitePanel\App_LocalResources\WebApplicationGalleryParams.ascx.resx</File>
     <Key>lblInstallOnWebSite.Text</Key>
-    <DefaultValue>Install on Web Site:</DefaultValue>
+    <DefaultValue>Web Site</DefaultValue>
   </Resource>
   <Resource>
     <File>DesktopModules\WebsitePanel\App_LocalResources\WebApplicationGalleryParams.ascx.resx</File>
@@ -24111,12 +24671,12 @@ The following substitution variables can be used in the pattern:&lt;br/&gt;
   <Resource>
     <File>DesktopModules\WebsitePanel\App_LocalResources\WebApplicationGalleryParams.ascx.resx</File>
     <Key>rblDatabaseItem.ExistingDatabase</Key>
-    <DefaultValue>Existing Database</DefaultValue>
+    <DefaultValue>Use existing database</DefaultValue>
   </Resource>
   <Resource>
     <File>DesktopModules\WebsitePanel\App_LocalResources\WebApplicationGalleryParams.ascx.resx</File>
     <Key>rblDatabaseItem.NewDatabase</Key>
-    <DefaultValue>New Database</DefaultValue>
+    <DefaultValue>Create new database</DefaultValue>
   </Resource>
   <Resource>
     <File>DesktopModules\WebsitePanel\App_LocalResources\WebApplicationGalleryParams.ascx.resx</File>
@@ -24131,7 +24691,7 @@ The following substitution variables can be used in the pattern:&lt;br/&gt;
   <Resource>
     <File>DesktopModules\WebsitePanel\App_LocalResources\WebApplicationGalleryParams.ascx.resx</File>
     <Key>secAppSettings.Text</Key>
-    <DefaultValue>Application Settings</DefaultValue>
+    <DefaultValue>Application Information</DefaultValue>
   </Resource>
   <Resource>
     <File>DesktopModules\WebsitePanel\App_LocalResources\WebApplicationGalleryParams.ascx.resx</File>
@@ -24141,7 +24701,7 @@ The following substitution variables can be used in the pattern:&lt;br/&gt;
   <Resource>
     <File>DesktopModules\WebsitePanel\App_LocalResources\WebApplicationGalleryParams.ascx.resx</File>
     <Key>secLocation.Text</Key>
-    <DefaultValue>Installation Location</DefaultValue>
+    <DefaultValue>Site Information</DefaultValue>
   </Resource>
   <Resource>
     <File>DesktopModules\WebsitePanel\App_LocalResources\WebApplicationGalleryParams.ascx.resx</File>
@@ -24167,6 +24727,61 @@ The following substitution variables can be used in the pattern:&lt;br/&gt;
     <File>DesktopModules\WebsitePanel\App_LocalResources\WebApplicationGalleryParams.ascx.resx</File>
     <Key>btnOK.Text</Key>
     <DefaultValue>OK</DefaultValue>
+  </Resource>
+  <Resource>
+    <File>DesktopModules\WebsitePanel\App_LocalResources\WebApplicationGalleryParams.ascx.resx</File>
+    <Key>DatabaseEngine.FlatFile</Key>
+    <DefaultValue>Flat File</DefaultValue>
+  </Resource>
+  <Resource>
+    <File>DesktopModules\WebsitePanel\App_LocalResources\WebApplicationGalleryParams.ascx.resx</File>
+    <Key>DatabaseEngine.SQLite</Key>
+    <DefaultValue>SQLite</DefaultValue>
+  </Resource>
+  <Resource>
+    <File>DesktopModules\WebsitePanel\App_LocalResources\WebApplicationGalleryParams.ascx.resx</File>
+    <Key>DatabaseEngine.VistaDB</Key>
+    <DefaultValue>VistaDB</DefaultValue>
+  </Resource>
+  <Resource>
+    <File>DesktopModules\WebsitePanel\App_LocalResources\WebApplicationGalleryParams.ascx.resx</File>
+    <Key>locDatabaseGroup.Text</Key>
+    <DefaultValue>Database</DefaultValue>
+  </Resource>
+  <Resource>
+    <File>DesktopModules\WebsitePanel\App_LocalResources\WebApplicationGalleryParams.ascx.resx</File>
+    <Key>locDatabaseGroupDescr.Text</Key>
+    <DefaultValue>Choose your database:</DefaultValue>
+  </Resource>
+  <Resource>
+    <File>DesktopModules\WebsitePanel\App_LocalResources\WebApplicationGalleryParams.ascx.resx</File>
+    <Key>locNewDatabase.Text</Key>
+    <DefaultValue>Create a new or use an existing database</DefaultValue>
+  </Resource>
+  <Resource>
+    <File>DesktopModules\WebsitePanel\App_LocalResources\WebApplicationGalleryParams.ascx.resx</File>
+    <Key>locNewDatabaseDescr.Text</Key>
+    <DefaultValue>Choose whether the package should create a new database during installation or use an existing database:</DefaultValue>
+  </Resource>
+  <Resource>
+    <File>DesktopModules\WebsitePanel\App_LocalResources\WebApplicationGalleryParams.ascx.resx</File>
+    <Key>locWebSiteDescription.Text</Key>
+    <DefaultValue>Select web site to install the application:</DefaultValue>
+  </Resource>
+  <Resource>
+    <File>DesktopModules\WebsitePanel\App_LocalResources\WebApplicationGalleryParams.ascx.resx</File>
+    <Key>valRequireWebSite.Text</Key>
+    <DefaultValue>Select web site to install the application</DefaultValue>
+  </Resource>
+  <Resource>
+    <File>DesktopModules\WebsitePanel\App_LocalResources\WebApplicationGalleryParams.ascx.resx</File>
+    <Key>LaunchApplication.Text</Key>
+    <DefaultValue>Launch {0}</DefaultValue>
+  </Resource>
+  <Resource>
+    <File>DesktopModules\WebsitePanel\App_LocalResources\WebApplicationGalleryParams.ascx.resx</File>
+    <Key>LaunchApplicationTemp.Text</Key>
+    <DefaultValue>If you recently created this web site it still might be not accessible by its main URL until DNS propagation is completely finished. To open installed application right now you can use this temporary URL provided by your hosting provider: &lt;br/&gt;&lt;a href="{0}" target="_blank"&gt;{0}&lt;/a&gt;</DefaultValue>
   </Resource>
   <Resource>
     <File>DesktopModules\WebsitePanel\App_LocalResources\WebSites.ascx.resx</File>
@@ -25737,6 +26352,556 @@ To connect to web site management service please use username and password provi
     <File>DesktopModules\WebsitePanel\CRM\App_LocalResources\CRMUsers.ascx.resx</File>
     <Key>FormComments.Text</Key>
     <DefaultValue>&lt;p&gt;CRM user is any person who works for a business unit who uses the Microsoft Dynamics CRM application.&lt;/p&gt; &lt;p&gt;Each user has a user account. Included in the user's account is information such as the user's telephone numbers, e-mail address, and a link to the user's manager. &lt;/p&gt; &lt;p&gt;Each user corresponds to a user in the Active Directory for that organization.&lt;/p&gt;&lt;p&gt;You can disable a user's record to prevent the user from being able to access Microsoft Dynamics CRM. You can only disable a user record, not delete it.&lt;/p&gt;</DefaultValue>
+  </Resource>
+  <Resource>
+    <File>DesktopModules\WebsitePanel\ExchangeHostedEdition\App_LocalResources\AddOrganizationDomain.ascx.resx</File>
+    <Key>cancel.Text</Key>
+    <DefaultValue>Cancel</DefaultValue>
+  </Resource>
+  <Resource>
+    <File>DesktopModules\WebsitePanel\ExchangeHostedEdition\App_LocalResources\AddOrganizationDomain.ascx.resx</File>
+    <Key>locDomain.Text</Key>
+    <DefaultValue>Domain:</DefaultValue>
+  </Resource>
+  <Resource>
+    <File>DesktopModules\WebsitePanel\ExchangeHostedEdition\App_LocalResources\AddOrganizationDomain.ascx.resx</File>
+    <Key>requireCorrectDomain.ErrorMessage</Key>
+    <DefaultValue>Enter correct domain name in the form "mydomain.com" or "sub.mydomain.com"</DefaultValue>
+  </Resource>
+  <Resource>
+    <File>DesktopModules\WebsitePanel\ExchangeHostedEdition\App_LocalResources\AddOrganizationDomain.ascx.resx</File>
+    <Key>requireCorrectDomain.Text</Key>
+    <DefaultValue>!</DefaultValue>
+  </Resource>
+  <Resource>
+    <File>DesktopModules\WebsitePanel\ExchangeHostedEdition\App_LocalResources\AddOrganizationDomain.ascx.resx</File>
+    <Key>requireDomain.ErrorMessage</Key>
+    <DefaultValue>Select domain</DefaultValue>
+  </Resource>
+  <Resource>
+    <File>DesktopModules\WebsitePanel\ExchangeHostedEdition\App_LocalResources\AddOrganizationDomain.ascx.resx</File>
+    <Key>requireDomain.Text</Key>
+    <DefaultValue>*</DefaultValue>
+  </Resource>
+  <Resource>
+    <File>DesktopModules\WebsitePanel\ExchangeHostedEdition\App_LocalResources\AddOrganizationDomain.ascx.resx</File>
+    <Key>update.OnClientClick</Key>
+    <DefaultValue>ShowProgressDialog('Adding organization domain...');</DefaultValue>
+  </Resource>
+  <Resource>
+    <File>DesktopModules\WebsitePanel\ExchangeHostedEdition\App_LocalResources\AddOrganizationDomain.ascx.resx</File>
+    <Key>update.Text</Key>
+    <DefaultValue>Update</DefaultValue>
+  </Resource>
+  <Resource>
+    <File>DesktopModules\WebsitePanel\ExchangeHostedEdition\App_LocalResources\CreateOrganization.ascx.resx</File>
+    <Key>createOrganization.OnClientClick</Key>
+    <DefaultValue>ShowProgressDialog('Creating Exchange organization...');</DefaultValue>
+  </Resource>
+  <Resource>
+    <File>DesktopModules\WebsitePanel\ExchangeHostedEdition\App_LocalResources\CreateOrganization.ascx.resx</File>
+    <Key>createOrganization.Text</Key>
+    <DefaultValue>Create Organization</DefaultValue>
+  </Resource>
+  <Resource>
+    <File>DesktopModules\WebsitePanel\ExchangeHostedEdition\App_LocalResources\CreateOrganization.ascx.resx</File>
+    <Key>locAdministratorEmail.Text</Key>
+    <DefaultValue>Administrator e-mail:</DefaultValue>
+  </Resource>
+  <Resource>
+    <File>DesktopModules\WebsitePanel\ExchangeHostedEdition\App_LocalResources\CreateOrganization.ascx.resx</File>
+    <Key>locAdministratorName.Text</Key>
+    <DefaultValue>Administrator name:</DefaultValue>
+  </Resource>
+  <Resource>
+    <File>DesktopModules\WebsitePanel\ExchangeHostedEdition\App_LocalResources\CreateOrganization.ascx.resx</File>
+    <Key>locAdministratorPassword.Text</Key>
+    <DefaultValue>Administrator password:</DefaultValue>
+  </Resource>
+  <Resource>
+    <File>DesktopModules\WebsitePanel\ExchangeHostedEdition\App_LocalResources\CreateOrganization.ascx.resx</File>
+    <Key>locOrganizationName.Text</Key>
+    <DefaultValue>Organization name:</DefaultValue>
+  </Resource>
+  <Resource>
+    <File>DesktopModules\WebsitePanel\ExchangeHostedEdition\App_LocalResources\CreateOrganization.ascx.resx</File>
+    <Key>manageDomainsLink.Text</Key>
+    <DefaultValue>Manage domains</DefaultValue>
+  </Resource>
+  <Resource>
+    <File>DesktopModules\WebsitePanel\ExchangeHostedEdition\App_LocalResources\CreateOrganization.ascx.resx</File>
+    <Key>requireAdministratorEmail.ErrorMessage</Key>
+    <DefaultValue>Enter administrator e-mail address</DefaultValue>
+  </Resource>
+  <Resource>
+    <File>DesktopModules\WebsitePanel\ExchangeHostedEdition\App_LocalResources\CreateOrganization.ascx.resx</File>
+    <Key>requireAdministratorEmail.Text</Key>
+    <DefaultValue>*</DefaultValue>
+  </Resource>
+  <Resource>
+    <File>DesktopModules\WebsitePanel\ExchangeHostedEdition\App_LocalResources\CreateOrganization.ascx.resx</File>
+    <Key>requireAdministratorName.ErrorMessage</Key>
+    <DefaultValue>Enter administrator display name</DefaultValue>
+  </Resource>
+  <Resource>
+    <File>DesktopModules\WebsitePanel\ExchangeHostedEdition\App_LocalResources\CreateOrganization.ascx.resx</File>
+    <Key>requireAdministratorName.Text</Key>
+    <DefaultValue>*</DefaultValue>
+  </Resource>
+  <Resource>
+    <File>DesktopModules\WebsitePanel\ExchangeHostedEdition\App_LocalResources\CreateOrganization.ascx.resx</File>
+    <Key>requireCorrectDomain.ErrorMessage</Key>
+    <DefaultValue>Enter correct domain name in the form "mydomain.com" or "sub.mydomain.com"</DefaultValue>
+  </Resource>
+  <Resource>
+    <File>DesktopModules\WebsitePanel\ExchangeHostedEdition\App_LocalResources\CreateOrganization.ascx.resx</File>
+    <Key>requireCorrectDomain.Text</Key>
+    <DefaultValue>!</DefaultValue>
+  </Resource>
+  <Resource>
+    <File>DesktopModules\WebsitePanel\ExchangeHostedEdition\App_LocalResources\CreateOrganization.ascx.resx</File>
+    <Key>requireDomain.ErrorMessage</Key>
+    <DefaultValue>Specify organization domain</DefaultValue>
+  </Resource>
+  <Resource>
+    <File>DesktopModules\WebsitePanel\ExchangeHostedEdition\App_LocalResources\CreateOrganization.ascx.resx</File>
+    <Key>requireDomain.Text</Key>
+    <DefaultValue>*</DefaultValue>
+  </Resource>
+  <Resource>
+    <File>DesktopModules\WebsitePanel\ExchangeHostedEdition\App_LocalResources\CreateOrganization.ascx.resx</File>
+    <Key>requireOrganizationName.ErrorMessage</Key>
+    <DefaultValue>Enter organization name</DefaultValue>
+  </Resource>
+  <Resource>
+    <File>DesktopModules\WebsitePanel\ExchangeHostedEdition\App_LocalResources\CreateOrganization.ascx.resx</File>
+    <Key>requireOrganizationName.Text</Key>
+    <DefaultValue>*</DefaultValue>
+  </Resource>
+  <Resource>
+    <File>DesktopModules\WebsitePanel\ExchangeHostedEdition\App_LocalResources\DeleteOrganization.ascx.resx</File>
+    <Key>cancel.Text</Key>
+    <DefaultValue>Cancel</DefaultValue>
+  </Resource>
+  <Resource>
+    <File>DesktopModules\WebsitePanel\ExchangeHostedEdition\App_LocalResources\DeleteOrganization.ascx.resx</File>
+    <Key>confirmDelete.Text</Key>
+    <DefaultValue>I confirm deletion of this organization and all its contents</DefaultValue>
+  </Resource>
+  <Resource>
+    <File>DesktopModules\WebsitePanel\ExchangeHostedEdition\App_LocalResources\DeleteOrganization.ascx.resx</File>
+    <Key>delete.OnClientClick</Key>
+    <DefaultValue>ShowProgressDialog('Deleting Exchange organization...');</DefaultValue>
+  </Resource>
+  <Resource>
+    <File>DesktopModules\WebsitePanel\ExchangeHostedEdition\App_LocalResources\DeleteOrganization.ascx.resx</File>
+    <Key>delete.Text</Key>
+    <DefaultValue>Delete</DefaultValue>
+  </Resource>
+  <Resource>
+    <File>DesktopModules\WebsitePanel\ExchangeHostedEdition\App_LocalResources\DeleteOrganization.ascx.resx</File>
+    <Key>locWarningMessage.Text</Key>
+    <DefaultValue>&lt;p&gt;&lt;b&gt;All organization user accounts, contacts, distribution lists and public folders will be deleted.&lt;/b&gt;&lt;/p&gt;</DefaultValue>
+  </Resource>
+  <Resource>
+    <File>DesktopModules\WebsitePanel\ExchangeHostedEdition\App_LocalResources\OrganizationDetails.ascx.resx</File>
+    <Key>btnAddDomain.Text</Key>
+    <DefaultValue>Add Domain</DefaultValue>
+  </Resource>
+  <Resource>
+    <File>DesktopModules\WebsitePanel\ExchangeHostedEdition\App_LocalResources\OrganizationDetails.ascx.resx</File>
+    <Key>catchAllNotSet.Text</Key>
+    <DefaultValue>(not set)</DefaultValue>
+  </Resource>
+  <Resource>
+    <File>DesktopModules\WebsitePanel\ExchangeHostedEdition\App_LocalResources\OrganizationDetails.ascx.resx</File>
+    <Key>changeServicePlan.Text</Key>
+    <DefaultValue>Change Service Plan</DefaultValue>
+  </Resource>
+  <Resource>
+    <File>DesktopModules\WebsitePanel\ExchangeHostedEdition\App_LocalResources\OrganizationDetails.ascx.resx</File>
+    <Key>cmdDelete.OnClientClick</Key>
+    <DefaultValue>if(!confirm('Are you sure you want to remove selected domain?')) return false; else ShowProgressDialog('Deleting domain...');</DefaultValue>
+  </Resource>
+  <Resource>
+    <File>DesktopModules\WebsitePanel\ExchangeHostedEdition\App_LocalResources\OrganizationDetails.ascx.resx</File>
+    <Key>cmdDelete.Text</Key>
+    <DefaultValue>Delete</DefaultValue>
+  </Resource>
+  <Resource>
+    <File>DesktopModules\WebsitePanel\ExchangeHostedEdition\App_LocalResources\OrganizationDetails.ascx.resx</File>
+    <Key>deleteOrganization.Text</Key>
+    <DefaultValue>Delete Organization</DefaultValue>
+  </Resource>
+  <Resource>
+    <File>DesktopModules\WebsitePanel\ExchangeHostedEdition\App_LocalResources\OrganizationDetails.ascx.resx</File>
+    <Key>domainsQuota.Text</Key>
+    <DefaultValue>{0} of {1}</DefaultValue>
+  </Resource>
+  <Resource>
+    <File>DesktopModules\WebsitePanel\ExchangeHostedEdition\App_LocalResources\OrganizationDetails.ascx.resx</File>
+    <Key>gvDomains.Empty</Key>
+    <DefaultValue>There are no domains allowed for this organization. Click "Add Domain" button to add domain.</DefaultValue>
+  </Resource>
+  <Resource>
+    <File>DesktopModules\WebsitePanel\ExchangeHostedEdition\App_LocalResources\OrganizationDetails.ascx.resx</File>
+    <Key>gvDomainsIsDefault.Header</Key>
+    <DefaultValue>Default</DefaultValue>
+  </Resource>
+  <Resource>
+    <File>DesktopModules\WebsitePanel\ExchangeHostedEdition\App_LocalResources\OrganizationDetails.ascx.resx</File>
+    <Key>gvDomainsIsTemp.Header</Key>
+    <DefaultValue>Temporary</DefaultValue>
+  </Resource>
+  <Resource>
+    <File>DesktopModules\WebsitePanel\ExchangeHostedEdition\App_LocalResources\OrganizationDetails.ascx.resx</File>
+    <Key>gvDomainsName.Header</Key>
+    <DefaultValue>Domain</DefaultValue>
+  </Resource>
+  <Resource>
+    <File>DesktopModules\WebsitePanel\ExchangeHostedEdition\App_LocalResources\OrganizationDetails.ascx.resx</File>
+    <Key>lblAdminsWarning.Text</Key>
+    <DefaultValue>This block is visible to system administrators only.</DefaultValue>
+  </Resource>
+  <Resource>
+    <File>DesktopModules\WebsitePanel\ExchangeHostedEdition\App_LocalResources\OrganizationDetails.ascx.resx</File>
+    <Key>locAdministratorEmail.Text</Key>
+    <DefaultValue>Administrator e-mail:</DefaultValue>
+  </Resource>
+  <Resource>
+    <File>DesktopModules\WebsitePanel\ExchangeHostedEdition\App_LocalResources\OrganizationDetails.ascx.resx</File>
+    <Key>locAdministratorName.Text</Key>
+    <DefaultValue>Administrator name:</DefaultValue>
+  </Resource>
+  <Resource>
+    <File>DesktopModules\WebsitePanel\ExchangeHostedEdition\App_LocalResources\OrganizationDetails.ascx.resx</File>
+    <Key>locCatchAll.Text</Key>
+    <DefaultValue>Catch-all</DefaultValue>
+  </Resource>
+  <Resource>
+    <File>DesktopModules\WebsitePanel\ExchangeHostedEdition\App_LocalResources\OrganizationDetails.ascx.resx</File>
+    <Key>locCatchAllAddress.Text</Key>
+    <DefaultValue>Catch-all address:</DefaultValue>
+  </Resource>
+  <Resource>
+    <File>DesktopModules\WebsitePanel\ExchangeHostedEdition\App_LocalResources\OrganizationDetails.ascx.resx</File>
+    <Key>locContacts.Text</Key>
+    <DefaultValue>Contacts:</DefaultValue>
+  </Resource>
+  <Resource>
+    <File>DesktopModules\WebsitePanel\ExchangeHostedEdition\App_LocalResources\OrganizationDetails.ascx.resx</File>
+    <Key>locDistributionLists.Text</Key>
+    <DefaultValue>Distribution Lists:</DefaultValue>
+  </Resource>
+  <Resource>
+    <File>DesktopModules\WebsitePanel\ExchangeHostedEdition\App_LocalResources\OrganizationDetails.ascx.resx</File>
+    <Key>locDomains.Text</Key>
+    <DefaultValue>Domains</DefaultValue>
+  </Resource>
+  <Resource>
+    <File>DesktopModules\WebsitePanel\ExchangeHostedEdition\App_LocalResources\OrganizationDetails.ascx.resx</File>
+    <Key>locDomainsQuota.Text</Key>
+    <DefaultValue>Total domains used:</DefaultValue>
+  </Resource>
+  <Resource>
+    <File>DesktopModules\WebsitePanel\ExchangeHostedEdition\App_LocalResources\OrganizationDetails.ascx.resx</File>
+    <Key>locEcpURL.Text</Key>
+    <DefaultValue>Exchange Control Panel:</DefaultValue>
+  </Resource>
+  <Resource>
+    <File>DesktopModules\WebsitePanel\ExchangeHostedEdition\App_LocalResources\OrganizationDetails.ascx.resx</File>
+    <Key>locMailboxes.Text</Key>
+    <DefaultValue>Mailboxes:</DefaultValue>
+  </Resource>
+  <Resource>
+    <File>DesktopModules\WebsitePanel\ExchangeHostedEdition\App_LocalResources\OrganizationDetails.ascx.resx</File>
+    <Key>locOfferID.Text</Key>
+    <DefaultValue>Offer ID:</DefaultValue>
+  </Resource>
+  <Resource>
+    <File>DesktopModules\WebsitePanel\ExchangeHostedEdition\App_LocalResources\OrganizationDetails.ascx.resx</File>
+    <Key>locOrganizationDetails.Text</Key>
+    <DefaultValue>Organization Details</DefaultValue>
+  </Resource>
+  <Resource>
+    <File>DesktopModules\WebsitePanel\ExchangeHostedEdition\App_LocalResources\OrganizationDetails.ascx.resx</File>
+    <Key>locOrganizationName.Text</Key>
+    <DefaultValue>Organization name:</DefaultValue>
+  </Resource>
+  <Resource>
+    <File>DesktopModules\WebsitePanel\ExchangeHostedEdition\App_LocalResources\OrganizationDetails.ascx.resx</File>
+    <Key>locProgramID.Text</Key>
+    <DefaultValue>Program ID:</DefaultValue>
+  </Resource>
+  <Resource>
+    <File>DesktopModules\WebsitePanel\ExchangeHostedEdition\App_LocalResources\OrganizationDetails.ascx.resx</File>
+    <Key>locQuotas.Text</Key>
+    <DefaultValue>Quotas</DefaultValue>
+  </Resource>
+  <Resource>
+    <File>DesktopModules\WebsitePanel\ExchangeHostedEdition\App_LocalResources\OrganizationDetails.ascx.resx</File>
+    <Key>locSendTo.Text</Key>
+    <DefaultValue>Send to e-mail:</DefaultValue>
+  </Resource>
+  <Resource>
+    <File>DesktopModules\WebsitePanel\ExchangeHostedEdition\App_LocalResources\OrganizationDetails.ascx.resx</File>
+    <Key>locService.Text</Key>
+    <DefaultValue>Service:</DefaultValue>
+  </Resource>
+  <Resource>
+    <File>DesktopModules\WebsitePanel\ExchangeHostedEdition\App_LocalResources\OrganizationDetails.ascx.resx</File>
+    <Key>locServicePlan.Text</Key>
+    <DefaultValue>Service Plan</DefaultValue>
+  </Resource>
+  <Resource>
+    <File>DesktopModules\WebsitePanel\ExchangeHostedEdition\App_LocalResources\OrganizationDetails.ascx.resx</File>
+    <Key>locSetupInstructions.Text</Key>
+    <DefaultValue>Setup Instructions</DefaultValue>
+  </Resource>
+  <Resource>
+    <File>DesktopModules\WebsitePanel\ExchangeHostedEdition\App_LocalResources\OrganizationDetails.ascx.resx</File>
+    <Key>quota.FormatText</Key>
+    <DefaultValue>{0} of {1} (max {2})</DefaultValue>
+  </Resource>
+  <Resource>
+    <File>DesktopModules\WebsitePanel\ExchangeHostedEdition\App_LocalResources\OrganizationDetails.ascx.resx</File>
+    <Key>requireSendTo.Text</Key>
+    <DefaultValue>*</DefaultValue>
+  </Resource>
+  <Resource>
+    <File>DesktopModules\WebsitePanel\ExchangeHostedEdition\App_LocalResources\OrganizationDetails.ascx.resx</File>
+    <Key>sendSetupInstructions.Text</Key>
+    <DefaultValue>Send</DefaultValue>
+  </Resource>
+  <Resource>
+    <File>DesktopModules\WebsitePanel\ExchangeHostedEdition\App_LocalResources\OrganizationDetails.ascx.resx</File>
+    <Key>setCatchAll.Text</Key>
+    <DefaultValue>Set Catch-all</DefaultValue>
+  </Resource>
+  <Resource>
+    <File>DesktopModules\WebsitePanel\ExchangeHostedEdition\App_LocalResources\OrganizationDetails.ascx.resx</File>
+    <Key>summaryTemplateNotSet.Text</Key>
+    <DefaultValue>(summary information template is not set)</DefaultValue>
+  </Resource>
+  <Resource>
+    <File>DesktopModules\WebsitePanel\ExchangeHostedEdition\App_LocalResources\OrganizationDetails.ascx.resx</File>
+    <Key>updateQuotas.Text</Key>
+    <DefaultValue>Update Quotas</DefaultValue>
+  </Resource>
+  <Resource>
+    <File>DesktopModules\WebsitePanel\ExchangeHostedEdition\App_LocalResources\UpdateOrganizationCatchAll.ascx.resx</File>
+    <Key>cancel.Text</Key>
+    <DefaultValue>Cancel</DefaultValue>
+  </Resource>
+  <Resource>
+    <File>DesktopModules\WebsitePanel\ExchangeHostedEdition\App_LocalResources\UpdateOrganizationCatchAll.ascx.resx</File>
+    <Key>catchAllModeDisabled.Text</Key>
+    <DefaultValue>Disable catch-all</DefaultValue>
+  </Resource>
+  <Resource>
+    <File>DesktopModules\WebsitePanel\ExchangeHostedEdition\App_LocalResources\UpdateOrganizationCatchAll.ascx.resx</File>
+    <Key>catchAllModeEnabled.Text</Key>
+    <DefaultValue>Enable catch-all</DefaultValue>
+  </Resource>
+  <Resource>
+    <File>DesktopModules\WebsitePanel\ExchangeHostedEdition\App_LocalResources\UpdateOrganizationCatchAll.ascx.resx</File>
+    <Key>locCatchAllAddress.Text</Key>
+    <DefaultValue>Catch-all mailbox:</DefaultValue>
+  </Resource>
+  <Resource>
+    <File>DesktopModules\WebsitePanel\ExchangeHostedEdition\App_LocalResources\UpdateOrganizationCatchAll.ascx.resx</File>
+    <Key>requireCatchAllAddress.ErrorMessage</Key>
+    <DefaultValue>Enter catch-all e-mail address</DefaultValue>
+  </Resource>
+  <Resource>
+    <File>DesktopModules\WebsitePanel\ExchangeHostedEdition\App_LocalResources\UpdateOrganizationCatchAll.ascx.resx</File>
+    <Key>requireCatchAllAddress.Text</Key>
+    <DefaultValue>*</DefaultValue>
+  </Resource>
+  <Resource>
+    <File>DesktopModules\WebsitePanel\ExchangeHostedEdition\App_LocalResources\UpdateOrganizationCatchAll.ascx.resx</File>
+    <Key>requireCorrectEmail.ErrorMessage</Key>
+    <DefaultValue>Enter correct e-mail address</DefaultValue>
+  </Resource>
+  <Resource>
+    <File>DesktopModules\WebsitePanel\ExchangeHostedEdition\App_LocalResources\UpdateOrganizationCatchAll.ascx.resx</File>
+    <Key>requireCorrectEmail.Text</Key>
+    <DefaultValue>!</DefaultValue>
+  </Resource>
+  <Resource>
+    <File>DesktopModules\WebsitePanel\ExchangeHostedEdition\App_LocalResources\UpdateOrganizationCatchAll.ascx.resx</File>
+    <Key>requireDomain.ErrorMessage</Key>
+    <DefaultValue>Select domain</DefaultValue>
+  </Resource>
+  <Resource>
+    <File>DesktopModules\WebsitePanel\ExchangeHostedEdition\App_LocalResources\UpdateOrganizationCatchAll.ascx.resx</File>
+    <Key>requireDomain.Text</Key>
+    <DefaultValue>*</DefaultValue>
+  </Resource>
+  <Resource>
+    <File>DesktopModules\WebsitePanel\ExchangeHostedEdition\App_LocalResources\UpdateOrganizationCatchAll.ascx.resx</File>
+    <Key>SelectDomain.Text</Key>
+    <DefaultValue>&lt;Select domain&gt;</DefaultValue>
+  </Resource>
+  <Resource>
+    <File>DesktopModules\WebsitePanel\ExchangeHostedEdition\App_LocalResources\UpdateOrganizationCatchAll.ascx.resx</File>
+    <Key>update.OnClientClick</Key>
+    <DefaultValue>ShowProgressDialog('Updating organization Catch-all address...');</DefaultValue>
+  </Resource>
+  <Resource>
+    <File>DesktopModules\WebsitePanel\ExchangeHostedEdition\App_LocalResources\UpdateOrganizationCatchAll.ascx.resx</File>
+    <Key>update.Text</Key>
+    <DefaultValue>Update</DefaultValue>
+  </Resource>
+  <Resource>
+    <File>DesktopModules\WebsitePanel\ExchangeHostedEdition\App_LocalResources\UpdateOrganizationQuotas.ascx.resx</File>
+    <Key>cancel.Text</Key>
+    <DefaultValue>Cancel</DefaultValue>
+  </Resource>
+  <Resource>
+    <File>DesktopModules\WebsitePanel\ExchangeHostedEdition\App_LocalResources\UpdateOrganizationQuotas.ascx.resx</File>
+    <Key>locContacts.Text</Key>
+    <DefaultValue>Contacts:</DefaultValue>
+  </Resource>
+  <Resource>
+    <File>DesktopModules\WebsitePanel\ExchangeHostedEdition\App_LocalResources\UpdateOrganizationQuotas.ascx.resx</File>
+    <Key>locDistributionLists.Text</Key>
+    <DefaultValue>Distribution Lists:</DefaultValue>
+  </Resource>
+  <Resource>
+    <File>DesktopModules\WebsitePanel\ExchangeHostedEdition\App_LocalResources\UpdateOrganizationQuotas.ascx.resx</File>
+    <Key>locMailboxes.Text</Key>
+    <DefaultValue>Mailboxes:</DefaultValue>
+  </Resource>
+  <Resource>
+    <File>DesktopModules\WebsitePanel\ExchangeHostedEdition\App_LocalResources\UpdateOrganizationQuotas.ascx.resx</File>
+    <Key>maxQuota.Text</Key>
+    <DefaultValue>(max {0})</DefaultValue>
+  </Resource>
+  <Resource>
+    <File>DesktopModules\WebsitePanel\ExchangeHostedEdition\App_LocalResources\UpdateOrganizationQuotas.ascx.resx</File>
+    <Key>rangeContacts.ErrorMessage</Key>
+    <DefaultValue>Specify correct number</DefaultValue>
+  </Resource>
+  <Resource>
+    <File>DesktopModules\WebsitePanel\ExchangeHostedEdition\App_LocalResources\UpdateOrganizationQuotas.ascx.resx</File>
+    <Key>rangeContacts.Text</Key>
+    <DefaultValue>!</DefaultValue>
+  </Resource>
+  <Resource>
+    <File>DesktopModules\WebsitePanel\ExchangeHostedEdition\App_LocalResources\UpdateOrganizationQuotas.ascx.resx</File>
+    <Key>rangeDistributionLists.ErrorMessage</Key>
+    <DefaultValue>Specify correct number</DefaultValue>
+  </Resource>
+  <Resource>
+    <File>DesktopModules\WebsitePanel\ExchangeHostedEdition\App_LocalResources\UpdateOrganizationQuotas.ascx.resx</File>
+    <Key>rangeDistributionLists.Text</Key>
+    <DefaultValue>!</DefaultValue>
+  </Resource>
+  <Resource>
+    <File>DesktopModules\WebsitePanel\ExchangeHostedEdition\App_LocalResources\UpdateOrganizationQuotas.ascx.resx</File>
+    <Key>rangeMailboxes.ErrorMessage</Key>
+    <DefaultValue>Specify correct number</DefaultValue>
+  </Resource>
+  <Resource>
+    <File>DesktopModules\WebsitePanel\ExchangeHostedEdition\App_LocalResources\UpdateOrganizationQuotas.ascx.resx</File>
+    <Key>rangeMailboxes.Text</Key>
+    <DefaultValue>!</DefaultValue>
+  </Resource>
+  <Resource>
+    <File>DesktopModules\WebsitePanel\ExchangeHostedEdition\App_LocalResources\UpdateOrganizationQuotas.ascx.resx</File>
+    <Key>requireContacts.ErrorMessage</Key>
+    <DefaultValue>Enter contacts quota</DefaultValue>
+  </Resource>
+  <Resource>
+    <File>DesktopModules\WebsitePanel\ExchangeHostedEdition\App_LocalResources\UpdateOrganizationQuotas.ascx.resx</File>
+    <Key>requireContacts.Text</Key>
+    <DefaultValue>*</DefaultValue>
+  </Resource>
+  <Resource>
+    <File>DesktopModules\WebsitePanel\ExchangeHostedEdition\App_LocalResources\UpdateOrganizationQuotas.ascx.resx</File>
+    <Key>requireDistributionLists.ErrorMessage</Key>
+    <DefaultValue>Enter distribution lists quota</DefaultValue>
+  </Resource>
+  <Resource>
+    <File>DesktopModules\WebsitePanel\ExchangeHostedEdition\App_LocalResources\UpdateOrganizationQuotas.ascx.resx</File>
+    <Key>requireDistributionLists.Text</Key>
+    <DefaultValue>*</DefaultValue>
+  </Resource>
+  <Resource>
+    <File>DesktopModules\WebsitePanel\ExchangeHostedEdition\App_LocalResources\UpdateOrganizationQuotas.ascx.resx</File>
+    <Key>requireMailboxes.ErrorMessage</Key>
+    <DefaultValue>Enter mailboxes quota</DefaultValue>
+  </Resource>
+  <Resource>
+    <File>DesktopModules\WebsitePanel\ExchangeHostedEdition\App_LocalResources\UpdateOrganizationQuotas.ascx.resx</File>
+    <Key>requireMailboxes.Text</Key>
+    <DefaultValue>*</DefaultValue>
+  </Resource>
+  <Resource>
+    <File>DesktopModules\WebsitePanel\ExchangeHostedEdition\App_LocalResources\UpdateOrganizationQuotas.ascx.resx</File>
+    <Key>update.OnClientClick</Key>
+    <DefaultValue>ShowProgressDialog('Updating organization quotas...');</DefaultValue>
+  </Resource>
+  <Resource>
+    <File>DesktopModules\WebsitePanel\ExchangeHostedEdition\App_LocalResources\UpdateOrganizationQuotas.ascx.resx</File>
+    <Key>update.Text</Key>
+    <DefaultValue>Update</DefaultValue>
+  </Resource>
+  <Resource>
+    <File>DesktopModules\WebsitePanel\ExchangeHostedEdition\App_LocalResources\UpdateOrganizationServicePlan.ascx.resx</File>
+    <Key>apply.OnClientClick</Key>
+    <DefaultValue>ShowProgressDialog('Updating organization service plan...');</DefaultValue>
+  </Resource>
+  <Resource>
+    <File>DesktopModules\WebsitePanel\ExchangeHostedEdition\App_LocalResources\UpdateOrganizationServicePlan.ascx.resx</File>
+    <Key>apply.Text</Key>
+    <DefaultValue>Apply</DefaultValue>
+  </Resource>
+  <Resource>
+    <File>DesktopModules\WebsitePanel\ExchangeHostedEdition\App_LocalResources\UpdateOrganizationServicePlan.ascx.resx</File>
+    <Key>cancel.Text</Key>
+    <DefaultValue>Cancel</DefaultValue>
+  </Resource>
+  <Resource>
+    <File>DesktopModules\WebsitePanel\ExchangeHostedEdition\App_LocalResources\UpdateOrganizationServicePlan.ascx.resx</File>
+    <Key>locCurrentServicePlan.Text</Key>
+    <DefaultValue>Current Service Plan</DefaultValue>
+  </Resource>
+  <Resource>
+    <File>DesktopModules\WebsitePanel\ExchangeHostedEdition\App_LocalResources\UpdateOrganizationServicePlan.ascx.resx</File>
+    <Key>locNewServicePlan.Text</Key>
+    <DefaultValue>New Service Plan</DefaultValue>
+  </Resource>
+  <Resource>
+    <File>DesktopModules\WebsitePanel\ExchangeHostedEdition\App_LocalResources\UpdateOrganizationServicePlan.ascx.resx</File>
+    <Key>locOfferID.Text</Key>
+    <DefaultValue>Offer ID:</DefaultValue>
+  </Resource>
+  <Resource>
+    <File>DesktopModules\WebsitePanel\ExchangeHostedEdition\App_LocalResources\UpdateOrganizationServicePlan.ascx.resx</File>
+    <Key>locProgramID.Text</Key>
+    <DefaultValue>Program ID:</DefaultValue>
+  </Resource>
+  <Resource>
+    <File>DesktopModules\WebsitePanel\ExchangeHostedEdition\App_LocalResources\UpdateOrganizationServicePlan.ascx.resx</File>
+    <Key>locService.Text</Key>
+    <DefaultValue>Service:</DefaultValue>
+  </Resource>
+  <Resource>
+    <File>DesktopModules\WebsitePanel\ExchangeHostedEdition\App_LocalResources\UpdateOrganizationServicePlan.ascx.resx</File>
+    <Key>requireServices.ErrorMessage</Key>
+    <DefaultValue>Select new service</DefaultValue>
+  </Resource>
+  <Resource>
+    <File>DesktopModules\WebsitePanel\ExchangeHostedEdition\App_LocalResources\UpdateOrganizationServicePlan.ascx.resx</File>
+    <Key>requireServices.Text</Key>
+    <DefaultValue>*</DefaultValue>
+  </Resource>
+  <Resource>
+    <File>DesktopModules\WebsitePanel\ExchangeHostedEdition\App_LocalResources\UpdateOrganizationServicePlan.ascx.resx</File>
+    <Key>SelectService.Text</Key>
+    <DefaultValue>&lt;Select service&gt;</DefaultValue>
   </Resource>
   <Resource>
     <File>DesktopModules\WebsitePanel\ExchangeServer\App_LocalResources\ExchangeActiveSyncSettings.ascx.resx</File>
@@ -29951,6 +31116,51 @@ Exchange-enabled organization has its own Global Address List (GAL) and Offline 
     <DefaultValue>Sql Server</DefaultValue>
   </Resource>
   <Resource>
+    <File>DesktopModules\WebsitePanel\ProviderControls\App_LocalResources\Exchange2010SP1_Settings.ascx.resx</File>
+    <Key>locDomainTemplates.Text</Key>
+    <DefaultValue>Domain Templates</DefaultValue>
+  </Resource>
+  <Resource>
+    <File>DesktopModules\WebsitePanel\ProviderControls\App_LocalResources\Exchange2010SP1_Settings.ascx.resx</File>
+    <Key>locEcpDomain.Text</Key>
+    <DefaultValue>Exchange Control Panel URL:</DefaultValue>
+  </Resource>
+  <Resource>
+    <File>DesktopModules\WebsitePanel\ProviderControls\App_LocalResources\Exchange2010SP1_Settings.ascx.resx</File>
+    <Key>locEcpURLDescr.Text</Key>
+    <DefaultValue>You can use [DOMAIN_NAME] variable for organization default domain.</DefaultValue>
+  </Resource>
+  <Resource>
+    <File>DesktopModules\WebsitePanel\ProviderControls\App_LocalResources\Exchange2010SP1_Settings.ascx.resx</File>
+    <Key>locOfferID.Text</Key>
+    <DefaultValue>Offer ID:</DefaultValue>
+  </Resource>
+  <Resource>
+    <File>DesktopModules\WebsitePanel\ProviderControls\App_LocalResources\Exchange2010SP1_Settings.ascx.resx</File>
+    <Key>locOrganizationTemplate.Text</Key>
+    <DefaultValue>Organization Template</DefaultValue>
+  </Resource>
+  <Resource>
+    <File>DesktopModules\WebsitePanel\ProviderControls\App_LocalResources\Exchange2010SP1_Settings.ascx.resx</File>
+    <Key>locProgramID.Text</Key>
+    <DefaultValue>Program ID:</DefaultValue>
+  </Resource>
+  <Resource>
+    <File>DesktopModules\WebsitePanel\ProviderControls\App_LocalResources\Exchange2010SP1_Settings.ascx.resx</File>
+    <Key>locTemporaryDomain.Text</Key>
+    <DefaultValue>Temporary domain:</DefaultValue>
+  </Resource>
+  <Resource>
+    <File>DesktopModules\WebsitePanel\ProviderControls\App_LocalResources\Exchange2010SP1_Settings.ascx.resx</File>
+    <Key>requireOfferID.Text</Key>
+    <DefaultValue>*</DefaultValue>
+  </Resource>
+  <Resource>
+    <File>DesktopModules\WebsitePanel\ProviderControls\App_LocalResources\Exchange2010SP1_Settings.ascx.resx</File>
+    <Key>requireProgramID.Text</Key>
+    <DefaultValue>*</DefaultValue>
+  </Resource>
+  <Resource>
     <File>DesktopModules\WebsitePanel\ProviderControls\App_LocalResources\Exchange_Settings.ascx.resx</File>
     <Key>lblSetupVariables.Text</Key>
     <DefaultValue>Setup Instruction Variables</DefaultValue>
@@ -30973,6 +32183,11 @@ The following substitution variables can be used in the pattern:&lt;br/&gt;
     <DefaultValue>ASP.NET 4.0 Application Pool:</DefaultValue>
   </Resource>
   <Resource>
+    <File>DesktopModules\WebsitePanel\ProviderControls\App_LocalResources\IIS60_Settings.ascx.resx</File>
+    <Key>ipAddress.SelectValueText</Key>
+    <DefaultValue>&lt;All unassigned&gt;</DefaultValue>
+  </Resource>
+  <Resource>
     <File>DesktopModules\WebsitePanel\ProviderControls\App_LocalResources\IIS70_Settings.ascx.resx</File>
     <Key>lblADIntegration.Text</Key>
     <DefaultValue>Active Directory Integration:</DefaultValue>
@@ -31166,6 +32381,11 @@ The following substitution variables can be used in the pattern:&lt;br/&gt;
     <File>DesktopModules\WebsitePanel\ProviderControls\App_LocalResources\IIS70_Settings.ascx.resx</File>
     <Key>lblScriptsDirectory.Text</Key>
     <DefaultValue>Scripts Directory:</DefaultValue>
+  </Resource>
+  <Resource>
+    <File>DesktopModules\WebsitePanel\ProviderControls\App_LocalResources\IIS70_Settings.ascx.resx</File>
+    <Key>ipAddress.SelectValueText</Key>
+    <DefaultValue>&lt;All unassigned&gt;</DefaultValue>
   </Resource>
   <Resource>
     <File>DesktopModules\WebsitePanel\ProviderControls\App_LocalResources\MailEnable_EditAccount.ascx.resx</File>

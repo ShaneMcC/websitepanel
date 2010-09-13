@@ -21,14 +21,14 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_3B6BCC3083984F7B823C46F727669165"
-        "OwnerKey" = "8:_UNDEFINED"
+        "MsmKey" = "8:_35106841D3FC4DBB160366A5202CE3D1"
+        "OwnerKey" = "8:_3B6BCC3083984F7B823C46F727669165"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
-        "MsmKey" = "8:_4FB85810470810101EF8149C538E86C1"
-        "OwnerKey" = "8:_3B6BCC3083984F7B823C46F727669165"
+        "MsmKey" = "8:_3B6BCC3083984F7B823C46F727669165"
+        "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -52,7 +52,7 @@
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_4FB85810470810101EF8149C538E86C1"
+        "OwnerKey" = "8:_35106841D3FC4DBB160366A5202CE3D1"
         "MsmSig" = "8:_UNDEFINED"
         }
     }
@@ -90,7 +90,7 @@
         "DisplayName" = "8:Release"
         "IsDebugOnly" = "11:FALSE"
         "IsReleaseOnly" = "11:TRUE"
-        "OutputFilename" = "8:Release\\WebsitePanelLocalizationToolkit10.msi"
+        "OutputFilename" = "8:Release\\WebsitePanelLocalizationToolkit102.msi"
         "PackageFilesAs" = "3:2"
         "PackageFileSize" = "3:-2147483648"
         "CabType" = "3:1"
@@ -137,7 +137,7 @@
                 {
                 "Name" = "8:.NET Framework"
                 "Message" = "8:[VSDNETMSG]"
-                "FrameworkVersion" = "8:2.0.50727"
+                "FrameworkVersion" = "8:2.0.50727 "
                 "AllowLaterVersions" = "11:FALSE"
                 "InstallUrl" = "8:http://go.microsoft.com/fwlink/?LinkId=9832"
                 }
@@ -165,13 +165,18 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
-            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_4FB85810470810101EF8149C538E86C1"
+            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_35106841D3FC4DBB160366A5202CE3D1"
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
             "AssemblyAsmDisplayName" = "8:Ionic.Zip.Reduced, Version=1.8.4.28, Culture=neutral, PublicKeyToken=edbe51ad942a3f5c, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
+                    "_35106841D3FC4DBB160366A5202CE3D1"
+                    {
+                    "Name" = "8:Ionic.Zip.Reduced.dll"
+                    "Attributes" = "3:512"
+                    }
                 }
             "SourcePath" = "8:Ionic.Zip.Reduced.dll"
             "TargetName" = "8:"
@@ -321,7 +326,7 @@
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:WebsitePanel Localization Toolkit 1.0"
         "ProductCode" = "8:{B0DB02AC-2995-4FF3-B658-894AC884720A}"
-        "PackageCode" = "8:{9719C5EB-DEFC-48BE-944F-8E6E81581302}"
+        "PackageCode" = "8:{6841DD2D-0B00-41B6-BCAF-33C88DD452C3}"
         "UpgradeCode" = "8:{5E387E28-5748-4BF2-BEEF-2A3AE3F43FC5}"
         "AspNetVersion" = "8:4.0.30319.0"
         "RestartWWWService" = "11:FALSE"
