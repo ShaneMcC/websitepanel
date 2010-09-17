@@ -78,8 +78,7 @@ namespace WebsitePanel.Portal
         private void ExportReport()
         {
             // build HTML
-            DataTable dtRecords = new ReportsHelper().GetPackagesDiskspacePaged(PanelSecurity.PackageId,
-                Int32.MaxValue, 0, "");
+            DataTable dtRecords = new ReportsHelper().GetPackagesDiskspacePaged(-1, Int32.MaxValue, 0, "");
 
             StringBuilder sb = new StringBuilder();
             sb.Append("<html>");
@@ -118,7 +117,7 @@ namespace WebsitePanel.Portal
             Response.AddHeader("Content-Disposition", "attachment; filename=" + fileName);
             Response.ContentType = "application/octet-stream";
 
-            Response.Write(AntiXss.HtmlEncode(sb.ToString()));
+            Response.Write(sb.ToString());
 
             Response.End();
         }

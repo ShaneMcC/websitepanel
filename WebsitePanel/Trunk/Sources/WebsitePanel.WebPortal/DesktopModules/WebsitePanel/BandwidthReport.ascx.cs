@@ -159,8 +159,7 @@ namespace WebsitePanel.Portal
         private void ExportReport()
         {
             // build HTML
-            DataTable dtRecords = new ReportsHelper().GetPackagesBandwidthPaged(PanelSecurity.PackageId,
-                Int32.MaxValue, 0, "", litStartDate.Text, litEndDate.Text);
+            DataTable dtRecords = new ReportsHelper().GetPackagesBandwidthPaged(-1, Int32.MaxValue, 0, "", litStartDate.Text, litEndDate.Text);
 
             StringBuilder sb = new StringBuilder();
             sb.Append("<html>");
@@ -199,7 +198,7 @@ namespace WebsitePanel.Portal
             Response.AddHeader("Content-Disposition", "attachment; filename=" + fileName);
             Response.ContentType = "application/octet-stream";
 
-            Response.Write(AntiXss.HtmlEncode(sb.ToString()));
+            Response.Write(sb.ToString());
 
             Response.End();
         }
