@@ -18,6 +18,6 @@
     <p class="Download msi"><a href="https://sourceforge.net/projects/websitepanel/files/Releases/WebsitePanel/1.0/Tools/WebsitePanelLocalizationToolkit10.msi/download">WebsitePanel Localization Toolkit 1.0 (~1 MB)</a></p>
     
     <h2>Language Packs</h2>
-    <p class="Download zip"><a href="http://www.websitepanel.net/Files/LanguagePacks/WebsitePanel Language Pack da-DK 1.0.1.zip">Danish Language Pack for WebsitePanel 1.0.1</a></p>
+    <p class="Download zip"><a href="http://www.websitepanel.net/Files/LanguagePacks/WebsitePanel Language Pack da-DK 1.0.1.zip">Danish Language Pack for WebsitePanel 1.0.1</a><br />(Original author: Jeppe Richardt; updated for WebsitePanel by Klaus E. Frederiksen)</p>
 
 </asp:Content>
