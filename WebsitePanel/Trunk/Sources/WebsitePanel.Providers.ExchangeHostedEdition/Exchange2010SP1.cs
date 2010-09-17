@@ -345,9 +345,9 @@ namespace WebsitePanel.Providers.ExchangeHostedEdition
 
                 Command cmd = new Command("Set-RecipientEnforcementProvisioningPolicy");
                 cmd.Parameters.Add("Identity", String.Format("{0}\\{1}", organizationId, RecipientQuotaPolicyIdentity));
-                cmd.Parameters.Add("MailboxCountQuota", mailboxesNumber);
-                cmd.Parameters.Add("ContactCountQuota", contactsNumber);
-                cmd.Parameters.Add("DistributionListCountQuota", distributionListsNumber);
+                cmd.Parameters.Add("MailboxCountQuota", ConvertInt32ToUnlimited(mailboxesNumber));
+                cmd.Parameters.Add("ContactCountQuota", ConvertInt32ToUnlimited(contactsNumber));
+                cmd.Parameters.Add("DistributionListCountQuota", ConvertInt32ToUnlimited(distributionListsNumber));
 
                 // run command
                 ExecuteShellCommand(runSpace, cmd);
