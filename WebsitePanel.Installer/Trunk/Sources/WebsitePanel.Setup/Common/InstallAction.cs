@@ -83,7 +83,8 @@ namespace WebsitePanel.Setup
 		UpdateLicenseInformation,
 		ConfigureStandaloneServerData,
 		CreateWPServerLogin,
-		FolderPermissions
+		FolderPermissions,
+        AddCustomErrorsPage
 	}
 	
 	public class InstallAction

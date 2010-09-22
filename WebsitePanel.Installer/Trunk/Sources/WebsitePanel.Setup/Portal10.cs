@@ -5,7 +5,31 @@ using System.Windows.Forms;
 
 namespace WebsitePanel.Setup
 {
-    /// <summary>
+	/// <summary>
+	/// Version 1.1.0
+	/// </summary>
+	public class Portal110 : Portal
+	{
+		public static new DialogResult Install(object obj)
+		{
+			return Portal.InstallBase(obj, "1.0.0");
+		}
+
+		public static new DialogResult Uninstall(object obj)
+		{
+			return Portal.Uninstall(obj);
+		}
+
+		public static new DialogResult Setup(object obj)
+		{
+			return Portal.Setup(obj);
+		}
+
+		public static new DialogResult Update(object obj)
+		{
+			return UpdateBase(obj, "1.0.0", "1.0.2", false, new InstallAction(ActionTypes.AddCustomErrorsPage));
+		}
+	}
     /// Version 1.0.2
     /// </summary>
     public class Portal102 : Portal101

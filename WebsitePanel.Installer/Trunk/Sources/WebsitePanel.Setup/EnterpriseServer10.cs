@@ -5,7 +5,31 @@ using System.Windows.Forms;
 
 namespace WebsitePanel.Setup
 {
-    /// <summary>
+	/// <summary>
+	/// Version 1.1.0
+	/// </summary>
+	public class EnterpriseServer110 : EnterpriseServer
+	{
+		public static new DialogResult Install(object obj)
+		{
+			return EnterpriseServer.InstallBase(obj, "1.0.0");
+		}
+
+		public static new DialogResult Uninstall(object obj)
+		{
+			return EnterpriseServer.Uninstall(obj);
+		}
+
+		public static new DialogResult Setup(object obj)
+		{
+			return EnterpriseServer.Setup(obj);
+		}
+
+		public static new DialogResult Update(object obj)
+		{
+			return UpdateBase(obj, "1.0.0", "1.0.2", true);
+		}
+	}
     /// Version 1.0.2
     /// </summary>
     public class EnterpriseServer102 : EnterpriseServer101

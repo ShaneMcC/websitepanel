@@ -5,6 +5,17 @@ using System.Windows.Forms;
 
 namespace WebsitePanel.Setup
 {
+	/// <summary>
+	/// Version 1.1.0
+	/// </summary>
+	public class StandaloneServerSetup110 : StandaloneServerSetup
+	{
+		public static new DialogResult Install(object obj)
+		{
+			return StandaloneServerSetup.InstallBase(obj, "1.0.0");
+		}
+	}
+
     /// <summary>
     /// Version 1.0.2
     /// </summary>

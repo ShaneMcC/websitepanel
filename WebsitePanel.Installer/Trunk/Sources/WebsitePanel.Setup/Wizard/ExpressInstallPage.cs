@@ -250,6 +250,9 @@ namespace WebsitePanel.Setup
 						case ActionTypes.FolderPermissions:
 							ConfigureFolderPermissions();
 							break;
+						case ActionTypes.AddCustomErrorsPage:
+							AddCustomErrorsPage();
+							break;
 					}
 				}
 				this.progressBar.Value = 100;
@@ -3203,6 +3206,54 @@ namespace WebsitePanel.Setup
 			process.Run();
 
 			Log.WriteEnd("Installed database objects");
+		}
+		/// <summary>
+		/// Add custom error page to the web.config (Microsoft Security Advisory (2416728))
+		/// </summary>
+		private void AddCustomErrorsPage()
+		{
+			try
+			{
+				string webConfigPath = Path.Combine(Wizard.SetupVariables.InstallationFolder, "web.config");
+				Log.WriteStart("Web.config file is being updated");
+				// Ensure the web.config exists
+				if (!File.Exists(webConfigPath))
+				{
+					Log.WriteInfo(string.Format("File {0} not found", webConfigPath));
+					return;
+				}
+				// Load web.config
+				XmlDocument doc = new XmlDocument();
+				doc.Load(webConfigPath);
+
+				// replace existing node:
+				// <system.web>
+				//	 <customErrors mode="Off" />
+				// </system.web>
+				// with:
+				// <system.web>
+				//	 <customErrors mode="RemoteOnly" defaultRedirect="~/error.htm" />
+				// </system.web>
+				//
+				XmlElement customErrors = doc.SelectSingleNode("configuration/system.web/customErrors[@mode='Off']") as XmlElement;
+				// ensure node is found
+				if (customErrors != null)
+				{
+					XmlUtils.SetXmlAttribute(customErrors, "mode", "RemoteOnly");
+					XmlUtils.SetXmlAttribute(customErrors, "defaultRedirect", "~/error.htm");
+				}
+				// save changes have been made
+				doc.Save(webConfigPath);
+				//
+				Log.WriteEnd("Web.config has been updated");
+			}
+			catch (Exception ex)
+			{
+				if (Utils.IsThreadAbortException(ex))
+					return;
+				Log.WriteError("Could not update web.config file", ex);
+				throw;
+			}
 		}
 	}
 }
