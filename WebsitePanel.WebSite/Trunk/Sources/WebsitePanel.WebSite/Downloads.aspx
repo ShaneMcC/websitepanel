@@ -20,4 +20,6 @@
     <h2>Language Packs</h2>
     <p class="Download zip"><a href="http://www.websitepanel.net/Files/LanguagePacks/WebsitePanel Language Pack da-DK 1.0.1.zip">Danish Language Pack for WebsitePanel 1.0.1</a><br />(Original author: Jeppe Richardt; updated for WebsitePanel by Klaus E. Frederiksen)</p>
 
+    <p class="Download zip"><a href="http://www.websitepanel.net/Files/LanguagePacks/WebsitePanel Language Pack de-DE 1.0.2.zip">German Language Pack for WebsitePanel 1.0.2</a><br />(Author: Mike Schwarz)</p>
+
 </asp:Content>
