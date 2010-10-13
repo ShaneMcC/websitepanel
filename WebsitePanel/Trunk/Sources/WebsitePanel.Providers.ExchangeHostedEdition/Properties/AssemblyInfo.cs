@@ -7,7 +7,6 @@ using System.Runtime.InteropServices;
 // associated with an assembly.
 [assembly: AssemblyTitle("WebsitePanel.Providers.ExchangeHostedEdition")]
 [assembly: AssemblyDescription("")]
-[assembly: AssemblyConfiguration("")]
 [assembly: AssemblyProduct("WebsitePanel.Providers.ExchangeHostedEdition")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]

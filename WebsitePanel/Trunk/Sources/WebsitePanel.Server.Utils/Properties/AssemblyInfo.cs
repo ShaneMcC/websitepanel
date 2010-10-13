@@ -7,7 +7,6 @@ using System.Runtime.InteropServices;
 // associated with an assembly.
 [assembly: AssemblyTitle("WebsitePanel.Server.Utils")]
 [assembly: AssemblyDescription("")]
-[assembly: AssemblyConfiguration("")]
 [assembly: AssemblyProduct("WebsitePanel.Server.Utils")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]

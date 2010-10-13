@@ -20,9 +20,9 @@
 					Display="Dynamic" ErrorMessage="*" />
 				&nbsp;
 				<asp:DropDownList runat="server" ID="ddlBillingPeriod">
-					<asp:ListItem Value="day" Text="Day(s)"/>
-					<asp:ListItem Value="month" Text="Month(s)"/>
-					<asp:ListItem Value="year" Text="Year(s)"/>
+					<asp:ListItem Value="day" Text="Day(s)" meta:resourcekey="itmDays"/>
+					<asp:ListItem Value="month" Text="Month(s)" meta:resourcekey="itmMonths"/>
+					<asp:ListItem Value="year" Text="Year(s)" meta:resourcekey="itmYears"/>
 				</asp:DropDownList>
 			</td>
 		</tr>

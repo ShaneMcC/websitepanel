@@ -35,25 +35,44 @@ namespace WebsitePanel.Portal.ExchangeHostedEdition
             }
 
             // current quotas
-            mailboxes.Text = org.MailboxCountQuota.ToString();
-            contacts.Text = org.ContactCountQuota.ToString();
-            distributionLists.Text = org.DistributionListCountQuota.ToString();
+            mailboxes.Text = IsUnlimited(org.MailboxCountQuota) ? "" : org.MailboxCountQuota.ToString();
+            contacts.Text = IsUnlimited(org.ContactCountQuota) ? "" : org.ContactCountQuota.ToString();
+            distributionLists.Text = IsUnlimited(org.DistributionListCountQuota) ? "" : org.DistributionListCountQuota.ToString();
 
             // max quotas
             string maxQuotaFormat = GetLocalizedString("maxQuota.Text");
-            maxMailboxes.Text = String.Format(maxQuotaFormat, org.MaxMailboxCountQuota);
-            maxContacts.Text = String.Format(maxQuotaFormat, org.MaxContactCountQuota);
-            maxDistributionLists.Text = String.Format(maxQuotaFormat, org.MaxDistributionListCountQuota);
+            maxMailboxes.Text = String.Format(maxQuotaFormat, FormatUnlimited(org.MaxMailboxCountQuota));
+            maxContacts.Text = String.Format(maxQuotaFormat, FormatUnlimited(org.MaxContactCountQuota));
+            maxDistributionLists.Text = String.Format(maxQuotaFormat, FormatUnlimited(org.MaxDistributionListCountQuota));
 
-            rangeMailboxes.MaximumValue = org.MaxMailboxCountQuota.ToString();
-            rangeMailboxes.Enabled = (org.MaxMailboxCountQuota != -1);
+            if (!IsUnlimited(org.MaxMailboxCountQuota))
+            {
+                requireMailboxes.Enabled = true;
+                rangeMailboxes.MaximumValue = org.MaxMailboxCountQuota.ToString();
+            }
 
-            rangeContacts.MaximumValue = org.MaxContactCountQuota.ToString();
-            rangeContacts.Enabled = (org.MaxContactCountQuota != -1);
+            if (!IsUnlimited(org.MaxContactCountQuota))
+            {
+                requireContacts.Enabled = true;
+                rangeContacts.MaximumValue = org.MaxContactCountQuota.ToString();
+            }
 
-            rangeDistributionLists.MaximumValue = org.MaxDistributionListCountQuota.ToString();
-            rangeDistributionLists.Enabled = (org.MaxDistributionListCountQuota != -1);
-          }
+            if (!IsUnlimited(org.MaxDistributionListCountQuota))
+            {
+                requireDistributionLists.Enabled = true;
+                rangeDistributionLists.MaximumValue = org.MaxDistributionListCountQuota.ToString();
+            }
+        }
+
+        private bool IsUnlimited(int num)
+        {
+            return (num == -1);
+        }
+
+        private string FormatUnlimited(int num)
+        {
+            return IsUnlimited(num) ? GetLocalizedString("unlimited.Text") : num.ToString();
+        }
 
         protected void update_Click(object sender, EventArgs e)
         {
@@ -63,9 +82,9 @@ namespace WebsitePanel.Portal.ExchangeHostedEdition
             try
             {
                 // collect form data
-                int mailboxesNumber = Utils.ParseInt(mailboxes.Text, 0);
-                int contactsNumber = Utils.ParseInt(contacts.Text, 0);
-                int distributionListsNumber = Utils.ParseInt(distributionLists.Text, 0);
+                int mailboxesNumber = (mailboxes.Text.Trim() == "") ? -1 : Utils.ParseInt(mailboxes.Text, 0);
+                int contactsNumber = (contacts.Text.Trim() == "") ? -1 : Utils.ParseInt(contacts.Text, 0);
+                int distributionListsNumber = (distributionLists.Text.Trim() == "") ? -1 : Utils.ParseInt(distributionLists.Text, 0);
 
                 // call service
                 ResultObject result = ES.Services.ExchangeHostedEdition.UpdateExchangeOrganizationQuotas(

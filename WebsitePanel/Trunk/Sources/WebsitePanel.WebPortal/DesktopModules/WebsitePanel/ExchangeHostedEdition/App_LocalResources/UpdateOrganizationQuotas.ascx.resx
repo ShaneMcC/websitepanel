@@ -168,6 +168,9 @@
   <data name="requireMailboxes.Text" xml:space="preserve">
     <value>*</value>
   </data>
+  <data name="unlimited.Text" xml:space="preserve">
+    <value>Unlimited</value>
+  </data>
   <data name="update.OnClientClick" xml:space="preserve">
     <value>ShowProgressDialog('Updating organization quotas...');</value>
   </data>

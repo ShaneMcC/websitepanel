@@ -31,6 +31,7 @@ using System.Configuration;
 using WebsitePanel.Providers;
 using WebsitePanel.Providers.Common;
 using WebsitePanel.Server.Utils;
+using System.Reflection;
 
 namespace WebsitePanel.Server.Code
 {
@@ -85,7 +86,11 @@ namespace WebsitePanel.Server.Code
 
         public static string GetServerVersion()
         {
-			return typeof(AutoDiscoveryHelper).Assembly.GetName().Version.ToString(3);
+            object[] attrs = Assembly.GetExecutingAssembly().GetCustomAttributes(typeof(AssemblyInformationalVersionAttribute), true);
+            if (attrs.Length > 0)
+                return ((AssemblyInformationalVersionAttribute)attrs[0]).InformationalVersion;
+            else
+			    return typeof(AutoDiscoveryHelper).Assembly.GetName().Version.ToString(3);
         }
 
     }

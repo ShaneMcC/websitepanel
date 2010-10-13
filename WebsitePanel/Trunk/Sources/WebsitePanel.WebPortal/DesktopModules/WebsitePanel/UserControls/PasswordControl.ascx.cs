@@ -206,28 +206,28 @@ namespace WebsitePanel.Portal
                 
                 function wspValidatePasswordNumbers(source, args)
                 {
-                    if(args.Value == source.dpsw) return true;
+                    if(args.Value == source.getAttribute('dpsw')) return true;
                     args.IsValid = wspValidatePattern(/(\d)/g, args.Value,
                         parseInt(source.getAttribute('minimumNumber')));
                 }
 
                 function wspValidatePasswordUppercase(source, args)
                 {
-                    if(args.Value == source.dpsw) return true;
+                    if(args.Value == source.getAttribute('dpsw')) return true;
                     args.IsValid = wspValidatePattern(/([A-Z])/g, args.Value,
                         parseInt(source.getAttribute('minimumNumber')));
                 }
 
                 function wspValidatePasswordSymbols(source, args)
                 {
-                    if(args.Value == source.dpsw) return true;
+                    if(args.Value == source.getAttribute('dpsw')) return true;
                     args.IsValid = wspValidatePattern(/(\W)/g, args.Value,
                         parseInt(source.getAttribute('minimumNumber')));
                 }
 
                 function wspValidatePasswordLength(source, args)
                 {
-                    if(args.Value == source.dpsw) return true;
+                    if(args.Value == source.getAttribute('dpsw')) return true;
                     args.IsValid = (args.Value.length >= parseInt(source.getAttribute('minimumLength')));
                 }
                 

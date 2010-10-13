@@ -204,7 +204,7 @@ namespace WebsitePanel.Providers.Database
         public virtual bool DatabaseExists(string databaseName)
         {
             return (ExecuteQuery(
-                String.Format("select name from master..sysdatabases where name = '{0}'", databaseName)).Tables[0].Rows.Count > 0);
+                String.Format("select name from master..sysdatabases where name = '{0}'", EscapeSql(databaseName))).Tables[0].Rows.Count > 0);
         }
 
         public virtual string[] GetDatabases()
@@ -255,7 +255,7 @@ namespace WebsitePanel.Providers.Database
         private string CreateFileNameString(string fileName, int fileSize)
         {
             string str = fileSize == 0 ? string.Format(" FILENAME = '{0}' ", fileName) :
-                string.Format(" FILENAME = '{0}', MAXSIZE = {1} ", fileName, fileSize);
+                string.Format(" FILENAME = '{0}', MAXSIZE = {1} ", EscapeSql(fileName), fileSize);
 
             return str;
         }
@@ -293,9 +293,9 @@ namespace WebsitePanel.Providers.Database
                     " ON ( NAME = '{1}_data', {2})" +
                     " LOG ON ( NAME = '{3}_log', {4}){5};",
                     database.Name,
-                    database.Name, 
-                    CreateFileNameString(dataFile,database.DataSize),
-                    database.Name, 
+                    EscapeSql(database.Name), 
+                    CreateFileNameString(dataFile, database.DataSize),
+                    EscapeSql(database.Name), 
                     CreateFileNameString(logFile, database.LogSize),
                     collation);
             
@@ -361,7 +361,7 @@ namespace WebsitePanel.Providers.Database
         public virtual bool UserExists(string username)
         {
             return (ExecuteQuery(
-                String.Format("select name from master..syslogins where name = '{0}'", username)).Tables[0].Rows.Count > 0);
+                String.Format("select name from master..syslogins where name = '{0}'", EscapeSql(username))).Tables[0].Rows.Count > 0);
         }
 
         public virtual string[] GetUsers()
@@ -379,7 +379,7 @@ namespace WebsitePanel.Providers.Database
             SqlUser user = new SqlUser();
 
             DataView dvUser = ExecuteQuery(String.Format("select dbname from master..syslogins where name = '{0}'",
-                username)).Tables[0].DefaultView;
+                EscapeSql(username))).Tables[0].DefaultView;
 
             user.Name = username;
             user.DefaultDatabase = "";
@@ -408,8 +408,8 @@ namespace WebsitePanel.Providers.Database
             //    user.Name, password, user.DefaultDatabase));
             //Fixed create login with "Enforce password policy" disabled.
             ExecuteNonQuery(
-                String.Format("CREATE LOGIN {0} WITH PASSWORD='{1}', DEFAULT_DATABASE={2}, CHECK_EXPIRATION=OFF, CHECK_POLICY=OFF",
-                    user.Name, password, user.DefaultDatabase));
+                String.Format("CREATE LOGIN [{0}] WITH PASSWORD='{1}', DEFAULT_DATABASE=[{2}], CHECK_EXPIRATION=OFF, CHECK_POLICY=OFF",
+                    user.Name, EscapeSql(password), user.DefaultDatabase));
 
             // add access to databases
             foreach (string database in user.Databases)
@@ -427,7 +427,7 @@ namespace WebsitePanel.Providers.Database
                 user.DefaultDatabase = "master";
 
             ExecuteNonQuery(String.Format("EXEC sp_defaultdb '{0}', '{1}'",
-                user.Name, user.DefaultDatabase));
+                EscapeSql(user.Name), EscapeSql(user.DefaultDatabase)));
 
             
             // update user databases access
@@ -448,14 +448,14 @@ namespace WebsitePanel.Providers.Database
             CloseUserConnections(username);
 
             // drop login
-            ExecuteNonQuery(String.Format("EXEC sp_droplogin '{0}'", username));
+            ExecuteNonQuery(String.Format("EXEC sp_droplogin '{0}'", EscapeSql(username)));
         }
 
         public virtual void ChangeUserPassword(string username, string password)
         {
             // change user password
             ExecuteNonQuery(String.Format("EXEC sp_password @new='{0}', @loginame='{1}'",
-                password, username));
+                EscapeSql(password), EscapeSql(username)));
         }
 
         #endregion
@@ -544,7 +544,7 @@ namespace WebsitePanel.Providers.Database
 
             // backup database
             ExecuteNonQuery(String.Format(@"BACKUP DATABASE [{0}] TO DISK = N'{1}'", // WITH INIT, NAME = '{2}'
-                databaseName, bakFile/*, backupName*/));
+                databaseName, EscapeSql(bakFile)/*, backupName*/));
 
             return bakFile;
         }
@@ -588,18 +588,18 @@ namespace WebsitePanel.Providers.Database
 
         private void DetachDatabase(string databaseName)
         {
-            ExecuteNonQuery(String.Format("sp_detach_db '{0}'", databaseName));
+            ExecuteNonQuery(String.Format("sp_detach_db '{0}'", EscapeSql(databaseName)));
         }
 
         private void AttachDatabase(string databaseName, string[] files)
         {
             string[] sqlFiles = new string[files.Length];
             for (int i = 0; i < files.Length; i++)
-                sqlFiles[i] = "N'" + files[i] + "'";
+                sqlFiles[i] = "N'" + EscapeSql(files[i]) + "'";
 
             // create command
             string cmdText = String.Format("sp_attach_db N'{0}', {1}",
-                databaseName, String.Join(",", sqlFiles));
+                EscapeSql(databaseName), String.Join(",", sqlFiles));
 
             ExecuteNonQuery(cmdText);
         }
@@ -608,7 +608,7 @@ namespace WebsitePanel.Providers.Database
         {
             // execute command
             ExecuteNonQuery(String.Format("sp_attach_single_file_db @dbname='{0}', @physname=N'{1}'",
-                databaseName, file));
+                EscapeSql(databaseName), EscapeSql(file)));
         }
         #endregion
 
@@ -693,8 +693,8 @@ namespace WebsitePanel.Providers.Database
                 // get file list from backup file
                 string[][] backupFiles = GetBackupFiles(bakFile);
 
-                if (backupFiles.Length != 2)
-                    throw new ApplicationException("backup should contain exactly 2 logical files");
+                if (backupFiles.Length < 1)
+                    throw new ApplicationException("Backup set should contain at least 1 logical file");
 
                 // map backup files to existing ones
                 string[] movings = new string[backupFiles.Length];
@@ -707,12 +707,12 @@ namespace WebsitePanel.Providers.Database
                     else
                         path = database.LogPath;
 
-                    movings[i] = String.Format("MOVE '{0}' TO '{1}'", name, path);
+                    movings[i] = String.Format("MOVE '{0}' TO '{1}'", EscapeSql(name), EscapeSql(path));
                 }
 
                 // restore database
                 ExecuteNonQuery(String.Format(@"RESTORE DATABASE [{0}] FROM DISK = '{1}' WITH REPLACE, {2}",
-                    database.Name, bakFile, String.Join(", ", movings)));
+                    database.Name, EscapeSql(bakFile), String.Join(", ", movings)));
 
 
                 // restore original database users
@@ -811,7 +811,7 @@ namespace WebsitePanel.Providers.Database
         private string[][] GetBackupFiles(string file)
         {
             DataView dvFiles = ExecuteQuery(
-                String.Format("RESTORE FILELISTONLY FROM DISK = '{0}'", file)).Tables[0].DefaultView;
+                String.Format("RESTORE FILELISTONLY FROM DISK = '{0}'", EscapeSql(file))).Tables[0].DefaultView;
 
             string[][] files = new string[dvFiles.Count][];
             for (int i = 0; i < dvFiles.Count; i++)
@@ -1035,7 +1035,7 @@ namespace WebsitePanel.Providers.Database
             try
             {
                 ExecuteNonQuery(String.Format("USE [{0}];EXEC sp_grantdbaccess '{1}';",
-                    databaseName, user));
+                    databaseName, EscapeSql(user)));
             }
             catch (SqlException ex)
             {
@@ -1044,7 +1044,7 @@ namespace WebsitePanel.Providers.Database
                     // the user already exists in the database
                     // so, try to auto fix his login in the database
                     ExecuteNonQuery(String.Format("USE [{0}];EXEC sp_change_users_login 'Auto_Fix', '{1}';",
-                        databaseName, user));
+                        databaseName, EscapeSql(user)));
                 }
                 else
                 {
@@ -1054,7 +1054,7 @@ namespace WebsitePanel.Providers.Database
 
             // add database owner
             ExecuteNonQuery(String.Format("USE [{0}];EXEC sp_addrolemember 'db_owner', '{1}';",
-                databaseName, user));
+                databaseName, EscapeSql(user)));
         }
 
         private void RemoveUsersFromDatabase(string databaseName, List<string> users)
@@ -1072,7 +1072,7 @@ namespace WebsitePanel.Providers.Database
                 try
                 {
                     ExecuteNonQuery(String.Format("USE [{0}];EXEC sp_changeobjectowner '{1}.{2}', 'dbo'",
-                        databaseName, user, userObject));
+                        databaseName, EscapeSql(user), EscapeSql(userObject)));
                 }
                 catch (SqlException ex)
                 {
@@ -1084,11 +1084,11 @@ namespace WebsitePanel.Providers.Database
                         // try to rename object before changing owner
                         string renamedObject = user + DateTime.Now.Ticks + "_" + userObject;
                         ExecuteNonQuery(String.Format("USE [{0}];EXEC sp_rename '{1}.{2}', '{3}'",
-                            databaseName, user, userObject, renamedObject));
+                            databaseName, EscapeSql(user), EscapeSql(userObject), EscapeSql(renamedObject)));
 
                         // change owner
                         ExecuteNonQuery(String.Format("USE [{0}];EXEC sp_changeobjectowner '{1}.{2}', 'dbo'",
-                            databaseName, user, renamedObject));
+                            databaseName, EscapeSql(user), EscapeSql(renamedObject)));
                     }
                     else
                     {
@@ -1099,14 +1099,14 @@ namespace WebsitePanel.Providers.Database
 
             // revoke db access
             ExecuteNonQuery(String.Format("USE [{0}];EXEC sp_revokedbaccess '{1}';",
-                databaseName, user));
+                databaseName, EscapeSql(user)));
         }
 
         private string[] GetUserDatabaseObjects(string databaseName, string user)
         {
             DataView dvObjects = ExecuteQuery(String.Format("select so.name from [{0}]..sysobjects as so" +
                 " inner join [{1}]..sysusers as su on so.uid = su.uid" +
-                " where su.name = '{2}'", databaseName, databaseName, user)).Tables[0].DefaultView;
+                " where su.name = '{2}'", databaseName, databaseName, EscapeSql(user))).Tables[0].DefaultView;
             string[] objects = new string[dvObjects.Count];
             for (int i = 0; i < dvObjects.Count; i++)
             {
@@ -1118,7 +1118,7 @@ namespace WebsitePanel.Providers.Database
         private void CloseDatabaseConnections(string databaseName)
         {
             DataView dv = ExecuteQuery(
-                String.Format(@"SELECT spid FROM master..sysprocesses WHERE dbid = DB_ID('{0}')", databaseName)).Tables[0].DefaultView;
+                String.Format(@"SELECT spid FROM master..sysprocesses WHERE dbid = DB_ID('{0}')", EscapeSql(databaseName))).Tables[0].DefaultView;
 
             // kill processes
             for (int i = 0; i < dv.Count; i++)
@@ -1128,7 +1128,7 @@ namespace WebsitePanel.Providers.Database
         private void CloseUserConnections(string userName)
         {
             DataView dv = ExecuteQuery(
-                String.Format(@"SELECT spid FROM master..sysprocesses WHERE loginame = '{0}'", userName)).Tables[0].DefaultView;
+                String.Format(@"SELECT spid FROM master..sysprocesses WHERE loginame = '{0}'", EscapeSql(userName))).Tables[0].DefaultView;
 
             // kill processes
             for (int i = 0; i < dv.Count; i++)
@@ -1138,6 +1138,11 @@ namespace WebsitePanel.Providers.Database
         private void KillProcess(short spid)
         {
             ExecuteNonQuery(String.Format("KILL {0}", spid));
+        }
+
+        private string EscapeSql(string s)
+        {
+            return (s != null) ? s.Replace("'", "''") : null;
         }
 
         #endregion

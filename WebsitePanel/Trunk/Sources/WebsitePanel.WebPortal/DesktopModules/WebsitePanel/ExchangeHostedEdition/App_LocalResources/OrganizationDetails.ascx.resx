@@ -225,6 +225,9 @@
   <data name="summaryTemplateNotSet.Text" xml:space="preserve">
     <value>(summary information template is not set)</value>
   </data>
+  <data name="unlimited.Text" xml:space="preserve">
+    <value>Unlimited</value>
+  </data>
   <data name="updateQuotas.Text" xml:space="preserve">
     <value>Update Quotas</value>
   </data>

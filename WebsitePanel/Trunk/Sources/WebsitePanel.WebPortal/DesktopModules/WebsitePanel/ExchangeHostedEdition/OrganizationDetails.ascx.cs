@@ -67,9 +67,9 @@ namespace WebsitePanel.Portal.ExchangeHostedEdition
 
             // quotas
             string quotaFormat = GetLocalizedString("quota.FormatText");
-            mailboxes.Text = String.Format(quotaFormat, org.MailboxCount, org.MailboxCountQuota, org.MaxMailboxCountQuota);
-            contacts.Text = String.Format(quotaFormat, org.ContactCount, org.ContactCountQuota, org.MaxContactCountQuota);
-            distributionLists.Text = String.Format(quotaFormat, org.DistributionListCount, org.DistributionListCountQuota, org.MaxDistributionListCountQuota);
+            mailboxes.Text = String.Format(quotaFormat, org.MailboxCount, FormatUnlimited(org.MailboxCountQuota), FormatUnlimited(org.MaxMailboxCountQuota));
+            contacts.Text = String.Format(quotaFormat, org.ContactCount, FormatUnlimited(org.ContactCountQuota), FormatUnlimited(org.MaxContactCountQuota));
+            distributionLists.Text = String.Format(quotaFormat, org.DistributionListCount, FormatUnlimited(org.DistributionListCountQuota), FormatUnlimited(org.MaxDistributionListCountQuota));
 
 
             // catch-all
@@ -80,6 +80,11 @@ namespace WebsitePanel.Portal.ExchangeHostedEdition
 
             // summary
             BindOrganizationSummary(org);
+        }
+
+        private string FormatUnlimited(int num)
+        {
+            return (num != -1) ? num.ToString() : GetLocalizedString("unlimited.Text");
         }
 
         private void BindOrganizationDomains(ExchangeOrganization org)

@@ -32,8 +32,8 @@ using System.Net;
 using System.Web;
 using System.Web.Services;
 using System.Text;
-using System.Security.Cryptography;
 using System.Diagnostics;
+using System.Drawing.Imaging;
 
 namespace WebsitePanel.Portal
 {
@@ -69,91 +69,71 @@ namespace WebsitePanel.Portal
             string imageUrl = context.Request.QueryString[URL];
             if (!string.IsNullOrEmpty(imageUrl))
             {
+				// Create decoded version of the image url
+				imageUrl = context.Server.UrlDecode(imageUrl);
+				//
+				Image img = null;
+
 				try
 				{
-					// Create decoded version of the image url
-					imageUrl = context.Server.UrlDecode(imageUrl);
-					//
-					Image img = null;
-
-					try
-					{
-						WebRequest request = WebRequest.Create(imageUrl);
-						WebResponse response = request.GetResponse();
-						// Load image stream from the response
-						img = new Bitmap(response.GetResponseStream());
-					}
-					catch (Exception ex)
-					{
-						Trace.TraceError(ex.StackTrace);
-					}
-
-                    int width = Utils.ParseInt(context.Request.QueryString[WIDTH], 20);
-                    int height = Utils.ParseInt(context.Request.QueryString[HEIGHT], 20);
-
-                    // calculate new size
-                    int h = (img != null) ? img.Height : height;
-                    int w = (img != null) ? img.Width : width;
-                    int b = Math.Max(h, w);
-                    double per = b > Math.Max(width, height) ? (Math.Max(width, height) * 1.0) / b : 1.0;
-
-                    h = (int)(h * per);
-                    w = (int)(w * per);
-
-                    Bitmap bitmap = new Bitmap(width, height);
-                    Graphics new_g = Graphics.FromImage(bitmap);
-                    new_g.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.HighQuality;
-                    new_g.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.HighQualityBicubic;
-
-                    if (img != null)
-                    {
-                        // draw image
-                        new_g.DrawImage(img, 0, 0, w, h);
-                        img.Dispose();
-                    }
-
-                    // emit it to the response stream
-                    bitmap.Save(context.Response.OutputStream, System.Drawing.Imaging.ImageFormat.Png);
-
-                    // clean-up
-                    bitmap.Dispose();
-                    new_g.Dispose();
-
-					// set cache info if image was loaded
-                    if (img != null)
-                    {
-                        context.Response.Cache.SetExpires(DateTime.Now.AddSeconds(BitmapCacheDurationInSeconds));
-                        context.Response.Cache.SetCacheability(HttpCacheability.Public);
-                        context.Response.Cache.SetValidUntilExpires(true);
-                    }
-
-                    // end response
-					context.Response.End();
+					WebRequest request = WebRequest.Create(imageUrl);
+					WebResponse response = request.GetResponse();
+					// Load image stream from the response
+					img = new Bitmap(response.GetResponseStream());
 				}
 				catch (Exception ex)
 				{
 					Trace.TraceError(ex.StackTrace);
-				}                                                 
+				}
+
+                int width = Utils.ParseInt(context.Request.QueryString[WIDTH], 20);
+                int height = Utils.ParseInt(context.Request.QueryString[HEIGHT], 20);
+
+                // calculate new size
+                int h = (img != null) ? img.Height : height;
+                int w = (img != null) ? img.Width : width;
+                int b = Math.Max(h, w);
+                double per = b > Math.Max(width, height) ? (Math.Max(width, height) * 1.0) / b : 1.0;
+
+                h = (int)(h * per);
+                w = (int)(w * per);
+
+                Bitmap bitmap = new Bitmap(width, height, PixelFormat.Format32bppArgb);
+                Graphics new_g = Graphics.FromImage(bitmap);
+                new_g.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.HighQuality;
+                new_g.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.HighQualityBicubic;
+
+                // draw white background
+                SolidBrush brush = new SolidBrush(Color.White);
+                new_g.FillRectangle(brush, new Rectangle(0, 0, width, height));
+                brush.Dispose();
+
+                if (img != null)
+                {
+                    // draw image
+                    new_g.DrawImage(img, 0, 0, w, h);
+                    img.Dispose();
+                }
+
+                // emit it to the response stream
+                bitmap.Save(context.Response.OutputStream, System.Drawing.Imaging.ImageFormat.Jpeg);
+
+                // clean-up
+                bitmap.Dispose();
+                new_g.Dispose();
+
+				// set cache info if image was loaded
+                if (img != null)
+                {
+                    context.Response.Cache.SetExpires(DateTime.Now.AddSeconds(BitmapCacheDurationInSeconds));
+                    context.Response.Cache.SetCacheability(HttpCacheability.Public);
+                    context.Response.Cache.SetValidUntilExpires(true);
+                }
+
+                // end response
+				context.Response.End();                                               
             }
         }
-
-		private string GetImageETag(string urlString)
-		{
-			Encoder stringEncoder;
-			int byteCount;
-			Byte[] stringBytes;
-	 
-			// Get string bytes 
-			stringEncoder = Encoding.UTF8.GetEncoder();
-			byteCount = stringEncoder.GetByteCount(urlString.ToCharArray(), 0, urlString.Length, true);
-			stringBytes = new Byte[byteCount];
-
-			stringEncoder.GetBytes(urlString.ToCharArray(), 0, urlString.Length, stringBytes, 0, true);
-	 
-			//{ Hash string using MD5 and return the hex-encoded hash }
-			MD5 md5 = MD5CryptoServiceProvider.Create();
-			return @"\" + BitConverter.ToString(md5.ComputeHash(stringBytes)).Replace("-", string.Empty) + @"\";
-		}
 
         public bool IsReusable
         {

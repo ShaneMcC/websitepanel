@@ -49,7 +49,9 @@ namespace WebsitePanel.EnterpriseServer
             litUrl.Text = url.Substring(0, url.LastIndexOf("/"));
 
             // set version
-            litVersion.Text =  Assembly.GetExecutingAssembly().GetName().Version.ToString(3);
+            object[] attrs = Assembly.GetExecutingAssembly().GetCustomAttributes(typeof(AssemblyInformationalVersionAttribute), true);
+            if (attrs.Length > 0)
+                litVersion.Text = ((AssemblyInformationalVersionAttribute)attrs[0]).InformationalVersion;
 
 			imgLogo.ImageUrl = Page.ClientScript.GetWebResourceUrl(
 				typeof(DefaultPage), "WebsitePanel.EnterpriseServer.Images.logo.png");

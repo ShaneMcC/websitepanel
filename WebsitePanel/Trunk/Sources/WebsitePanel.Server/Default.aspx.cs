@@ -49,7 +49,9 @@ namespace WebsitePanel.Server
             litUrl.Text = url.Substring(0, url.LastIndexOf("/"));
 
             // set version
-            litVersion.Text = Assembly.GetExecutingAssembly().GetName().Version.ToString(3);
+            object[] attrs = Assembly.GetExecutingAssembly().GetCustomAttributes(typeof(AssemblyInformationalVersionAttribute), true);
+            if(attrs.Length > 0)
+                litVersion.Text = ((AssemblyInformationalVersionAttribute)attrs[0]).InformationalVersion;
 
             // asp.net mode
             litAspNetMode.Text = (IntPtr.Size == 8) ? "64-bit" : "32-bit";

@@ -109,7 +109,9 @@ namespace WebsitePanel.Portal
                         IMailEditAccountControl ctrl = (IMailEditAccountControl)providerControl.Controls[0];
                         ctrl.BindItem(item);
                     }
-                    if (string.IsNullOrEmpty(txtMailBoxSizeLimit.Text)) {
+                    if (string.IsNullOrEmpty(txtMailBoxSizeLimit.Text)
+                        && cntx.Quotas[Quotas.MAIL_MAXBOXSIZE].QuotaAllocatedValue != -1)
+                    {
                         txtMailBoxSizeLimit.Text = cntx.Quotas[Quotas.MAIL_MAXBOXSIZE].QuotaAllocatedValue.ToString();
                     }
                 }

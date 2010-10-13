@@ -97,11 +97,13 @@ namespace WebsitePanel.Providers.ExchangeHostedEdition
                 #endregion
 
             }
-            catch
+            catch(Exception ex)
             {
                 // delete organization if it was created
                 if (organizationCreated)
                     DeleteOrganizationInternal(runSpace, organizationId);
+
+                throw ex;
             }
             finally
             {

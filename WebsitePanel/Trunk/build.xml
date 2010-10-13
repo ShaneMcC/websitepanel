@@ -1,7 +1,7 @@
 <Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
 <Import Project="C:\Program Files (x86)\MSBuild\MSBuildCommunityTasks\MSBuild.Community.Tasks.Targets"/>    
   <PropertyGroup>
-    <Version>1.0.2.0</Version>
+    <Version>1.1.0.0</Version>
     <BuildConfiguration>Release</BuildConfiguration>
     <SourcesPath>https://websitepanel.svn.sourceforge.net/svnroot/websitepanel/WebsitePanel/Trunk</SourcesPath>
     <RootFolder>C:\Projects\Sourceforge\WebsitePanel</RootFolder>
@@ -13,7 +13,7 @@
     <BuildFolder>$(TrunkFolder)\Build</BuildFolder>
     <DeployFolder>$(TrunkFolder)\Deploy</DeployFolder>
     
-    <PreviousBuildFolder>C:\Projects\Sourceforge\WebsitePanel\Releases\1.0.1\Build</PreviousBuildFolder>
+    <PreviousBuildFolder>C:\Projects\Sourceforge\WebsitePanel\Releases\1.0.2\Build</PreviousBuildFolder>
 
 
     <DiffCmd>$(TrunkFolder)\Tools\Diff.exe</DiffCmd>

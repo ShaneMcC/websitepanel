@@ -129,6 +129,15 @@
   <data name="btnSaveCycle.Text" xml:space="preserve">
     <value>Save Billing Cycle</value>
   </data>
+  <data name="itmDays.Text" xml:space="preserve">
+    <value>Day(s)</value>
+  </data>
+  <data name="itmMonths.Text" xml:space="preserve">
+    <value>Month(s)</value>
+  </data>
+  <data name="itmYears.Text" xml:space="preserve">
+    <value>Year(s)</value>
+  </data>
   <data name="lclBillingPeriod.Text" xml:space="preserve">
     <value>Billing Period:</value>
   </data>

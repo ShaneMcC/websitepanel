@@ -54,7 +54,11 @@ namespace WebsitePanel.Portal.SkinControls
             try
             {
                 if (!String.IsNullOrEmpty(assemblyName))
-                    litVersion.Text = Assembly.Load(assemblyName).GetName().Version.ToString(3);
+                {
+                    object[] attrs = Assembly.GetExecutingAssembly().GetCustomAttributes(typeof(AssemblyInformationalVersionAttribute), true);
+                    if (attrs.Length > 0)
+                        litVersion.Text = ((AssemblyInformationalVersionAttribute)attrs[0]).InformationalVersion;
+                }
             }
             catch { /* skip */ }
         }

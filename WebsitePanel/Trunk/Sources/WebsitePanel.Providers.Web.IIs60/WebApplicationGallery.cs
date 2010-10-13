@@ -274,8 +274,8 @@ otherwise contact WebsitePanel Software for further assistance.", ex);
 			//
 			XmlNamespaceManager nsmgr = GetXmlNsManager(xmldoc.NameTable);
 			//
-			string xQuery = String.IsNullOrEmpty(categoryName) ? "//atom:entry[@type='application' and atom:installers/atom:installer/atom:languageId = 'en']"
-                : String.Format("//atom:entry[@type='application' and atom:keywords[atom:keywordId='{0}'] and atom:installers/atom:installer/atom:languageId = 'en']", categoryName);
+			string xQuery = String.IsNullOrEmpty(categoryName) ? "//atom:entry[@type='application']"
+                : String.Format("//atom:entry[@type='application' and atom:keywords[atom:keywordId='{0}']]", categoryName);
 			//
 			List<GalleryApplication> appList = new List<GalleryApplication>();
 			//
