@@ -60,6 +60,7 @@
     <Reference Include="System.Web.Mobile" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Content\Images\zip-icon.png" />
     <Content Include="Data\ProductReleasesFeed-dev.xml" />
     <Content Include="Services\InstallerService-Beta.asmx" />
     <Content Include="Services\InstallerService.asmx" />

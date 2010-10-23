@@ -134,3 +134,8 @@ INPUT.Button
 {
 	background-image: url('../images/pdf-icon.png');
 }
+
+.Download.zip
+{
+	background-image: url('../images/zip-icon.png');
+}
