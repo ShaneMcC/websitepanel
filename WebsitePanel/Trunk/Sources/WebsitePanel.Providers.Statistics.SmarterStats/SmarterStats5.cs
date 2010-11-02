@@ -40,79 +40,75 @@ namespace WebsitePanel.Providers.Statistics
     {
         public override bool IsInstalled()
         {
-            string productName = null;
-            string productVersion = null;
-            String[] names = null;
-
-            RegistryKey HKLM = Registry.LocalMachine;
-
-            RegistryKey key = HKLM.OpenSubKey(@"SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall");
+            string productName = null, productVersion = null;
+            
+            // Check x86 platform
+            RegistryKey key = Registry.LocalMachine.OpenSubKey(@"SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall");
 
             if (key != null)
             {
-                names = key.GetSubKeyNames();
+                var names = key.GetSubKeyNames();
 
                 foreach (string s in names)
                 {
-                    RegistryKey subkey = HKLM.OpenSubKey(@"SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\" + s);
+                    RegistryKey subkey = key.OpenSubKey(s);
+                    //
+                    if (subkey == null)
+                        continue;
+                    //
+                    productName = subkey.GetValue("DisplayName") as String;
+                    //
+                    if (String.IsNullOrEmpty(productName))
+                        continue;
 
-                    if (subkey != null)
+                    if (productName.Equals("SmarterStats")
+                        || productName.Equals("SmarterStats Service"))
                     {
-                        if (!String.IsNullOrEmpty((string)subkey.GetValue("DisplayName")))
-                        {
-                            productName = (string)subkey.GetValue("DisplayName");
-                        }
-                        if (productName != null)
-                            if (productName.Equals("SmarterStats") || productName.Equals("SmarterStats Service"))
-                            {
-                                productVersion = (string)subkey.GetValue("DisplayVersion");
-                                break;
-                            }
+                        productVersion = subkey.GetValue("DisplayVersion") as String;
+                        goto Version_Match;
                     }
-                }
-
-                if (!String.IsNullOrEmpty(productVersion))
-                {
-                    string[] split = productVersion.Split(new char[] { '.' });
-                    return split[0].Equals("5");
                 }
             }
 
-            //checking x64 platform
-            key = HKLM.OpenSubKey(@"SOFTWARE\Wow6432Node\Microsoft\Windows\CurrentVersion\Uninstall");
+            // Check x64 platform
+            key = Registry.LocalMachine.OpenSubKey(@"SOFTWARE\Wow6432Node\Microsoft\Windows\CurrentVersion\Uninstall");
 
             if (key != null)
             {
-                names = key.GetSubKeyNames();
+                var names = key.GetSubKeyNames();
 
                 foreach (string s in names)
                 {
-                    RegistryKey subkey =
-                        HKLM.OpenSubKey(@"SOFTWARE\Wow6432Node\Microsoft\Windows\CurrentVersion\Uninstall\" + s);
+                    RegistryKey subkey = key.OpenSubKey(s);
+                    //
+                    if (subkey == null)
+                        continue;
+                    //
+                    productName = subkey.GetValue("DisplayName") as String;
+                    //
+                    if (String.IsNullOrEmpty(productName))
+                        continue;
 
-                    if (subkey != null)
+                    if (productName.Equals("SmarterStats") 
+                        || productName.Equals("SmarterStats Service"))
                     {
-                        if (!String.IsNullOrEmpty((string)subkey.GetValue("DisplayName")))
-                        {
-                            productName = (string)subkey.GetValue("DisplayName");
-                        }
-                        if (productName != null)
-                            if (productName.Equals("SmarterStats") || productName.Equals("SmarterStats Service"))
-                            {
-                                productVersion = (string)subkey.GetValue("DisplayVersion");
-                                break;
-                            }
+                        productVersion = subkey.GetValue("DisplayVersion") as String;
+                        goto Version_Match;
                     }
                 }
-
-                if (!String.IsNullOrEmpty(productVersion))
-                {
-                    string[] split = productVersion.Split(new char[] { '.' });
-                    return split[0].Equals("5");
-                }
             }
-
+    
+    Version_Match:
+            //
+            if (String.IsNullOrEmpty(productVersion))
+                return false;
+            // Match SmarterStats either 5.x or 6.x version
+            if (productVersion.StartsWith("5.")
+                || productVersion.StartsWith("6."))
+                return true;
+            //
             return false;
         }
     }
 }
+

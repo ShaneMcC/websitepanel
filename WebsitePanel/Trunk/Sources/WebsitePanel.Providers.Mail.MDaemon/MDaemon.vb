@@ -113,23 +113,6 @@ Public Class MDaemon
         End Try
     End Sub
 
-
-    Protected Sub EmitEditUserSemaphore(ByVal account As String, ByVal userDbLine As String)
-        Dim service As Service = LoadServiceProvider()
-
-        Try
-            Dim appCachePath As String = service.ComObject.GetAppDir()
-
-            If Not String.IsNullOrEmpty(appCachePath) Then
-                appCachePath = Path.Combine(appCachePath, "EditUser.SEM")
-
-                File.WriteAllText(appCachePath, String.Concat(account, ", ", userDbLine))
-            End If
-        Catch ex As Exception
-
-        End Try
-    End Sub
-
     Protected Overridable Function LoadServiceProvider() As Service
         Dim result As Service = New Service()
 
@@ -320,25 +303,25 @@ Public Class MDaemon
             mdUserInfo.IsForwarding = False
         End If
 
-            mdUserInfo.MailBox = GetEmailName(account.Name)
-            mdUserInfo.Domain = GetDomainName(account.Name)
-            mdUserInfo.Password = account.Password
-            mdUserInfo.Email = account.Name
+        mdUserInfo.MailBox = GetEmailName(account.Name)
+        mdUserInfo.Domain = GetDomainName(account.Name)
+        mdUserInfo.Password = account.Password
+        mdUserInfo.Email = account.Name
 
-            ' TRUE if account is configured to auto-extract attachments
-            mdUserInfo.AutoDecode = Convert.ToBoolean(account.Item("AutoDecode"))
-            mdUserInfo.MailFormat = account.Item("MailFormat")
+        ' TRUE if account is configured to auto-extract attachments
+        mdUserInfo.AutoDecode = Convert.ToBoolean(account.Item("AutoDecode"))
+        mdUserInfo.MailFormat = account.Item("MailFormat")
 
-            mdUserInfo.HideFromEveryone = Convert.ToBoolean(account.Item("HideFromEveryone"))
-            mdUserInfo.AllowChangeViaEmail = Convert.ToBoolean(account.Item("AllowChangeViaEmail"))
-            mdUserInfo.CheckAddrBook = Convert.ToBoolean(account.Item("CheckAddrBook"))
-            mdUserInfo.EncryptEmail = Convert.ToBoolean(account.Item("EncryptEmail"))
-            mdUserInfo.UpdateAddrBook = Convert.ToBoolean(account.Item("UpdateAddrBook"))
+        mdUserInfo.HideFromEveryone = Convert.ToBoolean(account.Item("HideFromEveryone"))
+        mdUserInfo.AllowChangeViaEmail = Convert.ToBoolean(account.Item("AllowChangeViaEmail"))
+        mdUserInfo.CheckAddrBook = Convert.ToBoolean(account.Item("CheckAddrBook"))
+        mdUserInfo.EncryptEmail = Convert.ToBoolean(account.Item("EncryptEmail"))
+        mdUserInfo.UpdateAddrBook = Convert.ToBoolean(account.Item("UpdateAddrBook"))
 
-            If account.MaxMailboxSize > 0 Then
-                mdUserInfo.ApplyQuotas = True
-                mdUserInfo.MaxDiskSpace = account.MaxMailboxSize
-            End If
+        If account.MaxMailboxSize > 0 Then
+            mdUserInfo.ApplyQuotas = True
+            mdUserInfo.MaxDiskSpace = account.MaxMailboxSize
+        End If
     End Sub
 
     Protected Sub PopulateGroupInfo(ByRef group As MailGroup, ByVal verify As Boolean)
@@ -400,74 +383,67 @@ Public Class MDaemon
     End Sub 'ClearListMembers
 
     Protected Sub UpdateUserAccessInfo(ByVal userDbPath As String, ByRef account As MailAccount)
+        Dim service As Service = LoadServiceProvider()
+
+        Dim hUser As Integer = service.ComObject.GetByEmail(account.Name)
+
+        If hUser = CInt(MD_HANDLE.MD_BADHANDLE) Then
+            Throw New Exception(String.Format("Mailbox '{0}' not found.", account.Name))
+        End If
+
+        Dim mdUserInfo As Object = CreateMDUserInfo(service)
+
+        PopulateUserInfo(account, mdUserInfo)
+        service.ComObject.FilterUserInfo(mdUserInfo)
+
+        Dim recordExists As Boolean
+
         Try
-            If Not File.Exists(userDbPath) Then
-                Throw New Exception(String.Format("File {0} not found.", userDbPath))
+            If AccountExists(account.Name) Then
+
+                Dim access As Long = 1
+
+                If account.Enabled Then
+                    If EnableIMAP And EnablePOP Then
+                        access = 1
+                    ElseIf EnablePOP Then
+                        access = 2
+                    ElseIf EnableIMAP Then
+                        access = 3
+                    End If
+                Else
+                    access = 4
+                End If
+
+                recordExists = True
+
+                ' Update access info (aka access-type)
+                mdUserInfo.AccessType = access
+
+                ' Update mailbox size
+                If account.MaxMailboxSize > 0 Then
+                    mdUserInfo.ApplyQuotas = True
+                    mdUserInfo.MaxDiskSpace = CType(account.MaxMailboxSize * 1000, Long)
+                End If
+
+                ' Send the changes
+                Dim errorCode As Integer = service.ComObject.VerifyUserInfo(mdUserInfo, CInt(MD_VRFYFLAGS.MDUSERDLL_VRFYALL))
+                If errorCode <> CInt(MD_ERROR.MDDLLERR_NOERROR) Then
+                    Throw New Exception(String.Format("Could not validate account info. Please make sure that all entries are valid. Error code {0}", errorCode))
+                End If
+
+                If Not service.ComObject.SetUserInfo(hUser, mdUserInfo) Then
+                    Throw New Exception(String.Format("Could not update  mailbox '{0}'", account.Name))
+                End If
+
             End If
 
-            Dim userName As String = GetEmailName(account.Name)
-            Dim domainName As String = GetDomainName(account.Name)
-
-            Dim domain As String
-            Dim user As String
-            Dim newLine As String
-
-            Dim recordExists As Boolean
-
-            Dim dbLines() As String = File.ReadAllLines(userDbPath)
-
-            For Each dbLine As String In dbLines
-                If dbLine Is Nothing Then
-                    Continue For
-                End If
-
-                If dbLine.Length < 218 Then
-                    'lines.Add(dbLine)
-                    Continue For
-                End If
-
-                domain = dbLine.Substring(0, 45).Trim()
-                user = dbLine.Substring(45, 30).Trim()
-                newLine = dbLine
-
-                If String.Compare(domainName, domain, True) = 0 And String.Compare(userName, user, True) = 0 Then
-                    Dim access As String = "Y"
-
-                    If account.Enabled Then
-                        If EnableIMAP And EnablePOP Then
-                            access = "Y"
-                        ElseIf EnableIMAP Then
-                            access = "I"
-                        ElseIf EnablePOP Then
-                            access = "P"
-                        End If
-                    Else
-                        access = "C"
-                    End If
-
-                    recordExists = True
-
-                    ' update access info
-                    newLine = dbLine.Substring(0, 217) + access + dbLine.Substring(218)
-
-                    ' create formatted string
-                    Dim mailboxSize As String = account.MaxMailboxSize.ToString().PadLeft(10, "0"c)
-                    ' update mailbox size
-                    newLine = newLine.Substring(0, 225) + mailboxSize
-
-                    ' semaphore MDaemon that user has been modified
-                    EmitEditUserSemaphore(account.Name, newLine)
-
-                    Exit For
-                End If
-            Next
-
-            ' check whether a user record exists
+            ' Check whether a user record exists
             If Not recordExists Then
-                Throw New Exception("Can't find mailbox info.")
+                Throw New Exception("Could not find mailbox info.")
             End If
         Catch ex As Exception
-            Throw New Exception("Can't update mailbox access info.", ex)
+            Throw New Exception("Could not update mailbox access info.", ex)
         End Try
     End Sub
 
@@ -540,7 +516,7 @@ Public Class MDaemon
         ' If AntiVirus for MDaemon is installed, this option enables you the AntiVirus settings to be applied to the selected secondary domain
         WriteProfileString(domain.Name, "EnableAntiVirus", YesNoBooleanToString(domain.Item("EnableAntiVirus")), domainDbPath)
 
-        ' If you want MDaemon’s current Spam Filter settings to be applied to the selected secondary domain
+        ' If you want MDaemon's current Spam Filter settings to be applied to the selected secondary domain
         WriteProfileString(domain.Name, "EnableAntiSpam", YesNoBooleanToString(domain.Item("EnableAntiSpam")), domainDbPath)
 
     End Sub 'WriteDomainInfo
@@ -735,68 +711,59 @@ Public Class MDaemon
     End Function 'CreateMailboxItem
 
     Protected Overridable Sub PopulateMailboxAccessInfo(ByVal userDbPath As String, ByVal mailbox As MailAccount)
+        Dim service As Service = LoadServiceProvider()
+
+        Dim hUser As Integer = service.ComObject.GetByEmail(mailbox.Name)
+
+        If hUser = CInt(MD_HANDLE.MD_BADHANDLE) Then
+            Throw New Exception(String.Format("Mailbox '{0}' not found.", mailbox.Name))
+        End If
+
+        Dim mdUserInfo As Object = CreateMDUserInfo(service)
+
+        PopulateUserInfo(mailbox, mdUserInfo)
+        service.ComObject.FilterUserInfo(mdUserInfo)
+
+        Dim recordExists As Boolean
+
         Try
-            If Not File.Exists(userDbPath) Then
-                Throw New Exception(String.Format("File {0} not found.", userDbPath))
+            If AccountExists(mailbox.Name) Then
+
+                Dim access As Long = 1
+
+                Select Case mdUserInfo.AccessType
+                    Case 1
+                        mailbox.Enabled = True
+                        mailbox.Item("EnableIMAP") = True
+                        mailbox.Item("EnablePOP") = True
+
+                    Case 2
+                        mailbox.Enabled = True
+                        mailbox.Item("EnableIMAP") = False
+                        mailbox.Item("EnablePOP") = True
+
+                    Case 3
+                        mailbox.Enabled = True
+                        mailbox.Item("EnableIMAP") = True
+                        mailbox.Item("EnablePOP") = False
+
+                    Case Else
+                        mailbox.Enabled = False
+                        mailbox.Item("EnableIMAP") = False
+                        mailbox.Item("EnablePOP") = False
+
+                End Select
+
+                recordExists = True
+
             End If
 
-            Dim userName As String = GetEmailName(mailbox.Name)
-            Dim domainName As String = GetDomainName(mailbox.Name)
-            Dim domain As String
-            Dim user As String
-            Dim recordExists As Boolean = False
+            If Not recordExists Then
+                Throw New Exception(String.Format("Could not find mailbox '{0}' info.", mailbox.Name))
+            End If
 
-            Using reader As New StreamReader(userDbPath)
-                Dim line As String
-
-                Do
-                    line = reader.ReadLine()
-
-                    If line Is Nothing Then
-                        Continue Do
-                    End If
-
-                    If line.Length < 218 Then
-                        Continue Do
-                    End If
-
-                    domain = line.Substring(0, 45).Trim()
-                    user = line.Substring(45, 30).Trim()
-
-                    If String.Compare(domainName, domain, True) = 0 And String.Compare(userName, user, True) = 0 Then
-                        Dim access As String = line.Substring(217, 1)
-                        Select Case access
-                            Case "Y"
-                                mailbox.Enabled = True
-                                mailbox.Item("EnableIMAP") = True
-                                mailbox.Item("EnablePOP") = True
-                            Case "P"
-                                mailbox.Enabled = True
-                                mailbox.Item("EnableIMAP") = False
-                                mailbox.Item("EnablePOP") = True
-                            Case "I"
-                                mailbox.Enabled = True
-                                mailbox.Item("EnableIMAP") = True
-                                mailbox.Item("EnablePOP") = False
-                            Case "C"
-                            Case Else
-                                mailbox.Enabled = False
-                                mailbox.Item("EnableIMAP") = False
-                                mailbox.Item("EnablePOP") = False
-                        End Select
-
-                        recordExists = True
-                        Exit Do
-                    End If
-                Loop While Not line Is Nothing
-
-                If Not recordExists Then
-                    Throw New Exception("Can't find mailbox info.")
-                End If
-
-            End Using
         Catch ex As Exception
-            Throw New Exception("Can't read mailbox access info.", ex)
+            Throw New Exception(String.Format("Could not read mailbox '{0}' access info.", mailbox.Name), ex)
         End Try
     End Sub 'PopulateMailboxAccessInfo
 
@@ -1302,16 +1269,16 @@ Public Class MDaemon
 
     Public Function MailAliasExists(ByVal mailAliasName As String) As Boolean Implements IMailServer.MailAliasExists
         Dim path As String = GetAppFolderPath() + "Alias.dat"
-		Dim split As String()
+        Dim split As String()
         Using sr As StreamReader = New StreamReader(path)
             Dim line As String
             Do
                 line = sr.ReadLine()
                 If (Not String.IsNullOrEmpty(line)) Then
-					split = line.Split(New [Char]() {"="c})
-				Else
-					Continue Do
-				End If
+                    split = line.Split(New [Char]() {"="c})
+                Else
+                    Continue Do
+                End If
                 If mailAliasName.Equals(split(0).Trim) Then
                     Return True
                 End If
@@ -1323,7 +1290,7 @@ Public Class MDaemon
 
     Public Function GetMailAliases(ByVal domainName As String) As MailAlias() Implements IMailServer.GetMailAliases
         Dim aliases As List(Of MailAlias) = New List(Of MailAlias)
-        Dim path As String = "C:\MDaemon\App\Alias.dat"
+        Dim path As String = GetAppFolderPath() + "Alias.dat"
         Dim split As String()
         Using sr As StreamReader = New StreamReader(path)
             Dim line As String
@@ -1811,7 +1778,7 @@ Public Class MDaemon
 
             Dim errorCode As Integer = service.ComObject.VerifyUserInfo(mdUserInfo, CInt(MD_VRFYFLAGS.MDUSERDLL_VRFYALL))
             If errorCode <> CInt(MD_ERROR.MDDLLERR_NOERROR) Then
-                Throw New Exception(String.Format("Could not validate account info.  Please make sure that all entries are valid. Error code {0}", errorCode))
+                Throw New Exception(String.Format("Could not validate account info. Please make sure that all entries are valid. Error code {0}", errorCode))
             End If
 
             If Not service.ComObject.SetUserInfo(hUser, mdUserInfo) Then
@@ -1824,12 +1791,10 @@ Public Class MDaemon
             Dim responderDbPath As String = service.ComObject.GetDBPath(MDaemonInterop.MDUSERDLL_AUTORESPDB)
             UpdateUserResponderInfo(responderDbPath, mailbox)
 
-            'service.ComObject.ReloadUsers()
-
             UnloadServiceProvider(service)
         Catch ex As Exception
             UnloadServiceProvider(service)
-            Throw New Exception("Can't update mailbox", ex)
+            Throw New Exception(String.Format("Could not update mailbox '{0}'", mailbox.Name), ex)
         End Try
     End Sub
 
