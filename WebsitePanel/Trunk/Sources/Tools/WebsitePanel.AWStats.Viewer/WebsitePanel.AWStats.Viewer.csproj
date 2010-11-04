@@ -79,9 +79,8 @@
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Microsoft.Web.Services3, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\WebsitePanel\Trunk\Lib\Microsoft.Web.Services3.dll</HintPath>
+    <Reference Include="Microsoft.Web.Services3">
+      <HintPath>..\..\..\Lib\Microsoft.Web.Services3.dll</HintPath>
     </Reference>
     <Reference Include="System">
       <Name>System</Name>
