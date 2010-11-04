@@ -44,34 +44,30 @@
   
   <Target Name="CompileSources">
     <!-- WebsitePanel -->
-    <MSBuild Projects="$(TrunkFolder)\Sources\WebSitePanel.Server.sln;$(TrunkFolder)\Sources\WebsitePanel.EnterpriseServer.sln;$(TrunkFolder)\Sources\WebsitePanel.WebPortal.sln"  Properties="Configuration=$(BuildConfiguration)" />
+    <MSBuild Projects="$(TrunkFolder)\Sources\WebSitePanel.Server.sln;$(TrunkFolder)\Sources\WebsitePanel.EnterpriseServer.sln;$(TrunkFolder)\Sources\WebsitePanel.WebPortal.sln" Properties="Configuration=$(BuildConfiguration)" />
     
     <!-- Tools -->
-    <MSBuild Projects="$(TrunkFolder)\Sources\Tools\WebsitePanel.Import.CsvBulk.sln"  Properties="Configuration=$(BuildConfiguration)" />
-    <MSBuild Projects="$(TrunkFolder)\Sources\Tools\WebsitePanel.Import.Enterprise.sln"  Properties="Configuration=$(BuildConfiguration)" />
-    <MSBuild Projects="$(TrunkFolder)\Sources\Tools\WebsitePanel.AWStats.Viewer.sln"  Properties="Configuration=$(BuildConfiguration)" />
+    <MSBuild Projects="$(TrunkFolder)\Sources\Tools\WebsitePanel.Import.CsvBulk.sln" Properties="Configuration=$(BuildConfiguration)" />
+    <MSBuild Projects="$(TrunkFolder)\Sources\Tools\WebsitePanel.Import.Enterprise.sln" Properties="Configuration=$(BuildConfiguration)" />
+    <MSBuild Projects="$(TrunkFolder)\Sources\Tools\WebsitePanel.AWStats.Viewer.sln" Properties="Configuration=$(BuildConfiguration)" />
   </Target>
 
   <Target Name="PrepareBuilds" DependsOnTargets="CompileSources">
-    <RemoveDir Directories="$(BuildFolder)"/>
-    <MakeDir Directories="$(BuildFolder)"/>
-
+     <!-- Remove build output folders in reversed order (e.q. root folder removed last) -->
     <RemoveDir Directories="$(ServerBuild)"/>
-    <MakeDir Directories="$(ServerBuild)"/>
-
     <RemoveDir Directories="$(EnterpriseServerBuild)"/>
-    <MakeDir Directories="$(EnterpriseServerBuild)"/>
-
     <RemoveDir Directories="$(PortalBuild)"/>
-    <MakeDir Directories="$(PortalBuild)"/>
-
     <RemoveDir Directories="$(ImportCsvBuild)"/>
-    <MakeDir Directories="$(ImportCsvBuild)"/>
-
     <RemoveDir Directories="$(ImportEnterpriseBuild)"/>
-    <MakeDir Directories="$(ImportEnterpriseBuild)"/>
-
     <RemoveDir Directories="$(AWStatsViewerBuild)"/>
+    <RemoveDir Directories="$(BuildFolder)"/>
+    
+    <MakeDir Directories="$(BuildFolder)"/>
+    <MakeDir Directories="$(ServerBuild)"/>
+    <MakeDir Directories="$(EnterpriseServerBuild)"/>
+    <MakeDir Directories="$(PortalBuild)"/>
+    <MakeDir Directories="$(ImportCsvBuild)"/>
+    <MakeDir Directories="$(ImportEnterpriseBuild)"/>
     <MakeDir Directories="$(AWStatsViewerBuild)"/>
   </Target>
   
@@ -98,7 +94,6 @@
     </ItemGroup>
     <Copy SourceFiles="@(ServerBuildFiles)" DestinationFolder="$(ServerBuild)\%(RecursiveDir)" />
   </Target>
-
   
   <Target Name="CreateEnterpriseServerBuild" DependsOnTargets="CreateServerBuild">
     <ItemGroup>
@@ -117,7 +112,6 @@
     </ItemGroup>
     <Copy SourceFiles="@(EnterpriseServerBuildFiles)" DestinationFolder="$(EnterpriseServerBuild)\%(RecursiveDir)" />
   </Target>
-
   
   <Target Name="CreatePortalBuild" DependsOnTargets="CreateEnterpriseServerBuild">
     <ItemGroup>
@@ -180,7 +174,6 @@
   <Target Name="Build" DependsOnTargets="CreateAWStatsViewerBuild">
     <!-- Do nothing -->
   </Target>
-
   
   <!-- Create full distributives -->
   <PropertyGroup>
@@ -197,15 +190,15 @@
     <AWStatsViewerInstall>$(ToolsFolder)\AWStats.Viewer</AWStatsViewerInstall>
   </PropertyGroup>
   
-  
   <Target Name="PrepareInstalls" DependsOnTargets="Build">
+    <Delete Files="$(InstallFolder)\**\*.*"/>
     <RemoveDir Directories="$(InstallFolder)"/>
     <MakeDir Directories="$(InstallFolder)"/>
-    
+
+    <Delete Files="$(ToolsFolder)\**\*.*"/>
     <RemoveDir Directories="$(ToolsFolder)"/>
     <MakeDir Directories="$(ToolsFolder)"/>
   </Target>
-
   
   <Target Name="CreateServerInstall" DependsOnTargets="PrepareInstalls">
     <ItemGroup>
@@ -218,7 +211,6 @@
     <Copy SourceFiles="@(ServerDeployFiles)" DestinationFolder="$(ServerInstall)\%(RecursiveDir)" />
     <XmlUpdate XmlFileName="$(ServerInstall)\web.config" Xpath="//configuration/websitepanel.server/security/password/@value" Value="${installer.server.password}" />
   </Target>
-
   
   <Target Name="CreateEnterpriseServerInstall" DependsOnTargets="CreateServerInstall">
     <ItemGroup>
@@ -233,7 +225,6 @@
     <XmlUpdate XmlFileName="$(EnterpriseServerInstall)\web.config" Xpath="//configuration/appSettings/add[@key=%22WebsitePanel.CryptoKey%22]/@value" Value="${installer.cryptokey}"  />
   </Target>
 
-  
   <Target Name="CreatePortalInstall" DependsOnTargets="CreateEnterpriseServerInstall">
     <ItemGroup>
       <PortalDeployFiles Include="$(PortalBuild)\**\*.*" />
@@ -273,7 +264,6 @@
     <Copy SourceFiles="$(RootFolder)\LICENSE.txt" DestinationFolder="$(AWStatsViewerInstall)" />
   </Target>
   
-  
   <!-- Create update from previous version -->
   <PropertyGroup>
     <UpdateFolder>$(DeployFolder)\Update</UpdateFolder>
@@ -297,19 +287,17 @@
   </Target>
   
   <Target Name="CreateServerUpdate" DependsOnTargets="PrepareUpdates">
-    <Exec Command="$(DiffCmd) %22$(PreviousBuildFolder)\Server%22 %22$(ServerInstall)%22  %22$(ServerUpdate)%22"/>
+    <Exec Command="$(DiffCmd) %22$(PreviousBuildFolder)\Server%22 %22$(ServerInstall)%22  %22$(ServerUpdate)%22 /ex:web.config"/>
   </Target>
 
   <Target Name="CreateEnterpriseServerUpdate" DependsOnTargets="CreateServerUpdate" >
-    <Exec Command="$(DiffCmd) %22$(PreviousBuildFolder)\EnterpriseServer%22 %22$(EnterpriseServerInstall)%22  %22$(EnterpriseServerUpdate)%22"/>
+    <Exec Command="$(DiffCmd) %22$(PreviousBuildFolder)\EnterpriseServer%22 %22$(EnterpriseServerInstall)%22  %22$(EnterpriseServerUpdate)%22 /ex:web.config"/>
     <Copy SourceFiles="$(TrunkFolder)\Database\update_db.sql" DestinationFolder="$(EnterpriseServerUpdate)\Setup" />
   </Target>
 
   <Target Name="CreatePortalUpdate" DependsOnTargets="CreateEnterpriseServerUpdate" >
-    <Exec Command="$(DiffCmd) %22$(PreviousBuildFolder)\Portal%22 %22$(PortalInstall)%22  %22$(PortalUpdate)%22"/>
+    <Exec Command="$(DiffCmd) %22$(PreviousBuildFolder)\Portal%22 %22$(PortalInstall)%22  %22$(PortalUpdate)%22 /ex:web.config,web7.config"/>
   </Target>
-
-
   
   <!-- Create Enterprise Server database and script it -->
   <PropertyGroup>
@@ -346,8 +334,6 @@
     <Delete Files="$(DatabaseFolder)\install_db_temp.sql" />
   </Target>
 
-
-
   <!-- Compile and deploy Setup.dll -->
   <Target Name="CreateSetupDLL" DependsOnTargets="ScriptEnterpriseServerDatabase">
     
@@ -371,7 +357,6 @@
     <MakeDir Directories="$(StandaloneInstall)\Setup"/>
     <Copy SourceFiles="$(SetupBuildFolder)\setup.dll" DestinationFolder="$(StandaloneInstall)\Setup" />
   </Target>
-  
   
   <!-- Deploy -->
   <Target Name="Deploy" DependsOnTargets="CreateSetupDLL" >
