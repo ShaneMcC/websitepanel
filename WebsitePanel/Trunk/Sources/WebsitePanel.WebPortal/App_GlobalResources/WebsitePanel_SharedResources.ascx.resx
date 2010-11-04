@@ -3319,9 +3319,6 @@
   <data name="ErrorDescription.724" xml:space="preserve">
     <value>Check the license of your mail server.</value>
   </data>
-  <data name="q" xml:space="preserve">
-    <value>Hosting Package</value>
-  </data>
   <data name="AuditLogTask.HOSTING_SPACE_WR_ADD" xml:space="preserve">
     <value>Add</value>
   </data>
@@ -4780,11 +4777,11 @@
   <data name="Quota.ExchangeHostedEdition.Mailboxes" xml:space="preserve">
     <value>Mailboxes</value>
   </data>
-  <data name="ReportResourceGroup.ExchangeHostedEdition" xml:space="preserve">
-    <value>Exchange 2010 Hosted Edition</value>
+  <data name="ReportResourceGroup.ExchangeHostingMode" xml:space="preserve">
+    <value>Exchange 2010 Hosting Mode</value>
   </data>
-  <data name="ResourceGroup.ExchangeHostedEdition" xml:space="preserve">
-    <value>Exchange Hosted Edition</value>
+  <data name="ResourceGroup.ExchangeHostingMode" xml:space="preserve">
+    <value>Exchange Hosting Mode</value>
   </data>
   <data name="Error.EXCHANGE_HOSTED_CREATE_ORGANIZATION" xml:space="preserve">
     <value>Error creating Exchange organization</value>
@@ -4896,5 +4893,8 @@
   </data>
   <data name="Quota.Mail.DisableSizeEdit" xml:space="preserve">
     <value>Disable Mailbox Size Edit</value>
+  </data>
+  <data name="AuditLogSource.ExchangeHostedEdition" xml:space="preserve">
+    <value>Exchange Hosting Mode</value>
   </data>
 </root>
