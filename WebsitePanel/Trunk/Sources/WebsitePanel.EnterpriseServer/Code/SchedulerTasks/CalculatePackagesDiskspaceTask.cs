@@ -140,7 +140,7 @@ namespace WebsitePanel.EnterpriseServer
                     if (!string.IsNullOrEmpty(org.GlobalAddressList))
                     {
                         int exchangeServiceId = GetExchangeServiceID(org.PackageId);
-                        ServiceProvider exchangeProvider = ExchangeServerController.GetExchangeServiceProvider(exchangeServiceId, item.Id);                                                
+                        ServiceProvider exchangeProvider = ExchangeServerController.GetExchangeServiceProvider(exchangeServiceId, item.ServiceId);                                                
 
                         SoapServiceProviderItem soapOrg = SoapServiceProviderItem.Wrap(org);
                         ServiceProviderItemDiskSpace[] itemsDiskspace =
