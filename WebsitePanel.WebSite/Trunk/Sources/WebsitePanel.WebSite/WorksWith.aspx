@@ -1,8 +1,8 @@
-﻿<%@ Page Title="WebsitePanel - Supported Software" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="SupportedSoftware.aspx.cs" Inherits="WebsitePanel.WebSite.SupportedSoftware" %>
+﻿<%@ Page Title="WebsitePanel - 3rd Party Software" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="WorksWith.aspx.cs" Inherits="WebsitePanel.WebSite.WorksWith" %>
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentColumn" runat="server">
-    <h1>Supported Software</h1>
+    <h1>3rd Party Software</h1>
     
     <h2>Operating Systems</h2>
     <ul>
@@ -60,7 +60,7 @@
 
     <h2>Statistics Servers</h2>
     <ul>
-        <li>SmarterStats 3.x - 4.x</li>
+        <li>SmarterStats 3.x - 5.x</li>
         <li>AWStats Statistics (free software)</li>
     </ul>
 

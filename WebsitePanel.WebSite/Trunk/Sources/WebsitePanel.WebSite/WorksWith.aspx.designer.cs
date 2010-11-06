@@ -10,6 +10,6 @@
 namespace WebsitePanel.WebSite {
     
     
-    public partial class SupportedSoftware {
+    public partial class WorksWith {
     }
 }

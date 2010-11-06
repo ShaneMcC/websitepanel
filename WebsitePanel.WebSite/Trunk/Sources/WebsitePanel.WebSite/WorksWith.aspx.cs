@@ -7,7 +7,7 @@ using System.Web.UI.WebControls;
 
 namespace WebsitePanel.WebSite
 {
-    public partial class SupportedSoftware : System.Web.UI.Page
+    public partial class WorksWith : System.Web.UI.Page
     {
         protected void Page_Load(object sender, EventArgs e)
         {

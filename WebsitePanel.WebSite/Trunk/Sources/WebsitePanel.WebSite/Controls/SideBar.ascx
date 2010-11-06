@@ -3,7 +3,7 @@
 <h2>WebsitePanel</h2>
 <ul>
     <!--li><a href="#">Features</a></li-->
-    <li><a href="/SupportedSoftware.aspx">Supported Software</a></li>
+    <li><a href="/WorksWith.aspx">3rd Party Software</a></li>
     <li><a href="/Downloads.aspx">Download</a></li>
     <!--li><a href="#">Enterprise Modules</a></li-->
     <li><a href="/License.aspx">License</a></li>

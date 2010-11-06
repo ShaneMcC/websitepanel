@@ -20,7 +20,7 @@
         <li>It&#39;s an open source project under <a href="/License.aspx">BSD license</a></li>
         <li>Built exclusively for Windows platform</li>
         <li>True multi-server architecture</li>
-        <li>Huge list of <a href="/SupportedSoftware.aspx">supported software</a></li>
+        <li>Huge list of <a href="/WorksWith.aspx">3rd party software</a></li>
         <li>Tight integration with <a href="http://www.microsoft.com/web/gallery/" target="_blank">Microsoft Web App Gallery</a></li>
         <li>Easy to install and use</li>
         <li>Great community support</li>

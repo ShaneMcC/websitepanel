@@ -62,6 +62,7 @@
   <ItemGroup>
     <Content Include="Content\Images\zip-icon.png" />
     <Content Include="Data\ProductReleasesFeed-dev.xml" />
+    <Content Include="Error.htm" />
     <Content Include="Services\InstallerService-Beta.asmx" />
     <Content Include="Services\InstallerService.asmx" />
     <Content Include="Web.config" />
@@ -124,12 +125,12 @@
     <Compile Include="Site.Master.designer.cs">
       <DependentUpon>Site.Master</DependentUpon>
     </Compile>
-    <Compile Include="SupportedSoftware.aspx.cs">
-      <DependentUpon>SupportedSoftware.aspx</DependentUpon>
+    <Compile Include="WorksWith.aspx.cs">
+      <DependentUpon>WorksWith.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="SupportedSoftware.aspx.designer.cs">
-      <DependentUpon>SupportedSoftware.aspx</DependentUpon>
+    <Compile Include="WorksWith.aspx.designer.cs">
+      <DependentUpon>WorksWith.aspx</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>
@@ -146,7 +147,7 @@
     <Content Include="Downloads.aspx" />
     <Content Include="License.aspx" />
     <Content Include="Site.Master" />
-    <Content Include="SupportedSoftware.aspx" />
+    <Content Include="WorksWith.aspx" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
