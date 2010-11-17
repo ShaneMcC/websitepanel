@@ -6,7 +6,7 @@
     
     <h2>Operating Systems</h2>
     <ul>
-        <li>Windows Server 2008 R2 any edition, 32 and 64 bits</li>
+        <li>Windows Server 2008 R2 any edition, 64 bits</li>
         <li>Windows Server 2008 any edition, 32 and 64 bits&nbsp;</li>
         <li>Windows Server 2003 R2 any edition, 32 and 64 bits</li>
         <li>Windows Server 2003 any edition, 32 and 64 bits</li>
