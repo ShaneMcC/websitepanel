@@ -33,7 +33,7 @@ using System.Collections.ObjectModel;
 using System.Text;
 using System.Reflection;
 using System.Globalization;
-
+using System.Configuration;
 using System.DirectoryServices;
 using System.Security;
 using System.Security.Principal;
@@ -61,8 +61,12 @@ namespace WebsitePanel.Providers.HostedSolution
 		static Exchange2007()
 		{
 			AppDomain.CurrentDomain.AssemblyResolve += new ResolveEventHandler(ResolveExchangeAssembly);
-			ExchangeRegistryPath = "SOFTWARE\\Microsoft\\Exchange\\Setup"; 
+			ExchangeRegistryPath = "SOFTWARE\\Microsoft\\Exchange\\Setup";
 		}
+		#endregion
+
+		#region Constants
+		private const string CONFIG_CLEAR_QUERYBASEDN = "WebsitePanel.Exchange.ClearQueryBaseDN";
 		#endregion
 
 		#region Properties
@@ -115,7 +119,7 @@ namespace WebsitePanel.Providers.HostedSolution
 		internal string OABGenerationServer
 		{
 			get { return ProviderSettings["OABServer"]; }
-		}		
+		}
 
 		internal static string ExchangeRegistryPath
 		{
@@ -200,13 +204,13 @@ namespace WebsitePanel.Providers.HostedSolution
 		#endregion
 
 		#region Domains
-		
-        public string[] GetAuthoritativeDomains()
-        {
-            return GetAuthoritativeDomainsInternal();
-        }
-        
-        public void AddAuthoritativeDomain(string domain)
+
+		public string[] GetAuthoritativeDomains()
+		{
+			return GetAuthoritativeDomainsInternal();
+		}
+
+		public void AddAuthoritativeDomain(string domain)
 		{
 			CreateAuthoritativeDomainInternal(domain);
 		}
@@ -321,7 +325,7 @@ namespace WebsitePanel.Providers.HostedSolution
 			string contactDisplayName, string contactAccountName, string contactEmail, string defaultOrganizationDomain)
 		{
 			CreateContactInternal(organizationId, organizationDistinguishedName, contactDisplayName,
-                contactAccountName, contactEmail, defaultOrganizationDomain);
+				contactAccountName, contactEmail, defaultOrganizationDomain);
 		}
 
 		public void DeleteContact(string accountName)
@@ -338,7 +342,7 @@ namespace WebsitePanel.Providers.HostedSolution
 			bool hideFromAddressBook, string firstName, string initials, string lastName, string address,
 			string city, string state, string zip, string country, string jobTitle, string company,
 			string department, string office, string managerAccountName, string businessPhone, string fax,
-            string homePhone, string mobilePhone, string pager, string webPage, string notes, int useMapiRichTextFormat, string defaultOrganizationDomain)
+			string homePhone, string mobilePhone, string pager, string webPage, string notes, int useMapiRichTextFormat, string defaultOrganizationDomain)
 		{
 			SetContactGeneralSettingsInternal(accountName, displayName, email, hideFromAddressBook,
 				firstName, initials, lastName, address, city, state, zip, country, jobTitle,
@@ -962,7 +966,7 @@ namespace WebsitePanel.Providers.HostedSolution
 					ret = false;
 					ExchangeLog.LogError("Could not delete ActiveSyncPolicy " + organizationId, ex);
 				}
-				
+
 				//disable mail security distribution group
 				try
 				{
@@ -1271,9 +1275,9 @@ namespace WebsitePanel.Providers.HostedSolution
 			}
 			ExchangeLog.LogEnd("ChangeOrganizationState");
 		}
-		
-        
-        private long CalculateOrganizationDiskSpace(string organizationId, string organizationDistinguishedName)
+
+
+		private long CalculateOrganizationDiskSpace(string organizationId, string organizationDistinguishedName)
 		{
 			ExchangeLog.LogStart("CalculateOrganizationDiskSpace");
 			ExchangeLog.DebugInfo("Organization Id: {0}", organizationId);
@@ -1333,7 +1337,7 @@ namespace WebsitePanel.Providers.HostedSolution
 			ExchangeLog.DebugInfo("Folder: {0}", folder);
 
 			long size = 0;
-			
+
 			Command cmd = new Command("Get-PublicFolderStatistics");
 			cmd.Parameters.Add("Identity", folder);
 			if (!string.IsNullOrEmpty(PublicFolderServer))
@@ -1397,10 +1401,10 @@ namespace WebsitePanel.Providers.HostedSolution
 		private ExchangeAccount[] GetMailboxSendAsAccounts(Runspace runSpace, string organizationId, string accountName)
 		{
 			ExchangeLog.LogStart("GetMailboxSendAsAccounts");
-			
+
 			string cn = GetMailboxCommonName(runSpace, accountName);
 			ExchangeAccount[] ret = GetSendAsAccounts(runSpace, organizationId, cn);
-			
+
 			ExchangeLog.LogEnd("GetMailboxSendAsAccounts");
 			return ret;
 		}
@@ -1526,7 +1530,7 @@ namespace WebsitePanel.Providers.HostedSolution
 			try
 			{
 				transaction = StartTransaction();
-				
+
 				string[] resAccounts = MergeADPermission(runSpace, existingAccounts, accountId, accounts, transaction);
 				foreach (string id in resAccounts)
 				{
@@ -1815,7 +1819,16 @@ namespace WebsitePanel.Providers.HostedSolution
 				string globalAddressListDN = this.GetGlobalAddressListDN(runSpace, globalAddressListName);
 				string path = AddADPrefix(id);
 				DirectoryEntry mailbox = GetADObject(path);
-				SetADObjectPropertyValue(mailbox, "msExchQueryBaseDN", globalAddressListDN);
+
+				// check if msExchQueryBaseDN must be cleared for Exchange 2010 SP1
+				bool clearQueryBaseDN = false;
+				if (ConfigurationManager.AppSettings[CONFIG_CLEAR_QUERYBASEDN] != null)
+					clearQueryBaseDN = Boolean.Parse(ConfigurationManager.AppSettings[CONFIG_CLEAR_QUERYBASEDN]);
+				Version exchangeVersion = GetExchangeVersion();
+
+				if (!(clearQueryBaseDN && (exchangeVersion >= new Version(14, 1))))
+					SetADObjectPropertyValue(mailbox, "msExchQueryBaseDN", globalAddressListDN);
+
 				//SetADObjectPropertyValue(mailbox, "msExchUseOAB", offlineAddressBook);
 				mailbox.CommitChanges();
 				mailbox.Close();
@@ -1927,7 +1940,15 @@ namespace WebsitePanel.Providers.HostedSolution
 				string globalAddressListDN = GetGlobalAddressListDN(runSpace, globalAddressListName);
 				string path = AddADPrefix(id);
 				DirectoryEntry mailbox = GetADObject(path);
-				SetADObjectPropertyValue(mailbox, "msExchQueryBaseDN", globalAddressListDN);
+				// check if msExchQueryBaseDN must be cleared for Exchange 2010 SP1
+				bool clearQueryBaseDN = false;
+				if (ConfigurationManager.AppSettings[CONFIG_CLEAR_QUERYBASEDN] != null)
+					clearQueryBaseDN = Boolean.Parse(ConfigurationManager.AppSettings[CONFIG_CLEAR_QUERYBASEDN]);
+				Version exchangeVersion = GetExchangeVersion();
+
+				if (!(clearQueryBaseDN && (exchangeVersion >= new Version(14, 1))))
+					SetADObjectPropertyValue(mailbox, "msExchQueryBaseDN", globalAddressListDN);
+
 				//SetADObjectPropertyValue(mailbox, "msExchUseOAB", offlineAddressBook);
 				mailbox.CommitChanges();
 				mailbox.Close();
@@ -2812,7 +2833,7 @@ namespace WebsitePanel.Providers.HostedSolution
 			ExchangeLog.LogEnd("GetMailboxStatisticsInternal");
 			return info;
 		}
-		
+
 		private Collection<PSObject> GetMailboxObject(Runspace runSpace, string id)
 		{
 			Command cmd = new Command("Get-Mailbox");
@@ -2830,7 +2851,7 @@ namespace WebsitePanel.Providers.HostedSolution
 			string contactDisplayName,
 			string contactAccountName,
 			string contactEmail,
-            string defaultOrganizationDomain)
+			string defaultOrganizationDomain)
 		{
 			ExchangeLog.LogStart("CreateContactInternal");
 			ExchangeLog.DebugInfo("Organization Id: {0}", organizationId);
@@ -2847,7 +2868,7 @@ namespace WebsitePanel.Providers.HostedSolution
 
 
 				string ouName = ConvertADPathToCanonicalName(organizationDistinguishedName);
-                string tempEmail = string.Format("{0}@{1}", Guid.NewGuid().ToString("N"), defaultOrganizationDomain);
+				string tempEmail = string.Format("{0}@{1}", Guid.NewGuid().ToString("N"), defaultOrganizationDomain);
 				//create contact
 				Command cmd = new Command("New-MailContact");
 				cmd.Parameters.Add("Name", contactAccountName);
@@ -2866,10 +2887,10 @@ namespace WebsitePanel.Providers.HostedSolution
 				cmd.Parameters.Add("EmailAddressPolicyEnabled", false);
 				cmd.Parameters.Add("CustomAttribute1", organizationId);
 				cmd.Parameters.Add("WindowsEmailAddress", tempEmail);
-			    ExecuteShellCommand(runSpace, cmd);
-			    
-                SetContactEmail(id, contactEmail);                              
-                
+				ExecuteShellCommand(runSpace, cmd);
+
+				SetContactEmail(id, contactEmail);
+
 			}
 			catch (Exception ex)
 			{
@@ -2938,7 +2959,7 @@ namespace WebsitePanel.Providers.HostedSolution
 				info.DisplayName = (string)GetPSObjectProperty(contact, "DisplayName");
 				info.HideFromAddressBook = (bool)GetPSObjectProperty(contact, "HiddenFromAddressListsEnabled");
 				info.EmailAddress = GetContactEmail(id);
-                info.UseMapiRichTextFormat = (int)GetPSObjectProperty(contact, "UseMapiRichTextFormat");
+				info.UseMapiRichTextFormat = (int)GetPSObjectProperty(contact, "UseMapiRichTextFormat");
 
 				cmd = new Command("Get-Contact");
 				cmd.Parameters.Add("Identity", accountName);
@@ -2966,7 +2987,7 @@ namespace WebsitePanel.Providers.HostedSolution
 				info.Pager = (string)GetPSObjectProperty(user, "Pager");
 				info.WebPage = (string)GetPSObjectProperty(user, "WebPage");
 				info.Notes = (string)GetPSObjectProperty(user, "Notes");
-                
+
 
 			}
 			finally
@@ -2979,13 +3000,13 @@ namespace WebsitePanel.Providers.HostedSolution
 		}
 
 		private void SetContactEmail(string id, string email)
-		{            
-            string cn = ActiveDirectoryUtils.AddADPrefix(id, PrimaryDomainController);
-            DirectoryEntry de = ActiveDirectoryUtils.GetADObject(cn);
-			ActiveDirectoryUtils.SetADObjectPropertyValue(de, "targetAddress", "SMTP:"+email);
+		{
+			string cn = ActiveDirectoryUtils.AddADPrefix(id, PrimaryDomainController);
+			DirectoryEntry de = ActiveDirectoryUtils.GetADObject(cn);
+			ActiveDirectoryUtils.SetADObjectPropertyValue(de, "targetAddress", "SMTP:" + email);
 			//ActiveDirectoryUtils.SetADObjectPropertyValue(de, "mail", email);
-            de.CommitChanges();                                    
-                
+			de.CommitChanges();
+
 		}
 
 		private string GetContactEmail(string id)
@@ -2997,12 +3018,12 @@ namespace WebsitePanel.Providers.HostedSolution
 				email = email.Substring(5);
 			return email;
 		}
-        
-        private void SetContactGeneralSettingsInternal(string accountName, string displayName, string email,
+
+		private void SetContactGeneralSettingsInternal(string accountName, string displayName, string email,
 			bool hideFromAddressBook, string firstName, string initials, string lastName, string address,
 			string city, string state, string zip, string country, string jobTitle, string company,
 			string department, string office, string managerAccountName, string businessPhone, string fax,
-            string homePhone, string mobilePhone, string pager, string webPage, string notes, int useMapiRichTextFormat, string defaultDomain)
+			string homePhone, string mobilePhone, string pager, string webPage, string notes, int useMapiRichTextFormat, string defaultDomain)
 		{
 			ExchangeLog.LogStart("SetContactGeneralSettingsInternal");
 			ExchangeLog.DebugInfo("Account: {0}", accountName);
@@ -3015,12 +3036,12 @@ namespace WebsitePanel.Providers.HostedSolution
 				Command cmd = new Command("Get-MailContact");
 				cmd.Parameters.Add("Identity", accountName);
 				Collection<PSObject> result = ExecuteShellCommand(runSpace, cmd);
-				
+
 				string id = GetResultObjectDN(result);
 				string tempEmail = SmtpAddressToString((SmtpAddress)GetPSObjectProperty(result[0], "PrimarySmtpAddress"));
-			    string []parts = tempEmail.Split('@');
-                if (parts != null && parts.Length > 0)
-			        tempEmail = parts[0] + '@' + defaultDomain;
+				string[] parts = tempEmail.Split('@');
+				if (parts != null && parts.Length > 0)
+					tempEmail = parts[0] + '@' + defaultDomain;
 
 				cmd = new Command("Set-MailContact");
 				cmd.Parameters.Add("Identity", accountName);
@@ -3028,11 +3049,11 @@ namespace WebsitePanel.Providers.HostedSolution
 				cmd.Parameters.Add("DisplayName", displayName);
 				cmd.Parameters.Add("HiddenFromAddressListsEnabled", hideFromAddressBook);
 				cmd.Parameters.Add("ExternalEmailAddress", tempEmail);
-                cmd.Parameters.Add("UseMapiRichTextFormat", (UseMapiRichTextFormat)useMapiRichTextFormat);
+				cmd.Parameters.Add("UseMapiRichTextFormat", (UseMapiRichTextFormat)useMapiRichTextFormat);
 				cmd.Parameters.Add("WindowsEmailAddress", tempEmail);
-                ExecuteShellCommand(runSpace, cmd);
-                
-           
+				ExecuteShellCommand(runSpace, cmd);
+
+
 				cmd = new Command("Set-Contact");
 				cmd.Parameters.Add("Identity", accountName);
 				cmd.Parameters.Add("FirstName", firstName);
@@ -3055,8 +3076,8 @@ namespace WebsitePanel.Providers.HostedSolution
 				cmd.Parameters.Add("Pager", pager);
 				cmd.Parameters.Add("WebPage", webPage);
 				cmd.Parameters.Add("Notes", notes);
-			    
-    			ExecuteShellCommand(runSpace, cmd);
+
+				ExecuteShellCommand(runSpace, cmd);
 
 				SetContactEmail(id, email);
 
@@ -3192,7 +3213,7 @@ namespace WebsitePanel.Providers.HostedSolution
 				{
 					Log.WriteError(ex);
 				}
-				
+
 				if (securityGroupId != null)
 					break;
 
@@ -3408,7 +3429,7 @@ namespace WebsitePanel.Providers.HostedSolution
 				Collection<PSObject> result = ExecuteShellCommand(runSpace, cmd);
 				PSObject group = result[0];
 				string manager = GetGroupManager(group);
-			
+
 				//set members
 				ExchangeAccount[] accounts = GetGroupMembers(runSpace, accountName);
 				Dictionary<string, string> existingMembers = new Dictionary<string, string>();
@@ -3451,7 +3472,7 @@ namespace WebsitePanel.Providers.HostedSolution
 				//remove old manager rights
 				if (!string.IsNullOrEmpty(manager))
 				{
-					RemoveADPermission(runSpace, accountName, manager, "WriteProperty", null, "Member"); 
+					RemoveADPermission(runSpace, accountName, manager, "WriteProperty", null, "Member");
 				}
 
 				SetGroup(runSpace, accountName, managedBy, notes);
@@ -3821,7 +3842,7 @@ namespace WebsitePanel.Providers.HostedSolution
 
 
 				exchangeDistributionList = new ExchangeDistributionList();
-			    exchangeDistributionList.AccountName = accountName;
+				exchangeDistributionList.AccountName = accountName;
 				exchangeDistributionList.SendOnBehalfAccounts = GetSendOnBehalfAccounts(runspace, distributionGroup);
 				exchangeDistributionList.SendAsAccounts = GetSendAsAccounts(runspace, organizationId, cn);
 			}
@@ -3898,7 +3919,7 @@ namespace WebsitePanel.Providers.HostedSolution
 			ExchangeLog.LogEnd("GeDistributionListCommonName");
 			return cn;
 		}
-	
+
 		#endregion
 
 		#region Public folders
@@ -4109,7 +4130,7 @@ namespace WebsitePanel.Providers.HostedSolution
 				//try to avoid message: "The Active Directory proxy object for the public folder 'XXX'
 				// is being generated. Please try again later."
 				int attempts = 0;
-			    string windowsEmailAddress = null;
+				string windowsEmailAddress = null;
 				while (true)
 				{
 					cmd = new Command("Get-MailPublicFolder");
@@ -4120,7 +4141,7 @@ namespace WebsitePanel.Providers.HostedSolution
 					if (result != null && result.Count > 0)
 					{
 						id = GetResultObjectIdentity(result);
-                        windowsEmailAddress = ObjToString(GetPSObjectProperty(result[0], "WindowsEmailAddress"));
+						windowsEmailAddress = ObjToString(GetPSObjectProperty(result[0], "WindowsEmailAddress"));
 						break;
 					}
 
@@ -4149,11 +4170,11 @@ namespace WebsitePanel.Providers.HostedSolution
 						cmd.Parameters.Add("Alias", accountName);
 						cmd.Parameters.Add("EmailAddressPolicyEnabled", false);
 						cmd.Parameters.Add("CustomAttribute1", organizationId);
-                        cmd.Parameters.Add("CustomAttribute3", windowsEmailAddress);
+						cmd.Parameters.Add("CustomAttribute3", windowsEmailAddress);
 						cmd.Parameters.Add("PrimarySmtpAddress", email);
 						ExecuteShellCommand(runSpace, cmd, out errors);
-						
-						if ( errors.Length == 0 ) 
+
+						if (errors.Length == 0)
 							success = true;
 					}
 					catch (Exception ex)
@@ -4446,10 +4467,10 @@ namespace WebsitePanel.Providers.HostedSolution
 				if (smtpAddress != null)
 					primaryEmail = smtpAddress.ToString();
 
-                //SmtpAddress winAddress = (SmtpAddress)GetPSObjectProperty(publicFolder, "WindowsEmailAddress");
-                //if (winAddress != null)
-                //    windowsEmail = winAddress.ToString();
-                windowsEmail = ObjToString(GetPSObjectProperty(publicFolder, "CustomAttribute3"));
+				//SmtpAddress winAddress = (SmtpAddress)GetPSObjectProperty(publicFolder, "WindowsEmailAddress");
+				//if (winAddress != null)
+				//    windowsEmail = winAddress.ToString();
+				windowsEmail = ObjToString(GetPSObjectProperty(publicFolder, "CustomAttribute3"));
 
 
 				ProxyAddressCollection emails = (ProxyAddressCollection)GetPSObjectProperty(publicFolder, "EmailAddresses");
@@ -4493,8 +4514,8 @@ namespace WebsitePanel.Providers.HostedSolution
 				PSObject publicFolder = result[0];
 
 				//SmtpAddress winAddress = (SmtpAddress)GetPSObjectProperty(publicFolder, "WindowsEmailAddress");
-                string windowsEmail = ObjToString(GetPSObjectProperty(publicFolder, "CustomAttribute3"));
-                //string windowsEmail = ObjToString(winAddress);
+				string windowsEmail = ObjToString(GetPSObjectProperty(publicFolder, "CustomAttribute3"));
+				//string windowsEmail = ObjToString(winAddress);
 
 				ProxyAddressCollection emails = new ProxyAddressCollection();
 				ProxyAddress proxy = null;
@@ -4651,7 +4672,7 @@ namespace WebsitePanel.Providers.HostedSolution
 		#endregion
 
 		#region Address Lists (GAL, AL, OAB)
-		
+
 		private string GetAddressListDN(Runspace runSpace, string id)
 		{
 			ExchangeLog.LogStart("GetAddressListDN");
@@ -5320,7 +5341,7 @@ namespace WebsitePanel.Providers.HostedSolution
 
 		private static RunspaceConfiguration runspaceConfiguration = null;
 		private static string ExchangePath = null;
-		
+
 		internal static string GetExchangePath()
 		{
 			if (string.IsNullOrEmpty(ExchangePath))
@@ -5331,7 +5352,7 @@ namespace WebsitePanel.Providers.HostedSolution
 				{
 					string value = (string)rk.GetValue("MsiInstallPath", null);
 					rk.Close();
-					if ( !string.IsNullOrEmpty(value))
+					if (!string.IsNullOrEmpty(value))
 						ExchangePath = Path.Combine(value, "bin");
 				}
 			}
@@ -5673,42 +5694,42 @@ namespace WebsitePanel.Providers.HostedSolution
 		#region Domains
 
 
-        private string[] GetAuthoritativeDomainsInternal()
-        {
-            ExchangeLog.LogStart("GetAuthoritativeDomainsInternal");
+		private string[] GetAuthoritativeDomainsInternal()
+		{
+			ExchangeLog.LogStart("GetAuthoritativeDomainsInternal");
 
-            Runspace runSpace = null;
-            List<string> domains = new List<string>();
-            try
-            {
-                runSpace = OpenRunspace();
-                Command cmd = new Command("Get-AcceptedDomain");
-                
-                Collection<PSObject> result = ExecuteShellCommand(runSpace, cmd);
-                foreach(PSObject current in result)
-                {
-                    domains.Add(GetPSObjectProperty(current, "DomainName").ToString());
-                }
-                                
-            }
-            catch (Exception ex)
-            {
-                ExchangeLog.LogError("GetAuthoritativeDomainsInternal", ex);
-                throw;
-            }
-            finally
-            {
-                CloseRunspace(runSpace);
-            }
+			Runspace runSpace = null;
+			List<string> domains = new List<string>();
+			try
+			{
+				runSpace = OpenRunspace();
+				Command cmd = new Command("Get-AcceptedDomain");
 
-            ExchangeLog.LogEnd("GetAuthoritativeDomainsInternal");
-            return domains.ToArray();
-            
-        }
+				Collection<PSObject> result = ExecuteShellCommand(runSpace, cmd);
+				foreach (PSObject current in result)
+				{
+					domains.Add(GetPSObjectProperty(current, "DomainName").ToString());
+				}
 
-		
-        
-        /// <summary>
+			}
+			catch (Exception ex)
+			{
+				ExchangeLog.LogError("GetAuthoritativeDomainsInternal", ex);
+				throw;
+			}
+			finally
+			{
+				CloseRunspace(runSpace);
+			}
+
+			ExchangeLog.LogEnd("GetAuthoritativeDomainsInternal");
+			return domains.ToArray();
+
+		}
+
+
+
+		/// <summary>
 		/// Creates Authoritative Domain on Hub Transport Server
 		/// </summary>
 		/// <param name="domain"></param>
@@ -5966,7 +5987,6 @@ namespace WebsitePanel.Providers.HostedSolution
 		}
 		#endregion
 
-
 		#region Mobile devices
 
 		private ExchangeMobileDevice[] GetMobileDevicesInternal(string accountName)
@@ -6013,7 +6033,7 @@ namespace WebsitePanel.Providers.HostedSolution
 			device.DeviceType = (string)GetPSObjectProperty(obj, "DeviceType");
 			device.DeviceID = (string)GetPSObjectProperty(obj, "DeviceID");
 			device.DeviceUserAgent = (string)GetPSObjectProperty(obj, "DeviceUserAgent");
-			DateTime? wipeSentTime = (DateTime?)GetPSObjectProperty(obj, "DeviceWipeSentTime"); 
+			DateTime? wipeSentTime = (DateTime?)GetPSObjectProperty(obj, "DeviceWipeSentTime");
 			device.DeviceWipeSentTime = ConvertNullableToDateTime(wipeSentTime);
 			DateTime? wipeRequestTime = (DateTime?)GetPSObjectProperty(obj, "DeviceWipeRequestTime");
 			device.DeviceWipeRequestTime = ConvertNullableToDateTime(wipeRequestTime);
@@ -6046,7 +6066,7 @@ namespace WebsitePanel.Providers.HostedSolution
 					device.Status = MobileDeviceStatus.OK;
 				}
 			}
-			
+
 			return device;
 		}
 
@@ -6060,7 +6080,7 @@ namespace WebsitePanel.Providers.HostedSolution
 				runSpace = OpenRunspace();
 				Command cmd = new Command("Get-ActiveSyncDeviceStatistics");
 				cmd.Parameters.Add("Identity", id);
-				cmd.Parameters.Add("ShowRecoveryPassword", true); 
+				cmd.Parameters.Add("ShowRecoveryPassword", true);
 				Collection<PSObject> result = ExecuteShellCommand(runSpace, cmd);
 				if (result != null && result.Count > 0)
 				{
@@ -6074,7 +6094,7 @@ namespace WebsitePanel.Providers.HostedSolution
 			ExchangeLog.LogEnd("GetMobileDeviceInternal");
 			return device;
 		}
-		
+
 		private void WipeDataFromDeviceInternal(string id)
 		{
 			ExchangeLog.LogStart("WipeDataFromDeviceInternal");
@@ -6093,7 +6113,7 @@ namespace WebsitePanel.Providers.HostedSolution
 			}
 			ExchangeLog.LogEnd("WipeDataFromDeviceInternal");
 		}
-		
+
 		private void CancelRemoteWipeRequestInternal(string id)
 		{
 			ExchangeLog.LogStart("CancelRemoteWipeRequestInternal");
@@ -6289,12 +6309,12 @@ namespace WebsitePanel.Providers.HostedSolution
 
 		internal int ConvertNullableToInt32<T>(Nullable<T> value) where T : struct
 		{
-		    int ret = 0;
+			int ret = 0;
 			if (value.HasValue)
-		    {
+			{
 				ret = Convert.ToInt32(value.Value);
-		    }
-		    return ret;
+			}
+			return ret;
 		}
 
 
@@ -6422,6 +6442,35 @@ namespace WebsitePanel.Providers.HostedSolution
 			return ret;
 		}
 
+		public override bool IsInstalled()
+		{
+			int value = 0;
+			RegistryKey root = Registry.LocalMachine;
+			RegistryKey rk = root.OpenSubKey(ExchangeRegistryPath);
+			if (rk != null)
+			{
+				value = (int)rk.GetValue("MsiProductMajor", null);
+				rk.Close();
+			}
+
+			return value == 8;
+		}
+
+		public Version GetExchangeVersion()
+		{
+			int major = 0;
+			int minor = 0;
+			RegistryKey root = Registry.LocalMachine;
+			RegistryKey rk = root.OpenSubKey(ExchangeRegistryPath);
+			if (rk != null)
+			{
+				major = (int)rk.GetValue("MsiProductMajor", 0);
+				minor = (int)rk.GetValue("MsiProductMinor", 0);
+				rk.Close();
+			}
+
+			return new Version(major, minor);
+		}
 		#endregion
 
 		#region Transactions
@@ -6521,22 +6570,5 @@ namespace WebsitePanel.Providers.HostedSolution
 			}
 		}
 		#endregion
-
-        public override bool IsInstalled()
-        {
-            int value = 0;
-            RegistryKey root = Registry.LocalMachine;
-			RegistryKey rk = root.OpenSubKey(ExchangeRegistryPath);
-            if (rk != null)
-            {
-                value = (int)rk.GetValue("MsiProductMajor", null);
-                rk.Close();
-            }
-
-
-            return value == 8;
-        }
-
 	}
 }
-
