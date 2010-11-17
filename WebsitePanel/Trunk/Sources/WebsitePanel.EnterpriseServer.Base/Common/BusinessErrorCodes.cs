@@ -142,6 +142,8 @@ namespace WebsitePanel.EnterpriseServer
         public const int ERROR_MAIL_LISTS_RECIPIENTS_LIMIT = -722;
         public const int ERROR_MAIL_LICENSE_DOMAIN_QUOTA = -723;
         public const int ERROR_MAIL_LICENSE_USERS_QUOTA = -724;
+
+		public const int ERROR_MAIL_ACCOUNT_MAX_MAILBOX_SIZE_LIMIT = -725;
         #endregion
 
         #region FTP
