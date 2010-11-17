@@ -86,14 +86,11 @@ namespace WebsitePanel.Portal
                 LoadProviderControl((int)ViewState["PackageId"], "Mail", providerControl, "EditAccount.ascx");
                 // load package context
                 PackageContext cntx = PackagesHelper.GetCachedPackageContext((int)ViewState["PackageId"]);
-                // set messagebox size textbox visibility
-                if (cntx.Quotas.ContainsKey(Quotas.MAIL_DISABLESIZEEDIT))
-                {
-                    txtMailBoxSizeLimit.Visible = cntx.Quotas[Quotas.MAIL_DISABLESIZEEDIT].QuotaAllocatedValue == 0;
-                    lblMailboxSizeLimit.Visible = txtMailBoxSizeLimit.Visible;
-                }
+
                 if (!IsPostBack)
                 {
+					// set messagebox size textbox visibility
+					HandleMaxMailboxSizeLimitDisplay(cntx);
                     // bind item to controls
                     if (item != null)
                     {
@@ -101,18 +98,11 @@ namespace WebsitePanel.Portal
                         mailEditAddress.Email = item.Name;
                         mailEditAddress.EditMode = true;
                         passwordControl.EditMode = true;
-                        if (txtMailBoxSizeLimit.Visible)
-                        {
-                            txtMailBoxSizeLimit.Text = item.MaxMailboxSize.ToString();
-                        }
+						// Display currently set max mailbox size limit
+						SetMaxMailboxSizeLimit(item.MaxMailboxSize);
                         // other controls
                         IMailEditAccountControl ctrl = (IMailEditAccountControl)providerControl.Controls[0];
                         ctrl.BindItem(item);
-                    }
-                    if (string.IsNullOrEmpty(txtMailBoxSizeLimit.Text)
-                        && cntx.Quotas[Quotas.MAIL_MAXBOXSIZE].QuotaAllocatedValue != -1)
-                    {
-                        txtMailBoxSizeLimit.Text = cntx.Quotas[Quotas.MAIL_MAXBOXSIZE].QuotaAllocatedValue.ToString();
                     }
                 }
             }
@@ -123,6 +113,67 @@ namespace WebsitePanel.Portal
                 return;
             }
         }
+
+		private void HandleMaxMailboxSizeLimitDisplay(PackageContext cntx)
+		{
+			if (cntx.Quotas.ContainsKey(Quotas.MAIL_DISABLESIZEEDIT))
+			{
+				// Obtain quotas from the plan assigned
+				bool maxMailboxSizeChangeable = (cntx.Quotas[Quotas.MAIL_DISABLESIZEEDIT].QuotaAllocatedValue == 0);
+				int maxMailboxSizeLimit = cntx.Quotas[Quotas.MAIL_MAXBOXSIZE].QuotaAllocatedValue;
+				// Ensure all validation controls, markup and layout is rendered consistently
+				if (maxMailboxSizeLimit == -1 && maxMailboxSizeChangeable == false)
+				{
+					lblMaxMailboxSizeLimit.Visible = true;
+					txtMailBoxSizeLimit.Visible = false;
+				}
+				// 
+				else if (maxMailboxSizeLimit >= 0 && maxMailboxSizeChangeable == false)
+				{
+					lblMaxMailboxSizeLimit.Visible = true;
+					txtMailBoxSizeLimit.Visible = false;
+				}
+				else if(maxMailboxSizeLimit == -1 && maxMailboxSizeChangeable == true)
+				{
+					lblMaxMailboxSizeLimit.Visible = false;
+					txtMailBoxSizeLimit.Visible = true;
+				}
+				else // this is the cue for the fallback clause: if (maxMailboxSizeLimit >= 0 && maxMailboxSizeChangeable == true)
+				{
+					lblMaxMailboxSizeLimit.Visible = false;
+					txtMailBoxSizeLimit.Visible = true;
+				}
+				// Set the value being displayed for both controls in either case, as the logic above addresses all rendering concerns.
+				SetMaxMailboxSizeLimit(maxMailboxSizeLimit);
+				// Configure required field & range validators appropriately
+				RequiredFieldValidator1.Enabled = txtMailBoxSizeLimit.Visible;
+				MaxMailboxSizeLimitValidator.Enabled = txtMailBoxSizeLimit.Visible;
+				CompareValidator1.Enabled = txtMailBoxSizeLimit.Visible;
+				// Ensure the validator has its mimimun & maximum values adjusted correspondingly
+				if (maxMailboxSizeLimit == -1 || maxMailboxSizeLimit == 0)
+				{
+					MaxMailboxSizeLimitValidator.Enabled = false;
+				}
+				else
+				{
+					MaxMailboxSizeLimitValidator.MinimumValue = "1";
+					MaxMailboxSizeLimitValidator.MaximumValue = maxMailboxSizeLimit.ToString();
+				}
+				// Format the validator's error message
+				MaxMailboxSizeLimitValidator.ErrorMessage = String.Format(MaxMailboxSizeLimitValidator.ErrorMessage,
+					MaxMailboxSizeLimitValidator.MinimumValue, MaxMailboxSizeLimitValidator.MaximumValue);
+			}
+		}
+
+		private void SetMaxMailboxSizeLimit(int sizeLimit)
+		{
+			txtMailBoxSizeLimit.Text = sizeLimit.ToString();
+			// Ensure we use correct wording when the mailbox size limit is disabled for editing
+			if (sizeLimit == -1 || sizeLimit == 0)
+				lblMaxMailboxSizeLimit.Text = GetSharedLocalizedString("Text.Unlimited");
+			else
+				lblMaxMailboxSizeLimit.Text = sizeLimit.ToString();
+		}
 
         private void SaveItem()
         {

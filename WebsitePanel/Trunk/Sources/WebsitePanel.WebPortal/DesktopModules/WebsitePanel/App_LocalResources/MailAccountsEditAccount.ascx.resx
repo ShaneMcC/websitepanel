@@ -132,10 +132,16 @@
   <data name="btnSave.Text" xml:space="preserve">
     <value>Save</value>
   </data>
+  <data name="CompareValidator1.ErrorMessage" xml:space="preserve">
+    <value>Please ensure the value you entered is a positive number.</value>
+  </data>
   <data name="lblMailboxSizeLimit.Text" xml:space="preserve">
     <value>Mailbox Size Limit, MB:</value>
   </data>
   <data name="lblPassword.Text" xml:space="preserve">
     <value>Password:</value>
+  </data>
+  <data name="MaxMailboxSizeLimitValidator.ErrorMessage" xml:space="preserve">
+    <value>Please ensure the value you entered is in range between {0} and {1}.</value>
   </data>
 </root>
