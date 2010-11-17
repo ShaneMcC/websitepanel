@@ -5,6 +5,59 @@
 </head>
 <body>
     <h1>WebsitePanel - Release Notes</h1>
+	<p>
+        <strong>November 17, 2010 - v1.1.0</strong></p>
+    <ul>
+		<li>Added Exchange 2010 SP1 Hosting Mode module</li>
+        <li>Added SharePoint 2010 module (contributed by 
+			<a href="http://social.msdn.microsoft.com/profile/webio/?type=forum&amp;referrer=http://social.msdn.microsoft.com/Forums/en-US/wspdiscuss/threads" 
+				target="_blank">Webio</a>)</li>
+		<li>Added SmarterMail 7 module (contributed by 
+			<a href="http://social.msdn.microsoft.com/profile/yoda-ict/?type=forum&amp;referrer=http://social.msdn.microsoft.com/Forums/en-US/wspdiscuss/thread/0053f21c-f7ee-4e97-8fd5-0e84cb046cc2" 
+				target="_blank">yoda-ict</a>)</li>
+		<li>Added SmarterStats 6 module  (contributed by 
+			<a href="http://social.msdn.microsoft.com/profile/yoda-ict/?type=forum&amp;referrer=http://social.msdn.microsoft.com/Forums/en-US/wspdiscuss/thread/0053f21c-f7ee-4e97-8fd5-0e84cb046cc2" 
+				target="_blank">yoda-ict</a>)</li>
+		<li>Added: Addition to get the correct domain name inside the TaskManager (contributed by 
+			<a href="http://social.msdn.microsoft.com/profile/yoda-ict/?type=forum&amp;referrer=http://social.msdn.microsoft.com/Forums/en-US/wspdiscuss/thread/0053f21c-f7ee-4e97-8fd5-0e84cb046cc2" 
+				target="_blank">yoda-ict</a>)</li>
+		<li>Added: Workaround for Global Address list to show up after Exchange 2010 SP1 installation without /hosting switch. This workaround is not switched on by default; to switch it on, please follow the instructions provided in this 
+			<a href="http://social.msdn.microsoft.com/Forums/en-US/wspsupport/thread/342db243-a74b-4374-a848-d9edfbc7f072" 
+				target="_blank">post</a>.</li>
+		<li>Added: WebsitePanel.IISModules (<a href="http://iismodules.codeplex.com/" 
+				target="_blank">http://iismodules.codeplex.com</a>)</li>
+		<li>Added: meta:resourcekey to BillingCyclesEditCycle.ascx and BillingCyclesAddCycle.ascx</li>
+        <li>Updated WSP Portal web.config in 1.1 upgrade script to enable custom error</li>
+		<li>Fixed: MDaemon alias import fails: Directory hardcoded in the module (contributed by 
+			<a href="https://sourceforge.net/tracker/?func=detail&amp;atid=1330292&amp;aid=3032904&amp;group_id=316247" 
+				target="_blank">mcrook</a>)</li>
+		<li>Fixed: When updating Exchange account general settings an empty account password is stored into WSP database (contributed by 
+			<a href="http://social.msdn.microsoft.com/profile/webio/?type=forum&amp;referrer=http://social.msdn.microsoft.com/Forums/en-US/wspdiscuss/threads" 
+				target="_blank">Webio</a>)</li>
+		<li>Fixed: Bug with mail aliases (MDaemon) (contributed by 
+			<a href="https://sourceforge.net/tracker/?func=detail&amp;atid=1330292&amp;aid=3032904&amp;group_id=316247" 
+				target="_blank">mcrook</a>)</li>
+		<li>Fixed: SmarterMail 7: Max mailbox size -1 (contributed by 
+			<a href="http://social.msdn.microsoft.com/profile/yoda-ict/?type=forum&amp;referrer=http://social.msdn.microsoft.com/Forums/en-US/wspdiscuss/thread/0053f21c-f7ee-4e97-8fd5-0e84cb046cc2" 
+				target="_blank">yoda-ict</a>)</li>
+        <li>Fixed: Not showing emails (MDaemon ODBC database) (contributed by 
+			<a href="https://sourceforge.net/tracker/?func=detail&amp;atid=1330292&amp;aid=3032904&amp;group_id=316247" 
+				target="_blank">mcrook</a>)</li>
+		<li>Fixed: Show apps for all languages in Microsoft Web App Gallery module</li>
+		<li>Fixed: Microsoft Web Application Gallery 1.0.1 module - images missing when 
+			catalog or an individual app page is displayed</li>
+		<li>Fixed: Exchange 2010 SP1 Beta module unable to create organization when plan quotas are set to unlimited</li>
+		<li>Fixed: Customer login account gets error while clicking on "exporting report" button under Disk Space Report</li>
+		<li>Fixed: Microsoft SQL 2008 user creation with some characters fails</li>
+		<li>Fixed: Unable to restore Microsoft SQL Server 2008 R2 databases</li>
+		<li>Fixed: Zip Files Error in File Manager and related modules: cannot zip 65535 files or greater</li>
+		<li>Fixed: Localization Toolkit Import is not working</li>
+		<li>Fixed: Problems calculating disk space for Exchange-enabled spaces</li>
+		<li>Fixed: Negative value is allowed in &quot;Max Mailbox Size, MB&quot; field when create or 
+			edit a mail box</li>
+		<li>Fixed: Service provider properties are not updated/Missing UpdateServiceProperties stored procedure in the database when do a fresh install</li>
+		<li>Fixed: Exchange 2010 SP1 Hosted Edition provider renamed to Exchange 2010 SP1 Hosting Mode</li>
+    </ul>
     <p>
         <strong>September 3, 2010 - v1.0.2</strong></p>
     <ul>
