@@ -114,6 +114,10 @@ namespace WebsitePanel.EnterpriseServer
             if (PackageController.GetPackageItemByName(item.PackageId, item.Name, typeof(MailAccount)) != null)
                 return BusinessErrorCodes.ERROR_MAIL_ACCOUNTS_PACKAGE_ITEM_EXISTS;
 
+			// check mailbox account size limit
+			if (item.MaxMailboxSize < -1)
+				return BusinessErrorCodes.ERROR_MAIL_ACCOUNT_MAX_MAILBOX_SIZE_LIMIT;
+
             // place log record
             TaskManager.StartTask("MAIL_ACCOUNT", "ADD", item.Name);
             int itemId = 0;
@@ -181,6 +185,10 @@ namespace WebsitePanel.EnterpriseServer
             // check package
             int packageCheck = SecurityContext.CheckPackage(origItem.PackageId, DemandPackage.IsActive);
             if (packageCheck < 0) return packageCheck;
+
+			// check mailbox account size limit
+			if (item.MaxMailboxSize < -1)
+				return BusinessErrorCodes.ERROR_MAIL_ACCOUNT_MAX_MAILBOX_SIZE_LIMIT;
 
             // place log record
             TaskManager.StartTask("MAIL_ACCOUNT", "UPDATE", origItem.Name);
@@ -1215,6 +1223,7 @@ namespace WebsitePanel.EnterpriseServer
             // place log record
             TaskManager.StartTask("MAIL_DOMAIN", "ADD_POINTER", mailDomain.Name);
             TaskManager.ItemId = itemId;
+			TaskManager.TaskParameters["Domain ID"] = domain.DomainId;
             TaskManager.WriteParameter("Domain pointer", domain.DomainName);
 
             try
@@ -1259,6 +1268,7 @@ namespace WebsitePanel.EnterpriseServer
             // place log record
             TaskManager.StartTask("MAIL_DOMAIN", "DELETE_POINTER", mailDomain.Name);
             TaskManager.ItemId = itemId;
+			TaskManager.TaskParameters["Domain ID"] = domain.DomainId;
             TaskManager.WriteParameter("Domain pointer", domain.DomainName);
 
             try
