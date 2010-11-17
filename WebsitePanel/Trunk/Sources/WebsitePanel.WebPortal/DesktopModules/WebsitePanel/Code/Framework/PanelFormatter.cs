@@ -46,6 +46,11 @@ namespace WebsitePanel.Portal
 			return PortalUtils.GetSharedLocalizedString(Utils.ModuleName, "YesNo." + flag.ToString());
 		}
 
+		public static string GetLocalizedResourceGroupName(string groupName)
+		{
+			return PortalUtils.GetSharedLocalizedString(Utils.ModuleName, String.Format("ResourceGroup.{0}", groupName));
+		}
+
         public static string GetDisplaySizeInBytes(long size)
         {
             if (size >= 0x400 && size < 0x100000)

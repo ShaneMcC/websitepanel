@@ -92,7 +92,7 @@ namespace WebsitePanel.Portal
 
         private void BindService()
         {
-            litGroup.Text = resourceGroup.GroupName;
+			litGroup.Text = PanelFormatter.GetLocalizedResourceGroupName(resourceGroup.GroupName);
             litProvider.Text = provider.DisplayName;
 
             txtServiceName.Text = service.ServiceName;

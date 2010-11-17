@@ -142,6 +142,6 @@
     <value>Virtual Private Servers</value>
   </data>
   <data name="lnkExchangeHostedEdition.Text" xml:space="preserve">
-    <value>Exchange Hosted Edition</value>
+    <value>Exchange Hosting Mode</value>
   </data>
 </root>

@@ -39,7 +39,7 @@
         </li>
         <li>
             <asp:HyperLink ID="lnkExchangeHostedEditionPolicy" runat="server" meta:resourcekey="lnkExchangeHostedEditionPolicy"
-                    Text="Exchange Hosted Edition Policy" NavigateUrl='<%# GetSettingsLink("ExchangeHostedEditionPolicy", "SettingsExchangeHostedEditionPolicy") %>'></asp:HyperLink>
+                    Text="Exchange Hosting Mode Policy" NavigateUrl='<%# GetSettingsLink("ExchangeHostedEditionPolicy", "SettingsExchangeHostedEditionPolicy") %>'></asp:HyperLink>
         </li>
         <li>
             <asp:HyperLink ID="lnkVpsPolicy" runat="server" meta:resourcekey="lnkVpsPolicy"

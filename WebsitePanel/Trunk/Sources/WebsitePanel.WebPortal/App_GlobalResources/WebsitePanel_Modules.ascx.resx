@@ -718,7 +718,7 @@
     <value>Allocate Web Site IP Addresses</value>
   </data>
   <data name="ModuleTitle.ExchangeHostedEdition" xml:space="preserve">
-    <value>Exchange Hosted Edition</value>
+    <value>Exchange Hosting Mode</value>
   </data>
   <data name="ModuleTitle.HostedExchangeAddOrganizationDomain" xml:space="preserve">
     <value>Add Organization Domain</value>

@@ -56,8 +56,7 @@ namespace WebsitePanel.Portal
         private void BindGroup()
         {
             ResourceGroupInfo group = ES.Services.Servers.GetResourceGroup(PanelRequest.GroupID);
-            litGroupName.Text = group.GroupName;
-            serviceName.Text = group.GroupName;
+			litGroupName.Text = serviceName.Text = PanelFormatter.GetLocalizedResourceGroupName(group.GroupName);
         }
 
         private void BindProviders()
