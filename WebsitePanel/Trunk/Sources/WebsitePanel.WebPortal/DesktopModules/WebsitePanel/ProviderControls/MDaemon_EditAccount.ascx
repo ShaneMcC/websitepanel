@@ -57,10 +57,10 @@
 		    </td>
 	    </tr>
 	    <tr>
-	        <td>
+	        <td class="SubHead">
 	            <asp:Label runat="server" ID="lblRetainLocalCopy" meta:resourcekey="lblRetainLocalCopy" />
 	        </td>
-	        <td>
+	        <td class="SubHead">
 	            <asp:CheckBox runat="server" id="cbRetainLocalCopy" meta:resourcekey="cbRetainLocalCopy"/>
 	        </td>
 	    </tr>
