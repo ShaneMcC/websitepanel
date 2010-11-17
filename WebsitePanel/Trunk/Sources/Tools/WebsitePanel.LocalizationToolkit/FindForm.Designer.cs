@@ -180,7 +180,7 @@ namespace WebsitePanel.LocalizationToolkit
 			// 
 			this.AcceptButton = this.btnFindNext;
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
-			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Inherit;
 			this.CancelButton = this.btnClose;
 			this.ClientSize = new System.Drawing.Size(505, 197);
 			this.ControlBox = false;
