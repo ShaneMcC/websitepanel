@@ -3,6 +3,7 @@
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentColumn" runat="server">
     <h1>3rd Party Software</h1>
+	<p style="text-align: justify;">WebsitePanel works with a huge list of 3rd party products. Please note that support for the software systems managed by WebsitePanel is provided by the publisher or manufacturer of those software systems. For example support for SmarterMail is provided by SmarterTools.  Likewise support for Microsoft products such as IIS is provided by Microsoft support under the standard product support channels.</p>
     
     <h2>Operating Systems</h2>
     <ul>
@@ -32,7 +33,7 @@
 
     <h2>Mail Servers</h2>
     <ul>
-        <li>SmarterMail 2.x - 6.x</li>
+        <li>SmarterMail 2.x - 7.x</li>
         <li>MailEnable 2.x - 4.x</li>
         <li>Merak Mail Server 8.x - 10.x</li>
         <li>MDaemon 9.x - 10.x</li>
@@ -60,16 +61,19 @@
 
     <h2>Statistics Servers</h2>
     <ul>
-        <li>SmarterStats 3.x - 5.x</li>
+        <li>SmarterStats 3.x - 6.x</li>
         <li>AWStats Statistics (free software)</li>
     </ul>
 
     <h2>Collaboration</h2>
     <ul>
+		<li>Microsoft Exchange Server 2010 SP1 installed with /hosting switch</li>
         <li>Microsoft Exchange Server 2007 and 2010
-            <br /><span style="color:red">Exchange 2010 SP1 is not supported. For Exchange 2010 SP1 support status update please see <a href="http://social.msdn.microsoft.com/Forums/en-US/wspentsupport/thread/f4db8636-a3a3-4c1c-93dd-82390f9d1d8f">this post</a>.</span></li>
-        <li>BlackBerry Enterprise Server</li>
+			<br /><span style="color:red">Please refer to this post <a href="http://social.msdn.microsoft.com/Forums/en-US/wspsupport/thread/539276af-77f6-4669-934d-2eb8d1017d2a
+">post</a> for support status update on Exchange 2007 and 2010.</span></li>
+		<li>BlackBerry Enterprise Server</li>
         <li>Windows SharePoint Services 3.0</li>
+		<li>SharePoint Foundation 2010</li>
         <li>Office Communication Server 2007</li>
         <li>Microsoft Dynamics CRM 4.0</li>
     </ul>

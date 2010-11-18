@@ -9,5 +9,6 @@
     <p class="Download pdf"><a href="http://sourceforge.net/projects/websitepanel/files/Documentation/WebsitePanel-Installation-Guide.pdf/download">WebsitePanel Installation Guide (~3 MB)</a></p>
 
     <h2>Modules</h2>
-    <p class="Download pdf"><a href="http://www.websitepanel.net/docs/WebsitePanel Exchange 2010 SP1 Hosted Edition Module Guide.pdf">WebsitePanel Exchange 2010 SP1 Hosted Edition Module Guide (~1 MB)</a></p>
+	<p class="Download pdf"><a href="http://www.websitepanel.net/docs/WebsitePanel Exchange 2010 SP1 Hosting Mode Module Guide.pdf">WebsitePanel Exchange 2010 SP1 Hosting Mode Module Guide (~300 KB)</a></p>
+	<p class="Download pdf"><a href="http://www.websitepanel.net/docs/Guidance for migration to Exchange 2010 SP1 Hosting Mode.pdf">Guidance for migration to Exchange 2010 SP1 Hosting Mode (~770 KB)</a></p>
 </asp:Content>
