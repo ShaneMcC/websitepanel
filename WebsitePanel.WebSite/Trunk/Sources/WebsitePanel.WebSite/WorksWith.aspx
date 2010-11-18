@@ -69,7 +69,7 @@
     <ul>
 		<li>Microsoft Exchange Server 2010 SP1 installed with /hosting switch</li>
         <li>Microsoft Exchange Server 2007 and 2010
-			<br /><span style="color:red">Please refer to this post <a href="http://social.msdn.microsoft.com/Forums/en-US/wspsupport/thread/539276af-77f6-4669-934d-2eb8d1017d2a
+			<br /><span style="color:red">Please refer to this <a href="http://social.msdn.microsoft.com/Forums/en-US/wspsupport/thread/539276af-77f6-4669-934d-2eb8d1017d2a
 ">post</a> for support status update on Exchange 2007 and 2010.</span></li>
 		<li>BlackBerry Enterprise Server</li>
         <li>Windows SharePoint Services 3.0</li>
