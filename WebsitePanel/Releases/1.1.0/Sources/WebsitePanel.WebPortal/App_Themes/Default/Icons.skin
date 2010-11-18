@@ -1,0 +1,82 @@
+<%--
+Default skin template. The following skins are provided as examples only.
+
+1. Named control skin. The SkinId should be uniquely defined because
+   duplicate SkinId's per control type are not allowed in the same theme.
+
+<asp:GridView runat="server" SkinId="gridviewSkin" BackColor="White" >
+   <AlternatingRowStyle BackColor="Blue" />
+</asp:GridView>
+
+2. Default skin. The SkinId is not defined. Only one default 
+   control skin per control type is allowed in the same theme.
+
+<asp:Image runat="server" ImageUrl="~/images/image1.jpg" />
+--%>
+
+<%--  Entity Icons --%>
+<asp:Image SkinID="Admin" runat="server" ImageUrl="icons/admin_48.png" ImageAlign="AbsMiddle" Width="48" Height="48"></asp:Image>
+<asp:Image SkinID="Admin128" runat="server" ImageUrl="icons/operator_128.png" ImageAlign="AbsMiddle" Width="128" Height="128"></asp:Image>
+<asp:Image SkinID="Reseller128" runat="server" ImageUrl="icons/admin_128.png" ImageAlign="AbsMiddle" Width="128" Height="128"></asp:Image>
+<asp:Image SkinID="User" runat="server" ImageUrl="icons/user_48.png" ImageAlign="AbsMiddle" Width="48" Height="48"></asp:Image>
+<asp:Image SkinID="User128" runat="server" ImageUrl="icons/user_128.png" ImageAlign="AbsMiddle" Width="128" Height="128"></asp:Image>
+<asp:Image SkinID="Space" runat="server" ImageUrl="icons/sphere_48.png" ImageAlign="AbsMiddle" Width="48" Height="48"></asp:Image>
+<asp:Image SkinID="Space128" runat="server" ImageUrl="icons/sphere_128.png" ImageAlign="AbsMiddle" Width="128" Height="128"></asp:Image>
+
+<%--  Command Icons --%>
+<asp:ImageButton SkinID="DropDown" runat="server" ImageUrl="images/user.gif" ImageAlign="AbsMiddle" hspace="3"></asp:ImageButton>
+
+<%--  Shopping Cart Icons --%>
+<asp:Image SkinID="Basket128" runat="server" ImageUrl="icons/basket_128.png" ImageAlign="AbsMiddle" Width="128" Height="128"></asp:Image>
+<asp:Image SkinID="Storehouse128" runat="server" ImageUrl="icons/store_house_128.png" ImageAlign="AbsMiddle" Width="128" Height="128"></asp:Image>
+
+
+<asp:Image SkinID="Organization48" runat="server" ImageUrl="images/Exchange/company__48.png" ImageAlign="AbsMiddle" Width="48" Height="48"></asp:Image>
+<asp:Image SkinID="OrganizationAdd48" runat="server" ImageUrl="images/Exchange/company__add_48.png" ImageAlign="AbsMiddle" Width="48" Height="48"></asp:Image>
+
+<asp:Image SkinID="OrganizationUser48" runat="server" ImageUrl="images/Exchange/admin_48.png" ImageAlign="AbsMiddle" Width="48" Height="48"></asp:Image>
+<asp:Image SkinID="OrganizationUserAdd48" runat="server" ImageUrl="images/Exchange/admin_add_48.png" ImageAlign="AbsMiddle" Width="48" Height="48"></asp:Image>
+
+<%--  Exchange Icons --%>
+<asp:Image SkinID="ExchangeOrg48" runat="server" ImageUrl="images/Exchange/server_mail_48.png" ImageAlign="AbsMiddle" Width="48" Height="48"></asp:Image>
+<asp:Image SkinID="ExchangeOrgAdd48" runat="server" ImageUrl="images/Exchange/server_mail_add_48.png" ImageAlign="AbsMiddle" Width="48" Height="48"></asp:Image>
+<asp:Image SkinID="ExchangeSetup48" runat="server" ImageUrl="images/Exchange/setup_48.png" ImageAlign="AbsMiddle" Width="48" Height="48"></asp:Image>
+<asp:Image SkinID="ExchangeMailbox48" runat="server" ImageUrl="images/Exchange/accounting_mail_48.png" ImageAlign="AbsMiddle" Width="48" Height="48"></asp:Image>
+<asp:Image SkinID="ExchangeMailboxAdd48" runat="server" ImageUrl="images/Exchange/accounting_mail_add_48.png" ImageAlign="AbsMiddle" Width="48" Height="48"></asp:Image>
+<asp:Image SkinID="ExchangeContact48" runat="server" ImageUrl="images/Exchange/contacts_48.png" ImageAlign="AbsMiddle" Width="48" Height="48"></asp:Image>
+<asp:Image SkinID="ExchangeContactAdd48" runat="server" ImageUrl="images/Exchange/contacts_add_48.png" ImageAlign="AbsMiddle" Width="48" Height="48"></asp:Image>
+<asp:Image SkinID="ExchangePublicFolder48" runat="server" ImageUrl="images/Exchange/publicfolder_48.png" ImageAlign="AbsMiddle" Width="48" Height="48"></asp:Image>
+<asp:Image SkinID="ExchangePublicFolderAdd48" runat="server" ImageUrl="images/Exchange/publicfolder_add_48.png" ImageAlign="AbsMiddle" Width="48" Height="48"></asp:Image>
+<asp:Image SkinID="ExchangeDomainName48" runat="server" ImageUrl="images/Exchange/mail_domain_48.png" ImageAlign="AbsMiddle" Width="48" Height="48"></asp:Image>
+<asp:Image SkinID="ExchangeDomainNameAdd48" runat="server" ImageUrl="images/Exchange/mail_domain_add_48.png" ImageAlign="AbsMiddle" Width="48" Height="48"></asp:Image>
+<asp:Image SkinID="ExchangeStorage48" runat="server" ImageUrl="images/Exchange/storage_48.png" ImageAlign="AbsMiddle" Width="48" Height="48"></asp:Image>
+<asp:Image SkinID="ExchangeStorageConfig48" runat="server" ImageUrl="images/Exchange/storage_limits_48.png" ImageAlign="AbsMiddle" Width="48" Height="48"></asp:Image>
+<asp:Image SkinID="ExchangeList48" runat="server" ImageUrl="images/Exchange/distribution_list_48.png" ImageAlign="AbsMiddle" Width="48" Height="48"></asp:Image>
+<asp:Image SkinID="ExchangeListAdd48" runat="server" ImageUrl="images/Exchange/distribution_list_add_48.png" ImageAlign="AbsMiddle" Width="48" Height="48"></asp:Image>
+<asp:Image SkinID="ExchangeActiveSyncConfig48" runat="server" ImageUrl="images/Exchange/activesync_config_48.png" ImageAlign="AbsMiddle" Width="48" Height="48"></asp:Image>
+<asp:Image SkinID="ExchangeOrganization" runat="server" ImageUrl="images/Exchange/building.png" ImageAlign="AbsMiddle" Width="48" Height="48"></asp:Image>
+<asp:Image SkinID="ExchangeModule" runat="server" ImageUrl="images/Exchange/building.png" ImageAlign="AbsMiddle" Width="48" Height="48"></asp:Image>
+<asp:Image SkinID="SharePointModule" runat="server" ImageUrl="images/Exchange/building.png" ImageAlign="AbsMiddle" Width="48" Height="48"></asp:Image>
+
+<asp:Image SkinID="SharePointSiteCollection48" runat="server" ImageUrl="images/colors_48.png" ImageAlign="AbsMiddle" Width="48" Height="48"></asp:Image>
+
+
+<asp:ImageButton SkinID="ExchangeAddressBook16" runat="server" ImageUrl="images/Exchange/address_book.gif" ImageAlign="AbsMiddle" Width="16" Height="16"></asp:ImageButton>
+<asp:Image SkinID="Checkbox16" runat="server" ImageUrl="images/Exchange/checkbox.png" ImageAlign="AbsMiddle" Width="16" Height="16"></asp:Image>
+<asp:Image SkinID="CRMLogo" runat="server" ImageUrl="images/crm_48.png" ImageAlign="AbsMiddle"/>
+<asp:Image SkinID="OCSLogo" runat="server" ImageUrl="images/ocs48.png" ImageAlign="AbsMiddle"/>
+
+<%--  BlackBerry Icons --%>
+<asp:Image SkinID="BlackBerryUsersLogo" runat="server" ImageUrl="images/bbuser48.png" ImageAlign="AbsMiddle"/>
+<%--  VPS Icons --%>
+<asp:Image SkinID="Servers48" runat="server" ImageUrl="images/VPS/servers_48.png" ImageAlign="AbsMiddle" Width="48" Height="48"></asp:Image>
+<asp:Image SkinID="Server48" runat="server" ImageUrl="images/Exchange/setup_48.png" ImageAlign="AbsMiddle" Width="48" Height="48"></asp:Image>
+<asp:Image SkinID="Dvd48" runat="server" ImageUrl="icons/dvd_disc_48.png" ImageAlign="AbsMiddle" Width="48" Height="48"></asp:Image>
+<asp:Image SkinID="DvdDrive48" runat="server" ImageUrl="images/VPS/dvd_drive_48.png" ImageAlign="AbsMiddle" Width="48" Height="48"></asp:Image>
+<asp:Image SkinID="Network48" runat="server" ImageUrl="images/VPS/network_48.png" ImageAlign="AbsMiddle" Width="48" Height="48"></asp:Image>
+<asp:Image SkinID="AuditLog48" runat="server" ImageUrl="icons/record_48.png" ImageAlign="AbsMiddle" Width="48" Height="48"></asp:Image>
+<asp:Image SkinID="Help48" runat="server" ImageUrl="images/VPS/help_48.png" ImageAlign="AbsMiddle" Width="48" Height="48"></asp:Image>
+<asp:Image SkinID="Snapshot48" runat="server" ImageUrl="images/VPS/snapshot_48.png" ImageAlign="AbsMiddle" Width="48" Height="48"></asp:Image>
+<asp:Image SkinID="ServerConfig48" runat="server" ImageUrl="images/VPS/server_config_48.png" ImageAlign="AbsMiddle" Width="48" Height="48"></asp:Image>
+<asp:Image SkinID="AddServer48" runat="server" ImageUrl="images/VPS/add_server_48.png" ImageAlign="AbsMiddle" Width="48" Height="48"></asp:Image>
+<asp:Image SkinID="DeleteServer48" runat="server" ImageUrl="images/VPS/delete_server_48.png" ImageAlign="AbsMiddle" Width="48" Height="48"></asp:Image>
