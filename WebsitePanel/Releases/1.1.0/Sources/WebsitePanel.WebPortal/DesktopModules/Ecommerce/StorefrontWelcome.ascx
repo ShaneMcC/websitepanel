@@ -1,2 +1,0 @@
-<%@ Control Language="C#" AutoEventWireup="true" CodeBehind="StorefrontWelcome.ascx.cs" Inherits="WebsitePanel.Ecommerce.Portal.StorefrontWelcome" %>
-<div class="FormBody" runat="server" id="pnlWelcomeMsg"></div>

@@ -1,2 +1,0 @@
-<%@ Control Language="C#" AutoEventWireup="true" CodeBehind="Logo.ascx.cs" Inherits="WebsitePanel.Portal.SkinControls.Logo" %>
-<a href="<%= Page.ResolveUrl("~/") %>"><asp:Image ID="imgLogo" runat="server" /></a>

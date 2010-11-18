@@ -1,2 +1,0 @@
-<%@ Control Language="C#" AutoEventWireup="true" CodeBehind="CustomerInvoiceTemplated.ascx.cs" Inherits="WebsitePanel.Ecommerce.Portal.DesktopModules.Ecommerce.UserControls.CustomerInvoiceTemplated" %>
-<div runat="server" ID="pnlCustomerInvoice" />
