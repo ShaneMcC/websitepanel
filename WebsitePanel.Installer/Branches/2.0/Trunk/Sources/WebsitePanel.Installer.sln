@@ -1,0 +1,44 @@
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2010
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{129305D5-A9E6-4DCE-BFF6-41809E13EEEE}"
+	ProjectSection(SolutionItems) = preProject
+		..\..\LICENSE.txt = ..\..\LICENSE.txt
+		..\..\Readme.htm = ..\..\Readme.htm
+		..\..\ReleaseNotes.htm = ..\..\ReleaseNotes.htm
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebsitePanel.Installer", "WebsitePanel.Installer\WebsitePanel.Installer.csproj", "{A358C6E2-F57D-4AB9-B13D-FD3048134143}"
+	ProjectSection(ProjectDependencies) = postProject
+		{F01A019E-1501-45A2-94D8-C621866A3ECD} = {F01A019E-1501-45A2-94D8-C621866A3ECD}
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebsitePanel.Updater", "WebsitePanel.Updater\WebsitePanel.Updater.csproj", "{F01A019E-1501-45A2-94D8-C621866A3ECD}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebsitePanel.Setup", "WebsitePanel.Setup\WebsitePanel.Setup.csproj", "{3951C0EC-BD98-450E-B228-CDBE5BD4AD49}"
+EndProject
+Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "Setup", "Setup\Setup.vdproj", "{2D271041-201E-4E9C-8AB1-B62DC5B0B0E1}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{A358C6E2-F57D-4AB9-B13D-FD3048134143}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A358C6E2-F57D-4AB9-B13D-FD3048134143}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A358C6E2-F57D-4AB9-B13D-FD3048134143}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A358C6E2-F57D-4AB9-B13D-FD3048134143}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F01A019E-1501-45A2-94D8-C621866A3ECD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F01A019E-1501-45A2-94D8-C621866A3ECD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3951C0EC-BD98-450E-B228-CDBE5BD4AD49}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3951C0EC-BD98-450E-B228-CDBE5BD4AD49}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3951C0EC-BD98-450E-B228-CDBE5BD4AD49}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3951C0EC-BD98-450E-B228-CDBE5BD4AD49}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2D271041-201E-4E9C-8AB1-B62DC5B0B0E1}.Debug|Any CPU.ActiveCfg = Debug
+		{2D271041-201E-4E9C-8AB1-B62DC5B0B0E1}.Release|Any CPU.ActiveCfg = Release
+		{2D271041-201E-4E9C-8AB1-B62DC5B0B0E1}.Release|Any CPU.Build.0 = Release
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
