@@ -10,7 +10,7 @@ namespace WebsitePanel.Setup
 		/// <summary> 
 		/// Clean up any resources being used.
 		/// </summary>
-		/// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+		/// <param appPoolName="disposing">true if managed resources should be disposed; otherwise, false.</param>
 		protected override void Dispose(bool disposing)
 		{
 			if (disposing && (components != null))
@@ -103,7 +103,7 @@ namespace WebsitePanel.Setup
 			this.lblWebSiteDomain.Name = "lblWebSiteDomain";
 			this.lblWebSiteDomain.Size = new System.Drawing.Size(104, 16);
 			this.lblWebSiteDomain.TabIndex = 4;
-			this.lblWebSiteDomain.Text = "Host name:";
+			this.lblWebSiteDomain.Text = "Host appPoolName:";
 			// 
 			// txtWebSiteDomain
 			// 
@@ -129,7 +129,7 @@ namespace WebsitePanel.Setup
 			this.lblWarning.Name = "lblWarning";
 			this.lblWarning.Size = new System.Drawing.Size(396, 36);
 			this.lblWarning.TabIndex = 1;
-			this.lblWarning.Text = "Make sure the specified host name is pointed to this web site; otherwise you migh" +
+			this.lblWarning.Text = "Make sure the specified host appPoolName is pointed to this web site; otherwise you migh" +
 				"t not be able to access the application.\r\n";
 			// 
 			// WebPage

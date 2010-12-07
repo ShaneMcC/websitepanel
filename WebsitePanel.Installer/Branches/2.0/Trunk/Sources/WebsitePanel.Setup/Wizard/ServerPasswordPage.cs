@@ -11,7 +11,7 @@
 //   this list of conditions  and  the  following  disclaimer in  the documentation
 //   and/or other materials provided with the distribution.
 //
-// - Neither  the  name  of  the  SMB SAAS Systems Inc.  nor   the   names  of  its
+// - Neither  the  appPoolName  of  the  SMB SAAS Systems Inc.  nor   the   names  of  its
 //   contributors may be used to endorse or  promote  products  derived  from  this
 //   software without specific prior written permission.
 //
@@ -103,10 +103,11 @@ namespace WebsitePanel.Setup
 					e.Cancel = true;
 					return;
 				}
-				string hash = Utils.ComputeSHA1(txtPassword.Text);
-				Wizard.SetupVariables.ServerPassword = hash;
+				//string hash = Utils.ComputeSHA1(txtPassword.Text);
+				//Wizard.SetupVariables.ServerPassword = hash;
+				Wizard.SetupVariables.ServerPassword = txtPassword.Text;
 				Wizard.SetupVariables.UpdateServerPassword = true;
-				AppConfig.SetComponentSettingStringValue(Wizard.SetupVariables.ComponentId, "Password", hash);
+				//AppConfig.SetComponentSettingStringValue(Wizard.SetupVariables.ComponentId, "Password", hash);
 			}
 			catch
 			{

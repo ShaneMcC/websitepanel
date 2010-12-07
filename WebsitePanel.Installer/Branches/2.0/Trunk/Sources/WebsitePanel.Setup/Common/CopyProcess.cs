@@ -11,7 +11,7 @@
 //   this list of conditions  and  the  following  disclaimer in  the documentation
 //   and/or other materials provided with the distribution.
 //
-// - Neither  the  name  of  the  SMB SAAS Systems Inc.  nor   the   names  of  its
+// - Neither  the  appPoolName  of  the  SMB SAAS Systems Inc.  nor   the   names  of  its
 //   contributors may be used to endorse or  promote  products  derived  from  this
 //   software without specific prior written permission.
 //
@@ -45,9 +45,9 @@ namespace WebsitePanel.Setup
 		/// <summary>
 		/// Initializes a new instance of the class.
 		/// </summary>
-		/// <param name="bar">Progress bar.</param>
-		/// <param name="source">Source folder.</param>
-		/// <param name="destination">Destination folder.</param>
+		/// <param appPoolName="bar">Progress bar.</param>
+		/// <param appPoolName="source">Source folder.</param>
+		/// <param appPoolName="destination">Destination folder.</param>
 		public CopyProcess(ProgressBar bar, string source, string destination)
 		{
 			this.progressBar = bar;

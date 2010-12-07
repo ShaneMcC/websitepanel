@@ -11,7 +11,7 @@
 //   this list of conditions  and  the  following  disclaimer in  the documentation
 //   and/or other materials provided with the distribution.
 //
-// - Neither  the  name  of  the  SMB SAAS Systems Inc.  nor   the   names  of  its
+// - Neither  the  appPoolName  of  the  SMB SAAS Systems Inc.  nor   the   names  of  its
 //   contributors may be used to endorse or  promote  products  derived  from  this
 //   software without specific prior written permission.
 //
@@ -64,11 +64,11 @@ namespace WebsitePanel.Setup
 		/// <summary>
 		/// Grants NTFS permissions by username
 		/// </summary>
-		/// <param name="path"></param>
-		/// <param name="accountName"></param>
-		/// <param name="permissions"></param>
-		/// <param name="inheritParentPermissions"></param>
-		/// <param name="preserveOriginalPermissions"></param>
+		/// <param appPoolName="path"></param>
+		/// <param appPoolName="accountName"></param>
+		/// <param appPoolName="permissions"></param>
+		/// <param appPoolName="inheritParentPermissions"></param>
+		/// <param appPoolName="preserveOriginalPermissions"></param>
 		internal static void GrantNtfsPermissions(string path, string domain, string accountName,
 			NtfsPermission permissions, bool inheritParentPermissions, bool preserveOriginalPermissions)
 		{
@@ -79,11 +79,11 @@ namespace WebsitePanel.Setup
 		/// <summary>
 		/// Grants NTFS permissions by SID
 		/// </summary>
-		/// <param name="path"></param>
-		/// <param name="sid"></param>
-		/// <param name="permissions"></param>
-		/// <param name="inheritParentPermissions"></param>
-		/// <param name="preserveOriginalPermissions"></param>
+		/// <param appPoolName="path"></param>
+		/// <param appPoolName="sid"></param>
+		/// <param appPoolName="permissions"></param>
+		/// <param appPoolName="inheritParentPermissions"></param>
+		/// <param appPoolName="preserveOriginalPermissions"></param>
 		internal static void GrantNtfsPermissionsBySid(string path, string sid,
 			NtfsPermission permissions, bool inheritParentPermissions, bool preserveOriginalPermissions)
 		{
@@ -205,8 +205,8 @@ namespace WebsitePanel.Setup
 		/// <summary>
 		/// Removes NTFS permissions by username
 		/// </summary>
-		/// <param name="path"></param>
-		/// <param name="accountName"></param>
+		/// <param appPoolName="path"></param>
+		/// <param appPoolName="accountName"></param>
 		internal static void RemoveNtfsPermissions(string path, string accountName)
 		{
 			RemoveNtfsPermissionsBySid(path, GetSid(accountName));
@@ -215,8 +215,8 @@ namespace WebsitePanel.Setup
 		/// <summary>
 		/// Removes NTFS permissions by SID
 		/// </summary>
-		/// <param name="path"></param>
-		/// <param name="sid"></param>
+		/// <param appPoolName="path"></param>
+		/// <param appPoolName="sid"></param>
 		internal static void RemoveNtfsPermissionsBySid(string path, string sid)
 		{
 
@@ -271,7 +271,7 @@ namespace WebsitePanel.Setup
 		/// <summary>
 		/// Resets NTFS permissions by username
 		/// </summary>
-		/// <param name="path"></param>
+		/// <param appPoolName="path"></param>
 		internal static void ResetNtfsPermissions(string path)
 		{
 			// remove trailing slash if any
@@ -321,9 +321,9 @@ namespace WebsitePanel.Setup
 		}
 
 		/// <summary>
-		/// Returns SID by account name
+		/// Returns SID by account appPoolName
 		/// </summary>
-		/// <param name="userAccount"></param>
+		/// <param appPoolName="userAccount"></param>
 		/// <returns></returns>
 		internal static string GetSid(string userAccount)
 		{
@@ -331,10 +331,10 @@ namespace WebsitePanel.Setup
 		}
 
 		/// <summary>
-		/// Returns SID by account name and domain
+		/// Returns SID by account appPoolName and domain
 		/// </summary>
-		/// <param name="userAccount"></param>
-		/// <param name="domain"></param>
+		/// <param appPoolName="userAccount"></param>
+		/// <param appPoolName="domain"></param>
 		/// <returns></returns>
 		internal static string GetSid(string userAccount, string domain)
 		{
@@ -380,9 +380,9 @@ namespace WebsitePanel.Setup
 		}
 
 		/// <summary>
-		/// Returns account name by SID
+		/// Returns account appPoolName by SID
 		/// </summary>
-		/// <param name="sid"></param>
+		/// <param appPoolName="sid"></param>
 		/// <returns></returns>
 		internal static string GetAccountName(string sid)
 		{
@@ -442,7 +442,7 @@ namespace WebsitePanel.Setup
 			}
 			catch(Exception ex)
 			{
-				Log.WriteError("Get domain name error", ex);
+				Log.WriteError("Get domain appPoolName error", ex);
 			}
 			return ldapPath;
 		}
@@ -466,7 +466,7 @@ namespace WebsitePanel.Setup
 		/// <summary>
 		/// Creates user
 		/// </summary>
-		/// <param name="userInfo">User</param>
+		/// <param appPoolName="userInfo">User</param>
 		internal static void CreateUser(SystemUserItem userInfo)
 		{
 			try
@@ -727,13 +727,13 @@ namespace WebsitePanel.Setup
 		/// <summary>
 		/// Deletes user
 		/// </summary>
-		/// <param name="userName">Username</param>
+		/// <param appPoolName="userName">Username</param>
 		internal static void DeleteUser(string domain, string userName)
 		{
 			try
 			{
 				DirectoryEntry user = null;
-				if (string.IsNullOrEmpty(domain))
+				if (String.IsNullOrEmpty(domain))
 				{
 					//local computer
 					user = new DirectoryEntry(

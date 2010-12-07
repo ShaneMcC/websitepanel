@@ -49,6 +49,7 @@ using WebsitePanel.Providers.ResultObjects;
 
 using System.Reflection;
 using System.Collections.Specialized;
+using WebsitePanel.Setup.Actions;
 
 namespace WebsitePanel.Setup
 {
@@ -136,125 +137,10 @@ namespace WebsitePanel.Setup
 			try
 			{
 				SetProgressText("Creating installation script...");
-				
-				for (int i = 0; i < actions.Count; i++)
-				{
-					InstallAction action = actions[i];
-					SetProgressText(action.Description);
-					SetProgressValue(0);
-	
-					switch (action.ActionType)
-					{
-						case ActionTypes.CopyFiles:
-							CopyFiles(
-								Wizard.SetupVariables.InstallerFolder,
-								Wizard.SetupVariables.InstallationFolder);
-							break;
-						case ActionTypes.CreateWebSite:
-							CreateWebSite();
-							break;
-						case ActionTypes.CryptoKey:
-							SetCryptoKey();
-							break;
-						case ActionTypes.ServerPassword:
-							SetServerPassword();
-							break;
-						case ActionTypes.UpdateServerPassword:
-							UpdateServerPassword();
-							break;
-						case ActionTypes.UpdateConfig:
-							UpdateSystemConfiguration();
-							break;
-						case ActionTypes.CreateDatabase:
-							CreateDatabase();
-							break;
-						case ActionTypes.CreateDatabaseUser:
-							CreateDatabaseUser();
-							break;
-						case ActionTypes.ExecuteSql:
-							ExecuteSqlScript(action.Path);
-							break;
-						case ActionTypes.UpdateWebSite:
-							UpdateWebSiteBindings();
 
-							break;
-						case ActionTypes.Backup:
-							Backup();
-							break;
-						/*case ActionTypes.UpdateFiles:
-							CopyFiles(
-								Wizard.SetupVariables.InstallerFolder,
-								Wizard.SetupVariables.InstallationFolder);
-							break;	 */
-						case ActionTypes.DeleteFiles:
-							DeleteFiles(action.Path);
-							break;
-						case ActionTypes.UpdateEnterpriseServerUrl:
-							UpdateEnterpriseServerUrl();
-							break;
-						case ActionTypes.CreateShortcuts:
-							CreateShortcuts();
-							break;
-						case ActionTypes.UpdateServers:
-							UpdateServers();
-							break;
-						case ActionTypes.CopyWebConfig:
-							CopyWebConfig();
-							break;
-                        case ActionTypes.UpdateWebConfigNamespaces:
-                            UpdateWebConfigNamespaces();
-                            break;
-						case ActionTypes.StopApplicationPool:
-							StopApplicationPool();
-							break;
-						case ActionTypes.StartApplicationPool:
-							StartApplicationPool();
-							break;
-						case ActionTypes.UpdatePortal2811:
-							UpdatePortal2811();
-							break;
-						case ActionTypes.UpdateEnterpriseServer2810:
-						case ActionTypes.UpdateServer2810:
-							UpdateWseSecuritySettings();
-							break;
-						case ActionTypes.CreateUserAccount:
-							CreateAccount(action.Name);
-							break;
-						case ActionTypes.ServiceSettings:
-							SetServiceSettings();
-							break;
-						case ActionTypes.RegisterWindowsService:
-							RegisterWindowsService();
-							break;
-						case ActionTypes.StartWindowsService:
-							StartWindowsService();
-							break;
-						case ActionTypes.StopWindowsService:
-							StopWindowsService();
-							break;
-						case ActionTypes.InitSetupVariables:
-							InitSetupVaribles(action.SetupVariables);
-							break;
-						case ActionTypes.UpdateServerAdminPassword:
-							UpdateServerAdminPassword();
-							break;
-						case ActionTypes.UpdateLicenseInformation:
-							UpdateLicenseInformation();
-							break;
-						case ActionTypes.ConfigureStandaloneServerData:
-							ConfigureStandaloneServer(action.Url);
-							break;
-						case ActionTypes.CreateWPServerLogin:
-							CreateWPServerLogin();
-							break;
-						case ActionTypes.FolderPermissions:
-							ConfigureFolderPermissions();
-							break;
-						case ActionTypes.AddCustomErrorsPage:
-							AddCustomErrorsPage();
-							break;
-					}
-				}
+				var demo = new ServerActionManager(Wizard.SetupVariables);
+				demo.Start();
+				
 				this.progressBar.Value = 100;
 
 			}
@@ -264,7 +150,7 @@ namespace WebsitePanel.Setup
 					return;
 
 				ShowError();
-				Rollback();
+				//Rollback();
 				return;
 			}
 

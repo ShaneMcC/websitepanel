@@ -11,7 +11,7 @@
 //   this list of conditions  and  the  following  disclaimer in  the documentation
 //   and/or other materials provided with the distribution.
 //
-// - Neither  the  name  of  the  SMB SAAS Systems Inc.  nor   the   names  of  its
+// - Neither  the  appPoolName  of  the  SMB SAAS Systems Inc.  nor   the   names  of  its
 //   contributors may be used to endorse or  promote  products  derived  from  this
 //   software without specific prior written permission.
 //
@@ -60,7 +60,7 @@ namespace WebsitePanel.Setup
 
 			InstallerForm form = new InstallerForm();
 			Wizard wizard = form.Wizard;
-			InitInstall(args, wizard);
+			InitInstall(args, wizard.SetupVariables);
 
 			//ES url
 			wizard.SetupVariables.EnterpriseServerURL = "http://127.0.0.1:9002";
@@ -144,7 +144,7 @@ namespace WebsitePanel.Setup
 			wizard.SetupVariables.UserMembership = (wizard.SetupVariables.IISVersion.Major == 7) ?
 				new string[] { "IIS_IUSRS" } :
 				new string[] { "IIS_WPG" };
-			LoadSetupVariablesFromConfig(wizard, componentId);
+			LoadSetupVariablesFromConfig(wizard.SetupVariables, componentId);
 
 			IntroductionPage page1 = new IntroductionPage();
 			ConfirmUninstallPage page2 = new ConfirmUninstallPage();
@@ -177,7 +177,7 @@ namespace WebsitePanel.Setup
 			InstallerForm form = new InstallerForm();
 			Wizard wizard = form.Wizard;
 			wizard.SetupVariables.SetupAction = SetupActions.Setup;
-			LoadSetupVariablesFromConfig(wizard, componentId);
+			LoadSetupVariablesFromConfig(wizard.SetupVariables, componentId);
 			wizard.SetupVariables.WebSiteId = AppConfig.GetComponentSettingStringValue(componentId, "WebSiteId");
 			wizard.SetupVariables.WebSiteIP = AppConfig.GetComponentSettingStringValue(componentId, "WebSiteIP");
 			wizard.SetupVariables.WebSitePort = AppConfig.GetComponentSettingStringValue(componentId, "WebSitePort");
@@ -236,7 +236,7 @@ namespace WebsitePanel.Setup
 
 			InstallerForm form = new InstallerForm();
 			Wizard wizard = form.Wizard;
-			LoadSetupVariablesFromConfig(wizard, componentId);
+			LoadSetupVariablesFromConfig(wizard.SetupVariables, componentId);
             //if (wizard.SetupVariables.Version != "1.5.3")
             //{
             //    MessageBox.Show("Please update to version 1.5.3", "Setup Wizard", MessageBoxButtons.OK, MessageBoxIcon.Warning);

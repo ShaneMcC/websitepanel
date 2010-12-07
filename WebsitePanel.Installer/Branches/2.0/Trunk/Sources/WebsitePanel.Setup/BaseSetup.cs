@@ -11,7 +11,7 @@
 //   this list of conditions  and  the  following  disclaimer in  the documentation
 //   and/or other materials provided with the distribution.
 //
-// - Neither  the  name  of  the  SMB SAAS Systems Inc.  nor   the   names  of  its
+// - Neither  the  appPoolName  of  the  SMB SAAS Systems Inc.  nor   the   names  of  its
 //   contributors may be used to endorse or  promote  products  derived  from  this
 //   software without specific prior written permission.
 //
@@ -31,27 +31,29 @@ using System.IO;
 using System.Windows.Forms;
 using System.Collections;
 using System.Xml;
+using System.Collections.Generic;
+using WebsitePanel.Installer.Common;
 
 namespace WebsitePanel.Setup
 {
-	public class BaseSetup 
+	public class BaseSetup
 	{
-		public static void InitInstall(Hashtable args, Wizard wizard)
+		public static void InitInstall(Hashtable args, SetupVariables vars)
 		{
 			AppConfig.LoadConfiguration();
 
-			LoadSetupVariablesFromParameters(wizard, args);
+			LoadSetupVariablesFromParameters(vars, args);
 
-			wizard.SetupVariables.SetupAction = SetupActions.Install;
-			wizard.SetupVariables.InstallationFolder = Path.Combine("C:\\WebsitePanel", wizard.SetupVariables.ComponentName);
+			vars.SetupAction = SetupActions.Install;
+			vars.InstallationFolder = Path.Combine("C:\\WebsitePanel", vars.ComponentName);
 			string componentId = Guid.NewGuid().ToString();
-			wizard.SetupVariables.ComponentId = componentId;
-			wizard.SetupVariables.Instance = string.Empty;
+			vars.ComponentId = componentId;
+			vars.Instance = string.Empty;
 
 			//create component settings node
-			wizard.SetupVariables.ComponentConfig = AppConfig.CreateComponentConfig(componentId);
+			vars.ComponentConfig = AppConfig.CreateComponentConfig(componentId);
 			//add default component settings
-			CreateComponentSettingsFromSetupVariables(wizard.SetupVariables, componentId);
+			CreateComponentSettingsFromSetupVariables(vars, componentId);
 		}
 
 		public static DialogResult UninstallBase(object obj)
@@ -69,7 +71,7 @@ namespace WebsitePanel.Setup
 			wizard.SetupVariables.UserMembership = (wizard.SetupVariables.IISVersion.Major == 7) ?
 				new string[] { "IIS_IUSRS" } :
 				new string[] { "IIS_WPG" };
-			LoadSetupVariablesFromConfig(wizard, componentId);
+			LoadSetupVariablesFromConfig(wizard.SetupVariables, componentId);
 
 			IntroductionPage page1 = new IntroductionPage();
 			ConfirmUninstallPage page2 = new ConfirmUninstallPage();
@@ -91,11 +93,11 @@ namespace WebsitePanel.Setup
 			string shellVersion = Utils.GetStringSetupParameter(args, "ShellVersion");
 			string componentId = Utils.GetStringSetupParameter(args, "ComponentId");
 			AppConfig.LoadConfiguration();
-			
+
 			InstallerForm form = new InstallerForm();
 			Wizard wizard = form.Wizard;
 			wizard.SetupVariables.SetupAction = SetupActions.Setup;
-			LoadSetupVariablesFromConfig(wizard, componentId);
+			LoadSetupVariablesFromConfig(wizard.SetupVariables, componentId);
 			wizard.SetupVariables.WebSiteId = AppConfig.GetComponentSettingStringValue(componentId, "WebSiteId");
 			wizard.SetupVariables.WebSiteIP = AppConfig.GetComponentSettingStringValue(componentId, "WebSiteIP");
 			wizard.SetupVariables.WebSitePort = AppConfig.GetComponentSettingStringValue(componentId, "WebSitePort");
@@ -126,13 +128,13 @@ namespace WebsitePanel.Setup
 			return form.ShowModal(owner);
 		}
 
-        public static DialogResult UpdateBase(object obj, string minimalInstallerVersion, string versionToUpgrade, bool updateSql)
-        {
-            return UpdateBase(obj, minimalInstallerVersion, versionToUpgrade, updateSql, null);
-        }
+		public static DialogResult UpdateBase(object obj, string minimalInstallerVersion, string versionToUpgrade, bool updateSql)
+		{
+			return UpdateBase(obj, minimalInstallerVersion, versionToUpgrade, updateSql, null);
+		}
 
 		public static DialogResult UpdateBase(object obj, string minimalInstallerVersion,
-            string versionToUpgrade, bool updateSql, InstallAction versionSpecificAction)
+			string versionToUpgrade, bool updateSql, InstallAction versionSpecificAction)
 		{
 			Hashtable args = Utils.GetSetupParameters(obj);
 			string shellVersion = Utils.GetStringSetupParameter(args, "ShellVersion");
@@ -151,7 +153,7 @@ namespace WebsitePanel.Setup
 
 			InstallerForm form = new InstallerForm();
 			Wizard wizard = form.Wizard;
-			LoadSetupVariablesFromConfig(wizard, componentId);
+			LoadSetupVariablesFromConfig(wizard.SetupVariables, componentId);
 			if (!VersionEquals(wizard.SetupVariables.Version, versionToUpgrade))
 			{
 				MessageBox.Show(
@@ -190,8 +192,8 @@ namespace WebsitePanel.Setup
 			action.Description = "Copying files...";
 			page2.Actions.Add(action);
 
-            if (versionSpecificAction != null)
-                page2.Actions.Add(versionSpecificAction);
+			if (versionSpecificAction != null)
+				page2.Actions.Add(versionSpecificAction);
 
 			if (updateSql)
 			{
@@ -218,8 +220,6 @@ namespace WebsitePanel.Setup
 			IWin32Window owner = args["ParentForm"] as IWin32Window;
 			return form.ShowModal(owner);
 		}
-
-
 
 		protected static void LoadSetupVariablesFromSetupXml(string xml, SetupVariables setupVariables)
 		{
@@ -274,31 +274,44 @@ namespace WebsitePanel.Setup
 			}
 		}
 
-		public static void LoadSetupVariablesFromConfig(Wizard wizard, string componentId)
+		public static void LoadSetupVariablesFromConfig(SetupVariables vars, string componentId)
 		{
-			wizard.SetupVariables.InstallationFolder = AppConfig.GetComponentSettingStringValue(componentId, "InstallFolder");
-			wizard.SetupVariables.ComponentName = AppConfig.GetComponentSettingStringValue(componentId, "ComponentName");
-			wizard.SetupVariables.ComponentCode = AppConfig.GetComponentSettingStringValue(componentId, "ComponentCode");
-			wizard.SetupVariables.ComponentDescription = AppConfig.GetComponentSettingStringValue(componentId, "ComponentDescription");
-			wizard.SetupVariables.ComponentId = componentId;
-			wizard.SetupVariables.ApplicationName = AppConfig.GetComponentSettingStringValue(componentId, "ApplicationName");
-			wizard.SetupVariables.Version = AppConfig.GetComponentSettingStringValue(componentId, "Release");
-			wizard.SetupVariables.Instance = AppConfig.GetComponentSettingStringValue(componentId, "Instance");
+			vars.InstallationFolder = AppConfig.GetComponentSettingStringValue(componentId, "InstallFolder");
+			vars.ComponentName = AppConfig.GetComponentSettingStringValue(componentId, "ComponentName");
+			vars.ComponentCode = AppConfig.GetComponentSettingStringValue(componentId, "ComponentCode");
+			vars.ComponentDescription = AppConfig.GetComponentSettingStringValue(componentId, "ComponentDescription");
+			vars.ComponentId = componentId;
+			vars.ApplicationName = AppConfig.GetComponentSettingStringValue(componentId, "ApplicationName");
+			vars.Version = AppConfig.GetComponentSettingStringValue(componentId, "Release");
+			vars.Instance = AppConfig.GetComponentSettingStringValue(componentId, "Instance");
 		}
 
-		public static void LoadSetupVariablesFromParameters(Wizard wizard, Hashtable args)
+		public static void LoadSetupVariablesFromParameters(SetupVariables vars, Hashtable args)
 		{
-			wizard.SetupVariables.ApplicationName = Utils.GetStringSetupParameter(args, "ApplicationName");
-			wizard.SetupVariables.ComponentName = Utils.GetStringSetupParameter(args, "ComponentName");
-			wizard.SetupVariables.ComponentCode = Utils.GetStringSetupParameter(args, "ComponentCode");
-			wizard.SetupVariables.ComponentDescription = Utils.GetStringSetupParameter(args, "ComponentDescription");
-			wizard.SetupVariables.Version = Utils.GetStringSetupParameter(args, "Version");
-			wizard.SetupVariables.InstallerFolder = Utils.GetStringSetupParameter(args, "InstallerFolder");
-			wizard.SetupVariables.Installer = Utils.GetStringSetupParameter(args, "Installer");
-			wizard.SetupVariables.InstallerType = Utils.GetStringSetupParameter(args, "InstallerType");
-			wizard.SetupVariables.InstallerPath = Utils.GetStringSetupParameter(args, "InstallerPath");
-			wizard.SetupVariables.IISVersion = Utils.GetVersionSetupParameter(args, "IISVersion");
-			wizard.SetupVariables.SetupXml = Utils.GetStringSetupParameter(args, "SetupXml");
+			vars.ApplicationName = Utils.GetStringSetupParameter(args, "ApplicationName");
+			vars.ComponentName = Utils.GetStringSetupParameter(args, "ComponentName");
+			vars.ComponentCode = Utils.GetStringSetupParameter(args, "ComponentCode");
+			vars.ComponentDescription = Utils.GetStringSetupParameter(args, "ComponentDescription");
+			vars.Version = Utils.GetStringSetupParameter(args, "Version");
+			vars.InstallerFolder = Utils.GetStringSetupParameter(args, "InstallerFolder");
+			vars.Installer = Utils.GetStringSetupParameter(args, "Installer");
+			vars.InstallerType = Utils.GetStringSetupParameter(args, "InstallerType");
+			vars.InstallerPath = Utils.GetStringSetupParameter(args, "InstallerPath");
+			vars.IISVersion = Utils.GetVersionSetupParameter(args, "IISVersion");
+			vars.SetupXml = Utils.GetStringSetupParameter(args, "SetupXml");
+
+			// Add some extra variables if any, coming from SilentInstaller
+			#region SilentInstaller CLI arguments
+			if (args[Global.Parameters.ShellMode] == Global.SilentInstallerShell)
+			{
+				vars.WebSiteIP = Utils.GetStringSetupParameter(args, Global.Parameters.WebSiteIP);
+				vars.WebSitePort = Utils.GetStringSetupParameter(args, Global.Parameters.WebSitePort);
+				vars.WebSiteDomain = Utils.GetStringSetupParameter(args, Global.Parameters.WebSiteDomain);
+				vars.UserDomain = Utils.GetStringSetupParameter(args, Global.Parameters.UserDomain);
+				vars.UserAccount = Utils.GetStringSetupParameter(args, Global.Parameters.UserAccount);
+				vars.UserPassword = Utils.GetStringSetupParameter(args, Global.Parameters.UserPassword);
+			}
+			#endregion
 		}
 
 		public static void CreateComponentSettingsFromSetupVariables(SetupVariables setupVariables, string componentId)

@@ -11,7 +11,7 @@
 //   this list of conditions  and  the  following  disclaimer in  the documentation
 //   and/or other materials provided with the distribution.
 //
-// - Neither  the  name  of  the  SMB SAAS Systems Inc.  nor   the   names  of  its
+// - Neither  the  appPoolName  of  the  SMB SAAS Systems Inc.  nor   the   names  of  its
 //   contributors may be used to endorse or  promote  products  derived  from  this
 //   software without specific prior written permission.
 //
@@ -47,10 +47,10 @@ namespace WebsitePanel.Setup
 		/// <summary>
 		/// Initializes a new instance of the class.
 		/// </summary>
-		/// <param name="bar">Progress bar.</param>
-		/// <param name="file">Sql script file</param>
-		/// <param name="connection">Sql connection string</param>
-		/// <param name="db">Sql server database name</param>
+		/// <param appPoolName="bar">Progress bar.</param>
+		/// <param appPoolName="file">Sql script file</param>
+		/// <param appPoolName="connection">Sql connection string</param>
+		/// <param appPoolName="db">Sql server database appPoolName</param>
 		public SqlProcess(ProgressBar bar, string file, string connection, string db)
 		{
 			this.progressBar = bar;

@@ -11,7 +11,7 @@
 //   this list of conditions  and  the  following  disclaimer in  the documentation
 //   and/or other materials provided with the distribution.
 //
-// - Neither  the  name  of  the  SMB SAAS Systems Inc.  nor   the   names  of  its
+// - Neither  the  appPoolName  of  the  SMB SAAS Systems Inc.  nor   the   names  of  its
 //   contributors may be used to endorse or  promote  products  derived  from  this
 //   software without specific prior written permission.
 //
@@ -55,8 +55,8 @@ namespace WebsitePanel.Setup
 		/// <summary>
 		/// Write error to the log.
 		/// </summary>
-		/// <param name="message">Error message.</param>
-		/// <param name="ex">Exception.</param>
+		/// <param appPoolName="message">Error message.</param>
+		/// <param appPoolName="ex">Exception.</param>
 		internal static void WriteError(string message, Exception ex)
 		{
 			try
@@ -72,8 +72,8 @@ namespace WebsitePanel.Setup
 		/// <summary>
 		/// Write error to the log.
 		/// </summary>
-		/// <param name="message">Error message.</param>
-		/// <param name="ex">Exception.</param>
+		/// <param appPoolName="message">Error message.</param>
+		/// <param appPoolName="ex">Exception.</param>
 		internal static void WriteError(string message)
 		{
 			WriteError(message, null);
@@ -82,7 +82,7 @@ namespace WebsitePanel.Setup
 		/// <summary>
 		/// Write to log
 		/// </summary>
-		/// <param name="message"></param>
+		/// <param appPoolName="message"></param>
 		internal static void Write(string message)
 		{
 			try
@@ -97,7 +97,7 @@ namespace WebsitePanel.Setup
 		/// <summary>
 		/// Write line to log
 		/// </summary>
-		/// <param name="message"></param>
+		/// <param appPoolName="message"></param>
 		internal static void WriteLine(string message)
 		{
 			try
@@ -111,7 +111,7 @@ namespace WebsitePanel.Setup
 		/// <summary>
 		/// Write info message to log
 		/// </summary>
-		/// <param name="message"></param>
+		/// <param appPoolName="message"></param>
 		internal static void WriteInfo(string message)
 		{
 			try
@@ -125,7 +125,7 @@ namespace WebsitePanel.Setup
 		/// <summary>
 		/// Write start message to log
 		/// </summary>
-		/// <param name="message"></param>
+		/// <param appPoolName="message"></param>
 		internal static void WriteStart(string message)
 		{
 			try
@@ -140,7 +140,7 @@ namespace WebsitePanel.Setup
 		/// <summary>
 		/// Write end message to log
 		/// </summary>
-		/// <param name="message"></param>
+		/// <param appPoolName="message"></param>
 		internal static void WriteEnd(string message)
 		{
 			try

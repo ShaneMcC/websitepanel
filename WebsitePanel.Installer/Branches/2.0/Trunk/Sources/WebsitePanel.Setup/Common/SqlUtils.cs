@@ -11,7 +11,7 @@
 //   this list of conditions  and  the  following  disclaimer in  the documentation
 //   and/or other materials provided with the distribution.
 //
-// - Neither  the  name  of  the  SMB SAAS Systems Inc.  nor   the   names  of  its
+// - Neither  the  appPoolName  of  the  SMB SAAS Systems Inc.  nor   the   names  of  its
 //   contributors may be used to endorse or  promote  products  derived  from  this
 //   software without specific prior written permission.
 //
@@ -48,7 +48,7 @@ namespace WebsitePanel.Setup
 		/// <summary>
 		/// Check sql connection.
 		/// </summary>
-		/// <param name="connectionString">Connection string.</param>
+		/// <param appPoolName="connectionString">Connection string.</param>
 		/// <returns>True if connecion is valid, otherwise false.</returns>
 		internal static bool CheckSqlConnection(string connectionString)
 		{
@@ -69,7 +69,7 @@ namespace WebsitePanel.Setup
         /// <summary>
         /// Gets the version of SQL Server instance.
         /// </summary>
-        /// <param name="connectionString">Connection string.</param>
+        /// <param appPoolName="connectionString">Connection string.</param>
         /// <returns>True if connecion is valid, otherwise false.</returns>
         internal static string GetSqlServerVersion(string connectionString)
         {
@@ -98,7 +98,7 @@ namespace WebsitePanel.Setup
 		/// <summary>
 		/// Gets the security mode of SQL Server.
 		/// </summary>
-		/// <param name="connectionString">Connection string.</param>
+		/// <param appPoolName="connectionString">Connection string.</param>
 		/// <returns>1 - Windows Authentication mode, 0 - Mixed mode.</returns>
 		internal static int GetSqlServerSecurityMode(string connectionString)
 		{
@@ -131,7 +131,7 @@ namespace WebsitePanel.Setup
 		/// <summary>
 		/// Get databases.
 		/// </summary>
-		/// <param name="connectionString">Connection string.</param>
+		/// <param appPoolName="connectionString">Connection string.</param>
 		/// <returns>Databases.</returns>
 		internal static string[] GetDatabases(string connectionString)
 		{
@@ -221,20 +221,20 @@ namespace WebsitePanel.Setup
 		/// <summary>
 		/// Checks if the database exists.
 		/// </summary>
-		/// <param name="databaseName">Database name.</param>
-		/// <param name="connectionString">Connection string.</param>
+		/// <param appPoolName="databaseName">Database appPoolName.</param>
+		/// <param appPoolName="connectionString">Connection string.</param>
 		/// <returns>Returns True if the database exists.</returns>
 		internal static bool DatabaseExists(string connectionString, string databaseName)
 		{
 			return (ExecuteQuery(connectionString,
-				String.Format( "select name from master..sysdatabases where name = '{0}'", databaseName)).Tables[0].Rows.Count > 0);
+				String.Format( "select appPoolName from master..sysdatabases where appPoolName = '{0}'", databaseName)).Tables[0].Rows.Count > 0);
 		}
 
 		/// <summary>
 		/// Creates database.
 		/// </summary>
-		/// <param name="connectionString">Connection string.</param>
-		/// <param name="databaseName">Database name.</param>
+		/// <param appPoolName="connectionString">Connection string.</param>
+		/// <param appPoolName="databaseName">Database appPoolName.</param>
 		internal static void CreateDatabase(string connectionString, string databaseName)
 		{
 				// create database in the default location
@@ -248,10 +248,10 @@ namespace WebsitePanel.Setup
 		/// <summary>
 		/// Creates database user.
 		/// </summary>
-		/// <param name="connectionString">Connection string.</param>
-		/// <param name="userName">User name</param>
-		/// <param name="password">Password.</param>
-		/// <param name="database">Default database.</param>
+		/// <param appPoolName="connectionString">Connection string.</param>
+		/// <param appPoolName="userName">User appPoolName</param>
+		/// <param appPoolName="password">Password.</param>
+		/// <param appPoolName="database">Default database.</param>
 		internal static bool CreateUser(string connectionString, string userName, string password, string database)
 		{
             bool userCreated = false;
@@ -300,32 +300,32 @@ namespace WebsitePanel.Setup
 		/// <summary>
 		/// Checks whether specified user exists.
 		/// </summary>
-		/// <param name="connectionString">Connection string</param>
-		/// <param name="username">User name.</param>
+		/// <param appPoolName="connectionString">Connection string</param>
+		/// <param appPoolName="username">User appPoolName.</param>
 		/// <returns>True if specified user exists, otherwise false.</returns>
 		internal static bool UserExists(string connectionString, string username)
 		{
 			return (ExecuteQuery(connectionString,
-				string.Format("select name from master..syslogins where name = '{0}'", username)).Tables[0].Rows.Count > 0);
+				string.Format("select appPoolName from master..syslogins where appPoolName = '{0}'", username)).Tables[0].Rows.Count > 0);
 		}
 
 		/// <summary>
 		/// Checks whether specified login exists.
 		/// </summary>
-		/// <param name="connectionString">Connection string</param>
-		/// <param name="loginName">Login name.</param>
+		/// <param appPoolName="connectionString">Connection string</param>
+		/// <param appPoolName="loginName">Login appPoolName.</param>
 		/// <returns>True if specified login exists, otherwise false.</returns>
 		internal static bool LoginExists(string connectionString, string loginName)
 		{
 			return (ExecuteQuery(connectionString,
-				string.Format("SELECT * FROM sys.server_principals WHERE name = N'{0}'", loginName)).Tables[0].Rows.Count > 0);
+				string.Format("SELECT * FROM sys.server_principals WHERE appPoolName = N'{0}'", loginName)).Tables[0].Rows.Count > 0);
 		}
 
 		/// <summary>
 		/// Deletes login
 		/// </summary>
-		/// <param name="connectionString">Connection string</param>
-		/// <param name="loginName">Login name</param>
+		/// <param appPoolName="connectionString">Connection string</param>
+		/// <param appPoolName="loginName">Login appPoolName</param>
 		internal static void DeleteLogin(string connectionString, string loginName)
 		{
 			// drop login
@@ -336,8 +336,8 @@ namespace WebsitePanel.Setup
         /// <summary>
         /// Deletes database user
         /// </summary>
-        /// <param name="connectionString">Connection string</param>
-        /// <param name="username">Username</param>
+        /// <param appPoolName="connectionString">Connection string</param>
+        /// <param appPoolName="username">Username</param>
         internal static void DeleteUser(string connectionString, string username)
         {
             // remove user from databases
@@ -355,8 +355,8 @@ namespace WebsitePanel.Setup
 		/// <summary>
 		/// Deletes database
 		/// </summary>
-		/// <param name="connectionString">Connection string</param>
-		/// <param name="databaseName">Database name</param>
+		/// <param appPoolName="connectionString">Connection string</param>
+		/// <param appPoolName="databaseName">Database appPoolName</param>
 		internal static void DeleteDatabase(string connectionString, string databaseName)
 		{
 			// remove all users from database
@@ -377,9 +377,9 @@ namespace WebsitePanel.Setup
 		private static string[] GetDatabaseUsers(string connectionString, string databaseName)
 		{
 			string cmdText = String.Format(@"
-				select su.name FROM {0}..sysusers as su
+				select su.appPoolName FROM {0}..sysusers as su
 				inner JOIN master..syslogins as sl on su.sid = sl.sid
-				where su.hasdbaccess = 1 AND su.islogin = 1 AND su.issqluser = 1 AND su.name <> 'dbo'",
+				where su.hasdbaccess = 1 AND su.islogin = 1 AND su.issqluser = 1 AND su.appPoolName <> 'dbo'",
 				databaseName);
 			DataView dvUsers = ExecuteQuery(connectionString, cmdText).Tables[0].DefaultView;
 
@@ -394,9 +394,9 @@ namespace WebsitePanel.Setup
 		private static string[] GetUserDatabaseObjects(string connectionString, string databaseName, string user)
 		{
 			DataView dvObjects = ExecuteQuery(connectionString,
-				String.Format("select so.name from {0}..sysobjects as so" +
+				String.Format("select so.appPoolName from {0}..sysobjects as so" +
 				" inner join {1}..sysusers as su on so.uid = su.uid" + 
-				" where su.name = '{2}'", databaseName, databaseName, user)).Tables[0].DefaultView;
+				" where su.appPoolName = '{2}'", databaseName, databaseName, user)).Tables[0].DefaultView;
 			string[] objects = new string[dvObjects.Count];
 			for(int i = 0; i < dvObjects.Count; i++)
 			{
@@ -418,7 +418,7 @@ namespace WebsitePanel.Setup
 
 					DECLARE @DbName nvarchar(100)
 					DECLARE DatabasesCursor CURSOR FOR
-					SELECT name FROM master..sysdatabases
+					SELECT appPoolName FROM master..sysdatabases
 					WHERE (status & 256) = 0 AND (status & 512) = 0
 
 					OPEN DatabasesCursor
@@ -437,7 +437,7 @@ namespace WebsitePanel.Setup
 						END
 
 						DECLARE @sql nvarchar(1000)
-                SET @sql = 'if exists (select ''' + @DbName + ''' from [' + @DbName + ']..sysusers where name = ''' + @Username + ''') insert into #UserDatabases (Name) values (''' + @DbName + ''')'
+                SET @sql = 'if exists (select ''' + @DbName + ''' from [' + @DbName + ']..sysusers where appPoolName = ''' + @Username + ''') insert into #UserDatabases (Name) values (''' + @DbName + ''')'
 
 						EXECUTE(@sql)
 
@@ -508,7 +508,7 @@ namespace WebsitePanel.Setup
 					if(ex.Number == 15505)
 					{
 						// Cannot change owner of object 'user.ObjectName' or one of its child objects because
-						// the new owner 'dbo' already has an object with the same name.
+						// the new owner 'dbo' already has an object with the same appPoolName.
 
 						// try to rename object before changing owner
 						string renamedObject = user + DateTime.Now.Ticks + "_" + userObject;

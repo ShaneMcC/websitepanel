@@ -11,7 +11,7 @@
 //   this list of conditions  and  the  following  disclaimer in  the documentation
 //   and/or other materials provided with the distribution.
 //
-// - Neither  the  name  of  the  SMB SAAS Systems Inc.  nor   the   names  of  its
+// - Neither  the  appPoolName  of  the  SMB SAAS Systems Inc.  nor   the   names  of  its
 //   contributors may be used to endorse or  promote  products  derived  from  this
 //   software without specific prior written permission.
 //
@@ -31,6 +31,7 @@ using System.Xml;
 using System.Configuration;
 using System.Collections.Generic;
 using System.Text;
+using WebsitePanel.Installer.Core;
 
 namespace WebsitePanel.Setup
 {
@@ -45,7 +46,8 @@ namespace WebsitePanel.Setup
 
 		public static void LoadConfiguration()
 		{
-			appConfig = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
+			//appConfig = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
+			appConfig = ConfigurationManager.OpenExeConfiguration(AppConfigManager.AppConfigFileNameWithoutExtension);
 			ConfigurationSection section = appConfig.Sections["installer"];
 			if (section == null)
 				throw new ConfigurationErrorsException("instalelr section not found");

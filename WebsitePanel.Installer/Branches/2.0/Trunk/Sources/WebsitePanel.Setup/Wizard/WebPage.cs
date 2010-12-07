@@ -11,7 +11,7 @@
 //   this list of conditions  and  the  following  disclaimer in  the documentation
 //   and/or other materials provided with the distribution.
 //
-// - Neither  the  name  of  the  SMB SAAS Systems Inc.  nor   the   names  of  its
+// - Neither  the  appPoolName  of  the  SMB SAAS Systems Inc.  nor   the   names  of  its
 //   contributors may be used to endorse or  promote  products  derived  from  this
 //   software without specific prior written permission.
 //
@@ -260,7 +260,7 @@ namespace WebsitePanel.Setup
 			{
 				if (!Regex.IsMatch(domain, @"^([a-zA-Z0-9]([a-zA-Z0-9\-]{0,61}[a-zA-Z0-9])?\.)+[a-zA-Z]{2,6}$"))
 				{
-					ShowWarning("Please enter valid domain name (for example, mydomain.com)");
+					ShowWarning("Please enter valid domain appPoolName (for example, mydomain.com)");
 					return false;
 				}
 			}
@@ -329,7 +329,7 @@ namespace WebsitePanel.Setup
 				if (siteId == null)
 					return true;
 
-				// get site name
+				// get site appPoolName
 				string siteName = iis7 ? siteId : WebUtils.GetSite(siteId).Name;
 				ShowWarning(String.Format("'{0}' web site already has server binding with specified IP, Port and Domain.\nPlease, provide another combination of IP, Port and Domain.",
 					siteName));

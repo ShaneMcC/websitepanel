@@ -11,7 +11,7 @@
 //   this list of conditions  and  the  following  disclaimer in  the documentation
 //   and/or other materials provided with the distribution.
 //
-// - Neither  the  name  of  the  SMB SAAS Systems Inc.  nor   the   names  of  its
+// - Neither  the  appPoolName  of  the  SMB SAAS Systems Inc.  nor   the   names  of  its
 //   contributors may be used to endorse or  promote  products  derived  from  this
 //   software without specific prior written permission.
 //
@@ -50,9 +50,9 @@ namespace WebsitePanel.Setup.Web
 		/// <summary>
 		/// Initializes a new instance of the class.
 		/// </summary>
-		/// <param name="ip">IP address.</param>
-		/// <param name="port">TCP port.</param>
-		/// <param name="host">Host header value.</param>
+		/// <param appPoolName="ip">IP address.</param>
+		/// <param appPoolName="port">TCP port.</param>
+		/// <param appPoolName="host">Host header value.</param>
 		public ServerBinding(string ip, string port, string host)
 		{
 			this.ip = ip;

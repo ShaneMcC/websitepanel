@@ -94,6 +94,11 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\VersionInfo.cs">
+      <Link>VersionInfo.cs</Link>
+    </Compile>
+    <Compile Include="Actions\BaseActionManager.cs" />
+    <Compile Include="Actions\ServerActionManager.cs" />
     <Compile Include="Common\AppConfig.cs" />
     <Compile Include="Common\ConfigurationCheck.cs" />
     <Compile Include="Common\CopyProcess.cs" />
@@ -370,6 +375,12 @@
       <ProductName>Windows Installer 3.1</ProductName>
       <Install>true</Install>
     </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\WebsitePanel.Installer.Core\WebsitePanel.Installer.Core.csproj">
+      <Project>{0E4A3F5B-0BB1-4F63-863D-7B0182B378CF}</Project>
+      <Name>WebsitePanel.Installer.Core</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -11,7 +11,7 @@
 //   this list of conditions  and  the  following  disclaimer in  the documentation
 //   and/or other materials provided with the distribution.
 //
-// - Neither  the  name  of  the  SMB SAAS Systems Inc.  nor   the   names  of  its
+// - Neither  the  appPoolName  of  the  SMB SAAS Systems Inc.  nor   the   names  of  its
 //   contributors may be used to endorse or  promote  products  derived  from  this
 //   software without specific prior written permission.
 //
@@ -56,9 +56,9 @@ namespace WebsitePanel.Setup
 		#region Resources
 
 		/// <summary>
-		/// Get resource stream from assembly by specified resource name.
+		/// Get resource stream from assembly by specified resource appPoolName.
 		/// </summary>
-		/// <param name="resourceName">Name of the resource.</param>
+		/// <param appPoolName="resourceName">Name of the resource.</param>
 		/// <returns>Resource stream.</returns>
 		public static Stream GetResourceStream(string resourceName)
 		{
@@ -73,7 +73,7 @@ namespace WebsitePanel.Setup
 		/// <summary>
 		/// Computes the SHA1 hash value
 		/// </summary>
-		/// <param name="plainText"></param>
+		/// <param appPoolName="plainText"></param>
 		/// <returns></returns>
 		public static string ComputeSHA1(string plainText)
 		{
@@ -218,8 +218,8 @@ namespace WebsitePanel.Setup
 		/// <summary>
 		/// Converts string to int
 		/// </summary>
-		/// <param name="value">String containing a number to convert</param>
-		/// <param name="defaultValue">Default value</param>
+		/// <param appPoolName="value">String containing a number to convert</param>
+		/// <param appPoolName="defaultValue">Default value</param>
 		/// <returns>
 		///The Int32 number equivalent to the number contained in value.
 		/// </returns>
@@ -244,8 +244,8 @@ namespace WebsitePanel.Setup
 		/// <summary>
 		/// ParseBool
 		/// </summary>
-		/// <param name="value">Value</param>
-		/// <param name="defaultValue">Dafault value</param>
+		/// <param appPoolName="value">Value</param>
+		/// <param appPoolName="defaultValue">Dafault value</param>
 		/// <returns>bool</returns>
 		public static bool ParseBool(string value, bool defaultValue)
 		{
@@ -268,8 +268,8 @@ namespace WebsitePanel.Setup
 		/// <summary>
 		/// Converts string to decimal
 		/// </summary>
-		/// <param name="value">String containing a number to convert</param>
-		/// <param name="defaultValue">Default value</param>
+		/// <param appPoolName="value">String containing a number to convert</param>
+		/// <param appPoolName="defaultValue">Default value</param>
 		/// <returns>The Decimal number equivalent to the number contained in value.</returns>
 		public static decimal ParseDecimal(string value, decimal defaultValue)
 		{
@@ -292,8 +292,8 @@ namespace WebsitePanel.Setup
 		/// <summary>
 		/// Converts string to double 
 		/// </summary>
-		/// <param name="value">String containing a number to convert</param>
-		/// <param name="defaultValue">Default value</param>
+		/// <param appPoolName="value">String containing a number to convert</param>
+		/// <param appPoolName="defaultValue">Default value</param>
 		/// <returns>The double number equivalent to the number contained in value.</returns>
 		public static double ParseDouble(string value, double defaultValue)
 		{
@@ -320,7 +320,7 @@ namespace WebsitePanel.Setup
 		/// <summary>
 		/// Converts db value to string
 		/// </summary>
-		/// <param name="val">Value</param>
+		/// <param appPoolName="val">Value</param>
 		/// <returns>string</returns>
 		public static string GetDbString(object val)
 		{
@@ -333,7 +333,7 @@ namespace WebsitePanel.Setup
 		/// <summary>
 		/// Converts db value to short
 		/// </summary>
-		/// <param name="val">Value</param>
+		/// <param appPoolName="val">Value</param>
 		/// <returns>short</returns>
 		public static short GetDbShort(object val)
 		{
@@ -346,7 +346,7 @@ namespace WebsitePanel.Setup
 		/// <summary>
 		/// Converts db value to int
 		/// </summary>
-		/// <param name="val">Value</param>
+		/// <param appPoolName="val">Value</param>
 		/// <returns>int</returns>
 		public static int GetDbInt32(object val)
 		{
@@ -359,7 +359,7 @@ namespace WebsitePanel.Setup
 		/// <summary>
 		/// Converts db value to bool
 		/// </summary>
-		/// <param name="val">Value</param>
+		/// <param appPoolName="val">Value</param>
 		/// <returns>bool</returns>
 		public static bool GetDbBool(object val)
 		{
@@ -372,7 +372,7 @@ namespace WebsitePanel.Setup
 		/// <summary>
 		/// Converts db value to decimal
 		/// </summary>
-		/// <param name="val">Value</param>
+		/// <param appPoolName="val">Value</param>
 		/// <returns>decimal</returns>
 		public static decimal GetDbDecimal(object val)
 		{
@@ -386,7 +386,7 @@ namespace WebsitePanel.Setup
 		/// <summary>
 		/// Converts db value to datetime
 		/// </summary>
-		/// <param name="val">Value</param>
+		/// <param appPoolName="val">Value</param>
 		/// <returns>DateTime</returns>
 		public static DateTime GetDbDateTime(object val)
 		{

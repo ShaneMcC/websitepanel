@@ -11,7 +11,7 @@
 //   this list of conditions  and  the  following  disclaimer in  the documentation
 //   and/or other materials provided with the distribution.
 //
-// - Neither  the  name  of  the  SMB SAAS Systems Inc.  nor   the   names  of  its
+// - Neither  the  appPoolName  of  the  SMB SAAS Systems Inc.  nor   the   names  of  its
 //   contributors may be used to endorse or  promote  products  derived  from  this
 //   software without specific prior written permission.
 //
@@ -58,12 +58,12 @@ namespace WebsitePanel.Setup
 		public string ComponentCode { get; set; }
 
 		/// <summary>
-		/// Component name
+		/// Component appPoolName
 		/// </summary>
 		public string ComponentName { get; set; }
 
 		/// <summary>
-		/// Component name
+		/// Component appPoolName
 		/// </summary>
 		public string ApplicationName { get; set; }
 
@@ -90,7 +90,7 @@ namespace WebsitePanel.Setup
 		public int ReleaseId { get; set; }
 
 		/// <summary>
-		/// Release name
+		/// Release appPoolName
 		/// </summary>
 		public string Version { get; set; }
 
@@ -121,6 +121,10 @@ namespace WebsitePanel.Setup
 		public bool CreateDatabase { get; set; }
 
 		public bool NewVirtualDirectory { get; set; }
+
+		public bool NewWebApplicationPool { get; set; }
+
+		public string WebApplicationPoolName { get; set; }
 
 		/// <summary>
 		/// Virtual directory

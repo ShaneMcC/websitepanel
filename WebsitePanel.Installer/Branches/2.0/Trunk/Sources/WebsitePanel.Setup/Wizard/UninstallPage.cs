@@ -11,7 +11,7 @@
 //   this list of conditions  and  the  following  disclaimer in  the documentation
 //   and/or other materials provided with the distribution.
 //
-// - Neither  the  name  of  the  SMB SAAS Systems Inc.  nor   the   names  of  its
+// - Neither  the  appPoolName  of  the  SMB SAAS Systems Inc.  nor   the   names  of  its
 //   contributors may be used to endorse or  promote  products  derived  from  this
 //   software without specific prior written permission.
 //
@@ -285,7 +285,6 @@ namespace WebsitePanel.Setup
 				list.Add(action);
 			}
 
-
 			//database
 			bool deleteDatabase = AppConfig.GetComponentSettingBooleanValue(componentId, "NewDatabase");
 			if (deleteDatabase)
@@ -312,6 +311,7 @@ namespace WebsitePanel.Setup
 				action.Log = string.Format("- Delete {0} database user", username);
 				list.Add(action);
 			}
+
 			//database login (from standalone setup)
 			string loginName = AppConfig.GetComponentSettingStringValue(componentId, "DatabaseLogin");
 			if (!string.IsNullOrEmpty(loginName))
@@ -324,8 +324,6 @@ namespace WebsitePanel.Setup
 				action.Log = string.Format("- Delete {0} database login", loginName);
 				list.Add(action);
 			}
-
-
 
 			//virtual directory
 			bool deleteVirtualDirectory = AppConfig.GetComponentSettingBooleanValue(componentId, "NewVirtualDirectory");

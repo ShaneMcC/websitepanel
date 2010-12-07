@@ -10,7 +10,7 @@ namespace WebsitePanel.Setup
 		/// <summary> 
 		/// Clean up any resources being used.
 		/// </summary>
-		/// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+		/// <param appPoolName="disposing">true if managed resources should be disposed; otherwise, false.</param>
 		protected override void Dispose(bool disposing)
 		{
 			if (disposing && (components != null))
@@ -63,7 +63,7 @@ namespace WebsitePanel.Setup
 			this.lblLogin.Name = "lblLogin";
 			this.lblLogin.Size = new System.Drawing.Size(100, 23);
 			this.lblLogin.TabIndex = 5;
-			this.lblLogin.Text = "Login name:";
+			this.lblLogin.Text = "Login appPoolName:";
 			// 
 			// txtLogin
 			// 
