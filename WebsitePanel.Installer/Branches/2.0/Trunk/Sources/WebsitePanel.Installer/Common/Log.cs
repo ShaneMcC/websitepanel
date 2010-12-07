@@ -31,7 +31,8 @@ using System.Configuration;
 using System.Diagnostics;
 using System.IO;
 
-using WebsitePanel.Installer.Configuration;
+using WebsitePanel.Installer.Core.Configuration;
+using System.Security.Principal;
 
 namespace WebsitePanel.Installer.Common
 {
@@ -85,7 +86,7 @@ namespace WebsitePanel.Installer.Common
 		/// </summary>
 		/// <param name="message">Error message.</param>
 		/// <param name="ex">Exception.</param>
-		internal static void WriteError(string message, Exception ex)
+		public static void WriteError(string message, Exception ex)
 		{
 			try
 			{
@@ -100,7 +101,7 @@ namespace WebsitePanel.Installer.Common
 		/// Write error to the log.
 		/// </summary>
 		/// <param name="message">Error message.</param>
-		internal static void WriteError(string message)
+		public static void WriteError(string message)
 		{
 			try
 			{
@@ -114,7 +115,7 @@ namespace WebsitePanel.Installer.Common
 		/// Write to log
 		/// </summary>
 		/// <param name="message"></param>
-		internal static void Write(string message)
+		public static void Write(string message)
 		{
 			try
 			{
@@ -129,7 +130,7 @@ namespace WebsitePanel.Installer.Common
 		/// Write line to log
 		/// </summary>
 		/// <param name="message"></param>
-		internal static void WriteLine(string message)
+		public static void WriteLine(string message)
 		{
 			try
 			{
@@ -143,7 +144,7 @@ namespace WebsitePanel.Installer.Common
 		/// Write info message to log
 		/// </summary>
 		/// <param name="message"></param>
-		internal static void WriteInfo(string message)
+		public static void WriteInfo(string message)
 		{
 			try
 			{
@@ -157,7 +158,7 @@ namespace WebsitePanel.Installer.Common
 		/// Write start message to log
 		/// </summary>
 		/// <param name="message"></param>
-		internal static void WriteStart(string message)
+		public static void WriteStart(string message)
 		{
 			try
 			{
@@ -171,7 +172,7 @@ namespace WebsitePanel.Installer.Common
 		/// Write end message to log
 		/// </summary>
 		/// <param name="message"></param>
-		internal static void WriteEnd(string message)
+		public static void WriteEnd(string message)
 		{
 			try
 			{
@@ -181,19 +182,20 @@ namespace WebsitePanel.Installer.Common
 			catch { }
 		}
 
-		internal static void WriteApplicationStart()
+		public static void WriteApplicationStart()
 		{
 			try
 			{
 				string name = typeof(Log).Assembly.GetName().Name;
 				string version = typeof(Log).Assembly.GetName().Version.ToString();
-				string line = string.Format("[{0:G}] {1} {2} Started", DateTime.Now, name, version);
+				string identity = WindowsIdentity.GetCurrent().Name;
+				string line = string.Format("[{0:G}] {1} {2} Started by {3}", DateTime.Now, name, version, identity);
 				Trace.WriteLine(line);
 			}
 			catch { }
 		}
 
-		internal static void WriteApplicationEnd()
+		public static void WriteApplicationEnd()
 		{
 			try
 			{

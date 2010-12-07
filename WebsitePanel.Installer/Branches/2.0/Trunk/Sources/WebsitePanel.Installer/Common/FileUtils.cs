@@ -230,7 +230,7 @@ namespace WebsitePanel.Installer.Common
 		/// Returns current application path.
 		/// </summary>
 		/// <returns>Curent application path.</returns>
-		internal static string GetCurrentDirectory()
+		public static string GetCurrentDirectory()
 		{
 			return AppDomain.CurrentDomain.BaseDirectory;
 		}
@@ -239,7 +239,7 @@ namespace WebsitePanel.Installer.Common
 		/// Returns application temp directory.
 		/// </summary>
 		/// <returns>Application temp directory.</returns>
-		internal static string GetTempDirectory()
+		public static string GetTempDirectory()
 		{
 			return Path.Combine(GetCurrentDirectory(), "Tmp");
 		}
@@ -248,7 +248,7 @@ namespace WebsitePanel.Installer.Common
 		/// Returns application data directory.
 		/// </summary>
 		/// <returns>Application data directory.</returns>
-		internal static string GetDataDirectory()
+		public static string GetDataDirectory()
 		{
 			return Path.Combine(GetCurrentDirectory(), "Data");
 		}

@@ -34,7 +34,7 @@ namespace WebsitePanel.Installer.Common
 	/// <summary>
 	/// Registry helper class.
 	/// </summary>
-	internal sealed class RegistryUtils
+	public sealed class RegistryUtils
 	{
 		/// <summary>
 		/// Initializes a new instance of the class.
