@@ -68,6 +68,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\VersionInfo.cs">
+      <Link>VersionInfo.cs</Link>
+    </Compile>
     <Compile Include="Common\FileUtils.cs" />
     <Compile Include="Common\User32.cs" />
     <Compile Include="Common\Utils.cs" />
