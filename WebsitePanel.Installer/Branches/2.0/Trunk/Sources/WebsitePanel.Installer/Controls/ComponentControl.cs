@@ -38,6 +38,8 @@ using System.Text;
 using System.Windows.Forms;
 
 using WebsitePanel.Installer.Common;
+using WebsitePanel.Installer.Services;
+using WebsitePanel.Installer.Core;
 using WebsitePanel.Installer.Configuration;
 
 namespace WebsitePanel.Installer.Controls
@@ -140,7 +142,10 @@ namespace WebsitePanel.Installer.Controls
 			try
 			{
 				Log.WriteInfo(string.Format("Checking {0} {1}", componentName, release));
-				ds = AppContext.AppForm.WebService.GetComponentUpdate(componentCode, release);
+				//
+				var webService = ServiceProviderProxy.GetInstallerWebService();
+				ds = webService.GetComponentUpdate(componentCode, release);
+				//
 				Log.WriteEnd("Component update checked");
 				AppContext.AppForm.FinishProgress();
 			}
@@ -308,7 +313,7 @@ namespace WebsitePanel.Installer.Controls
 		{
 			Log.WriteStart("Starting component setup");
 
-			ComponentConfigElement element = AppContext.ScopeNode.Tag as ComponentConfigElement;
+			var element = AppContext.ScopeNode.Tag as ComponentConfigElement;
 
 			string installer = element.GetStringSetting("Installer");
 			string path = element.GetStringSetting("InstallerPath");

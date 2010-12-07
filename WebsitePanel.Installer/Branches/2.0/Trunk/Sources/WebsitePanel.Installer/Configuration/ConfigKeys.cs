@@ -30,7 +30,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace WebsitePanel.Installer.Configuration
+namespace WebsitePanel.Installer.Core.Configuration
 {
 	internal class ConfigKeys
 	{

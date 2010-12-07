@@ -31,7 +31,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Configuration;
 
-namespace WebsitePanel.Installer.Configuration
+namespace WebsitePanel.Installer.Core.Configuration
 {
 	/// <summary>
 	/// Provides configuration system support for the <installerSettings> configuration section. 

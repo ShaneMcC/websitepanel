@@ -32,7 +32,7 @@ using System.Collections;
 using System.Configuration;
 using System.Text;
 
-namespace WebsitePanel.Installer.Configuration
+namespace WebsitePanel.Installer.Core.Configuration
 {
 	/// <summary>
 	/// Represents <connections> configuration element containing a collection of child elements.

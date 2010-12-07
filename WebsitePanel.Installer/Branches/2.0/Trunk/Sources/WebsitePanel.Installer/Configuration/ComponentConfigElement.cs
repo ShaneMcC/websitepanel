@@ -32,7 +32,7 @@ using System.Collections;
 using System.Configuration;
 using System.Text;
 
-namespace WebsitePanel.Installer.Configuration
+namespace WebsitePanel.Installer.Core.Configuration
 {
 	/// <summary>
 	/// Represents a configuration element containing component info.

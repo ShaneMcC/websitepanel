@@ -38,8 +38,9 @@ using System.Data;
 using System.Text;
 using System.Windows.Forms;
 
-using WebsitePanel.Installer.Configuration;
 using WebsitePanel.Installer.Common;
+using WebsitePanel.Installer.Core;
+using WebsitePanel.Installer.Configuration;
 
 namespace WebsitePanel.Installer.Controls
 {
@@ -76,7 +77,7 @@ namespace WebsitePanel.Installer.Controls
 		/// </summary>
 		private void LoadSettings()
 		{
-			InstallerSection appConfig = AppContext.AppForm.AppConfiguration;
+			InstallerSection appConfig = AppConfigManager.AppConfiguration;
 			chkAutoUpdate.Checked = appConfig.GetBooleanSetting(ConfigKeys.Web_AutoCheck);
 			chkUseHTTPProxy.Checked = appConfig.GetBooleanSetting(ConfigKeys.Web_Proxy_UseProxy);
 			txtAddress.Text = appConfig.GetStringSetting(ConfigKeys.Web_Proxy_Address);
@@ -98,13 +99,14 @@ namespace WebsitePanel.Installer.Controls
 		/// <param name="e"></param>
 		private void OnUpdateClick(object sender, EventArgs e)
 		{
-			KeyValueConfigurationCollection settings = AppContext.AppForm.AppConfiguration.Settings;
+			KeyValueConfigurationCollection settings = AppConfigManager.AppConfiguration.Settings;
 			settings[ConfigKeys.Web_AutoCheck].Value = chkAutoUpdate.Checked.ToString();
 			settings[ConfigKeys.Web_Proxy_UseProxy].Value = chkUseHTTPProxy.Checked.ToString();
 			settings[ConfigKeys.Web_Proxy_Address].Value = txtAddress.Text;
 			settings[ConfigKeys.Web_Proxy_UserName].Value = txtUserName.Text;
 			settings[ConfigKeys.Web_Proxy_Password].Value = txtPassword.Text;
-			AppContext.AppForm.SaveConfiguration(true);
+			//
+			AppConfigManager.SaveConfiguration(true);
 		}
 
 		/// <summary>

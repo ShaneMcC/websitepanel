@@ -39,8 +39,9 @@ using System.Text;
 using System.Windows.Forms;
 
 using WebsitePanel.Installer.Common;
-using WebsitePanel.Installer.Configuration;
 using WebsitePanel.Installer.Services;
+using WebsitePanel.Installer.Core;
+using WebsitePanel.Installer.Configuration;
 
 namespace WebsitePanel.Installer.Controls
 {
@@ -124,8 +125,9 @@ namespace WebsitePanel.Installer.Controls
 					args["InstallerPath"] = installerPath;
 					args["InstallerType"] = installerType;
 					args["Installer"] = Path.GetFileName(fileName);
-					args["ShellVersion"] = AppContext.AppForm.Version;
+					args[Global.Parameters.ShellVersion] = AssemblyLoader.GetShellVersion();
 					args["BaseDirectory"] = FileUtils.GetCurrentDirectory();
+					args[Global.Parameters.ShellMode] = Global.VisualInstallerShell;
 					args["IISVersion"] = Global.IISVersion;
 					args["SetupXml"] = this.componentSettingsXml;
 					args["ParentForm"] = FindForm();
@@ -159,7 +161,7 @@ namespace WebsitePanel.Installer.Controls
 		{
 			bool ret = false;
 			List<string> installedComponents = new List<string>(); 
-			foreach (ComponentConfigElement componentConfig in AppContext.AppForm.AppConfiguration.Components)
+			foreach (ComponentConfigElement componentConfig in AppConfigManager.AppConfiguration.Components)
 			{
 				string code = componentConfig.Settings["ComponentCode"].Value;
 				installedComponents.Add(code);
@@ -222,7 +224,8 @@ namespace WebsitePanel.Installer.Controls
 				Log.WriteStart("Loading list of available components");
 				lblDescription.Text = string.Empty;
 				//load components via web service
-				DataSet dsComponents = AppContext.AppForm.WebService.GetAvailableComponents();
+				var webService = ServiceProviderProxy.GetInstallerWebService();
+				DataSet dsComponents = webService.GetAvailableComponents();
 				//remove already installed components
 				foreach (DataRow row in dsComponents.Tables[0].Rows)
 				{
