@@ -4765,6 +4765,9 @@
   <data name="WebAppGallery.SQLRequired" xml:space="preserve">
     <value>SQL Server databases</value>
   </data>
+  <data name="Quota.Web.SSL" xml:space="preserve">
+    <value>SSL</value>
+  </data>
   <data name="Quota.ExchangeHostedEdition.Contacts" xml:space="preserve">
     <value>Contacts</value>
   </data>
@@ -4902,5 +4905,38 @@
   </data>
   <data name="Warning.725" xml:space="preserve">
     <value>Maximum mailbox account size should be a positive number</value>
+  </data>
+  <data name="Error.WEB_GEN_CSR" xml:space="preserve">
+    <value>Error generating CSR</value>
+  </data>
+  <data name="Error.WEB_GET_SSL" xml:space="preserve">
+    <value>Error getting SSL info for site</value>
+  </data>
+  <data name="Error.WEB_INSTALL_CSR" xml:space="preserve">
+    <value>Error installing certificate</value>
+  </data>
+  <data name="Error.WEB_SSL_DELETE" xml:space="preserve">
+    <value>Error deleting certificate</value>
+  </data>
+  <data name="Error.WEB_SSL_EXPORT" xml:space="preserve">
+    <value>Error exporting certificate</value>
+  </data>
+  <data name="Error.WEB_SSL_NOFILE" xml:space="preserve">
+    <value>You have not selected a file to upload</value>
+  </data>
+  <data name="Success.WEB_GEN_CSR" xml:space="preserve">
+    <value>CSR successfully generated.</value>
+  </data>
+  <data name="Success.WEB_INSTALL_CSR" xml:space="preserve">
+    <value>Certificate successfully installed on website</value>
+  </data>
+  <data name="ListItem.NotSpecified" xml:space="preserve">
+    <value>&lt;Not specified&gt;</value>
+  </data>
+  <data name="Success.WEB_SSL_DELETE" xml:space="preserve">
+    <value>Certificate successfully removed from the website</value>
+  </data>
+  <data name="Success.WEB_SSL_EXPORT" xml:space="preserve">
+    <value>Certificate successfully imported from the website</value>
   </data>
 </root>

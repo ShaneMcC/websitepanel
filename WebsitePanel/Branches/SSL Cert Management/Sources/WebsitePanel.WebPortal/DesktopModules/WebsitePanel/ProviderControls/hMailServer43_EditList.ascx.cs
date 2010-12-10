@@ -50,15 +50,28 @@ namespace WebsitePanel.Portal.ProviderControls
 		public void BindItem(MailList item)
 		{
 			Utils.SelectListItem(ddlPostingMode, item.PostingMode);
-
 			mailEditItems.Items = item.Members;
+            txtEmailAnnouncements.Text = item.ModeratorAddress;
+            cbSMTPAuthentication.Checked = item.RequireSmtpAuthentication;
+            ToggleFormControls();
 		}
 
 		public void SaveItem(MailList item)
 		{
 			item.PostingMode = (PostingMode)Enum.Parse(typeof(PostingMode), ddlPostingMode.SelectedValue, true);
-
+            item.ModeratorAddress = txtEmailAnnouncements.Text;
 			item.Members = mailEditItems.Items;
+            item.RequireSmtpAuthentication = cbSMTPAuthentication.Checked;
+  		}
+
+        protected void ddlPostingMode_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            ToggleFormControls();
+        }
+
+        private void ToggleFormControls()
+        {
+            lblEmail.Visible = txtEmailAnnouncements.Visible = (ddlPostingMode.SelectedValue == "ModeratorCanPost");
 		}
 	}
 }

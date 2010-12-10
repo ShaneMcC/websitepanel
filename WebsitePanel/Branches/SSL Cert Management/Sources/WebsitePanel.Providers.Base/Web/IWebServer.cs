@@ -110,5 +110,17 @@ namespace WebsitePanel.Providers.Web
 		void ChangeWebManagementAccessPassword(string accountName, string accountPassword);
 		bool CheckWebManagementAccountExists(string accountName);
 		ResultObject CheckWebManagementPasswordComplexity(string accountPassword);
+
+		//SSL
+		SSLCertificate generateCSR(SSLCertificate certificate);
+		SSLCertificate generateRenewalCSR(SSLCertificate certificate);
+		SSLCertificate installCertificate(SSLCertificate certificate, WebSite website);
+		SSLCertificate getCertificate(WebSite site);
+		SSLCertificate installPFX(byte[] certificate, string password, WebSite website);
+		byte[] exportCertificate(string serialNumber, string password);
+		List<SSLCertificate> getServerCertificates();
+		ResultObject DeleteCertificate(SSLCertificate certificate, WebSite website);
+		SSLCertificate ImportCertificate(WebSite website);
+		bool CheckCertificate(WebSite webSite);
 	}
 }

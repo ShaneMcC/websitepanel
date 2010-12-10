@@ -2870,5 +2870,142 @@ namespace WebsitePanel.EnterpriseServer
         }
 
         #endregion
+
+		#region SSL
+		public static int AddSSLRequest(int actorId, int packageId, int siteID, int userID, string friendlyname, string hostname, string csr, int csrLength, string distinguishedName, bool isRenewal, int previousID)
+		{
+			SqlParameter prmId = new SqlParameter("@SSLID", SqlDbType.Int);
+			prmId.Direction = ParameterDirection.Output;
+			SqlHelper.ExecuteNonQuery(ConnectionString, CommandType.StoredProcedure,
+				ObjectQualifier + "AddSSLRequest", prmId,
+				new SqlParameter("@ActorId", actorId),
+				new SqlParameter("@PackageId", packageId),
+				new SqlParameter("@UserID", userID),
+				new SqlParameter("@WebSiteID", siteID),
+				new SqlParameter("@FriendlyName", friendlyname),
+				new SqlParameter("@HostName", hostname),
+				new SqlParameter("@CSR", csr),
+				new SqlParameter("@CSRLength", csrLength),
+				new SqlParameter("@DistinguishedName", distinguishedName),
+				new SqlParameter("@IsRenewal", isRenewal),
+				new SqlParameter("@PreviousId", previousID)
+				);
+			return Convert.ToInt32(prmId.Value);
+
+		}
+
+		public static void CompleteSSLRequest(int actorId, int packageId, int id, string certificate, string distinguishedName, string serialNumber, byte[] hash, DateTime validFrom, DateTime expiryDate)
+		{
+			SqlHelper.ExecuteNonQuery(ConnectionString, CommandType.StoredProcedure,
+				ObjectQualifier + "CompleteSSLRequest",
+				new SqlParameter("@ActorID", actorId),
+				new SqlParameter("@PackageID", packageId),
+				new SqlParameter("@ID", id),
+				new SqlParameter("@DistinguishedName", distinguishedName),
+				new SqlParameter("@Certificate", certificate),
+				new SqlParameter("@SerialNumber", serialNumber),
+				new SqlParameter("@Hash", Convert.ToBase64String(hash)),
+				new SqlParameter("@ValidFrom", validFrom),
+				new SqlParameter("@ExpiryDate", expiryDate));
+
+		}
+
+		public static void AddPFX(int actorId, int packageId, int siteID, int userID, string hostname, string friendlyName, string distinguishedName, int csrLength, string serialNumber, DateTime validFrom, DateTime expiryDate)
+		{
+			SqlHelper.ExecuteNonQuery(ConnectionString, CommandType.StoredProcedure,
+				ObjectQualifier + "AddPFX",
+				new SqlParameter("@ActorId", actorId),
+				new SqlParameter("@PackageId", packageId),
+				new SqlParameter("@UserID", userID),
+				new SqlParameter("@WebSiteID", siteID),
+				new SqlParameter("@FriendlyName", friendlyName),
+				new SqlParameter("@HostName", hostname),
+				new SqlParameter("@CSRLength", csrLength),
+				new SqlParameter("@DistinguishedName", distinguishedName),
+				new SqlParameter("@SerialNumber", serialNumber),
+				new SqlParameter("@ValidFrom", validFrom),
+				new SqlParameter("@ExpiryDate", expiryDate));
+
+		}
+
+		public static DataSet GetSSL(int actorId, int packageId, int id)
+		{
+			return SqlHelper.ExecuteDataset(ConnectionString, CommandType.StoredProcedure,
+				ObjectQualifier + "GetSSL",
+				new SqlParameter("@SSLID", id));
+
+		}
+
+		public static DataSet GetCertificatesForSite(int actorId, int packageId, int siteId)
+		{
+			return SqlHelper.ExecuteDataset(ConnectionString, CommandType.StoredProcedure,
+				ObjectQualifier + "GetCertificatesForSite",
+				new SqlParameter("@ActorId", actorId),
+				new SqlParameter("@PackageId", packageId),
+				new SqlParameter("@websiteid", siteId));
+
+		}
+
+		public static DataSet GetPendingCertificates(int actorId, int packageId, int id, bool recursive)
+		{
+			return SqlHelper.ExecuteDataset(ConnectionString, CommandType.StoredProcedure,
+				ObjectQualifier + "GetPendingSSLForWebsite",
+				new SqlParameter("@ActorId", actorId),
+				new SqlParameter("@PackageId", packageId),
+				new SqlParameter("@websiteid", id),
+				new SqlParameter("@Recursive", recursive));
+
+		}
+
+		public static IDataReader GetSSLCertificateByID(int actorId, int id)
+		{
+			return SqlHelper.ExecuteReader(ConnectionString, CommandType.StoredProcedure,
+				ObjectQualifier + "GetSSLCertificateByID",
+				new SqlParameter("@ActorId", actorId),
+				new SqlParameter("@ID", id));
+		}
+
+		public static int CheckSSL(int siteID, bool renewal)
+		{
+			SqlParameter prmId = new SqlParameter("@Result", SqlDbType.Int);
+			prmId.Direction = ParameterDirection.Output;
+
+			SqlHelper.ExecuteNonQuery(ConnectionString, CommandType.StoredProcedure,
+				ObjectQualifier + "CheckSSL",
+				prmId,
+				new SqlParameter("@siteID", siteID),
+				new SqlParameter("@Renewal", renewal));
+
+			return Convert.ToInt32(prmId.Value);
+		}
+
+		public static IDataReader GetSiteCert(int actorId, int siteID)
+		{
+			return SqlHelper.ExecuteReader(ConnectionString, CommandType.StoredProcedure,
+				ObjectQualifier + "GetSSLCertificateByID",
+				new SqlParameter("@ActorId", actorId),
+				new SqlParameter("@ID", siteID));
+		}
+
+		public static void DeleteCertificate(int actorId, int packageId, int id)
+		{
+			SqlHelper.ExecuteNonQuery(ConnectionString, CommandType.StoredProcedure,
+				ObjectQualifier + "DeleteCertificate",
+				new SqlParameter("@ActorID", actorId),
+				new SqlParameter("@PackageID", packageId),
+				new SqlParameter("@id", id));
+		}
+
+		public static bool CheckSSLExistsForWebsite(int siteId)
+		{
+			SqlParameter prmId = new SqlParameter("@Result", SqlDbType.Bit);
+			prmId.Direction = ParameterDirection.Output;
+			SqlHelper.ExecuteNonQuery(ConnectionString, CommandType.StoredProcedure,
+				ObjectQualifier + "CheckSSLExistsForWebsite", prmId,
+				new SqlParameter("@siteID", siteId),
+				new SqlParameter("@SerialNumber", ""));
+			return Convert.ToBoolean(prmId.Value);
+		}
+		#endregion
     }
 }

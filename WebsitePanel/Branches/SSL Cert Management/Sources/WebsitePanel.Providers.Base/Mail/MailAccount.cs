@@ -50,6 +50,8 @@ namespace WebsitePanel.Providers.Mail
 	    private bool isDomainAdmin;
 	    private bool isDomainAdminEnabled;
 	    private bool retainLocalCopy; 
+        private bool signatureEnabled;
+        private string signatureHTML;
 
 
 	   
@@ -174,5 +176,19 @@ namespace WebsitePanel.Providers.Mail
 
 	    #endregion
 
+        #region hMail
+        public bool SignatureEnabled
+        {
+            get { return signatureEnabled; }
+            set { signatureEnabled = value; }
+        }
+
+        public string SignatureHTML
+        {
+            get { return signatureHTML; }
+            set { signatureHTML = value; }
+        }
+
+        #endregion 
     }
 }

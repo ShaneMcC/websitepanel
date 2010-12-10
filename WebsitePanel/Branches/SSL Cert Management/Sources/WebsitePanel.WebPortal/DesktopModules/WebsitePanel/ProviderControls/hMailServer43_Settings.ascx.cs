@@ -51,6 +51,7 @@ namespace WebsitePanel.Portal.ProviderControls
 			ipAddress.AddressId = (settings["ServerIpAddress"] != null) ? Utils.ParseInt(settings["ServerIpAddress"], 0) : 0;
 			txtUsername.Text = settings["AdminUsername"];
 			ViewState["PWD"] = settings["AdminPassword"];
+            rowPassword.Visible = ((string)ViewState["PWD"]) != "";
 		}
 
 		public void SaveSettings(StringDictionary settings)

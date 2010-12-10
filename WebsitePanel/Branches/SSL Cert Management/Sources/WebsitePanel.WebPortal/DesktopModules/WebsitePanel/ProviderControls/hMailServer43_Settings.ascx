@@ -17,6 +17,13 @@
 		    <asp:TextBox Runat="server" ID="txtUsername" CssClass="NormalTextBox" Width="200px"></asp:TextBox>
 		</td>
 	</tr>
+    <tr id="rowPassword" runat="server">
+		<td class="SubHead">
+		    <asp:Label ID="lblCurrPassword" runat="server" meta:resourcekey="lblCurrPassword" Text="Current Admin Password:"></asp:Label>
+		</td>
+		<td class="Normal">*******
+		</td>
+	</tr>
 	<tr>
 		<td class="SubHead">
 		    <asp:Label ID="lblAdminPassword" runat="server" meta:resourcekey="lblAdminPassword" Text="Admin Password:"></asp:Label>

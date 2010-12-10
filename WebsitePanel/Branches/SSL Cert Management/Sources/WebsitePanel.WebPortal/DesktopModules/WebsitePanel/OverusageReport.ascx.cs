@@ -519,7 +519,7 @@ namespace WebsitePanel.Portal
 
 				jsFunctionality.AppendLine(String.Empty);
 				jsFunctionality.AppendLine("function RefreshReport() {");
-				jsFunctionality.AppendLine("  GetReportViewerControllerInstance().ActionHandler('Refresh', '');");
+				jsFunctionality.AppendLine("  GetReportViewerControllerInstance().ActionHandler('RefreshControlLayout', '');");
 				jsFunctionality.AppendLine("}");
 
 				jsFunctionality.AppendLine(String.Empty);

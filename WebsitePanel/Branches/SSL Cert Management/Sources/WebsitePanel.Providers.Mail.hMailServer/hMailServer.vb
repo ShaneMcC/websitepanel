@@ -150,10 +150,20 @@ Public Class hMailServer
 
 		mailList.Enabled = objMailList.Active
 		mailList.Name = objMailList.Address
+		mailList.RequireSmtpAuthentication = objMailList.RequireSMTPAuth
 
-		If objMailList.RequireSMTPAuth Then
+		'If objMailList.RequireSMTPAuth Then
+		'mailList.PostingMode = PostingMode.MembersCanPost
+		'ElseIf Not String.IsNullOrEmpty(objMailList.RequireSenderAddress) Then
+		'mailList.PostingMode = PostingMode.ModeratorCanPost
+		'mailList.ModeratorAddress = objMailList.RequireSenderAddress
+		'Else
+		'mailList.PostingMode = PostingMode.AnyoneCanPost
+		'End If
+
+		If objMailList.Mode = 1 Then
 			mailList.PostingMode = PostingMode.MembersCanPost
-		ElseIf Not String.IsNullOrEmpty(objMailList.RequireSenderAddress) Then
+		ElseIf Not String.IsNullOrEmpty(objMailList.RequireSenderAddress) And (objMailList.Mode = 2) Then
 			mailList.PostingMode = PostingMode.ModeratorCanPost
 			mailList.ModeratorAddress = objMailList.RequireSenderAddress
 		Else
@@ -163,13 +173,22 @@ Public Class hMailServer
 		' load list members
 		Dim membersCount As Integer = objMailList.Recipients.Count - 1
 
+		Dim objRecipient As Object
 		If membersCount > 0 Then
 			mailList.Members = New String(membersCount) {}
 			For index As Integer = 0 To membersCount
-				Dim objRecipient As Object = objMailList.Recipients.Item(index)
+				objRecipient = objMailList.Recipients.Item(index)
 				mailList.Members(index) = objRecipient.RecipientAddress
 			Next index
+		Else
+			'case when list has one member
+			If membersCount = 0 Then
+				mailList.Members = New String(1) {}
+				objRecipient = objMailList.Recipients.Item(0)
+				mailList.Members(0) = objRecipient.RecipientAddress
+			End If
 		End If
+		'membersCount = -1 - list does not have members
 
 		Return mailList
 	End Function
@@ -257,11 +276,23 @@ Public Class hMailServer
 			objAccount.Active = mailbox.Enabled
 			objAccount.Password = mailbox.Password
 			objAccount.MaxSize = mailbox.MaxMailboxSize
+			objAccount.PersonFirstName = mailbox.FirstName
+			objAccount.PersonLastName = mailbox.FirstName
+			objAccount.SignatureEnabled = mailbox.SignatureEnabled
+			objAccount.SignaturePlainText = mailbox.Signature
+			objAccount.SignatureHTML = mailbox.SignatureHTML
 
 			If mailbox.ResponderEnabled Then
 				objAccount.VacationMessageIsOn = True
 				objAccount.VacationSubject = mailbox.ResponderSubject
 				objAccount.VacationMessage = mailbox.ResponderMessage
+			End If
+
+			'set forwarding address
+			If mailbox.ForwardingAddresses.Length > 0 Then
+				objAccount.ForwardAddress = mailbox.ForwardingAddresses(0)
+				objAccount.ForwardEnabled = True
+				objAccount.ForwardKeepOriginal = mailbox.RetainLocalCopy
 			End If
 
 			objAccount.Save()
@@ -592,7 +623,8 @@ Public Class hMailServer
 					Dim objAccount As Object = objDomain.ComObject.Aliases.Item(i)
 
 					If String.Compare(objAccount.Name, mailAlias.Name, True) = 0 Then
-						objAccount.Active = mailAlias.Enabled
+						'Fix mail alias is disabled in hMail Server when update it in WSP
+						objAccount.Active = True
 						objAccount.Value = mailAlias.ForwardTo
 						objAccount.Save()
 					End If
@@ -707,17 +739,22 @@ Public Class hMailServer
 					' get account details
 					Dim account As MailAccount = New MailAccount()
 					account.Name = objAccount.Address
+					account.FirstName = objAccount.PersonFirstName
+					account.LastName = objAccount.PersonLastName
 					account.Enabled = objAccount.Active
 					account.MaxMailboxSize = objAccount.MaxSize
 					account.Password = objAccount.Password
 					account.ResponderEnabled = objAccount.VacationMessageIsOn
 					account.ResponderSubject = objAccount.VacationSubject
 					account.ResponderMessage = objAccount.VacationMessage
-					account.ForwardingAddresses = GetAccountForwardings(objAccount)
-
-					Dim deleteOnForward As Boolean = False
-
-					account.DeleteOnForward = deleteOnForward
+					Dim forwardings As List(Of String) = New List(Of String)
+					forwardings.Add(objAccount.ForwardAddress)
+					account.ForwardingAddresses = forwardings.ToArray
+					account.RetainLocalCopy = objAccount.ForwardKeepOriginal
+					'Signature
+					account.SignatureEnabled = objAccount.SignatureEnabled
+					account.Signature = objAccount.SignaturePlainText
+					account.SignatureHTML = objAccount.SignatureHTML
 					Return account
 				End If
 			Next
@@ -758,14 +795,22 @@ Public Class hMailServer
 				' get account details
 				Dim account As MailAccount = New MailAccount()
 				account.Name = objAccount.Address
+				account.FirstName = objAccount.PersonFirstName
+				account.LastName = objAccount.PersonLastName
 				account.Enabled = objAccount.Active
 				account.MaxMailboxSize = objAccount.MaxSize
 				account.Password = objAccount.Password
 				account.ResponderEnabled = objAccount.VacationMessageIsOn
 				account.ResponderSubject = objAccount.VacationSubject
 				account.ResponderMessage = objAccount.VacationMessage
-				account.ForwardingAddresses = GetAccountForwardings(objAccount)
-				account.DeleteOnForward = False
+				Dim forwardings As List(Of String) = New List(Of String)
+				forwardings.Add(objAccount.ForwardAddress)
+				account.ForwardingAddresses = forwardings.ToArray
+				account.RetainLocalCopy = objAccount.ForwardKeepOriginal
+				'Signature
+				account.SignatureEnabled = objAccount.SignatureEnabled
+				account.Signature = objAccount.SignaturePlainText
+				account.SignatureHTML = objAccount.SignatureHTML
 				accounts.Add(account)
 			Next
 		End If
@@ -925,27 +970,33 @@ Public Class hMailServer
 
 		If objDomain.Succeed Then
 			Try
-				If mailbox.DeleteOnForward Then
-					' add alias
-					Dim objAlias As Object = objDomain.ComObject.Aliases.ItemByName(mailbox.Name)
-					objAlias.Active = mailbox.Enabled
-					objAlias.Value = mailbox.ForwardingAddresses(0)
-					objAlias.Save()
-				Else
-					' update account
-					Dim objAccount As Object = objDomain.ComObject.Accounts.ItemByAddress(mailbox.Name)
-					objAccount.Active = mailbox.Enabled
-					objAccount.Password = mailbox.Password
-					objAccount.MaxSize = mailbox.MaxMailboxSize
-					objAccount.VacationMessageIsOn = mailbox.ResponderEnabled
-					objAccount.VacationSubject = mailbox.ResponderSubject
-					objAccount.VacationMessage = mailbox.ResponderMessage
-					objAccount.Save()
+				' update account
+				Dim objAccount As Object = objDomain.ComObject.Accounts.ItemByAddress(mailbox.Name)
+				objAccount.Active = mailbox.Enabled
+				objAccount.Password = mailbox.Password
+				objAccount.MaxSize = mailbox.MaxMailboxSize
+				objAccount.VacationMessageIsOn = mailbox.ResponderEnabled
+				objAccount.VacationSubject = mailbox.ResponderSubject
+				objAccount.VacationMessage = mailbox.ResponderMessage
+				'Personal Information
+				objAccount.PersonFirstName = mailbox.FirstName
+				objAccount.PersonLastName = mailbox.LastName
+				'Signature
+				objAccount.SignatureEnabled = mailbox.SignatureEnabled
+				objAccount.SignaturePlainText = mailbox.Signature
+				objAccount.SignatureHTML = mailbox.SignatureHTML
 
-					' set account rules
-					SetAccountRules(mailbox, objAccount)
-
+				If mailbox.ForwardingAddresses.Length > 0 Then
+					objAccount.ForwardAddress = mailbox.ForwardingAddresses(0)
+					objAccount.ForwardKeepOriginal = mailbox.RetainLocalCopy
+					objAccount.ForwardEnabled = True
 				End If
+
+				objAccount.Save()
+
+				' set account rules
+				SetAccountRules(mailbox, objAccount)
+
 			Catch ex As Exception
 				Log.WriteError("Couldn't update an account.", ex)
 			End Try
@@ -1059,25 +1110,34 @@ Public Class hMailServer
 				Dim objMailList As Object = objDomain.ComObject.DistributionLists.ItemByAddress(maillist.Name)
 				objMailList.Active = maillist.Enabled
 
+				objMailList.RequireSMTPAuth = maillist.RequireSmtpAuthentication
+
 				Select Case maillist.PostingMode
 					Case PostingMode.MembersCanPost
-						objMailList.RequireSMTPAuth = True
+						objMailList.Mode = 1
 					Case PostingMode.ModeratorCanPost
 						If String.IsNullOrEmpty(maillist.ModeratorAddress) Then
 							Throw New Exception("List moderator address doesn't specified.")
 						End If
 						objMailList.RequireSenderAddress = maillist.ModeratorAddress
+						objMailList.Mode = 2
 					Case PostingMode.AnyoneCanPost
-						objMailList.RequireSMTPAuth = False
+						objMailList.Mode = 3
 				End Select
 
 				objMailList.Save()
 
+				Dim count As Integer = objMailList.Recipients.Count
+
 				' cleanup list members
-				For i As Integer = 0 To objMailList.Recipients.Count - 1
-					Dim objRecipient As Object = objMailList.Recipients.Item(i)
-					objRecipient.Delete()
-				Next i
+				' check if list has members to avoid Invalid Index exception
+				If objMailList.Recipients.Count > 0 Then
+					For i As Integer = 0 To objMailList.Recipients.Count - 1
+						Dim objRecipient As Object = objMailList.Recipients.Item(0)
+						objRecipient.Delete()
+					Next i
+				End If
+
 
 				' save list members
 				If Not maillist.Members Is Nothing Then

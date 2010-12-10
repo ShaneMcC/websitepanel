@@ -123,6 +123,9 @@
   <data name="lblAdminPassword.Text" xml:space="preserve">
     <value>Admin Password:</value>
   </data>
+  <data name="lblCurrPassword.Text" xml:space="preserve">
+    <value>Current Admin Password:</value>
+  </data>
   <data name="lblPublicIP.Text" xml:space="preserve">
     <value>Public IP Address:</value>
   </data>

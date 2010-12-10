@@ -276,6 +276,7 @@
     <Compile Include="Web\IWebServer.cs" />
     <Compile Include="Web\MimeMap.cs" />
     <Compile Include="Web\SharedSSLFolder.cs" />
+    <Compile Include="Web\SSLCertificate.cs" />
     <Compile Include="Web\WebFolder.cs" />
     <Compile Include="Web\WebGroup.cs" />
     <Compile Include="Web\WebSite.cs" />

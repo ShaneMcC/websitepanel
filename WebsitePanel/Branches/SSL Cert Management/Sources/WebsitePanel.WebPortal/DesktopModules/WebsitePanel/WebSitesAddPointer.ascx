@@ -8,7 +8,7 @@
 		</td>
 		<td>
 			<uc1:DomainsSelectDomainControl ID="domainsSelectDomainControl" runat="server"
-			    HideWebSites="true" HideDomainsSubDomains="true" />
+			    HideWebSites="true" HideDomainsSubDomains="false" />
 		</td>
 	</tr>
 </table>

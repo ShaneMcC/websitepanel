@@ -953,5 +953,117 @@ namespace WebsitePanel.Server
 		}
 
 		#endregion
+
+		#region SSL Management
+		[WebMethod, SoapHeader("settings")]
+		public SSLCertificate generateCSR(SSLCertificate certificate)
+		{
+			try
+			{
+				Log.WriteStart("'{0}' generateCSR", ProviderSettings.ProviderName);
+				certificate = WebProvider.generateCSR(certificate);
+				Log.WriteEnd("'{0}' generateCSR", ProviderSettings.ProviderName);
+				return certificate;
+
+			}
+			catch (Exception ex)
+			{
+				Log.WriteError(String.Format("'{0}' generateCSR", ProviderSettings.ProviderName), ex);
+				throw;
+			}
+		}
+		[WebMethod, SoapHeader("settings")]
+		public SSLCertificate generateRenewalCSR(SSLCertificate certificate)
+		{
+			try
+			{
+				Log.WriteStart("'{0}' generateCSR", ProviderSettings.ProviderName);
+				certificate = WebProvider.generateCSR(certificate);
+				Log.WriteEnd("'{0}' generateCSR", ProviderSettings.ProviderName);
+				return certificate;
+
+			}
+			catch (Exception ex)
+			{
+				Log.WriteError(String.Format("'{0}' generateCSR", ProviderSettings.ProviderName), ex);
+				throw;
+			}
+		}
+
+		[WebMethod, SoapHeader("settings")]
+		public SSLCertificate getCertificate(WebSite site)
+		{
+			throw new NotImplementedException();
+		}
+
+		[WebMethod, SoapHeader("settings")]
+		public SSLCertificate installCertificate(SSLCertificate certificate, WebSite website)
+		{
+			try
+			{
+				Log.WriteStart("'{0}' installCertificate", ProviderSettings.ProviderName);
+				SSLCertificate result = WebProvider.installCertificate(certificate, website);
+				Log.WriteEnd("'{0}' installCertificate", ProviderSettings.ProviderName);
+				return result;
+
+			}
+			catch (Exception ex)
+			{
+				Log.WriteError(String.Format("'{0}' generateCSR", ProviderSettings.ProviderName), ex);
+				throw;
+			}
+		}
+
+		[WebMethod, SoapHeader("settings")]
+		public SSLCertificate installPFX(byte[] certificate, string password, WebSite website)
+		{
+			try
+			{
+				Log.WriteStart("'{0}' installPFX", ProviderSettings.ProviderName);
+				SSLCertificate response = WebProvider.installPFX(certificate, password, website);
+
+				if (response.Hash == null)
+				{
+					Log.WriteError(String.Format("'{0}' installPFX", ProviderSettings.ProviderName), null);
+				}
+				else
+				{
+					Log.WriteEnd("'{0}' installPFX", ProviderSettings.ProviderName);
+				}
+				return response;
+			}
+			catch (Exception ex)
+			{
+				Log.WriteError(String.Format("'{0}' generateCSR", ProviderSettings.ProviderName), ex);
+				throw;
+			}
+		}
+
+		[WebMethod, SoapHeader("settings")]
+		public byte[] exportCertificate(string serialNumber, string password)
+		{
+			return WebProvider.exportCertificate(serialNumber, password);
+		}
+		[WebMethod, SoapHeader("settings")]
+		public List<SSLCertificate> getServerCertificates()
+		{
+			return WebProvider.getServerCertificates();
+		}
+		[WebMethod, SoapHeader("settings")]
+		public ResultObject DeleteCertificate(SSLCertificate certificate, WebSite website)
+		{
+			return WebProvider.DeleteCertificate(certificate, website);
+		}
+		[WebMethod, SoapHeader("settings")]
+		public SSLCertificate ImportCertificate(WebSite website)
+		{
+			return WebProvider.ImportCertificate(website);
+		}
+		[WebMethod, SoapHeader("settings")]
+		public bool CheckCertificate(WebSite webSite)
+		{
+			return WebProvider.CheckCertificate(webSite);
+		} 
+		#endregion
     }
 }

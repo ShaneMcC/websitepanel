@@ -117,19 +117,31 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="ddlPostingModeItem.Anyone" xml:space="preserve">
-    <value>Anyone</value>
+  <data name="ddlPostingModeItem.Announcements" xml:space="preserve">
+    <value>Announcements</value>
   </data>
-  <data name="ddlPostingModeItem.MembersOnly" xml:space="preserve">
-    <value>Members Only</value>
+  <data name="ddlPostingModeItem.MemberShip" xml:space="preserve">
+    <value>Membership</value>
   </data>
   <data name="ddlPostingModeItem.Password" xml:space="preserve">
     <value>Password Protected Posting</value>
+  </data>
+  <data name="ddlPostingModeItem.Public" xml:space="preserve">
+    <value>Public</value>
+  </data>
+  <data name="lblEmail.Text" xml:space="preserve">
+    <value>Announcements E-mail:</value>
   </data>
   <data name="lblMembers.Text" xml:space="preserve">
     <value>Mailing List Members:</value>
   </data>
   <data name="lblPostingMode.Text" xml:space="preserve">
     <value>Posting Mode:</value>
+  </data>
+  <data name="lblSMTPAuthentication.Text" xml:space="preserve">
+    <value>Require SMTP Authentication</value>
+  </data>
+  <data name="Security.Text" xml:space="preserve">
+    <value>Security</value>
   </data>
 </root>

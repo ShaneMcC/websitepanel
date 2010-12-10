@@ -1136,21 +1136,33 @@ ContinueFor1:
         End If
 
         Dim fs As FileStream = File.Open(filePath, FileMode.OpenOrCreate)
-        Try
-            Dim sw As New StreamWriter(fs)
-            Try
-                Dim str As String
-                For Each str In members
-                    sw.WriteLine(str)
-                Next str
-                sw.Flush()
-                sw.Close()
-            Finally
-                sw.Close()
-            End Try
-        Finally
-            fs.Close()
-        End Try
+		'clean all old members
+		Try
+			fs.SetLength(0)
+		Catch ex As Exception
+			Log.WriteError(String.Format("Error deleting old mail list memebers  for '{0}' mail list", groupName), ex)
+		Finally
+			fs.Close()
+		End Try
+		'reopen file for new members
+		fs = File.Open(filePath, FileMode.OpenOrCreate)
+		Try
+			Dim sw As New StreamWriter(fs)
+			Try
+				Dim str As String
+				For Each str In members
+					sw.WriteLine(str)
+				Next str
+				sw.Flush()
+				sw.Close()
+			Catch ex As Exception
+				Log.WriteError(String.Format("Unable to update new mail group members  for '{0}' group", groupName), ex)
+			Finally
+				sw.Close()
+			End Try
+		Finally
+			fs.Close()
+		End Try
     End Sub 'UpdateMaillistMembers
 
 
@@ -1163,21 +1175,33 @@ ContinueFor1:
         End If
 
         Dim fs As FileStream = File.Open(filePath, FileMode.OpenOrCreate)
-        Try
-            Dim sw As New StreamWriter(fs)
-            Try
-                Dim str As String
-                For Each str In members
-                    sw.WriteLine(str)
-                Next str
-                sw.Flush()
-                sw.Close()
-            Finally
-                sw.Close()
-            End Try
-        Finally
-            fs.Close()
-        End Try
+		'clean all old members
+		Try
+			fs.SetLength(0)
+		Catch ex As Exception
+			Log.WriteError(String.Format("Error deleting old mail list members  for '{0}' mail list", listName), ex)
+		Finally
+			fs.Close()
+		End Try
+		'reopen file for new members
+		fs = File.Open(filePath, FileMode.OpenOrCreate)
+		Try
+			Dim sw As New StreamWriter(fs)
+			Try
+				Dim str As String
+				For Each str In members
+					sw.WriteLine(str)
+				Next str
+				sw.Flush()
+				sw.Close()
+			Catch ex As Exception
+				Log.WriteError(String.Format("Unable to update new mail list memebers  for '{0}' mail list", listName), ex)
+			Finally
+				sw.Close()
+			End Try
+		Finally
+			fs.Close()
+		End Try
     End Sub 'UpdateMaillistMembers
 #End Region
 

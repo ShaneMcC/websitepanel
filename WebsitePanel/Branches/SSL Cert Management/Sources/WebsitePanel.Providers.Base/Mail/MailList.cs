@@ -269,5 +269,16 @@ namespace WebsitePanel.Providers.Mail
 	    }
 
 	    #endregion
+
+        #region hMailServer
+
+        private bool requireSmtpAuthentication;
+
+        public bool RequireSmtpAuthentication
+        {
+            get { return requireSmtpAuthentication; }
+            set { requireSmtpAuthentication = value; }
+        }
+        #endregion
     } 
 }
