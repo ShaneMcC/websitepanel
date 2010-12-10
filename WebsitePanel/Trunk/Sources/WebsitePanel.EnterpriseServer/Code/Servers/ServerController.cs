@@ -1721,13 +1721,13 @@ namespace WebsitePanel.EnterpriseServer
             }
 
             // add web site pointer
-            if (webEnabled && domainType == DomainType.DomainPointer && pointWebSiteId > 0)
+            if (webEnabled && pointWebSiteId > 0)
             {
                 WebServerController.AddWebSitePointer(pointWebSiteId, domainId);
             }
 
             // add mail domain pointer
-            if (mailEnabled && domainType == DomainType.DomainPointer && pointMailDomainId > 0)
+            if (mailEnabled && pointMailDomainId > 0)
             {
                 MailServerController.AddMailDomainPointer(pointMailDomainId, domainId);
             }

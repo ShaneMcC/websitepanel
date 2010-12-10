@@ -120,6 +120,8 @@ namespace WebsitePanel.Portal
                 tabsList.Add(new Tab(8, "coldfusion", GetLocalizedString("Tab.ColdFusion")));
 			if (PackagesHelper.CheckGroupQuotaEnabled(PackageId, ResourceGroups.Web, Quotas.WEB_REMOTEMANAGEMENT))
 				tabsList.Add(new Tab(9, "webman", GetLocalizedString("Tab.WebManagement")));
+            if (PackagesHelper.CheckGroupQuotaEnabled(PackageId, ResourceGroups.Web, Quotas.WEB_SSL) && IIs7)
+                tabsList.Add(new Tab(10, "SSL", GetLocalizedString("Tab.SSL")));
 
             if (dlTabs.SelectedIndex == -1)
             {
@@ -246,6 +248,7 @@ namespace WebsitePanel.Portal
             webSitesMimeTypesControl.BindWebItem(site);
             webSitesCustomHeadersControl.BindWebItem(site);
             webSitesCustomErrorsControl.BindWebItem(site);
+			WebsitesSSLControl.BindWebItem(site);
 
             BindVirtualDirectories();
 

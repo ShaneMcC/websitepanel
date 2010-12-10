@@ -384,4 +384,7 @@ To connect to web site management service please use username and password provi
   <data name="btnWmSvcSiteEnable.OnClientClick" xml:space="preserve">
     <value>ShowProgressDialog('Enabling Remote Management...')</value>
   </data>
+  <data name="Tab.SSL" xml:space="preserve">
+    <value>SSL</value>
+  </data>
 </root>

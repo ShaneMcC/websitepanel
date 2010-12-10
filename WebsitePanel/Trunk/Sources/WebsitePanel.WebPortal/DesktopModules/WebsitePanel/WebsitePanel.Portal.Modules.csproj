@@ -16,7 +16,8 @@
     <OldToolsVersion>3.5</OldToolsVersion>
     <UpgradeBackupLocation>
     </UpgradeBackupLocation>
-    <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -51,10 +52,6 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\Lib\Microsoft.ReportViewer.WebForms.dll</HintPath>
     </Reference>
-    <Reference Include="System.Web.Extensions, Version=1.0.61025.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\Lib\System.Web.Extensions.dll</HintPath>
-    </Reference>
     <Reference Include="Microsoft.Web.Services3, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\Lib\Microsoft.Web.Services3.dll</HintPath>
@@ -62,13 +59,16 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Web" />
+    <Reference Include="System.Web.Extensions" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Web.Services" />
     <Reference Include="System.EnterpriseServices" />
     <Reference Include="System.Web.Mobile" />
+    <Reference Include="System.Xml.Linq" />
     <Reference Include="WebsitePanel.EnterpriseServer.Base, Version=1.0.1.0, Culture=neutral, PublicKeyToken=da8782a6fc4d0081, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\Bin\WebsitePanel.EnterpriseServer.Base.dll</HintPath>
@@ -3355,6 +3355,13 @@
     <Compile Include="WebSitesSecuredFoldersControl.ascx.designer.cs">
       <DependentUpon>WebSitesSecuredFoldersControl.ascx</DependentUpon>
     </Compile>
+    <Compile Include="WebsitesSSL.ascx.cs">
+      <DependentUpon>WebsitesSSL.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="WebsitesSSL.ascx.designer.cs">
+      <DependentUpon>WebsitesSSL.ascx</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Content Include="SettingsExchangeHostedEditionOrganizationSummary.ascx" />
@@ -3387,6 +3394,7 @@
     <Content Include="UserControls\UserDetails.ascx" />
     <Content Include="UserControls\UserLookup.ascx" />
     <Content Include="UserControls\UsernameControl.ascx" />
+    <Content Include="WebsitesSSL.ascx" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="App_LocalResources\BandwidthReport.ascx.resx">
@@ -4343,6 +4351,7 @@
     <Content Include="App_LocalResources\SettingsExchangeHostedEditionOrganizationSummary.ascx.resx">
       <SubType>Designer</SubType>
     </Content>
+    <Content Include="App_LocalResources\WebsitesSSL.ascx.resx" />
     <EmbeddedResource Include="UserControls\App_LocalResources\EditDomainsList.ascx.resx">
       <SubType>Designer</SubType>
     </EmbeddedResource>

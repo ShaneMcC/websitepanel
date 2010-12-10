@@ -3275,8 +3275,6 @@ namespace WebsitePanel.Providers.Web
             return IsIISInstalled();
 		}
 
-
-
 		#region Microsoft Web Application Gallery
 
 		public GalleryCategoriesResult GetGalleryCategories()
@@ -3542,6 +3540,54 @@ namespace WebsitePanel.Providers.Web
 		}
 
 		public ResultObject CheckWebManagementPasswordComplexity(string accountPassword)
+		{
+			throw new NotSupportedException();
+		}
+		#endregion
+
+		#region SSL
+
+		public virtual SSLCertificate installCertificate(SSLCertificate certificate, WebSite website)
+		{
+			throw new NotSupportedException();
+		}
+
+		public virtual SSLCertificate getCertificate(WebSite site)
+		{
+			throw new NotSupportedException();
+		}
+
+		public virtual SSLCertificate installPFX(byte[] certificate, string password, WebSite website)
+		{
+			throw new NotSupportedException();
+		}
+
+		public virtual byte[] exportCertificate(string serialNumber, string password)
+		{
+			throw new NotSupportedException();
+		}
+
+		public virtual SSLCertificate generateCSR(SSLCertificate certificate)
+		{
+			throw new NotSupportedException();
+		}
+		public virtual SSLCertificate generateRenewalCSR(SSLCertificate certificate)
+		{
+			throw new NotSupportedException();
+		}
+		public virtual List<SSLCertificate> getServerCertificates()
+		{
+			throw new NotSupportedException();
+		}
+		public virtual ResultObject DeleteCertificate(SSLCertificate certificate, WebSite website)
+		{
+			throw new NotSupportedException();
+		}
+		public virtual SSLCertificate ImportCertificate(WebSite website)
+		{
+			throw new NotSupportedException();
+		}
+		public virtual bool CheckCertificate(WebSite webSite)
 		{
 			throw new NotSupportedException();
 		}

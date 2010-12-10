@@ -11,6 +11,8 @@
 <%@ Register Src="UserControls/EnableAsyncTasksSupport.ascx" TagName="EnableAsyncTasksSupport" TagPrefix="wsp" %>
 <%@ Register Src="UserControls/SimpleMessageBox.ascx" TagName="SimpleMessageBox" TagPrefix="wsp" %>
 
+<%@ Register src="WebsitesSSL.ascx" tagname="WebsitesSSL" tagprefix="uc2" %>
+
 <style type="text/css">
 	.style1
 	{
@@ -293,6 +295,11 @@ function confirmationWMSVC() {
 							<div class="NormalBold"><asp:Localize runat="server" meta:resourcekey="lclWmSvcNotInstalled" /></div>
 						</asp:PlaceHolder>
 					</div>
+                </asp:View>
+                <asp:View ID="SSL" runat="server">
+                
+                    <uc2:WebsitesSSL ID="WebsitesSSLControl" runat="server" />                    
+                
                 </asp:View>
                </asp:MultiView>
            </div>

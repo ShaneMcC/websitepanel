@@ -2409,5 +2409,295 @@ Please ensure the space has been allocated {0} IP address as a dedicated one and
         }
 
         #endregion
+
+		#region SSL
+		public static SSLCertificate CertificateRequest(SSLCertificate certificate, int siteItemId)
+		{
+
+			try
+			{
+				TaskManager.StartTask(LOG_SOURCE_WEB, "certificateRequest");
+				TaskManager.WriteParameter("SiteItemId", siteItemId);
+				TaskManager.WriteParameter("Hostname", certificate.Hostname);
+
+
+				WebSite item = GetWebSite(siteItemId) as WebSite;
+				PackageInfo service = PackageController.GetPackage(item.PackageId);
+				TaskManager.WriteParameter("WebSite.Name", item.Name);
+				WebServer server = GetWebServer(item.ServiceId);
+				TaskManager.WriteParameter("item.ServiceId", item.ServiceId);
+				certificate.UserID = service.UserId;
+				// We want to have a unique identifier for the FriendlyName to help us to identify it easily
+				long ticks = DateTime.UtcNow.Ticks - DateTime.Parse("01/01/1970 00:00:00").Ticks;
+				ticks /= 10000000; // Convert windows ticks to seconds
+
+				certificate.FriendlyName = String.Format("{0}_{1}", certificate.Hostname, ticks.ToString());
+				certificate = server.generateCSR(certificate);
+				certificate.id = DataProvider.AddSSLRequest(SecurityContext.User.UserId, item.PackageId,
+					certificate.SiteID, certificate.UserID, certificate.FriendlyName, certificate.Hostname,
+					certificate.CSR, certificate.CSRLength, certificate.DistinguishedName, certificate.IsRenewal,
+					certificate.PreviousId);
+
+			}
+			catch (Exception ex)
+			{
+				TaskManager.WriteError(ex);
+
+			}
+			finally
+			{
+				TaskManager.CompleteTask();
+			}
+			return certificate;
+
+		}
+
+		public static ResultObject InstallCertificate(SSLCertificate certificate, int siteItemId)
+		{
+			ResultObject result = new ResultObject { IsSuccess = true };
+			try
+			{
+				TaskManager.StartTask(LOG_SOURCE_WEB, "installCertificate");
+				TaskManager.WriteParameter("SiteItemId", siteItemId);
+				TaskManager.WriteParameter("Hostname", certificate.Hostname);
+
+
+				WebSite item = GetWebSite(siteItemId) as WebSite;
+				TaskManager.WriteParameter("WebSite.Name", item.Name);
+				WebServer server = GetWebServer(item.ServiceId);
+				TaskManager.WriteParameter("item.ServiceId", item.ServiceId);
+
+				certificate = server.installCertificate(certificate, item);
+				if (certificate.SerialNumber == null)
+				{
+					result.AddError("Error_Installing_certificate", null);
+					result.IsSuccess = false;
+				}
+				DataProvider.CompleteSSLRequest(SecurityContext.User.UserId, item.PackageId,
+												certificate.id, certificate.Certificate,
+												certificate.DistinguishedName, certificate.SerialNumber,
+												certificate.Hash, certificate.ValidFrom, certificate.ExpiryDate);
+				if (certificate.IsRenewal)
+				{
+					DataProvider.DeleteCertificate(SecurityContext.User.UserId, item.PackageId, certificate.PreviousId);
+				}
+
+			}
+			catch (Exception ex)
+			{
+				result.AddError("0", ex);
+				TaskManager.WriteError(ex);
+			}
+			finally
+			{
+				TaskManager.CompleteTask();
+			}
+			return result;
+		}
+
+		public static ResultObject InstallPfx(byte[] pfx, int siteItemId, string password)
+		{
+			ResultObject result = new ResultObject { IsSuccess = true };
+			try
+			{
+				TaskManager.StartTask(LOG_SOURCE_WEB, "installPFX");
+				TaskManager.WriteParameter("SiteItemId", siteItemId);
+
+				WebSite item = GetWebSite(siteItemId) as WebSite;
+				PackageInfo service = PackageController.GetPackage(item.PackageId);
+
+				TaskManager.WriteParameter("WebSite.Name", item.Name);
+				WebServer server = GetWebServer(item.ServiceId);
+				TaskManager.WriteParameter("item.ServiceId", item.ServiceId);
+
+				SSLCertificate certificate = server.installPFX(pfx, password, item);
+				if (certificate.SerialNumber == null)
+				{
+					result.AddError("Error_Installing_certificate", null);
+					result.IsSuccess = false;
+				}
+				DataProvider.AddPFX(SecurityContext.User.UserId, item.PackageId, item.Id, service.UserId, certificate.Hostname,
+				   certificate.FriendlyName, certificate.DistinguishedName, certificate.CSRLength, certificate.SerialNumber,
+				   certificate.ValidFrom, certificate.ExpiryDate);
+
+
+			}
+			catch (Exception ex)
+			{
+				result.IsSuccess = false;
+				result.AddError("Error_Installing_certificate", ex);
+				TaskManager.WriteError(ex);
+			}
+			finally
+			{
+				TaskManager.CompleteTask();
+			}
+			return result;
+		}
+
+		public static List<SSLCertificate> GetPendingCertificates(int siteItemId)
+		{
+			WebSite item = GetWebSite(siteItemId) as WebSite;
+			List<SSLCertificate> certificates = new List<SSLCertificate>();
+			return ObjectUtils.CreateListFromDataSet<SSLCertificate>(
+				DataProvider.GetPendingCertificates(SecurityContext.User.UserId, item.PackageId, item.Id, false));
+
+		}
+
+		public static SSLCertificate GetSslCertificateById(int iD)
+		{
+			return ObjectUtils.FillObjectFromDataReader<SSLCertificate>(
+				DataProvider.GetSSLCertificateByID(SecurityContext.User.UserId, iD));
+		}
+
+		public static int CheckSSL(int siteID, bool renewal)
+		{
+			return DataProvider.CheckSSL(siteID, renewal);
+		}
+
+		public static ResultObject CheckSSLForDomain(string domain, int siteID)
+		{
+			ResultObject result = new ResultObject { IsSuccess = true };
+			return result;
+		}
+
+		public static SSLCertificate GetSiteCert(int siteid)
+		{
+			return ObjectUtils.FillObjectFromDataReader<SSLCertificate>(
+				DataProvider.GetSiteCert(SecurityContext.User.UserId, siteid));
+		}
+
+		public static List<SSLCertificate> GetCertificatesForSite(int siteId)
+		{
+			WebSite item = GetWebSite(siteId) as WebSite;
+			List<SSLCertificate> certificates = new List<SSLCertificate>();
+			return ObjectUtils.CreateListFromDataSet<SSLCertificate>(
+				DataProvider.GetCertificatesForSite(SecurityContext.User.UserId, item.PackageId, item.Id));
+		}
+
+		public static byte[] ExportCertificate(int siteId, string serialNumber, string password)
+		{
+			WebSite item = GetWebSite(siteId) as WebSite;
+
+			WebServer server = GetWebServer(item.ServiceId);
+			return server.exportCertificate(serialNumber, password);
+		}
+
+		public static ResultObject DeleteCertificate(int siteId, SSLCertificate certificate)
+		{
+
+			ResultObject result = new ResultObject { IsSuccess = true };
+			try
+			{
+				TaskManager.StartTask(LOG_SOURCE_WEB, "DeleteCertificate");
+				WebSite item = GetWebSite(siteId) as WebSite;
+				WebServer server = GetWebServer(item.ServiceId);
+				result = server.DeleteCertificate(certificate, item);
+				if (result.IsSuccess)
+				{
+					DataProvider.DeleteCertificate(SecurityContext.User.UserId, item.PackageId, certificate.id);
+				}
+				else
+				{
+					List<string> exceptions = result.ErrorCodes;
+					foreach (string s in exceptions)
+					{
+						TaskManager.WriteError(s.ToString());
+					}
+				}
+			}
+			catch (Exception ex)
+			{
+				TaskManager.WriteError(ex);
+				result.IsSuccess = false;
+			}
+			finally
+			{
+				TaskManager.CompleteTask();
+			}
+			return result;
+		}
+
+		public static ResultObject ImportCertificate(int siteId)
+		{
+			ResultObject result = new ResultObject { IsSuccess = true };
+			try
+			{
+				TaskManager.StartTask(LOG_SOURCE_WEB, "ImportCertificate");
+
+				WebSite item = GetWebSite(siteId) as WebSite;
+				WebServer server = GetWebServer(item.ServiceId);
+				PackageInfo service = PackageController.GetPackage(item.PackageId);
+				SSLCertificate certificate = server.ImportCertificate(item);
+				if (!certificate.Success)
+				{
+					result.IsSuccess = false;
+					TaskManager.WriteError(certificate.Certificate.ToString());
+				}
+				else
+				{
+					DataProvider.AddPFX(SecurityContext.User.UserId, item.PackageId, item.Id, service.UserId, certificate.Hostname,
+				   certificate.FriendlyName, certificate.DistinguishedName, certificate.CSRLength, certificate.SerialNumber,
+				   certificate.ValidFrom, certificate.ExpiryDate);
+				}
+
+			}
+			catch (Exception ex)
+			{
+				TaskManager.WriteError(ex);
+				result.IsSuccess = false;
+
+			}
+			finally
+			{
+				TaskManager.CompleteTask();
+			}
+			return result;
+		}
+
+		public static ResultObject CheckCertificate(int siteId)
+		{
+			ResultObject result = new ResultObject { IsSuccess = false };
+			bool serverResult = false;
+
+			try
+			{
+				WebSite item = GetWebSite(siteId) as WebSite;
+				WebServer server = GetWebServer(item.ServiceId);
+				serverResult = server.CheckCertificate(item);
+				if (serverResult && !DataProvider.CheckSSLExistsForWebsite(siteId))
+				{
+					result.IsSuccess = true;
+				}
+			}
+			catch (Exception ex)
+			{
+
+				result.IsSuccess = false;
+				result.AddError("610", ex);
+			}
+			return result;
+		}
+
+		public static ResultObject DeleteCertificateRequest(int siteId, int csrID)
+		{
+			ResultObject result = new ResultObject { IsSuccess = true };
+
+			try
+			{
+				WebSite item = GetWebSite(siteId);
+				PackageInfo service = PackageController.GetPackage(item.PackageId);
+
+				DataProvider.DeleteCertificate(SecurityContext.User.UserId, service.PackageId, csrID);
+			}
+			catch (Exception ex)
+			{
+
+				result.IsSuccess = false;
+				result.AddError("610", ex);
+			}
+			return result;
+		}
+		#endregion
     }
 }

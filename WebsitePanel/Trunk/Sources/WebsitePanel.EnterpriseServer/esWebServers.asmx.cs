@@ -325,5 +325,79 @@ namespace WebsitePanel.EnterpriseServer
 		}
 		
 		#endregion
+
+        #region SSL
+        [WebMethod]
+        public SSLCertificate CertificateRequest(SSLCertificate certificate,int siteItemId)
+        {
+            return WebServerController.CertificateRequest(certificate, siteItemId);
+        }
+        [WebMethod]
+        public ResultObject InstallCertificate(SSLCertificate certificate, int siteItemId)
+        {
+            return WebServerController.InstallCertificate(certificate, siteItemId);
+        }
+        [WebMethod]
+        public ResultObject InstallPfx(byte[] certificate, int siteItemId,string password)
+        {
+            return WebServerController.InstallPfx(certificate, siteItemId,password);
+        }
+        [WebMethod]
+        public List<SSLCertificate> GetPendingCertificates(int siteItemId)
+        {
+            return WebServerController.GetPendingCertificates(siteItemId);
+        }
+        [WebMethod]
+        public SSLCertificate GetSSLCertificateByID(int Id)
+        {
+            return WebServerController.GetSslCertificateById(Id);
+        }
+        [WebMethod]
+        public SSLCertificate GetSiteCert(int siteID)
+        {
+            return WebServerController.GetSiteCert(siteID);
+        }
+        [WebMethod]
+        public int CheckSSLForWebsite(int siteID,bool renewal)
+        {
+            return WebServerController.CheckSSL(siteID, renewal);
+        }
+        [WebMethod]
+        public ResultObject CheckSSLForDomain(string domain,int siteID)
+        {
+            return WebServerController.CheckSSLForDomain(domain, siteID);
+        }
+        [WebMethod]
+        public byte[] ExportCertificate(int siteId, string serialNumber, string password)
+        {
+            return WebServerController.ExportCertificate(siteId,serialNumber, password);
+        }
+        [WebMethod]
+        public List<SSLCertificate> GetCertificatesForSite(int siteId)
+        {
+            return WebServerController.GetCertificatesForSite(siteId);
+        }
+        [WebMethod]
+        public ResultObject DeleteCertificate(int siteId,SSLCertificate certificate)
+        {
+            return WebServerController.DeleteCertificate(siteId, certificate);
+        }
+        [WebMethod]
+        public ResultObject ImportCertificate(int siteId)
+        {
+            return WebServerController.ImportCertificate(siteId);
+        }
+        [WebMethod]
+        public ResultObject CheckCertificate(int siteId)
+        {
+            return WebServerController.CheckCertificate(siteId);
+        }
+        [WebMethod]
+        public ResultObject DeleteCertificateRequest(int siteId,int csrID)
+        {
+            return WebServerController.DeleteCertificateRequest(siteId,csrID);
+        }
+		
+		#endregion
     }
 }

@@ -145,6 +145,34 @@ namespace WebsitePanel.EnterpriseServer {
         private System.Threading.SendOrPostCallback RevokeWebManagementAccessOperationCompleted;
         
         private System.Threading.SendOrPostCallback ChangeWebManagementAccessPasswordOperationCompleted;
+
+        private System.Threading.SendOrPostCallback CertificateRequestOperationCompleted;
+
+        private System.Threading.SendOrPostCallback InstallCertificateOperationCompleted;
+
+        private System.Threading.SendOrPostCallback InstallPfxOperationCompleted;
+
+        private System.Threading.SendOrPostCallback GetPendingCertificatesOperationCompleted;
+
+        private System.Threading.SendOrPostCallback GetSSLCertificateByIDOperationCompleted;
+
+        private System.Threading.SendOrPostCallback GetSiteCertOperationCompleted;
+
+        private System.Threading.SendOrPostCallback CheckSSLForWebsiteOperationCompleted;
+
+        private System.Threading.SendOrPostCallback CheckSSLForDomainOperationCompleted;
+
+        private System.Threading.SendOrPostCallback ExportCertificateOperationCompleted;
+
+        private System.Threading.SendOrPostCallback GetCertificatesForSiteOperationCompleted;
+
+        private System.Threading.SendOrPostCallback DeleteCertificateOperationCompleted;
+
+        private System.Threading.SendOrPostCallback ImportCertificateOperationCompleted;
+
+        private System.Threading.SendOrPostCallback CheckCertificateOperationCompleted;
+
+        private System.Threading.SendOrPostCallback DeleteCertificateRequestOperationCompleted;
         
         /// <remarks/>
         public esWebServers() {
@@ -279,6 +307,48 @@ namespace WebsitePanel.EnterpriseServer {
         
         /// <remarks/>
         public event ChangeWebManagementAccessPasswordCompletedEventHandler ChangeWebManagementAccessPasswordCompleted;
+
+        /// <remarks/>
+        public event CertificateRequestCompletedEventHandler CertificateRequestCompleted;
+
+        /// <remarks/>
+        public event InstallCertificateCompletedEventHandler InstallCertificateCompleted;
+
+        /// <remarks/>
+        public event InstallPfxCompletedEventHandler InstallPfxCompleted;
+
+        /// <remarks/>
+        public event GetPendingCertificatesCompletedEventHandler GetPendingCertificatesCompleted;
+
+        /// <remarks/>
+        public event GetSSLCertificateByIDCompletedEventHandler GetSSLCertificateByIDCompleted;
+
+        /// <remarks/>
+        public event GetSiteCertCompletedEventHandler GetSiteCertCompleted;
+
+        /// <remarks/>
+        public event CheckSSLForWebsiteCompletedEventHandler CheckSSLForWebsiteCompleted;
+
+        /// <remarks/>
+        public event CheckSSLForDomainCompletedEventHandler CheckSSLForDomainCompleted;
+
+        /// <remarks/>
+        public event ExportCertificateCompletedEventHandler ExportCertificateCompleted;
+
+        /// <remarks/>
+        public event GetCertificatesForSiteCompletedEventHandler GetCertificatesForSiteCompleted;
+
+        /// <remarks/>
+        public event DeleteCertificateCompletedEventHandler DeleteCertificateCompleted;
+
+        /// <remarks/>
+        public event ImportCertificateCompletedEventHandler ImportCertificateCompleted;
+
+        /// <remarks/>
+        public event CheckCertificateCompletedEventHandler CheckCertificateCompleted;
+
+        /// <remarks/>
+        public event DeleteCertificateRequestCompletedEventHandler DeleteCertificateRequestCompleted;
         
         /// <remarks/>
         [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://smbsaas/websitepanel/enterpriseserver/GetRawWebSitesPaged", RequestNamespace="http://smbsaas/websitepanel/enterpriseserver", ResponseNamespace="http://smbsaas/websitepanel/enterpriseserver", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
@@ -2166,6 +2236,723 @@ namespace WebsitePanel.EnterpriseServer {
                 this.ChangeWebManagementAccessPasswordCompleted(this, new ChangeWebManagementAccessPasswordCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
             }
         }
+
+        /// <remarks/>
+        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://smbsaas/websitepanel/enterpriseserver/CertificateRequest", RequestNamespace = "http://smbsaas/websitepanel/enterpriseserver", ResponseNamespace = "http://smbsaas/websitepanel/enterpriseserver", Use = System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle = System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
+        public SSLCertificate CertificateRequest(SSLCertificate certificate, int siteItemId)
+        {
+            object[] results = this.Invoke("CertificateRequest", new object[] {
+                        certificate,
+                        siteItemId});
+            return ((SSLCertificate)(results[0]));
+        }
+
+        /// <remarks/>
+        public System.IAsyncResult BeginCertificateRequest(SSLCertificate certificate, int siteItemId, System.AsyncCallback callback, object asyncState)
+        {
+            return this.BeginInvoke("CertificateRequest", new object[] {
+                        certificate,
+                        siteItemId}, callback, asyncState);
+        }
+
+        /// <remarks/>
+        public SSLCertificate EndCertificateRequest(System.IAsyncResult asyncResult)
+        {
+            object[] results = this.EndInvoke(asyncResult);
+            return ((SSLCertificate)(results[0]));
+        }
+
+        /// <remarks/>
+        public void CertificateRequestAsync(SSLCertificate certificate, int siteItemId)
+        {
+            this.CertificateRequestAsync(certificate, siteItemId, null);
+        }
+
+        /// <remarks/>
+        public void CertificateRequestAsync(SSLCertificate certificate, int siteItemId, object userState)
+        {
+            if ((this.CertificateRequestOperationCompleted == null))
+            {
+                this.CertificateRequestOperationCompleted = new System.Threading.SendOrPostCallback(this.OnCertificateRequestOperationCompleted);
+            }
+            this.InvokeAsync("CertificateRequest", new object[] {
+                        certificate,
+                        siteItemId}, this.CertificateRequestOperationCompleted, userState);
+        }
+
+        private void OnCertificateRequestOperationCompleted(object arg)
+        {
+            if ((this.CertificateRequestCompleted != null))
+            {
+                System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
+                this.CertificateRequestCompleted(this, new CertificateRequestCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
+            }
+        }
+
+        /// <remarks/>
+        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://smbsaas/websitepanel/enterpriseserver/InstallCertificate", RequestNamespace = "http://smbsaas/websitepanel/enterpriseserver", ResponseNamespace = "http://smbsaas/websitepanel/enterpriseserver", Use = System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle = System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
+        public ResultObject InstallCertificate(SSLCertificate certificate, int siteItemId)
+        {
+            object[] results = this.Invoke("InstallCertificate", new object[] {
+                        certificate,
+                        siteItemId});
+            return ((ResultObject)(results[0]));
+        }
+
+        /// <remarks/>
+        public System.IAsyncResult BeginInstallCertificate(SSLCertificate certificate, int siteItemId, System.AsyncCallback callback, object asyncState)
+        {
+            return this.BeginInvoke("InstallCertificate", new object[] {
+                        certificate,
+                        siteItemId}, callback, asyncState);
+        }
+
+        /// <remarks/>
+        public ResultObject EndInstallCertificate(System.IAsyncResult asyncResult)
+        {
+            object[] results = this.EndInvoke(asyncResult);
+            return ((ResultObject)(results[0]));
+        }
+
+        /// <remarks/>
+        public void InstallCertificateAsync(SSLCertificate certificate, int siteItemId)
+        {
+            this.InstallCertificateAsync(certificate, siteItemId, null);
+        }
+
+        /// <remarks/>
+        public void InstallCertificateAsync(SSLCertificate certificate, int siteItemId, object userState)
+        {
+            if ((this.InstallCertificateOperationCompleted == null))
+            {
+                this.InstallCertificateOperationCompleted = new System.Threading.SendOrPostCallback(this.OnInstallCertificateOperationCompleted);
+            }
+            this.InvokeAsync("InstallCertificate", new object[] {
+                        certificate,
+                        siteItemId}, this.InstallCertificateOperationCompleted, userState);
+        }
+
+        private void OnInstallCertificateOperationCompleted(object arg)
+        {
+            if ((this.InstallCertificateCompleted != null))
+            {
+                System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
+                this.InstallCertificateCompleted(this, new InstallCertificateCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
+            }
+        }
+
+        /// <remarks/>
+        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://smbsaas/websitepanel/enterpriseserver/InstallPfx", RequestNamespace = "http://smbsaas/websitepanel/enterpriseserver", ResponseNamespace = "http://smbsaas/websitepanel/enterpriseserver", Use = System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle = System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
+        public ResultObject InstallPfx([System.Xml.Serialization.XmlElementAttribute(DataType = "base64Binary")] byte[] certificate, int siteItemId, string password)
+        {
+            object[] results = this.Invoke("InstallPfx", new object[] {
+                        certificate,
+                        siteItemId,
+                        password});
+            return ((ResultObject)(results[0]));
+        }
+
+        /// <remarks/>
+        public System.IAsyncResult BeginInstallPfx(byte[] certificate, int siteItemId, string password, System.AsyncCallback callback, object asyncState)
+        {
+            return this.BeginInvoke("InstallPfx", new object[] {
+                        certificate,
+                        siteItemId,
+                        password}, callback, asyncState);
+        }
+
+        /// <remarks/>
+        public ResultObject EndInstallPfx(System.IAsyncResult asyncResult)
+        {
+            object[] results = this.EndInvoke(asyncResult);
+            return ((ResultObject)(results[0]));
+        }
+
+        /// <remarks/>
+        public void InstallPfxAsync(byte[] certificate, int siteItemId, string password)
+        {
+            this.InstallPfxAsync(certificate, siteItemId, password, null);
+        }
+
+        /// <remarks/>
+        public void InstallPfxAsync(byte[] certificate, int siteItemId, string password, object userState)
+        {
+            if ((this.InstallPfxOperationCompleted == null))
+            {
+                this.InstallPfxOperationCompleted = new System.Threading.SendOrPostCallback(this.OnInstallPfxOperationCompleted);
+            }
+            this.InvokeAsync("InstallPfx", new object[] {
+                        certificate,
+                        siteItemId,
+                        password}, this.InstallPfxOperationCompleted, userState);
+        }
+
+        private void OnInstallPfxOperationCompleted(object arg)
+        {
+            if ((this.InstallPfxCompleted != null))
+            {
+                System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
+                this.InstallPfxCompleted(this, new InstallPfxCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
+            }
+        }
+
+        /// <remarks/>
+        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://smbsaas/websitepanel/enterpriseserver/GetPendingCertificates", RequestNamespace = "http://smbsaas/websitepanel/enterpriseserver", ResponseNamespace = "http://smbsaas/websitepanel/enterpriseserver", Use = System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle = System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
+        public SSLCertificate[] GetPendingCertificates(int siteItemId)
+        {
+            object[] results = this.Invoke("GetPendingCertificates", new object[] {
+                        siteItemId});
+            return ((SSLCertificate[])(results[0]));
+        }
+
+        /// <remarks/>
+        public System.IAsyncResult BeginGetPendingCertificates(int siteItemId, System.AsyncCallback callback, object asyncState)
+        {
+            return this.BeginInvoke("GetPendingCertificates", new object[] {
+                        siteItemId}, callback, asyncState);
+        }
+
+        /// <remarks/>
+        public SSLCertificate[] EndGetPendingCertificates(System.IAsyncResult asyncResult)
+        {
+            object[] results = this.EndInvoke(asyncResult);
+            return ((SSLCertificate[])(results[0]));
+        }
+
+        /// <remarks/>
+        public void GetPendingCertificatesAsync(int siteItemId)
+        {
+            this.GetPendingCertificatesAsync(siteItemId, null);
+        }
+
+        /// <remarks/>
+        public void GetPendingCertificatesAsync(int siteItemId, object userState)
+        {
+            if ((this.GetPendingCertificatesOperationCompleted == null))
+            {
+                this.GetPendingCertificatesOperationCompleted = new System.Threading.SendOrPostCallback(this.OnGetPendingCertificatesOperationCompleted);
+            }
+            this.InvokeAsync("GetPendingCertificates", new object[] {
+                        siteItemId}, this.GetPendingCertificatesOperationCompleted, userState);
+        }
+
+        private void OnGetPendingCertificatesOperationCompleted(object arg)
+        {
+            if ((this.GetPendingCertificatesCompleted != null))
+            {
+                System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
+                this.GetPendingCertificatesCompleted(this, new GetPendingCertificatesCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
+            }
+        }
+
+        /// <remarks/>
+        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://smbsaas/websitepanel/enterpriseserver/GetSSLCertificateByID", RequestNamespace = "http://smbsaas/websitepanel/enterpriseserver", ResponseNamespace = "http://smbsaas/websitepanel/enterpriseserver", Use = System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle = System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
+        public SSLCertificate GetSSLCertificateByID(int Id)
+        {
+            object[] results = this.Invoke("GetSSLCertificateByID", new object[] {
+                        Id});
+            return ((SSLCertificate)(results[0]));
+        }
+
+        /// <remarks/>
+        public System.IAsyncResult BeginGetSSLCertificateByID(int Id, System.AsyncCallback callback, object asyncState)
+        {
+            return this.BeginInvoke("GetSSLCertificateByID", new object[] {
+                        Id}, callback, asyncState);
+        }
+
+        /// <remarks/>
+        public SSLCertificate EndGetSSLCertificateByID(System.IAsyncResult asyncResult)
+        {
+            object[] results = this.EndInvoke(asyncResult);
+            return ((SSLCertificate)(results[0]));
+        }
+
+        /// <remarks/>
+        public void GetSSLCertificateByIDAsync(int Id)
+        {
+            this.GetSSLCertificateByIDAsync(Id, null);
+        }
+
+        /// <remarks/>
+        public void GetSSLCertificateByIDAsync(int Id, object userState)
+        {
+            if ((this.GetSSLCertificateByIDOperationCompleted == null))
+            {
+                this.GetSSLCertificateByIDOperationCompleted = new System.Threading.SendOrPostCallback(this.OnGetSSLCertificateByIDOperationCompleted);
+            }
+            this.InvokeAsync("GetSSLCertificateByID", new object[] {
+                        Id}, this.GetSSLCertificateByIDOperationCompleted, userState);
+        }
+
+        private void OnGetSSLCertificateByIDOperationCompleted(object arg)
+        {
+            if ((this.GetSSLCertificateByIDCompleted != null))
+            {
+                System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
+                this.GetSSLCertificateByIDCompleted(this, new GetSSLCertificateByIDCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
+            }
+        }
+
+        /// <remarks/>
+        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://smbsaas/websitepanel/enterpriseserver/GetSiteCert", RequestNamespace = "http://smbsaas/websitepanel/enterpriseserver", ResponseNamespace = "http://smbsaas/websitepanel/enterpriseserver", Use = System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle = System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
+        public SSLCertificate GetSiteCert(int siteID)
+        {
+            object[] results = this.Invoke("GetSiteCert", new object[] {
+                        siteID});
+            return ((SSLCertificate)(results[0]));
+        }
+
+        /// <remarks/>
+        public System.IAsyncResult BeginGetSiteCert(int siteID, System.AsyncCallback callback, object asyncState)
+        {
+            return this.BeginInvoke("GetSiteCert", new object[] {
+                        siteID}, callback, asyncState);
+        }
+
+        /// <remarks/>
+        public SSLCertificate EndGetSiteCert(System.IAsyncResult asyncResult)
+        {
+            object[] results = this.EndInvoke(asyncResult);
+            return ((SSLCertificate)(results[0]));
+        }
+
+        /// <remarks/>
+        public void GetSiteCertAsync(int siteID)
+        {
+            this.GetSiteCertAsync(siteID, null);
+        }
+
+        /// <remarks/>
+        public void GetSiteCertAsync(int siteID, object userState)
+        {
+            if ((this.GetSiteCertOperationCompleted == null))
+            {
+                this.GetSiteCertOperationCompleted = new System.Threading.SendOrPostCallback(this.OnGetSiteCertOperationCompleted);
+            }
+            this.InvokeAsync("GetSiteCert", new object[] {
+                        siteID}, this.GetSiteCertOperationCompleted, userState);
+        }
+
+        private void OnGetSiteCertOperationCompleted(object arg)
+        {
+            if ((this.GetSiteCertCompleted != null))
+            {
+                System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
+                this.GetSiteCertCompleted(this, new GetSiteCertCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
+            }
+        }
+
+        /// <remarks/>
+        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://smbsaas/websitepanel/enterpriseserver/CheckSSLForWebsite", RequestNamespace = "http://smbsaas/websitepanel/enterpriseserver", ResponseNamespace = "http://smbsaas/websitepanel/enterpriseserver", Use = System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle = System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
+        public int CheckSSLForWebsite(int siteID, bool renewal)
+        {
+            object[] results = this.Invoke("CheckSSLForWebsite", new object[] {
+                        siteID,
+                        renewal});
+            return ((int)(results[0]));
+        }
+
+        /// <remarks/>
+        public System.IAsyncResult BeginCheckSSLForWebsite(int siteID, bool renewal, System.AsyncCallback callback, object asyncState)
+        {
+            return this.BeginInvoke("CheckSSLForWebsite", new object[] {
+                        siteID,
+                        renewal}, callback, asyncState);
+        }
+
+        /// <remarks/>
+        public int EndCheckSSLForWebsite(System.IAsyncResult asyncResult)
+        {
+            object[] results = this.EndInvoke(asyncResult);
+            return ((int)(results[0]));
+        }
+
+        /// <remarks/>
+        public void CheckSSLForWebsiteAsync(int siteID, bool renewal)
+        {
+            this.CheckSSLForWebsiteAsync(siteID, renewal, null);
+        }
+
+        /// <remarks/>
+        public void CheckSSLForWebsiteAsync(int siteID, bool renewal, object userState)
+        {
+            if ((this.CheckSSLForWebsiteOperationCompleted == null))
+            {
+                this.CheckSSLForWebsiteOperationCompleted = new System.Threading.SendOrPostCallback(this.OnCheckSSLForWebsiteOperationCompleted);
+            }
+            this.InvokeAsync("CheckSSLForWebsite", new object[] {
+                        siteID,
+                        renewal}, this.CheckSSLForWebsiteOperationCompleted, userState);
+        }
+
+        private void OnCheckSSLForWebsiteOperationCompleted(object arg)
+        {
+            if ((this.CheckSSLForWebsiteCompleted != null))
+            {
+                System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
+                this.CheckSSLForWebsiteCompleted(this, new CheckSSLForWebsiteCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
+            }
+        }
+
+        /// <remarks/>
+        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://smbsaas/websitepanel/enterpriseserver/CheckSSLForDomain", RequestNamespace = "http://smbsaas/websitepanel/enterpriseserver", ResponseNamespace = "http://smbsaas/websitepanel/enterpriseserver", Use = System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle = System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
+        public ResultObject CheckSSLForDomain(string domain, int siteID)
+        {
+            object[] results = this.Invoke("CheckSSLForDomain", new object[] {
+                        domain,
+                        siteID});
+            return ((ResultObject)(results[0]));
+        }
+
+        /// <remarks/>
+        public System.IAsyncResult BeginCheckSSLForDomain(string domain, int siteID, System.AsyncCallback callback, object asyncState)
+        {
+            return this.BeginInvoke("CheckSSLForDomain", new object[] {
+                        domain,
+                        siteID}, callback, asyncState);
+        }
+
+        /// <remarks/>
+        public ResultObject EndCheckSSLForDomain(System.IAsyncResult asyncResult)
+        {
+            object[] results = this.EndInvoke(asyncResult);
+            return ((ResultObject)(results[0]));
+        }
+
+        /// <remarks/>
+        public void CheckSSLForDomainAsync(string domain, int siteID)
+        {
+            this.CheckSSLForDomainAsync(domain, siteID, null);
+        }
+
+        /// <remarks/>
+        public void CheckSSLForDomainAsync(string domain, int siteID, object userState)
+        {
+            if ((this.CheckSSLForDomainOperationCompleted == null))
+            {
+                this.CheckSSLForDomainOperationCompleted = new System.Threading.SendOrPostCallback(this.OnCheckSSLForDomainOperationCompleted);
+            }
+            this.InvokeAsync("CheckSSLForDomain", new object[] {
+                        domain,
+                        siteID}, this.CheckSSLForDomainOperationCompleted, userState);
+        }
+
+        private void OnCheckSSLForDomainOperationCompleted(object arg)
+        {
+            if ((this.CheckSSLForDomainCompleted != null))
+            {
+                System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
+                this.CheckSSLForDomainCompleted(this, new CheckSSLForDomainCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
+            }
+        }
+
+        /// <remarks/>
+        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://smbsaas/websitepanel/enterpriseserver/ExportCertificate", RequestNamespace = "http://smbsaas/websitepanel/enterpriseserver", ResponseNamespace = "http://smbsaas/websitepanel/enterpriseserver", Use = System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle = System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
+        [return: System.Xml.Serialization.XmlElementAttribute(DataType = "base64Binary")]
+        public byte[] ExportCertificate(int siteId, string serialNumber, string password)
+        {
+            object[] results = this.Invoke("ExportCertificate", new object[] {
+                        siteId,
+                        serialNumber,
+                        password});
+            return ((byte[])(results[0]));
+        }
+
+        /// <remarks/>
+        public System.IAsyncResult BeginExportCertificate(int siteId, string serialNumber, string password, System.AsyncCallback callback, object asyncState)
+        {
+            return this.BeginInvoke("ExportCertificate", new object[] {
+                        siteId,
+                        serialNumber,
+                        password}, callback, asyncState);
+        }
+
+        /// <remarks/>
+        public byte[] EndExportCertificate(System.IAsyncResult asyncResult)
+        {
+            object[] results = this.EndInvoke(asyncResult);
+            return ((byte[])(results[0]));
+        }
+
+        /// <remarks/>
+        public void ExportCertificateAsync(int siteId, string serialNumber, string password)
+        {
+            this.ExportCertificateAsync(siteId, serialNumber, password, null);
+        }
+
+        /// <remarks/>
+        public void ExportCertificateAsync(int siteId, string serialNumber, string password, object userState)
+        {
+            if ((this.ExportCertificateOperationCompleted == null))
+            {
+                this.ExportCertificateOperationCompleted = new System.Threading.SendOrPostCallback(this.OnExportCertificateOperationCompleted);
+            }
+            this.InvokeAsync("ExportCertificate", new object[] {
+                        siteId,
+                        serialNumber,
+                        password}, this.ExportCertificateOperationCompleted, userState);
+        }
+
+        private void OnExportCertificateOperationCompleted(object arg)
+        {
+            if ((this.ExportCertificateCompleted != null))
+            {
+                System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
+                this.ExportCertificateCompleted(this, new ExportCertificateCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
+            }
+        }
+
+        /// <remarks/>
+        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://smbsaas/websitepanel/enterpriseserver/GetCertificatesForSite", RequestNamespace = "http://smbsaas/websitepanel/enterpriseserver", ResponseNamespace = "http://smbsaas/websitepanel/enterpriseserver", Use = System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle = System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
+        public SSLCertificate[] GetCertificatesForSite(int siteId)
+        {
+            object[] results = this.Invoke("GetCertificatesForSite", new object[] {
+                        siteId});
+            return ((SSLCertificate[])(results[0]));
+        }
+
+        /// <remarks/>
+        public System.IAsyncResult BeginGetCertificatesForSite(int siteId, System.AsyncCallback callback, object asyncState)
+        {
+            return this.BeginInvoke("GetCertificatesForSite", new object[] {
+                        siteId}, callback, asyncState);
+        }
+
+        /// <remarks/>
+        public SSLCertificate[] EndGetCertificatesForSite(System.IAsyncResult asyncResult)
+        {
+            object[] results = this.EndInvoke(asyncResult);
+            return ((SSLCertificate[])(results[0]));
+        }
+
+        /// <remarks/>
+        public void GetCertificatesForSiteAsync(int siteId)
+        {
+            this.GetCertificatesForSiteAsync(siteId, null);
+        }
+
+        /// <remarks/>
+        public void GetCertificatesForSiteAsync(int siteId, object userState)
+        {
+            if ((this.GetCertificatesForSiteOperationCompleted == null))
+            {
+                this.GetCertificatesForSiteOperationCompleted = new System.Threading.SendOrPostCallback(this.OnGetCertificatesForSiteOperationCompleted);
+            }
+            this.InvokeAsync("GetCertificatesForSite", new object[] {
+                        siteId}, this.GetCertificatesForSiteOperationCompleted, userState);
+        }
+
+        private void OnGetCertificatesForSiteOperationCompleted(object arg)
+        {
+            if ((this.GetCertificatesForSiteCompleted != null))
+            {
+                System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
+                this.GetCertificatesForSiteCompleted(this, new GetCertificatesForSiteCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
+            }
+        }
+
+        /// <remarks/>
+        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://smbsaas/websitepanel/enterpriseserver/DeleteCertificate", RequestNamespace = "http://smbsaas/websitepanel/enterpriseserver", ResponseNamespace = "http://smbsaas/websitepanel/enterpriseserver", Use = System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle = System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
+        public ResultObject DeleteCertificate(int siteId, SSLCertificate certificate)
+        {
+            object[] results = this.Invoke("DeleteCertificate", new object[] {
+                        siteId,
+                        certificate});
+            return ((ResultObject)(results[0]));
+        }
+
+        /// <remarks/>
+        public System.IAsyncResult BeginDeleteCertificate(int siteId, SSLCertificate certificate, System.AsyncCallback callback, object asyncState)
+        {
+            return this.BeginInvoke("DeleteCertificate", new object[] {
+                        siteId,
+                        certificate}, callback, asyncState);
+        }
+
+        /// <remarks/>
+        public ResultObject EndDeleteCertificate(System.IAsyncResult asyncResult)
+        {
+            object[] results = this.EndInvoke(asyncResult);
+            return ((ResultObject)(results[0]));
+        }
+
+        /// <remarks/>
+        public void DeleteCertificateAsync(int siteId, SSLCertificate certificate)
+        {
+            this.DeleteCertificateAsync(siteId, certificate, null);
+        }
+
+        /// <remarks/>
+        public void DeleteCertificateAsync(int siteId, SSLCertificate certificate, object userState)
+        {
+            if ((this.DeleteCertificateOperationCompleted == null))
+            {
+                this.DeleteCertificateOperationCompleted = new System.Threading.SendOrPostCallback(this.OnDeleteCertificateOperationCompleted);
+            }
+            this.InvokeAsync("DeleteCertificate", new object[] {
+                        siteId,
+                        certificate}, this.DeleteCertificateOperationCompleted, userState);
+        }
+
+        private void OnDeleteCertificateOperationCompleted(object arg)
+        {
+            if ((this.DeleteCertificateCompleted != null))
+            {
+                System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
+                this.DeleteCertificateCompleted(this, new DeleteCertificateCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
+            }
+        }
+
+        /// <remarks/>
+        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://smbsaas/websitepanel/enterpriseserver/ImportCertificate", RequestNamespace = "http://smbsaas/websitepanel/enterpriseserver", ResponseNamespace = "http://smbsaas/websitepanel/enterpriseserver", Use = System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle = System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
+        public ResultObject ImportCertificate(int siteId)
+        {
+            object[] results = this.Invoke("ImportCertificate", new object[] {
+                        siteId});
+            return ((ResultObject)(results[0]));
+        }
+
+        /// <remarks/>
+        public System.IAsyncResult BeginImportCertificate(int siteId, System.AsyncCallback callback, object asyncState)
+        {
+            return this.BeginInvoke("ImportCertificate", new object[] {
+                        siteId}, callback, asyncState);
+        }
+
+        /// <remarks/>
+        public ResultObject EndImportCertificate(System.IAsyncResult asyncResult)
+        {
+            object[] results = this.EndInvoke(asyncResult);
+            return ((ResultObject)(results[0]));
+        }
+
+        /// <remarks/>
+        public void ImportCertificateAsync(int siteId)
+        {
+            this.ImportCertificateAsync(siteId, null);
+        }
+
+        /// <remarks/>
+        public void ImportCertificateAsync(int siteId, object userState)
+        {
+            if ((this.ImportCertificateOperationCompleted == null))
+            {
+                this.ImportCertificateOperationCompleted = new System.Threading.SendOrPostCallback(this.OnImportCertificateOperationCompleted);
+            }
+            this.InvokeAsync("ImportCertificate", new object[] {
+                        siteId}, this.ImportCertificateOperationCompleted, userState);
+        }
+
+        private void OnImportCertificateOperationCompleted(object arg)
+        {
+            if ((this.ImportCertificateCompleted != null))
+            {
+                System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
+                this.ImportCertificateCompleted(this, new ImportCertificateCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
+            }
+        }
+
+        /// <remarks/>
+        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://smbsaas/websitepanel/enterpriseserver/CheckCertificate", RequestNamespace = "http://smbsaas/websitepanel/enterpriseserver", ResponseNamespace = "http://smbsaas/websitepanel/enterpriseserver", Use = System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle = System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
+        public ResultObject CheckCertificate(int siteId)
+        {
+            object[] results = this.Invoke("CheckCertificate", new object[] {
+                        siteId});
+            return ((ResultObject)(results[0]));
+        }
+
+        /// <remarks/>
+        public System.IAsyncResult BeginCheckCertificate(int siteId, System.AsyncCallback callback, object asyncState)
+        {
+            return this.BeginInvoke("CheckCertificate", new object[] {
+                        siteId}, callback, asyncState);
+        }
+
+        /// <remarks/>
+        public ResultObject EndCheckCertificate(System.IAsyncResult asyncResult)
+        {
+            object[] results = this.EndInvoke(asyncResult);
+            return ((ResultObject)(results[0]));
+        }
+
+        /// <remarks/>
+        public void CheckCertificateAsync(int siteId)
+        {
+            this.CheckCertificateAsync(siteId, null);
+        }
+
+        /// <remarks/>
+        public void CheckCertificateAsync(int siteId, object userState)
+        {
+            if ((this.CheckCertificateOperationCompleted == null))
+            {
+                this.CheckCertificateOperationCompleted = new System.Threading.SendOrPostCallback(this.OnCheckCertificateOperationCompleted);
+            }
+            this.InvokeAsync("CheckCertificate", new object[] {
+                        siteId}, this.CheckCertificateOperationCompleted, userState);
+        }
+
+        private void OnCheckCertificateOperationCompleted(object arg)
+        {
+            if ((this.CheckCertificateCompleted != null))
+            {
+                System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
+                this.CheckCertificateCompleted(this, new CheckCertificateCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
+            }
+        }
+
+        /// <remarks/>
+        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://smbsaas/websitepanel/enterpriseserver/DeleteCertificateRequest", RequestNamespace = "http://smbsaas/websitepanel/enterpriseserver", ResponseNamespace = "http://smbsaas/websitepanel/enterpriseserver", Use = System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle = System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
+        public ResultObject DeleteCertificateRequest(int siteId, int csrID)
+        {
+            object[] results = this.Invoke("DeleteCertificateRequest", new object[] {
+                        siteId,
+                        csrID});
+            return ((ResultObject)(results[0]));
+        }
+
+        /// <remarks/>
+        public System.IAsyncResult BeginDeleteCertificateRequest(int siteId, int csrID, System.AsyncCallback callback, object asyncState)
+        {
+            return this.BeginInvoke("DeleteCertificateRequest", new object[] {
+                        siteId,
+                        csrID}, callback, asyncState);
+        }
+
+        /// <remarks/>
+        public ResultObject EndDeleteCertificateRequest(System.IAsyncResult asyncResult)
+        {
+            object[] results = this.EndInvoke(asyncResult);
+            return ((ResultObject)(results[0]));
+        }
+
+        /// <remarks/>
+        public void DeleteCertificateRequestAsync(int siteId, int csrID)
+        {
+            this.DeleteCertificateRequestAsync(siteId, csrID, null);
+        }
+
+        /// <remarks/>
+        public void DeleteCertificateRequestAsync(int siteId, int csrID, object userState)
+        {
+            if ((this.DeleteCertificateRequestOperationCompleted == null))
+            {
+                this.DeleteCertificateRequestOperationCompleted = new System.Threading.SendOrPostCallback(this.OnDeleteCertificateRequestOperationCompleted);
+            }
+            this.InvokeAsync("DeleteCertificateRequest", new object[] {
+                        siteId,
+                        csrID}, this.DeleteCertificateRequestOperationCompleted, userState);
+        }
+
+        private void OnDeleteCertificateRequestOperationCompleted(object arg)
+        {
+            if ((this.DeleteCertificateRequestCompleted != null))
+            {
+                System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
+                this.DeleteCertificateRequestCompleted(this, new DeleteCertificateRequestCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
+            }
+        }
         
         /// <remarks/>
         public new void CancelAsync(object userState) {
@@ -3277,6 +4064,426 @@ namespace WebsitePanel.EnterpriseServer {
         /// <remarks/>
         public ResultObject Result {
             get {
+                this.RaiseExceptionIfNecessary();
+                return ((ResultObject)(this.results[0]));
+            }
+        }
+    }
+
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("wsdl", "2.0.50727.3038")]
+    public delegate void CertificateRequestCompletedEventHandler(object sender, CertificateRequestCompletedEventArgs e);
+
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("wsdl", "2.0.50727.3038")]
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.ComponentModel.DesignerCategoryAttribute("code")]
+    public partial class CertificateRequestCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs
+    {
+
+        private object[] results;
+
+        internal CertificateRequestCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) :
+            base(exception, cancelled, userState)
+        {
+            this.results = results;
+        }
+
+        /// <remarks/>
+        public SSLCertificate Result
+        {
+            get
+            {
+                this.RaiseExceptionIfNecessary();
+                return ((SSLCertificate)(this.results[0]));
+            }
+        }
+    }
+
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("wsdl", "2.0.50727.3038")]
+    public delegate void InstallCertificateCompletedEventHandler(object sender, InstallCertificateCompletedEventArgs e);
+
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("wsdl", "2.0.50727.3038")]
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.ComponentModel.DesignerCategoryAttribute("code")]
+    public partial class InstallCertificateCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs
+    {
+
+        private object[] results;
+
+        internal InstallCertificateCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) :
+            base(exception, cancelled, userState)
+        {
+            this.results = results;
+        }
+
+        /// <remarks/>
+        public ResultObject Result
+        {
+            get
+            {
+                this.RaiseExceptionIfNecessary();
+                return ((ResultObject)(this.results[0]));
+            }
+        }
+    }
+
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("wsdl", "2.0.50727.3038")]
+    public delegate void InstallPfxCompletedEventHandler(object sender, InstallPfxCompletedEventArgs e);
+
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("wsdl", "2.0.50727.3038")]
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.ComponentModel.DesignerCategoryAttribute("code")]
+    public partial class InstallPfxCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs
+    {
+
+        private object[] results;
+
+        internal InstallPfxCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) :
+            base(exception, cancelled, userState)
+        {
+            this.results = results;
+        }
+
+        /// <remarks/>
+        public ResultObject Result
+        {
+            get
+            {
+                this.RaiseExceptionIfNecessary();
+                return ((ResultObject)(this.results[0]));
+            }
+        }
+    }
+
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("wsdl", "2.0.50727.3038")]
+    public delegate void GetPendingCertificatesCompletedEventHandler(object sender, GetPendingCertificatesCompletedEventArgs e);
+
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("wsdl", "2.0.50727.3038")]
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.ComponentModel.DesignerCategoryAttribute("code")]
+    public partial class GetPendingCertificatesCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs
+    {
+
+        private object[] results;
+
+        internal GetPendingCertificatesCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) :
+            base(exception, cancelled, userState)
+        {
+            this.results = results;
+        }
+
+        /// <remarks/>
+        public SSLCertificate[] Result
+        {
+            get
+            {
+                this.RaiseExceptionIfNecessary();
+                return ((SSLCertificate[])(this.results[0]));
+            }
+        }
+    }
+
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("wsdl", "2.0.50727.3038")]
+    public delegate void GetSSLCertificateByIDCompletedEventHandler(object sender, GetSSLCertificateByIDCompletedEventArgs e);
+
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("wsdl", "2.0.50727.3038")]
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.ComponentModel.DesignerCategoryAttribute("code")]
+    public partial class GetSSLCertificateByIDCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs
+    {
+
+        private object[] results;
+
+        internal GetSSLCertificateByIDCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) :
+            base(exception, cancelled, userState)
+        {
+            this.results = results;
+        }
+
+        /// <remarks/>
+        public SSLCertificate Result
+        {
+            get
+            {
+                this.RaiseExceptionIfNecessary();
+                return ((SSLCertificate)(this.results[0]));
+            }
+        }
+    }
+
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("wsdl", "2.0.50727.3038")]
+    public delegate void GetSiteCertCompletedEventHandler(object sender, GetSiteCertCompletedEventArgs e);
+
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("wsdl", "2.0.50727.3038")]
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.ComponentModel.DesignerCategoryAttribute("code")]
+    public partial class GetSiteCertCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs
+    {
+
+        private object[] results;
+
+        internal GetSiteCertCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) :
+            base(exception, cancelled, userState)
+        {
+            this.results = results;
+        }
+
+        /// <remarks/>
+        public SSLCertificate Result
+        {
+            get
+            {
+                this.RaiseExceptionIfNecessary();
+                return ((SSLCertificate)(this.results[0]));
+            }
+        }
+    }
+
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("wsdl", "2.0.50727.3038")]
+    public delegate void CheckSSLForWebsiteCompletedEventHandler(object sender, CheckSSLForWebsiteCompletedEventArgs e);
+
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("wsdl", "2.0.50727.3038")]
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.ComponentModel.DesignerCategoryAttribute("code")]
+    public partial class CheckSSLForWebsiteCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs
+    {
+
+        private object[] results;
+
+        internal CheckSSLForWebsiteCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) :
+            base(exception, cancelled, userState)
+        {
+            this.results = results;
+        }
+
+        /// <remarks/>
+        public int Result
+        {
+            get
+            {
+                this.RaiseExceptionIfNecessary();
+                return ((int)(this.results[0]));
+            }
+        }
+    }
+
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("wsdl", "2.0.50727.3038")]
+    public delegate void CheckSSLForDomainCompletedEventHandler(object sender, CheckSSLForDomainCompletedEventArgs e);
+
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("wsdl", "2.0.50727.3038")]
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.ComponentModel.DesignerCategoryAttribute("code")]
+    public partial class CheckSSLForDomainCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs
+    {
+
+        private object[] results;
+
+        internal CheckSSLForDomainCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) :
+            base(exception, cancelled, userState)
+        {
+            this.results = results;
+        }
+
+        /// <remarks/>
+        public ResultObject Result
+        {
+            get
+            {
+                this.RaiseExceptionIfNecessary();
+                return ((ResultObject)(this.results[0]));
+            }
+        }
+    }
+
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("wsdl", "2.0.50727.3038")]
+    public delegate void ExportCertificateCompletedEventHandler(object sender, ExportCertificateCompletedEventArgs e);
+
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("wsdl", "2.0.50727.3038")]
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.ComponentModel.DesignerCategoryAttribute("code")]
+    public partial class ExportCertificateCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs
+    {
+
+        private object[] results;
+
+        internal ExportCertificateCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) :
+            base(exception, cancelled, userState)
+        {
+            this.results = results;
+        }
+
+        /// <remarks/>
+        public byte[] Result
+        {
+            get
+            {
+                this.RaiseExceptionIfNecessary();
+                return ((byte[])(this.results[0]));
+            }
+        }
+    }
+
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("wsdl", "2.0.50727.3038")]
+    public delegate void GetCertificatesForSiteCompletedEventHandler(object sender, GetCertificatesForSiteCompletedEventArgs e);
+
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("wsdl", "2.0.50727.3038")]
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.ComponentModel.DesignerCategoryAttribute("code")]
+    public partial class GetCertificatesForSiteCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs
+    {
+
+        private object[] results;
+
+        internal GetCertificatesForSiteCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) :
+            base(exception, cancelled, userState)
+        {
+            this.results = results;
+        }
+
+        /// <remarks/>
+        public SSLCertificate[] Result
+        {
+            get
+            {
+                this.RaiseExceptionIfNecessary();
+                return ((SSLCertificate[])(this.results[0]));
+            }
+        }
+    }
+
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("wsdl", "2.0.50727.3038")]
+    public delegate void DeleteCertificateCompletedEventHandler(object sender, DeleteCertificateCompletedEventArgs e);
+
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("wsdl", "2.0.50727.3038")]
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.ComponentModel.DesignerCategoryAttribute("code")]
+    public partial class DeleteCertificateCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs
+    {
+
+        private object[] results;
+
+        internal DeleteCertificateCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) :
+            base(exception, cancelled, userState)
+        {
+            this.results = results;
+        }
+
+        /// <remarks/>
+        public ResultObject Result
+        {
+            get
+            {
+                this.RaiseExceptionIfNecessary();
+                return ((ResultObject)(this.results[0]));
+            }
+        }
+    }
+
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("wsdl", "2.0.50727.3038")]
+    public delegate void ImportCertificateCompletedEventHandler(object sender, ImportCertificateCompletedEventArgs e);
+
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("wsdl", "2.0.50727.3038")]
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.ComponentModel.DesignerCategoryAttribute("code")]
+    public partial class ImportCertificateCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs
+    {
+
+        private object[] results;
+
+        internal ImportCertificateCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) :
+            base(exception, cancelled, userState)
+        {
+            this.results = results;
+        }
+
+        /// <remarks/>
+        public ResultObject Result
+        {
+            get
+            {
+                this.RaiseExceptionIfNecessary();
+                return ((ResultObject)(this.results[0]));
+            }
+        }
+    }
+
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("wsdl", "2.0.50727.3038")]
+    public delegate void CheckCertificateCompletedEventHandler(object sender, CheckCertificateCompletedEventArgs e);
+
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("wsdl", "2.0.50727.3038")]
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.ComponentModel.DesignerCategoryAttribute("code")]
+    public partial class CheckCertificateCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs
+    {
+
+        private object[] results;
+
+        internal CheckCertificateCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) :
+            base(exception, cancelled, userState)
+        {
+            this.results = results;
+        }
+
+        /// <remarks/>
+        public ResultObject Result
+        {
+            get
+            {
+                this.RaiseExceptionIfNecessary();
+                return ((ResultObject)(this.results[0]));
+            }
+        }
+    }
+
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("wsdl", "2.0.50727.3038")]
+    public delegate void DeleteCertificateRequestCompletedEventHandler(object sender, DeleteCertificateRequestCompletedEventArgs e);
+
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("wsdl", "2.0.50727.3038")]
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.ComponentModel.DesignerCategoryAttribute("code")]
+    public partial class DeleteCertificateRequestCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs
+    {
+
+        private object[] results;
+
+        internal DeleteCertificateRequestCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) :
+            base(exception, cancelled, userState)
+        {
+            this.results = results;
+        }
+
+        /// <remarks/>
+        public ResultObject Result
+        {
+            get
+            {
                 this.RaiseExceptionIfNecessary();
                 return ((ResultObject)(this.results[0]));
             }

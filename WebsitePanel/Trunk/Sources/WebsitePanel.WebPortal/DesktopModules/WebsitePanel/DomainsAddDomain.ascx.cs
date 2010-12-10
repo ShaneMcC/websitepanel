@@ -33,189 +33,200 @@ using System.Collections.Generic;
 
 namespace WebsitePanel.Portal
 {
-    public partial class DomainsAddDomain : WebsitePanelModuleBase
-    {
-        protected void Page_Load(object sender, EventArgs e)
-        {
-            try
-            {
-                // bind controls
-                BindControls();
-            }
-            catch (Exception ex)
-            {
-                ShowErrorMessage("DOMAIN_GET_DOMAIN", ex);
-            }
-        }
+	public partial class DomainsAddDomain : WebsitePanelModuleBase
+	{
+		protected void Page_Load(object sender, EventArgs e)
+		{
+			try
+			{
+				// bind controls
+				BindControls();
+			}
+			catch (Exception ex)
+			{
+				ShowErrorMessage("DOMAIN_GET_DOMAIN", ex);
+			}
+		}
 
-        private void BindControls()
-        {
-            // get domain type
-            DomainType type = GetDomainType(Request["DomainType"]);
+		private void BindControls()
+		{
+			// get domain type
+			DomainType type = GetDomainType(Request["DomainType"]);
 
-            // enable domain/sub-domain fields
-            if (type == DomainType.Domain || type == DomainType.DomainPointer)
-            {
-                // domains
-                DomainPanel.Visible = true;
-            }
-            else
-            {
-                // sub-domains
-                SubDomainPanel.Visible = true;
-                
-                // fill sub-domains
-                if (!IsPostBack)
-                {
-                    if (type == DomainType.SubDomain)
-                        BindUserDomains();
-                    else
-                        BindResellerDomains();
-                }
-            }
+			// enable domain/sub-domain fields
+			if (type == DomainType.Domain || type == DomainType.DomainPointer)
+			{
+				// domains
+				DomainPanel.Visible = true;
+			}
+			else
+			{
+				// sub-domains
+				SubDomainPanel.Visible = true;
 
-            if (type == DomainType.DomainPointer && !IsPostBack)
-            {
-                // bind web sites
-                WebSitesList.DataSource = ES.Services.WebServers.GetWebSites(PanelSecurity.PackageId, false);
-                WebSitesList.DataBind();
+				// fill sub-domains
+				if (!IsPostBack)
+				{
+					if (type == DomainType.SubDomain)
+						BindUserDomains();
+					else
+						BindResellerDomains();
+				}
+			}
+			// load package context
+			PackageContext cntx = PackagesHelper.GetCachedPackageContext(PanelSecurity.PackageId);
 
-                // bind mail domains
-                MailDomainsList.DataSource = ES.Services.MailServers.GetMailDomains(PanelSecurity.PackageId, false);
-                MailDomainsList.DataBind();
-            }
-            
-            // load package context
-            PackageContext cntx = PackagesHelper.GetCachedPackageContext(PanelSecurity.PackageId);
+			if ((type == DomainType.DomainPointer || (type == DomainType.Domain && cntx.Quotas[Quotas.OS_DOMAINPOINTERS].QuotaAllocatedValue == 0)) && !IsPostBack)
+			{
+				// bind web sites
+				WebSitesList.DataSource = ES.Services.WebServers.GetWebSites(PanelSecurity.PackageId, false);
+				WebSitesList.DataBind();
 
-            // create web site option
-            CreateWebSitePanel.Visible = (type == DomainType.Domain || type == DomainType.SubDomain)
-                && cntx.Groups.ContainsKey(ResourceGroups.Web);
-            CreateWebSite.Checked &= CreateWebSitePanel.Visible;
+				// bind mail domains
+				MailDomainsList.DataSource = ES.Services.MailServers.GetMailDomains(PanelSecurity.PackageId, false);
+				MailDomainsList.DataBind();
+			}
 
-            // point Web site
-            PointWebSitePanel.Visible = (type == DomainType.DomainPointer)
-                && cntx.Groups.ContainsKey(ResourceGroups.Web) && WebSitesList.Items.Count > 0;
-            WebSitesList.Enabled = PointWebSite.Checked;
+			// create web site option
+			CreateWebSitePanel.Visible = (type == DomainType.Domain || type == DomainType.SubDomain)
+				&& cntx.Groups.ContainsKey(ResourceGroups.Web);
+			if (PointWebSite.Checked)
+			{
+				CreateWebSite.Checked = false;
+				CreateWebSite.Enabled = false;
+			}
+			else
+			{
+				CreateWebSite.Enabled = true;
+				CreateWebSite.Checked &= CreateWebSitePanel.Visible;
+			}
 
-            // point mail domain
-            PointMailDomainPanel.Visible = (type == DomainType.DomainPointer)
-                && cntx.Groups.ContainsKey(ResourceGroups.Mail) && MailDomainsList.Items.Count > 0;
-            MailDomainsList.Enabled = PointMailDomain.Checked;
+			// point Web site
+			PointWebSitePanel.Visible = (type == DomainType.DomainPointer || (type == DomainType.Domain && cntx.Quotas[Quotas.OS_DOMAINPOINTERS].QuotaAllocatedValue == 0))
+				&& cntx.Groups.ContainsKey(ResourceGroups.Web) && WebSitesList.Items.Count > 0;
+			WebSitesList.Enabled = PointWebSite.Checked;
 
-            // DNS option
-            EnableDnsPanel.Visible = cntx.Groups.ContainsKey(ResourceGroups.Dns);
-            EnableDns.Checked &= EnableDnsPanel.Visible;
+			// point mail domain
+			PointMailDomainPanel.Visible = (type == DomainType.DomainPointer || (type == DomainType.Domain && cntx.Quotas[Quotas.OS_DOMAINPOINTERS].QuotaAllocatedValue == 0))
+				&& cntx.Groups.ContainsKey(ResourceGroups.Mail) && MailDomainsList.Items.Count > 0;
+			MailDomainsList.Enabled = PointMailDomain.Checked;
 
-            // instant alias
-            // check if instant alias was setup
-            bool instantAliasAllowed = false;
-            PackageSettings settings = ES.Services.Packages.GetPackageSettings(PanelSecurity.PackageId, PackageSettings.INSTANT_ALIAS);
-            instantAliasAllowed = (settings != null && !String.IsNullOrEmpty(settings["InstantAlias"]));
+			// DNS option
+			EnableDnsPanel.Visible = cntx.Groups.ContainsKey(ResourceGroups.Dns);
+			EnableDns.Checked &= EnableDnsPanel.Visible;
 
-            InstantAliasPanel.Visible = instantAliasAllowed && (type != DomainType.DomainPointer) /*&& EnableDnsPanel.Visible*/;
-            CreateInstantAlias.Checked &= InstantAliasPanel.Visible;
+			// instant alias
+			// check if instant alias was setup
+			bool instantAliasAllowed = false;
+			PackageSettings settings = ES.Services.Packages.GetPackageSettings(PanelSecurity.PackageId, PackageSettings.INSTANT_ALIAS);
+			instantAliasAllowed = (settings != null && !String.IsNullOrEmpty(settings["InstantAlias"]));
 
-            // allow sub-domains
-            AllowSubDomainsPanel.Visible = (type == DomainType.Domain) && PanelSecurity.EffectiveUser.Role != UserRole.User;
-        }
+			InstantAliasPanel.Visible = instantAliasAllowed && (type != DomainType.DomainPointer) /*&& EnableDnsPanel.Visible*/;
+			CreateInstantAlias.Checked &= InstantAliasPanel.Visible;
 
-        private DomainType GetDomainType(string typeName)
-        {
-            DomainType type = DomainType.Domain;
+			// allow sub-domains
+			AllowSubDomainsPanel.Visible = (type == DomainType.Domain) && PanelSecurity.EffectiveUser.Role != UserRole.User;
+		}
 
-            if (!String.IsNullOrEmpty(typeName))
-                type = (DomainType)Enum.Parse(typeof(DomainType), typeName, true);
+		private DomainType GetDomainType(string typeName)
+		{
+			DomainType type = DomainType.Domain;
 
-            return type;
-        }
+			if (!String.IsNullOrEmpty(typeName))
+				type = (DomainType)Enum.Parse(typeof(DomainType), typeName, true);
 
-        private void BindUserDomains()
-        {
-            DomainInfo[] allDomains = ES.Services.Servers.GetMyDomains(PanelSecurity.PackageId);
+			return type;
+		}
 
-            // filter domains
-            List<DomainInfo> domains = new List<DomainInfo>();
-            foreach (DomainInfo domain in allDomains)
-                if (!domain.IsDomainPointer && !domain.IsSubDomain && !domain.IsInstantAlias)
-                    domains.Add(domain);
+		private void BindUserDomains()
+		{
+			DomainInfo[] allDomains = ES.Services.Servers.GetMyDomains(PanelSecurity.PackageId);
 
-            DomainsList.DataSource = domains;
-            DomainsList.DataBind();
-        }
+			// filter domains
+			List<DomainInfo> domains = new List<DomainInfo>();
+			foreach (DomainInfo domain in allDomains)
+				if (!domain.IsDomainPointer && !domain.IsSubDomain && !domain.IsInstantAlias)
+					domains.Add(domain);
 
-        private void BindResellerDomains()
-        {
-            DomainsList.DataSource = ES.Services.Servers.GetResellerDomains(PanelSecurity.PackageId);
-            DomainsList.DataBind();
-        }
+			DomainsList.DataSource = domains;
+			DomainsList.DataBind();
+		}
 
-        private void AddDomain()
-        {
-            if (!Page.IsValid)
-                return;
+		private void BindResellerDomains()
+		{
+			DomainsList.DataSource = ES.Services.Servers.GetResellerDomains(PanelSecurity.PackageId);
+			DomainsList.DataBind();
+		}
 
-            // get domain type
-            DomainType type = GetDomainType(Request["DomainType"]);
+		private void AddDomain()
+		{
+			if (!Page.IsValid)
+				return;
 
-            // get domain name
-            string domainName = DomainName.Text.Trim();
-            if (type == DomainType.SubDomain || type == DomainType.ProviderSubDomain)
-                domainName = SubDomainName.Text.Trim() + "." + DomainsList.SelectedValue;
+			// get domain type
+			DomainType type = GetDomainType(Request["DomainType"]);
 
-            int pointWebSiteId = 0;
-            int pointMailDomainId = 0;
+			// get domain name
+			string domainName = DomainName.Text.Trim();
+			if (type == DomainType.SubDomain || type == DomainType.ProviderSubDomain)
+				domainName = SubDomainName.Text.Trim() + "." + DomainsList.SelectedValue;
 
-            if(type == DomainType.DomainPointer)
-            {
-                if(PointWebSite.Checked && WebSitesList.Items.Count > 0)
-                    pointWebSiteId = Utils.ParseInt(WebSitesList.SelectedValue, 0);
+			int pointWebSiteId = 0;
+			int pointMailDomainId = 0;
 
-                if(PointMailDomain.Checked && MailDomainsList.Items.Count > 0)
-                    pointMailDomainId = Utils.ParseInt(MailDomainsList.SelectedValue, 0);
-            }
+			// load package context
+			PackageContext cntx = PackagesHelper.GetCachedPackageContext(PanelSecurity.PackageId);
 
-            // add domain
-            int domainId = 0;
-            try
-            {
-                domainId = ES.Services.Servers.AddDomainWithProvisioning(PanelSecurity.PackageId,
-                    domainName, type, CreateWebSite.Checked, pointWebSiteId, pointMailDomainId,
-                    EnableDns.Checked, CreateInstantAlias.Checked, AllowSubDomains.Checked);
+			if (type == DomainType.DomainPointer || (type == DomainType.Domain && cntx.Quotas[Quotas.OS_DOMAINPOINTERS].QuotaAllocatedValue == 0))
+			{
+				if (PointWebSite.Checked && WebSitesList.Items.Count > 0)
+					pointWebSiteId = Utils.ParseInt(WebSitesList.SelectedValue, 0);
 
-                if (domainId < 0)
-                {
-                    ShowResultMessage(domainId);
-                    return;
-                }
-            }
-            catch (Exception ex)
-            {
-                ShowErrorMessage("DOMAIN_ADD_DOMAIN", ex);
-                return;
-            }
+				if (PointMailDomain.Checked && MailDomainsList.Items.Count > 0)
+					pointMailDomainId = Utils.ParseInt(MailDomainsList.SelectedValue, 0);
+			}
 
-            // put created domain to the cookie
-            HttpCookie domainCookie = new HttpCookie("CreatedDomainId", domainId.ToString());
-            Response.Cookies.Add(domainCookie);
+			// add domain
+			int domainId = 0;
+			try
+			{
+				domainId = ES.Services.Servers.AddDomainWithProvisioning(PanelSecurity.PackageId,
+					domainName, type, CreateWebSite.Checked, pointWebSiteId, pointMailDomainId,
+					EnableDns.Checked, CreateInstantAlias.Checked, AllowSubDomains.Checked);
 
-            // return
-            RedirectBack();
-        }
+				if (domainId < 0)
+				{
+					ShowResultMessage(domainId);
+					return;
+				}
+			}
+			catch (Exception ex)
+			{
+				ShowErrorMessage("DOMAIN_ADD_DOMAIN", ex);
+				return;
+			}
 
-        private void RedirectBack()
-        {
-            RedirectSpaceHomePage();
-        }
+			// put created domain to the cookie
+			HttpCookie domainCookie = new HttpCookie("CreatedDomainId", domainId.ToString());
+			Response.Cookies.Add(domainCookie);
 
-        protected void btnCancel_Click(object sender, EventArgs e)
-        {
-            // return
-            RedirectBack();
-        }
-        protected void btnAdd_Click(object sender, EventArgs e)
-        {
-            AddDomain();
-        }
-    }
+			// return
+			RedirectBack();
+		}
+
+		private void RedirectBack()
+		{
+			RedirectSpaceHomePage();
+		}
+
+		protected void btnCancel_Click(object sender, EventArgs e)
+		{
+			// return
+			RedirectBack();
+		}
+		protected void btnAdd_Click(object sender, EventArgs e)
+		{
+			AddDomain();
+		}
+	}
 }

@@ -10,12 +10,79 @@
 
 namespace WebsitePanel.Portal.ProviderControls {
     
+    
     public partial class hMailServer43_Settings {
-        protected System.Web.UI.WebControls.Label lblPublicIP;
-        protected WebsitePanel.Portal.SelectIPAddress ipAddress;
-        protected System.Web.UI.WebControls.Label lblAdminLogin;
-        protected System.Web.UI.WebControls.TextBox txtUsername;
-        protected System.Web.UI.WebControls.Label lblAdminPassword;
-        protected System.Web.UI.WebControls.TextBox txtPassword;
+        
+        /// <summary>
+        /// lblPublicIP control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label lblPublicIP;
+        
+        /// <summary>
+        /// ipAddress control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::WebsitePanel.Portal.SelectIPAddress ipAddress;
+        
+        /// <summary>
+        /// lblAdminLogin control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label lblAdminLogin;
+        
+        /// <summary>
+        /// txtUsername control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox txtUsername;
+        
+        /// <summary>
+        /// rowPassword control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlTableRow rowPassword;
+        
+        /// <summary>
+        /// lblCurrPassword control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label lblCurrPassword;
+        
+        /// <summary>
+        /// lblAdminPassword control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label lblAdminPassword;
+        
+        /// <summary>
+        /// txtPassword control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox txtPassword;
     }
 }
