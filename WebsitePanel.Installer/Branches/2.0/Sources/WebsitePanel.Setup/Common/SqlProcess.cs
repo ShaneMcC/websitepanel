@@ -11,7 +11,7 @@
 //   this list of conditions  and  the  following  disclaimer in  the documentation
 //   and/or other materials provided with the distribution.
 //
-// - Neither  the  appPoolName  of  the  SMB SAAS Systems Inc.  nor   the   names  of  its
+// - Neither  the  name  of  the  SMB SAAS Systems Inc.  nor   the   names  of  its
 //   contributors may be used to endorse or  promote  products  derived  from  this
 //   software without specific prior written permission.
 //
@@ -31,6 +31,7 @@ using System.Data.SqlClient;
 using System.IO;
 using System.Text;
 using System.Windows.Forms;
+using WebsitePanel.Setup.Actions;
 
 namespace WebsitePanel.Setup
 {
@@ -39,24 +40,34 @@ namespace WebsitePanel.Setup
 	/// </summary>
 	public sealed class SqlProcess
 	{
-		private ProgressBar progressBar;
 		private string scriptFile; 
 		private string connectionString;
 		private string database;
+
+		public event EventHandler<ActionProgressEventArgs<int>> ProgressChange;
 		
 		/// <summary>
 		/// Initializes a new instance of the class.
 		/// </summary>
-		/// <param appPoolName="bar">Progress bar.</param>
-		/// <param appPoolName="file">Sql script file</param>
-		/// <param appPoolName="connection">Sql connection string</param>
-		/// <param appPoolName="db">Sql server database appPoolName</param>
-		public SqlProcess(ProgressBar bar, string file, string connection, string db)
+		/// <param name="file">Sql script file</param>
+		/// <param name="connection">Sql connection string</param>
+		/// <param name="db">Sql server database name</param>
+		public SqlProcess(string file, string connection, string db)
 		{
-			this.progressBar = bar;
 			this.scriptFile = file;
 			this.connectionString = connection;
 			this.database = db;
+		}
+
+		private void OnProgressChange(int percentage)
+		{
+			if (ProgressChange == null)
+				return;
+			//
+			ProgressChange(this, new ActionProgressEventArgs<int>
+			{
+				EventData = percentage
+			});
 		}
 
 		/// <summary>
@@ -84,11 +95,9 @@ namespace WebsitePanel.Setup
 			}
 
 			Log.WriteInfo(string.Format("Executing {0} database commands", commandCount));
-
-			progressBar.Minimum = 0;
-			progressBar.Maximum = 100;
-			progressBar.Value = 0;
-
+			//
+			OnProgressChange(0);
+			//
 			SqlConnection connection = new SqlConnection(connectionString);
 
 			try
@@ -99,36 +108,38 @@ namespace WebsitePanel.Setup
 					SqlCommand command = new SqlCommand();
 					connection.Open();
 					command.Connection = connection;
-					command.CommandType	= System.Data.CommandType.Text;
-                    command.CommandTimeout = 600;
-				
-					while( null != (sql = ReadNextStatementFromStream(reader))) 
+					command.CommandType = System.Data.CommandType.Text;
+					command.CommandTimeout = 600;
+
+					while (null != (sql = ReadNextStatementFromStream(reader)))
 					{
 						sql = ProcessInstallVariables(sql);
 						command.CommandText = sql;
-                        try
-                        {
-                            command.ExecuteNonQuery();
-                        }
-                        catch (Exception ex)
-                        {
-                            throw new Exception("Error executing SQL command: " + sql, ex);
-                        }
+						try
+						{
+							command.ExecuteNonQuery();
+						}
+						catch (Exception ex)
+						{
+							throw new Exception("Error executing SQL command: " + sql, ex);
+						}
 
 						i++;
-						if ( commandCount != 0)
+						if (commandCount != 0)
 						{
-							progressBar.Value = Convert.ToInt32(i*100/commandCount);
+							OnProgressChange(Convert.ToInt32(i * 100 / commandCount));
 						}
 					}
 				}
 			}
-			catch(Exception ex)
+			catch (Exception ex)
 			{
-				throw new Exception("Can't run SQL script "+scriptFile, ex);
+				throw new Exception("Can't run SQL script " + scriptFile, ex);
 			}
-
-			connection.Close();
+			finally
+			{
+				connection.Close();
+			}
 		}
 
 		private string ReadNextStatementFromStream(StreamReader reader)

@@ -2,13 +2,14 @@
 using System.Collections.Generic;
 using System.Text;
 using System.IO;
+using System.Threading;
 
 namespace WebsitePanel.Setup.Actions
 {
-	public class ActionProgressEventArgs : EventArgs
+	public class ActionProgressEventArgs<T> : EventArgs
 	{
-		public string Text { get; set; }
-		public int Value { get; set; }
+		public string StatusMessage { get; set; }
+		public T EventData { get; set; }
 		public bool Indeterminate { get; set; }
 	}
 
@@ -24,99 +25,121 @@ namespace WebsitePanel.Setup.Actions
 
 	public abstract class Action
 	{
-		private Dictionary<string, object> actionProperties;
+		protected event EventHandler<ActionProgressEventArgs<int>> InstallProgressChange;
+		protected event EventHandler<ActionProgressEventArgs<int>> UninstallProgressChange;
+		protected event EventHandler<ActionProgressEventArgs<bool>> PrerequisiteComplete;
 
-		public abstract void Run(SetupVariables vars);
+		protected object objectLock = new Object();
 
-		public abstract void Rollback(SetupVariables vars);
-
-		public string Text
+		public virtual bool Indeterminate
 		{
-			get { return GetPropertyValue<string>("Text"); }
-			set { SetPropertyValue<string>("Text", value); }
-		}
-
-		public string RollbackText
-		{
-			get { return GetPropertyValue<string>("RollbackText"); }
-			set { SetPropertyValue<string>("RollbackText", value); }
-		}
-
-		public bool Indeterminate
-		{
-			get { return GetPropertyValue<bool>("Indeterminate"); }
-			set { SetPropertyValue<bool>("Indeterminate", value); }
-		}
-
-		protected void UpdateProgress(string text, int value)
-		{
-			OnProgressChanged(this, new ActionProgressEventArgs
+			get
 			{
-				Text = text,
-				Value = value,
+				return true;
+			}
+		}
+
+		protected void Begin(string message)
+		{
+			OnInstallProgressChanged(message, 0);
+		}
+
+		protected void Finish(string message)
+		{
+			OnInstallProgressChanged(message, 100);
+		}
+
+		protected void OnInstallProgressChanged(string message, int progress)
+		{
+			if (InstallProgressChange == null)
+				return;
+			//
+			InstallProgressChange(this, new ActionProgressEventArgs<int>
+			{
+				StatusMessage = message,
+				EventData = progress,
 				Indeterminate = this.Indeterminate
 			});
 		}
 
-		protected T GetPropertyValue<T>(string propertyName)
+		protected void OnUninstallProgressChanged(string message, int progress)
 		{
-			if (String.IsNullOrEmpty(propertyName))
-			{
-				Log.WriteInfo(String.Format("Empty property has requested by '{1}' action.", GetType()));
-				//
-				return default(T);
-			}
+			if (UninstallProgressChange == null)
+				return;
 			//
-			if (!actionProperties.ContainsKey(propertyName))
+			UninstallProgressChange(this, new ActionProgressEventArgs<int>
 			{
-				Log.WriteInfo(String.Format("Uknown property {0} has requested by '{1}' action.", propertyName, GetType()));
-				//
-				return default(T);
-			}
-			//
-			return (T)actionProperties[propertyName];
+				StatusMessage = message,
+				EventData = progress,
+				Indeterminate = this.Indeterminate
+			});
 		}
 
-		protected void SetPropertyValue<T>(string propertyName, T value)
+		protected void OnPrerequisiteCompleted(string message, bool result)
 		{
-			// Lazy initialization
-			if (actionProperties == null)
-				actionProperties = new Dictionary<string, object>();
+			if (PrerequisiteComplete == null)
+				return;
 			//
-			actionProperties[propertyName] = value;
-		}
-
-		public void WriteDebugInfo()
-		{
-			var markerDbgStr = String.Format("{0}", GetType());
-			//
-			Log.WriteStart(markerDbgStr);
-			//
-			foreach (var item in actionProperties)
+			PrerequisiteComplete(this, new ActionProgressEventArgs<bool>
 			{
-				Log.WriteLine(String.Format("({0}){1} = {2};", item.Value.GetType(), item.Key, item.Value));
-			}
-			//
-			Log.WriteEnd(markerDbgStr);
-		}
-
-		// The event   
-		public event EventHandler<ActionProgressEventArgs> ProgressChanged;
-		// Fire the Event   
-		private void OnProgressChanged(object sender, ActionProgressEventArgs args)
-		{
-			// Check if there are any Subscribers   
-			if (ProgressChanged != null)
-			{
-				// Call the Event   
-				ProgressChanged(sender, args);
-			}
+				StatusMessage = message,
+				EventData = result
+			});
 		}
 	}
 
-	public class BaseActionManager
+	public interface IActionManager
 	{
-		private List<Action> actions;
+		/// <summary>
+		/// 
+		/// </summary>
+		event EventHandler<ProgressEventArgs> TotalProgressChanged;
+		/// <summary>
+		/// 
+		/// </summary>
+		event EventHandler<ActionProgressEventArgs<int>> ActionProgressChanged;
+		/// <summary>
+		/// 
+		/// </summary>
+		event EventHandler<ActionProgressEventArgs<bool>> PrerequisiteComplete;
+		/// <summary>
+		/// 
+		/// </summary>
+		event EventHandler<ActionErrorEventArgs> ActionError;
+		/// <summary>
+		/// Gets current variables available in this session
+		/// </summary>
+		SetupVariables SessionVariables { get; }
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="action"></param>
+		void AddAction(Action action);
+		/// <summary>
+		/// Triggers manager to run currentScenario specified
+		/// </summary>
+		void Start();
+		/// <summary>
+		/// Triggers manager to run prerequisites verification procedure
+		/// </summary>
+		void VerifyDistributivePrerequisites();
+		/// <summary>
+		/// Triggers manager to prepare default parameters for the distributive
+		/// </summary>
+		void PrepareDistributiveDefaults();
+		/// <summary>
+		/// Initiates rollback procedure from the action specified
+		/// </summary>
+		/// <param name="lastSuccessActionIndex"></param>
+		void Rollback();
+	}
+
+	public class BaseActionManager : IActionManager
+	{
+		private List<Action> currentScenario;
+		//
+		private int lastSuccessActionIndex = -1;
+
 		private SetupVariables sessionVariables;
 
 		public SetupVariables SessionVariables
@@ -128,12 +151,26 @@ namespace WebsitePanel.Setup.Actions
 		}
 
 		#region Events
-
+		/// <summary>
+		/// 
+		/// </summary>
 		public event EventHandler<ProgressEventArgs> TotalProgressChanged;
-		public event EventHandler<ActionProgressEventArgs> ActionProgressChanged;
+		/// <summary>
+		/// 
+		/// </summary>
+		public event EventHandler<ActionProgressEventArgs<int>> ActionProgressChanged;
+		/// <summary>
+		/// 
+		/// </summary>
+		public event EventHandler<ActionProgressEventArgs<bool>> PrerequisiteComplete;
+		/// <summary>
+		/// 
+		/// </summary>
 		public event EventHandler<ActionErrorEventArgs> ActionError;
-		public event EventHandler PreInit;
-
+		/// <summary>
+		/// 
+		/// </summary>
+		public event EventHandler Initialize;
 		#endregion
 
 		protected BaseActionManager(SetupVariables sessionVariables)
@@ -141,49 +178,39 @@ namespace WebsitePanel.Setup.Actions
 			if (sessionVariables == null)
 				throw new ArgumentNullException("sessionVariables");
 			//
-			actions = new List<Action>();
+			currentScenario = new List<Action>();
 			//
 			this.sessionVariables = sessionVariables;
-			//
-			PreInit += new EventHandler(BaseActionManager_PreInit);
 		}
 
-		void BaseActionManager_PreInit(object sender, EventArgs e)
+		private void OnInitialize()
 		{
-			AppConfig.LoadConfiguration();
-
-			//LoadSetupVariablesFromParameters(wizard, args);
-
-			SessionVariables.SetupAction = SetupActions.Install;
-			SessionVariables.InstallationFolder = Path.Combine("C:\\WebsitePanel", SessionVariables.ComponentName);
-			SessionVariables.ComponentId = Guid.NewGuid().ToString();
-			SessionVariables.Instance = String.Empty;
-
-			//create component settings node
-			SessionVariables.ComponentConfig = AppConfig.CreateComponentConfig(SessionVariables.ComponentId);
+			if (Initialize == null)
+				return;
+			//
+			Initialize(this, EventArgs.Empty);
 		}
-
+		
 		/// <summary>
-		/// Adds action into the list of actions to be executed in the current action manager's session and attaches to its ProgressChange event 
+		/// Adds action into the list of currentScenario to be executed in the current action manager's session and attaches to its ProgressChange event 
 		/// to track the action's execution progress.
 		/// </summary>
-		/// <param appPoolName="action">Action to be executed</param>
+		/// <param name="action">Action to be executed</param>
 		/// <exception cref="ArgumentNullException"/>
 		public virtual void AddAction(Action action)
 		{
 			if (action == null)
 				throw new ArgumentNullException("action");
 
-			action.ProgressChanged += new EventHandler<ActionProgressEventArgs>(OnActionProgressChanged);
-			actions.Add(action);
+			currentScenario.Add(action);
 		}
 
 		private void UpdateActionProgress(string actionText, int actionValue, bool indeterminateAction)
 		{
-			OnActionProgressChanged(this, new ActionProgressEventArgs
+			OnActionProgressChanged(this, new ActionProgressEventArgs<int>
 			{
-				Text = actionText,
-				Value = actionValue,
+				StatusMessage = actionText,
+				EventData = actionValue,
 				Indeterminate = indeterminateAction
 			});
 		}
@@ -205,13 +232,24 @@ namespace WebsitePanel.Setup.Actions
 		}
 
 		// Fire the Event   
-		private void OnActionProgressChanged(object sender, ActionProgressEventArgs args)
+		private void OnActionProgressChanged(object sender, ActionProgressEventArgs<int> args)
 		{
 			// Check if there are any Subscribers   
 			if (ActionProgressChanged != null)
 			{
 				// Call the Event   
 				ActionProgressChanged(sender, args);
+			}
+		}
+
+		// Fire the Event   
+		private void OnPrerequisiteComplete(object sender, ActionProgressEventArgs<bool> args)
+		{
+			// Check if there are any Subscribers   
+			if (PrerequisiteComplete != null)
+			{
+				// Call the Event   
+				PrerequisiteComplete(sender, args);
 			}
 		}
 
@@ -232,64 +270,51 @@ namespace WebsitePanel.Setup.Actions
 			ActionError(this, args);
 		}
 
-		private void OnPreInit()
-		{
-			if (PreInit == null)
-				return;
-			//
-			PreInit(this, EventArgs.Empty);
-		}
-
 		/// <summary>
 		/// Starts action execution.
 		/// </summary>
 		public virtual void Start()
 		{
 			var currentActionType = default(Type);
-			var currentActionIndex = 0;
 
-			#region Phase 0. PreInit (notifying external clients about pre-initialization life stage)
-			// 
-			try
-			{
-				OnPreInit();
-			}
-			catch (Exception ex)
-			{
-				Log.WriteError("Pre-initialization phase has been failed.", ex);
-				//
-				return;
-			}
-			#endregion
-
-			#region Phase 1. Executing the installation session
+			#region Executing the installation session
 			//
 			try
 			{
 				//
 				int totalValue = 0;
-				for (int i = 0; i < actions.Count; i++)
+				for (int i = 0, progress = 1; i < currentScenario.Count; i++, progress++)
 				{
-					currentActionIndex = i;
+					var item = currentScenario[i];
 					// Get the next action from the queue
-					var action = actions[currentActionIndex];
+					var action = item as IInstallAction;
 					// Take the action's type to log as much information about it as possible
-					currentActionType = action.GetType();
-					// Action is about to start - 0% complete
-					UpdateActionProgress(action.Text, 0, action.Indeterminate);
-					// Execute an install action
-					action.Run(SessionVariables);
-					// Action has completed - 100% complete
-					UpdateActionProgress(action.Text, 100, action.Indeterminate);
-					// Calculate overall current progress status
-					totalValue = Convert.ToInt32((currentActionIndex + 1) * 100 / actions.Count);
-					// Update overall progress status
-					UpdateTotalProgress(totalValue);
+					currentActionType = item.GetType();
+					//
+					if (action != null)
+					{
+						//
+						action.ProgressChange += new EventHandler<ActionProgressEventArgs<int>>(action_ProgressChanged);
+						// Execute an install action
+						action.Run(SessionVariables);
+						//
+						action.ProgressChange -= new EventHandler<ActionProgressEventArgs<int>>(action_ProgressChanged);
+						// Calculate overall current progress status
+						totalValue = Convert.ToInt32(progress * 100 / currentScenario.Count);
+						// Update overall progress status
+						UpdateTotalProgress(totalValue);
+						//
+						Thread.Sleep(new TimeSpan(0, 0, 2));
+					}
+					//
+					lastSuccessActionIndex = i;
 				}
 				//
 				totalValue = 100;
 				//
 				UpdateTotalProgress(totalValue);
+				//
+				Thread.Sleep(new TimeSpan(0, 0, 2));
 			}
 			catch (Exception ex)
 			{
@@ -305,55 +330,156 @@ namespace WebsitePanel.Setup.Actions
 					return;
 				// Notify external clients
 				OnActionError();
-				// Rolling back all changes
-				Rollback(currentActionIndex);
 				//
 				return;
 			}
 			#endregion
 		}
 
-		public virtual void Rollback(int currentActionIndex)
+		void action_ProgressChanged(object sender, ActionProgressEventArgs<int> e)
+		{
+			// Action progress has been changed
+			UpdateActionProgress(e.StatusMessage, e.EventData, e.Indeterminate);
+		}
+
+		public virtual void Rollback()
 		{
 			var currentActionType = default(Type);
-
 			//
 			Log.WriteStart("Rolling back");
 			//
-			var totalValue = Convert.ToInt32((currentActionIndex + 1) * 100 / actions.Count);
+			UpdateActionProgress("Rolling back", 0, true);
 			//
-			while (currentActionIndex >= 0)
+			var totalValue = 0;
+			//
+			UpdateTotalProgress(totalValue);
+			//
+			for (int i = lastSuccessActionIndex, progress = 1; i >= 0; i--, progress++)
 			{
+				var action = currentScenario[i] as IUninstallAction;
 				//
-				var action = actions[currentActionIndex];
-				//
-				currentActionType = action.GetType();
-				//
-				UpdateActionProgress(action.RollbackText, 0, action.Indeterminate);
-				//
-				try
+				if (action != null)
 				{
-					action.Rollback(SessionVariables);
-				}
-				catch (Exception ex)
-				{
-					if (currentActionType != default(Type))
-						Log.WriteError(String.Format("Failed to rollback '{0}' action.", currentActionType));
+					action.ProgressChange += new EventHandler<ActionProgressEventArgs<int>>(action_ProgressChanged);
 					//
-					Log.WriteError("Here is the original exception...", ex);
+					try
+					{
+						action.Run(sessionVariables);
+					}
+					catch (Exception ex)
+					{
+						if (currentActionType != default(Type))
+							Log.WriteError(String.Format("Failed to rollback '{0}' action.", currentActionType));
+						//
+						Log.WriteError("Here is the original exception...", ex);
+						//
+					}
 					//
+					action.ProgressChange -= new EventHandler<ActionProgressEventArgs<int>>(action_ProgressChanged);
 				}
 				//
-				UpdateActionProgress(action.RollbackText, 100, action.Indeterminate);
-				//
-				currentActionIndex--;
-				//
-				totalValue = Convert.ToInt32((currentActionIndex + 1) * 100 / actions.Count);
+				totalValue = Convert.ToInt32(progress * 100 / (lastSuccessActionIndex + 1));
 				//
 				UpdateTotalProgress(totalValue);
+				//
+				Thread.Sleep(new TimeSpan(0, 0, 1));
 			}
 			//
 			Log.WriteEnd("Rolled back");
+		}
+
+		public void VerifyDistributivePrerequisites()
+		{
+			var currentActionType = default(Type);
+
+			try
+			{
+				//
+				for (int i = 0; i < currentScenario.Count; i++)
+				{
+					var item = currentScenario[i];
+					// Get the next action from the queue
+					var action = item as IPrerequisiteAction;
+					//
+					currentActionType = item.GetType();
+					//
+					if (action != null)
+					{
+						//
+						action.Complete += new EventHandler<ActionProgressEventArgs<bool>>(action_Complete);
+						// Execute an install action
+						action.Run(SessionVariables);
+						//
+						action.Complete -= new EventHandler<ActionProgressEventArgs<bool>>(action_Complete);
+					}
+				}
+			}
+			catch (Exception ex)
+			{
+				//
+				if (currentActionType != default(Type))
+				{
+					Log.WriteError(String.Format("Failed to execute '{0}' type of action.", currentActionType));
+				}
+				//
+				Log.WriteError("Here is the original exception...", ex);
+				//
+				if (Utils.IsThreadAbortException(ex))
+					return;
+				// Notify external clients
+				OnActionError();
+				//
+				return;
+			}
+		}
+
+		void action_Complete(object sender, ActionProgressEventArgs<bool> e)
+		{
+			OnPrerequisiteComplete(sender, e);
+		}
+
+		public void PrepareDistributiveDefaults()
+		{
+			//
+			OnInitialize();
+			//
+			var currentActionType = default(Type);
+
+			try
+			{
+				//
+				for (int i = 0; i < currentScenario.Count; i++)
+				{
+					// Get the next action from the queue
+					var action = currentScenario[i] as IPrepareDefaultsAction;
+					//
+					if (action == null)
+					{
+						continue;
+					}
+					//
+					currentActionType = action.GetType();
+					// Execute an install action
+					action.Run(SessionVariables);
+				}
+			}
+			catch (Exception ex)
+			{
+				//
+				if (currentActionType != default(Type))
+				{
+					Log.WriteError(String.Format("Failed to execute '{0}' type of action.", currentActionType));
+				}
+				//
+				Log.WriteError("Here is the original exception...", ex);
+				//
+				if (Utils.IsThreadAbortException(ex))
+					return;
+				// Notify external clients
+				OnActionError();
+				//
+				return;
+			}
 		}
 	}
 }

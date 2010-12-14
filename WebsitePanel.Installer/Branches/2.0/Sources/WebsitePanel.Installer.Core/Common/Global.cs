@@ -60,11 +60,14 @@ namespace WebsitePanel.Installer.Common
 			public const string UserDomain = "UserDomain";
 			public const string UserAccount = "UserAccount";
 			public const string UserPassword = "UserPassword";
+			public const string CryptoKey = "CryptoKey";
+			public const string ServerAdminPassword = "ServerAdminPassword";
 		}
 
 		public abstract class Messages
 		{
 			public const string NotEnoughPermissionsError = "You do not have the appropriate permissions to perform this operation. Make sure you are running the application from the local disk and you have local system administrator privileges.";
+			public const string InstallerObsoleteMessage = "WebsitePanel Installer {0} or higher required.";
 		}
 
 		private Global()

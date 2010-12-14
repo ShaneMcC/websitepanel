@@ -11,7 +11,7 @@
 //   this list of conditions  and  the  following  disclaimer in  the documentation
 //   and/or other materials provided with the distribution.
 //
-// - Neither  the  appPoolName  of  the  SMB SAAS Systems Inc.  nor   the   names  of  its
+// - Neither  the  name  of  the  SMB SAAS Systems Inc.  nor   the   names  of  its
 //   contributors may be used to endorse or  promote  products  derived  from  this
 //   software without specific prior written permission.
 //
@@ -37,6 +37,7 @@ using System.Windows.Forms;
 
 using WebsitePanel.Setup.Web;
 using WebsitePanel.Setup.Windows;
+using WebsitePanel.Setup.Actions;
 
 namespace WebsitePanel.Setup
 {
@@ -73,8 +74,16 @@ namespace WebsitePanel.Setup
 				this.progressBar.Value = 0;
 				this.lblProcess.Text = "Rolling back...";
 				Log.WriteStart("Rolling back");
-				RollBackProcess process = new RollBackProcess(this.progressBar);
-				process.Run();
+				//
+				Wizard.ActionManager.TotalProgressChanged += new EventHandler<ProgressEventArgs>((object sender, ProgressEventArgs e) =>
+				{
+					this.progressBar.Value = e.Value;
+					//
+					Thread.Sleep(new TimeSpan(0, 0, 2));
+				});
+				//
+				Wizard.ActionManager.Rollback();
+				//
 				Log.WriteEnd("Rolled back");
 				this.progressBar.Value = 100;
 			}

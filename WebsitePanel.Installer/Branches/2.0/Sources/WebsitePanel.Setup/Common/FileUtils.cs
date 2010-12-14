@@ -11,7 +11,7 @@
 //   this list of conditions  and  the  following  disclaimer in  the documentation
 //   and/or other materials provided with the distribution.
 //
-// - Neither  the  appPoolName  of  the  SMB SAAS Systems Inc.  nor   the   names  of  its
+// - Neither  the  name  of  the  SMB SAAS Systems Inc.  nor   the   names  of  its
 //   contributors may be used to endorse or  promote  products  derived  from  this
 //   software without specific prior written permission.
 //
@@ -89,7 +89,7 @@ namespace WebsitePanel.Setup
 		/// <summary>
 		/// Creates drectory with the specified directory.
 		/// </summary>
-		/// <param appPoolName="path">The directory path to create.</param>
+		/// <param name="path">The directory path to create.</param>
 		internal static void CreateDirectory(string path)
 		{
 			string dir = Path.GetDirectoryName(path);
@@ -103,8 +103,8 @@ namespace WebsitePanel.Setup
 		/// <summary>
 		/// Saves file content.
 		/// </summary>
-		/// <param appPoolName="fileName">File appPoolName.</param>
-		/// <param appPoolName="content">The array of bytes to write.</param>
+		/// <param name="fileName">File name.</param>
+		/// <param name="content">The array of bytes to write.</param>
 		internal static void SaveFileContent(string fileName, byte[] content)
 		{
 			FileStream stream = new FileStream(fileName, FileMode.Create);
@@ -115,8 +115,8 @@ namespace WebsitePanel.Setup
 		/// <summary>
 		/// Saves file content.
 		/// </summary>
-		/// <param appPoolName="fileName">File appPoolName.</param>
-		/// <param appPoolName="content">The array of bytes to write.</param>
+		/// <param name="fileName">File name.</param>
+		/// <param name="content">The array of bytes to write.</param>
 		internal static void AppendFileContent(string fileName, byte[] content)
 		{
 			FileStream stream = new FileStream(fileName, FileMode.Append, FileAccess.Write);
@@ -180,7 +180,7 @@ namespace WebsitePanel.Setup
 		/// <summary>
 		/// Deletes the specified file.
 		/// </summary>
-		/// <param appPoolName="fileName">The appPoolName of the file to be deleted.</param>
+		/// <param name="fileName">The name of the file to be deleted.</param>
 		internal static void DeleteFile(string fileName)
 		{
 			int attempts = 0;
@@ -205,7 +205,7 @@ namespace WebsitePanel.Setup
 		/// <summary>
 		/// Deletes the specified file.
 		/// </summary>
-		/// <param appPoolName="fileName">The appPoolName of the file to be deleted.</param>
+		/// <param name="fileName">The name of the file to be deleted.</param>
 		private static void DeleteReadOnlyFile(string fileName)
 		{
 			FileInfo info = new FileInfo(fileName);
@@ -216,7 +216,7 @@ namespace WebsitePanel.Setup
 		/// <summary>
 		/// Deletes the specified file.
 		/// </summary>
-		/// <param appPoolName="fileName">The appPoolName of the file to be deleted.</param>
+		/// <param name="fileName">The name of the file to be deleted.</param>
 		private static void DeleteFileInternal(string fileName)
 		{
 			try
@@ -232,7 +232,7 @@ namespace WebsitePanel.Setup
 		/// <summary>
 		/// Deletes the specified directory.
 		/// </summary>
-		/// <param appPoolName="directory">The appPoolName of the directory to be deleted.</param>
+		/// <param name="directory">The name of the directory to be deleted.</param>
 		internal static void DeleteDirectory(string directory)
 		{
 			if (!Directory.Exists(directory))
@@ -275,7 +275,7 @@ namespace WebsitePanel.Setup
 		/// <summary>
 		/// Deletes the specified directory.
 		/// </summary>
-		/// <param appPoolName="directory">The appPoolName of the directory to be deleted.</param>
+		/// <param name="directory">The name of the directory to be deleted.</param>
 		private static void DeleteDirectoryInternal(string directory)
 		{
 			try
@@ -291,7 +291,7 @@ namespace WebsitePanel.Setup
 		/// <summary>
 		/// Deletes the specified directory.
 		/// </summary>
-		/// <param appPoolName="directory">The appPoolName of the directory to be deleted.</param>
+		/// <param name="directory">The name of the directory to be deleted.</param>
 		private static void DeleteReadOnlyDirectory(string directory)
 		{
 			DirectoryInfo info = new DirectoryInfo(directory);
@@ -303,7 +303,7 @@ namespace WebsitePanel.Setup
 		/// <summary>
 		/// Determines whether the specified file exists.
 		/// </summary>
-		/// <param appPoolName="fileName">The path to check.</param>
+		/// <param name="fileName">The path to check.</param>
 		/// <returns></returns>
 		internal static bool FileExists(string fileName)
 		{
@@ -313,7 +313,7 @@ namespace WebsitePanel.Setup
 		/// <summary>
 		/// Determines whether the given path refers to an existing directory on disk.
 		/// </summary>
-		/// <param appPoolName="path">The path to test.</param>
+		/// <param name="path">The path to test.</param>
 		/// <returns></returns>
 		internal static bool DirectoryExists(string path)
 		{

@@ -61,7 +61,9 @@ namespace WebsitePanel.Setup
 		public ExpressInstallPage()
 		{
 			InitializeComponent();
+			//
 			actions = new List<InstallAction>();
+			//
 			this.CustomCancelHandler = true;
 		}
 
@@ -124,9 +126,6 @@ namespace WebsitePanel.Setup
 			thread.Start();
 		}
 
-		/// <summary>
-		/// Displays process progress.
-		/// </summary>
 		public void Start()
 		{
 			SetProgressValue(0);
@@ -138,9 +137,118 @@ namespace WebsitePanel.Setup
 			{
 				SetProgressText("Creating installation script...");
 
-				var demo = new ServerActionManager(Wizard.SetupVariables);
-				demo.Start();
-				
+				for (int i = 0; i < actions.Count; i++)
+				{
+					InstallAction action = actions[i];
+					SetProgressText(action.Description);
+					SetProgressValue(0);
+
+					switch (action.ActionType)
+					{
+						case ActionTypes.CopyFiles:
+							CopyFiles(
+								Wizard.SetupVariables.InstallerFolder,
+								Wizard.SetupVariables.InstallationFolder);
+							break;
+						case ActionTypes.CreateWebSite:
+							CreateWebSite();
+							break;
+						case ActionTypes.CryptoKey:
+							SetCryptoKey();
+							break;
+						case ActionTypes.ServerPassword:
+							SetServerPassword();
+							break;
+						case ActionTypes.UpdateServerPassword:
+							UpdateServerPassword();
+							break;
+						case ActionTypes.UpdateConfig:
+							UpdateSystemConfiguration();
+							break;
+						case ActionTypes.CreateDatabase:
+							CreateDatabase();
+							break;
+						case ActionTypes.CreateDatabaseUser:
+							CreateDatabaseUser();
+							break;
+						case ActionTypes.ExecuteSql:
+							ExecuteSqlScript(action.Path);
+							break;
+						case ActionTypes.UpdateWebSite:
+							UpdateWebSiteBindings();
+							break;
+						case ActionTypes.Backup:
+							Backup();
+							break;
+						case ActionTypes.DeleteFiles:
+							DeleteFiles(action.Path);
+							break;
+						case ActionTypes.UpdateEnterpriseServerUrl:
+							UpdateEnterpriseServerUrl();
+							break;
+						case ActionTypes.CreateShortcuts:
+							CreateShortcuts();
+							break;
+						case ActionTypes.UpdateServers:
+							UpdateServers();
+							break;
+						case ActionTypes.CopyWebConfig:
+							CopyWebConfig();
+							break;
+						case ActionTypes.UpdateWebConfigNamespaces:
+							UpdateWebConfigNamespaces();
+							break;
+						case ActionTypes.StopApplicationPool:
+							StopApplicationPool();
+							break;
+						case ActionTypes.StartApplicationPool:
+							StartApplicationPool();
+							break;
+						case ActionTypes.UpdatePortal2811:
+							UpdatePortal2811();
+							break;
+						case ActionTypes.UpdateEnterpriseServer2810:
+						case ActionTypes.UpdateServer2810:
+							UpdateWseSecuritySettings();
+							break;
+						case ActionTypes.CreateUserAccount:
+							CreateAccount(action.Name);
+							break;
+						case ActionTypes.ServiceSettings:
+							SetServiceSettings();
+							break;
+						case ActionTypes.RegisterWindowsService:
+							RegisterWindowsService();
+							break;
+						case ActionTypes.StartWindowsService:
+							StartWindowsService();
+							break;
+						case ActionTypes.StopWindowsService:
+							StopWindowsService();
+							break;
+						case ActionTypes.InitSetupVariables:
+							InitSetupVaribles(action.SetupVariables);
+							break;
+						case ActionTypes.UpdateServerAdminPassword:
+							UpdateServerAdminPassword();
+							break;
+						case ActionTypes.UpdateLicenseInformation:
+							UpdateLicenseInformation();
+							break;
+						case ActionTypes.ConfigureStandaloneServerData:
+							ConfigureStandaloneServer(action.Url);
+							break;
+						case ActionTypes.CreateWPServerLogin:
+							CreateWPServerLogin();
+							break;
+						case ActionTypes.FolderPermissions:
+							ConfigureFolderPermissions();
+							break;
+						case ActionTypes.AddCustomErrorsPage:
+							AddCustomErrorsPage();
+							break;
+					}
+				}
 				this.progressBar.Value = 100;
 
 			}
@@ -150,7 +258,7 @@ namespace WebsitePanel.Setup
 					return;
 
 				ShowError();
-				//Rollback();
+				Rollback();
 				return;
 			}
 
@@ -220,7 +328,7 @@ namespace WebsitePanel.Setup
 				//<system.web>
 				//	<pages>
 				//		<tagMapping>
-				//			<add tagType="System.Web.UI.WebControls.CompareValidator" mappedTagType="Sample.Web.UI.Compatibility.CompareValidator, Validators, Version=1.0.0.0"/>
+				//			<add tagType="System.Web.UI.WebControls.CompareValidator" mappedTagType="Sample.Web.UI.Compatibility.CompareValidator, Validators, Release=1.0.0.0"/>
 				//		</tagMapping>
 				//	</pages>
 				//</system.webServer>
@@ -238,7 +346,7 @@ namespace WebsitePanel.Setup
 				//<system.web>
 				//	<pages>
 				//		<tagMapping>
-				//			<add tagType="System.Web.UI.WebControls.CustomValidator" mappedTagType="Sample.Web.UI.Compatibility.CustomValidator, Validators, Version=1.0.0.0"/>
+				//			<add tagType="System.Web.UI.WebControls.CustomValidator" mappedTagType="Sample.Web.UI.Compatibility.CustomValidator, Validators, Release=1.0.0.0"/>
 				//		</tagMapping>
 				//	</pages>
 				//</system.webServer>
@@ -256,7 +364,7 @@ namespace WebsitePanel.Setup
 				//<system.web>
 				//	<pages>
 				//		<tagMapping>
-				//			<add tagType="System.Web.UI.WebControls.RangeValidator" mappedTagType="Sample.Web.UI.Compatibility.RangeValidator, Validators, Version=1.0.0.0"/>
+				//			<add tagType="System.Web.UI.WebControls.RangeValidator" mappedTagType="Sample.Web.UI.Compatibility.RangeValidator, Validators, Release=1.0.0.0"/>
 				//		</tagMapping>
 				//	</pages>
 				//</system.webServer>
@@ -274,7 +382,7 @@ namespace WebsitePanel.Setup
 				//<system.web>
 				//	<pages>
 				//		<tagMapping>
-				//			<add tagType="System.Web.UI.WebControls.RegularExpressionValidator" mappedTagType="Sample.Web.UI.Compatibility.RegularExpressionValidator, Validators, Version=1.0.0.0"/>
+				//			<add tagType="System.Web.UI.WebControls.RegularExpressionValidator" mappedTagType="Sample.Web.UI.Compatibility.RegularExpressionValidator, Validators, Release=1.0.0.0"/>
 				//		</tagMapping>
 				//	</pages>
 				//</system.webServer>
@@ -292,7 +400,7 @@ namespace WebsitePanel.Setup
 				//<system.web>
 				//	<pages>
 				//		<tagMapping>
-				//			<add tagType="System.Web.UI.WebControls.RequiredFieldValidator" mappedTagType="Sample.Web.UI.Compatibility.RequiredFieldValidator, Validators, Version=1.0.0.0"/>
+				//			<add tagType="System.Web.UI.WebControls.RequiredFieldValidator" mappedTagType="Sample.Web.UI.Compatibility.RequiredFieldValidator, Validators, Release=1.0.0.0"/>
 				//		</tagMapping>
 				//	</pages>
 				//</system.webServer>
@@ -310,7 +418,7 @@ namespace WebsitePanel.Setup
 				//<system.web>
 				//	<pages>
 				//		<tagMapping>
-				//			<add tagType="System.Web.UI.WebControls.ValidationSummary" mappedTagType="Sample.Web.UI.Compatibility.ValidationSummary, Validators, Version=1.0.0.0"/>
+				//			<add tagType="System.Web.UI.WebControls.ValidationSummary" mappedTagType="Sample.Web.UI.Compatibility.ValidationSummary, Validators, Release=1.0.0.0"/>
 				//		</tagMapping>
 				//	</pages>
 				//</system.webServer>
@@ -1717,9 +1825,6 @@ namespace WebsitePanel.Setup
 			}
 		}
 
-
-
-
         private void UpdateWebConfigNamespaces()
         {
             try
@@ -2083,8 +2188,9 @@ namespace WebsitePanel.Setup
 				Log.WriteInfo(string.Format("Updating web site \"{0}\" ( IP: {1}, Port: {2}, Domain: {3} )", siteId, ip, port, domain));
 
 				//check for existing site
-				string oldSiteId = iis7 ? WebUtils.GetIIS7SiteIdByBinding(ip, port, domain) : WebUtils.GetSiteIdByBinding(ip, port, domain);
-				if (oldSiteId != null)
+				var oldSiteId = iis7 ? WebUtils.GetIIS7SiteIdByBinding(ip, port, domain) : WebUtils.GetSiteIdByBinding(ip, port, domain);
+				// We found out that other web site has this combination of {IP:Port:Host Header} already assigned
+				if (!oldSiteId.Equals(Wizard.SetupVariables.WebSiteId))
 				{
 					// get site name
 					string oldSiteName = iis7 ? oldSiteId : WebUtils.GetSite(oldSiteId).Name;
@@ -2093,12 +2199,15 @@ namespace WebsitePanel.Setup
 						oldSiteName, ip, port, domain));
 				}
 
-				ServerBinding newBinding = new ServerBinding(ip, port, domain);
-				if ( iis7 )
-					WebUtils.UpdateIIS7SiteBindings(siteId, new ServerBinding[] { newBinding });
-				else
-					WebUtils.UpdateSiteBindings(siteId, new ServerBinding[] { newBinding });
-
+				// Assign the binding only if is not defined
+				if (String.IsNullOrEmpty(oldSiteId))
+				{
+					ServerBinding newBinding = new ServerBinding(ip, port, domain);
+					if (iis7)
+						WebUtils.UpdateIIS7SiteBindings(siteId, new ServerBinding[] { newBinding });
+					else
+						WebUtils.UpdateSiteBindings(siteId, new ServerBinding[] { newBinding });
+				}
 
 				// update config setings
 				string componentId = Wizard.SetupVariables.ComponentId;
@@ -2113,6 +2222,7 @@ namespace WebsitePanel.Setup
 				InstallLog.AppendLine("- Updated web site");
 				InstallLog.AppendLine("  You can access the application by the following URLs:");
 				string[] urls = GetApplicationUrls(ip, domain, port, null);
+				//
 				foreach (string url in urls)
 				{
 					InstallLog.AppendLine("  http://" + url);
@@ -2130,7 +2240,7 @@ namespace WebsitePanel.Setup
 			//opening windows firewall ports
 			try
 			{
-				OpenFirewallPort(component, port);
+				Utils.OpenFirewallPort(component, port, SetupVariables.IISVersion);
 			}
 			catch (Exception ex)
 			{
@@ -2425,7 +2535,6 @@ namespace WebsitePanel.Setup
 			}
 		}
 
-
 		private void SetCryptoKey()
 		{
 			try
@@ -2465,7 +2574,6 @@ namespace WebsitePanel.Setup
 				throw;
 			}
 		}
-
 
 		private void CopyFiles(string source, string destination)
 		{
@@ -2576,7 +2684,7 @@ namespace WebsitePanel.Setup
 			//opening windows firewall ports
 			try
 			{
-				OpenFirewallPort(component, port);
+				Utils.OpenFirewallPort(component, port, SetupVariables.IISVersion);
 			}
 			catch (Exception ex)
 			{
@@ -2586,32 +2694,6 @@ namespace WebsitePanel.Setup
 				Log.WriteError("Open windows firewall port error", ex);
 			}
 
-		}
-
-		private void OpenFirewallPort(string name, string port)
-		{
-			Version iisVersion = Wizard.SetupVariables.IISVersion;
-			bool iis7 = (iisVersion.Major == 7);
-			if (iis7)
-			{
-				//TODO: Add IIS7 support
-			}
-			else
-			{
-				if (Utils.IsWindowsFirewallEnabled() &&
-					Utils.IsWindowsFirewallExceptionsAllowed())
-				{
-					SetProgressText("Opening port in windows firewall...");
-
-					Log.WriteStart(string.Format("Opening port {0} in windows firewall", port));
-
-					Utils.OpenWindowsFirewallPort(name, port);
-
-					//update log
-					Log.WriteEnd("Opened port in windows firewall");
-					InstallLog.AppendLine(string.Format("- Opened port {0} in Windows Firewall", port));
-				}
-			}
 		}
 
 		private void ConfigureFolderPermissions()
@@ -2692,8 +2774,6 @@ namespace WebsitePanel.Setup
 			}
 		}
 	
-
-
 		private void CreateSite(string siteName, string ip, string port, string domain, string contentPath, string userName, string userPassword, string appPool)
 		{
 			SetProgressText("Creating web site...");
@@ -2912,7 +2992,6 @@ namespace WebsitePanel.Setup
 			}
 		}
 
-
 		/// <summary>
 		/// Returns the list of all possible application URLs
 		/// </summary>
@@ -2959,7 +3038,6 @@ namespace WebsitePanel.Setup
 
 			return urls.ToArray();
 		}
-
 
 		private void UpdateSystemConfiguration()
 		{
@@ -3088,7 +3166,13 @@ namespace WebsitePanel.Setup
 			Log.WriteStart("Installing database objects");
 
 			//showing process
-			SqlProcess process = new SqlProcess(this.progressBar, fileName, connectionString, database);
+			SqlProcess process = new SqlProcess(fileName, connectionString, database);
+			// Update progress change
+			process.ProgressChange += new EventHandler<ActionProgressEventArgs<int>>((object sender, ActionProgressEventArgs<int> e) =>
+			{
+				this.progressBar.Value = e.EventData;
+			});
+			//
 			process.Run();
 
 			Log.WriteEnd("Installed database objects");

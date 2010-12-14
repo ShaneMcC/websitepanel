@@ -11,7 +11,7 @@
 //   this list of conditions  and  the  following  disclaimer in  the documentation
 //   and/or other materials provided with the distribution.
 //
-// - Neither  the  appPoolName  of  the  SMB SAAS Systems Inc.  nor   the   names  of  its
+// - Neither  the  name  of  the  SMB SAAS Systems Inc.  nor   the   names  of  its
 //   contributors may be used to endorse or  promote  products  derived  from  this
 //   software without specific prior written permission.
 //
@@ -43,7 +43,7 @@ namespace WebsitePanel.Setup
 		/// <summary>
 		/// Initializes a new instance of the class.
 		/// </summary>
-		/// <param appPoolName="ns">Namespace.</param>
+		/// <param name="ns">Namespace.</param>
 		public WmiHelper(string ns)
 		{
 			this.ns = ns;
@@ -52,7 +52,7 @@ namespace WebsitePanel.Setup
 		/// <summary>
 		/// Executes specified query.
 		/// </summary>
-		/// <param appPoolName="query">Query to execute.</param>
+		/// <param name="query">Query to execute.</param>
 		/// <returns>Resulting collection.</returns>
 		internal ManagementObjectCollection ExecuteQuery(string query)
 		{
@@ -66,7 +66,7 @@ namespace WebsitePanel.Setup
 		/// <summary>
 		/// Retreives ManagementClass class initialized to the given WMI path.
 		/// </summary>
-		/// <param appPoolName="path">A ManagementPath specifying which WMI class to bind to.</param>
+		/// <param name="path">A ManagementPath specifying which WMI class to bind to.</param>
 		/// <returns>Instance of the ManagementClass class.</returns>
 		internal ManagementClass GetClass(string path)
 		{
@@ -76,7 +76,7 @@ namespace WebsitePanel.Setup
 		/// <summary>
 		/// Retreives ManagementObject class bound to the specified WMI path.
 		/// </summary>
-		/// <param appPoolName="path">A ManagementPath that contains a path to a WMI object.</param>
+		/// <param name="path">A ManagementPath that contains a path to a WMI object.</param>
 		/// <returns>Instance of the ManagementObject class.</returns>
 		internal ManagementObject GetObject(string path)
 		{

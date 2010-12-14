@@ -11,7 +11,7 @@
 //   this list of conditions  and  the  following  disclaimer in  the documentation
 //   and/or other materials provided with the distribution.
 //
-// - Neither  the  appPoolName  of  the  SMB SAAS Systems Inc.  nor   the   names  of  its
+// - Neither  the  name  of  the  SMB SAAS Systems Inc.  nor   the   names  of  its
 //   contributors may be used to endorse or  promote  products  derived  from  this
 //   software without specific prior written permission.
 //
@@ -42,7 +42,7 @@ namespace WebsitePanel.Setup
 		static RollBack()
 		{
 			script = new XmlDocument();
-			XmlElement root = script.CreateElement("actions");
+			XmlElement root = script.CreateElement("currentScenario");
 			script.AppendChild(root);
 		}
 
@@ -89,7 +89,7 @@ namespace WebsitePanel.Setup
 			XmlElement action = script.CreateElement("database");
 			RootElement.AppendChild(action); 
 			action.SetAttribute("connectionString", connectionString);
-			action.SetAttribute("appPoolName", name);
+			action.SetAttribute("name", name);
 		}
 
 		internal static void RegisterDatabaseBackupAction(string connectionString, string name, string bakFile, string position)
@@ -97,7 +97,7 @@ namespace WebsitePanel.Setup
 			XmlElement action = script.CreateElement("databaseBackup");
 			RootElement.AppendChild(action);
 			action.SetAttribute("connectionString", connectionString);
-			action.SetAttribute("appPoolName", name);
+			action.SetAttribute("name", name);
 			action.SetAttribute("bakFile", bakFile);
 			action.SetAttribute("position", position);
 		}
@@ -130,14 +130,14 @@ namespace WebsitePanel.Setup
 			XmlElement action = script.CreateElement("virtualDirectory");
 			RootElement.AppendChild(action); 
 			action.SetAttribute("siteId", siteId);
-			action.SetAttribute("appPoolName", name);
+			action.SetAttribute("name", name);
 		}
 
 		internal static void RegisterUserAccountAction(string domain, string userName)
 		{
 			XmlElement action = script.CreateElement("userAccount");
 			RootElement.AppendChild(action); 
-			action.SetAttribute("appPoolName", userName);
+			action.SetAttribute("name", userName);
 			action.SetAttribute("domain", domain);
 		}
 
@@ -145,28 +145,28 @@ namespace WebsitePanel.Setup
 		{
 			XmlElement action = script.CreateElement("applicationPool");
 			RootElement.AppendChild(action); 
-			action.SetAttribute("appPoolName", name);
+			action.SetAttribute("name", name);
 		}
 
 		internal static void RegisterIIS7ApplicationPool(string name)
 		{
 			XmlElement action = script.CreateElement("IIS7ApplicationPool");
 			RootElement.AppendChild(action);
-			action.SetAttribute("appPoolName", name);
+			action.SetAttribute("name", name);
 		}
 
 		internal static void RegisterStopApplicationPool(string name)
 		{
 			XmlElement action = script.CreateElement("stopApplicationPool");
 			RootElement.AppendChild(action);
-			action.SetAttribute("appPoolName", name);
+			action.SetAttribute("name", name);
 		}
 
 		internal static void RegisterStopIIS7ApplicationPool(string name)
 		{
 			XmlElement action = script.CreateElement("stopIIS7ApplicationPool");
 			RootElement.AppendChild(action);
-			action.SetAttribute("appPoolName", name);
+			action.SetAttribute("name", name);
 		}
 
 		internal static void RegisterConfigAction(string componentId, string name)
@@ -174,7 +174,7 @@ namespace WebsitePanel.Setup
 			XmlElement action = script.CreateElement("config");
 			RootElement.AppendChild(action);
 			action.SetAttribute("key", componentId);
-			action.SetAttribute("appPoolName", name);
+			action.SetAttribute("name", name);
 		}
 
 		internal static void RegisterWindowsService(string path, string name)
@@ -182,7 +182,7 @@ namespace WebsitePanel.Setup
 			XmlElement action = script.CreateElement("WindowsService");
 			RootElement.AppendChild(action);
 			action.SetAttribute("path", path);
-			action.SetAttribute("appPoolName", name);
+			action.SetAttribute("name", name);
 		}
 
 
@@ -205,12 +205,12 @@ namespace WebsitePanel.Setup
 				case "database":
 					DeleteDatabase(
 						XmlUtils.GetXmlAttribute(action, "connectionString"),
-						XmlUtils.GetXmlAttribute(action, "appPoolName"));
+						XmlUtils.GetXmlAttribute(action, "name"));
 					break;
 				case "databaseBackup":
 					RestoreDatabase(
 						XmlUtils.GetXmlAttribute(action, "connectionString"),
-						XmlUtils.GetXmlAttribute(action, "appPoolName"),
+						XmlUtils.GetXmlAttribute(action, "name"),
 						XmlUtils.GetXmlAttribute(action, "bakFile"),
 						XmlUtils.GetXmlAttribute(action, "position"));
 					break;
@@ -230,38 +230,38 @@ namespace WebsitePanel.Setup
 				case "virtualDirectory":
 					DeleteVirtualDirectory(
 						XmlUtils.GetXmlAttribute(action, "siteId"),
-						XmlUtils.GetXmlAttribute(action, "appPoolName"));
+						XmlUtils.GetXmlAttribute(action, "name"));
 					break;
 				case "userAccount":
 					DeleteUserAccount(
 						XmlUtils.GetXmlAttribute(action, "domain"),
-						XmlUtils.GetXmlAttribute(action, "appPoolName"));
+						XmlUtils.GetXmlAttribute(action, "name"));
 					break;
 				case "applicationPool":
 					DeleteApplicationPool(
-						XmlUtils.GetXmlAttribute(action, "appPoolName"));
+						XmlUtils.GetXmlAttribute(action, "name"));
 					break;
 				case "IIS7ApplicationPool":
 					DeleteIIS7ApplicationPool(
-						XmlUtils.GetXmlAttribute(action, "appPoolName"));
+						XmlUtils.GetXmlAttribute(action, "name"));
 					break;
 				case "config":
 					DeleteComponentSettings(
 						XmlUtils.GetXmlAttribute(action, "key"),
-						XmlUtils.GetXmlAttribute(action, "appPoolName"));
+						XmlUtils.GetXmlAttribute(action, "name"));
 					break;
 				case "stopApplicationPool":
 					StartApplicationPool(
-						XmlUtils.GetXmlAttribute(action, "appPoolName"));
+						XmlUtils.GetXmlAttribute(action, "name"));
 					break;
 				case "stopIIS7ApplicationPool":
 					StartIIS7ApplicationPool(
-						XmlUtils.GetXmlAttribute(action, "appPoolName"));
+						XmlUtils.GetXmlAttribute(action, "name"));
 					break;
 				case "WindowsService":
 					UnregisterWindowsService(
 						XmlUtils.GetXmlAttribute(action, "path"),
-						XmlUtils.GetXmlAttribute(action, "appPoolName"));
+						XmlUtils.GetXmlAttribute(action, "name"));
 					break;
 			}
 		}

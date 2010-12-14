@@ -11,7 +11,7 @@
 //   this list of conditions  and  the  following  disclaimer in  the documentation
 //   and/or other materials provided with the distribution.
 //
-// - Neither  the  appPoolName  of  the  SMB SAAS Systems Inc.  nor   the   names  of  its
+// - Neither  the  name of  the  SMB SAAS Systems Inc.  nor   the   names  of  its
 //   contributors may be used to endorse or  promote  products  derived  from  this
 //   software without specific prior written permission.
 //
@@ -284,7 +284,7 @@ namespace WebsitePanel.Setup
 		/// <summary>
 		/// Displays an error message box with the specified text.
 		/// </summary>
-		/// <param appPoolName="text">The text to display in the message box.</param>
+		/// <param name="text">The text to display in the message box.</param>
 		protected void ShowError(string text)
 		{
 			MessageBox.Show(this, text, FindForm().Text, MessageBoxButtons.OK, MessageBoxIcon.Error);
@@ -301,7 +301,7 @@ namespace WebsitePanel.Setup
 		/// <summary>
 		/// Displays an warning message box with the specified text.
 		/// </summary>
-		/// <param appPoolName="text">The text to display in the message box.</param>
+		/// <param name="text">The text to display in the message box.</param>
 		protected void ShowWarning(string text)
 		{
 			MessageBox.Show(this, text, FindForm().Text, MessageBoxButtons.OK, MessageBoxIcon.Warning);

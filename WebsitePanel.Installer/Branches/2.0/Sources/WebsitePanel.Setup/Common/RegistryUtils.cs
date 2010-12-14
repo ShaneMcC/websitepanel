@@ -11,7 +11,7 @@
 //   this list of conditions  and  the  following  disclaimer in  the documentation
 //   and/or other materials provided with the distribution.
 //
-// - Neither  the  appPoolName  of  the  SMB SAAS Systems Inc.  nor   the   names  of  its
+// - Neither  the  name  of  the  SMB SAAS Systems Inc.  nor   the   names  of  its
 //   contributors may be used to endorse or  promote  products  derived  from  this
 //   software without specific prior written permission.
 //
@@ -49,9 +49,9 @@ namespace WebsitePanel.Setup
 		/// <summary>
 		/// Retrieves the specified value from the subkey.
 		/// </summary>
-		/// <param appPoolName="subkey">Subkey.</param>
-		/// <param appPoolName="appPoolName">Name of value to retrieve.</param>
-		/// <returns>The data associated with appPoolName.</returns>
+		/// <param name="subkey">Subkey.</param>
+		/// <param name="name">Name of value to retrieve.</param>
+		/// <returns>The data associated with name.</returns>
 		public static object GetRegistryKeyValue(string subkey, string name)
 		{
 			object ret = null;
@@ -67,9 +67,9 @@ namespace WebsitePanel.Setup
 		/// <summary>
 		/// Retrieves the specified value from the subkey.
 		/// </summary>
-		/// <param appPoolName="subkey">Subkey.</param>
-		/// <param appPoolName="appPoolName">Name of value to retrieve.</param>
-		/// <returns>The data associated with appPoolName.</returns>
+		/// <param name="subkey">Subkey.</param>
+		/// <param name="name">Name of value to retrieve.</param>
+		/// <returns>The data associated with name.</returns>
 		internal static string GetRegistryKeyStringValue(string subkey, string name)
 		{
 			string ret = null;
@@ -85,9 +85,9 @@ namespace WebsitePanel.Setup
 		/// <summary>
 		/// Retrieves the specified value from the subkey.
 		/// </summary>
-		/// <param appPoolName="subkey">Subkey.</param>
-		/// <param appPoolName="appPoolName">Name of value to retrieve.</param>
-		/// <returns>The data associated with appPoolName.</returns>
+		/// <param name="subkey">Subkey.</param>
+		/// <param name="name">Name of value to retrieve.</param>
+		/// <returns>The data associated with name.</returns>
 		internal static int GetRegistryKeyInt32Value(string subkey, string name)
 		{
 			int ret = 0;
@@ -103,9 +103,9 @@ namespace WebsitePanel.Setup
 		/// <summary>
 		/// Retrieves the specified value from the subkey.
 		/// </summary>
-		/// <param appPoolName="subkey">Subkey.</param>
-		/// <param appPoolName="appPoolName">Name of value to retrieve.</param>
-		/// <returns>The data associated with appPoolName.</returns>
+		/// <param name="subkey">Subkey.</param>
+		/// <param name="name">Name of value to retrieve.</param>
+		/// <returns>The data associated with name.</returns>
 		internal static bool GetRegistryKeyBooleanValue(string subkey, string name)
 		{
 			bool ret = false;
@@ -130,7 +130,7 @@ namespace WebsitePanel.Setup
 		/// <summary>
 		/// Deletes a registry subkey and any child subkeys.
 		/// </summary>
-		/// <param appPoolName="subkey">Subkey to delete.</param>
+		/// <param name="subkey">Subkey to delete.</param>
 		internal static void DeleteRegistryKey(string subkey)
 		{
 			RegistryKey root = Registry.LocalMachine;
@@ -142,9 +142,9 @@ namespace WebsitePanel.Setup
 		/// <summary>
 		/// Sets the specified value to the subkey.
 		/// </summary>
-		/// <param appPoolName="subkey">Subkey.</param>
-		/// <param appPoolName="appPoolName">Name of value to store data in.</param>
-		/// <param appPoolName="value">Data to store. </param>
+		/// <param name="subkey">Subkey.</param>
+		/// <param name="name">Name of value to store data in.</param>
+		/// <param name="value">Data to store. </param>
 		internal static void SetRegistryKeyStringValue(string subkey, string name, string value)
 		{
 			RegistryKey root = Registry.LocalMachine;
@@ -158,9 +158,9 @@ namespace WebsitePanel.Setup
 		/// <summary>
 		/// Sets the specified value to the subkey.
 		/// </summary>
-		/// <param appPoolName="subkey">Subkey.</param>
-		/// <param appPoolName="appPoolName">Name of value to store data in.</param>
-		/// <param appPoolName="value">Data to store. </param>
+		/// <param name="subkey">Subkey.</param>
+		/// <param name="name">Name of value to store data in.</param>
+		/// <param name="value">Data to store. </param>
 		internal static void SetRegistryKeyInt32Value(string subkey, string name, int value)
 		{
 			RegistryKey root = Registry.LocalMachine;
@@ -174,9 +174,9 @@ namespace WebsitePanel.Setup
 		/// <summary>
 		/// Sets the specified value to the subkey.
 		/// </summary>
-		/// <param appPoolName="subkey">Subkey.</param>
-		/// <param appPoolName="appPoolName">Name of value to store data in.</param>
-		/// <param appPoolName="value">Data to store. </param>
+		/// <param name="subkey">Subkey.</param>
+		/// <param name="name">Name of value to store data in.</param>
+		/// <param name="value">Data to store. </param>
 		internal static void SetRegistryKeyBooleanValue(string subkey, string name, bool value)
 		{
 			RegistryKey root = Registry.LocalMachine;
@@ -190,7 +190,7 @@ namespace WebsitePanel.Setup
 		/// <summary>
 		/// Return the list of sub keys for the specified registry key.
 		/// </summary>
-		/// <param appPoolName="subkey">The appPoolName of the registry key</param>
+		/// <param name="subkey">The name of the registry key</param>
 		/// <returns>The array of subkey names.</returns>
 		internal static string[] GetRegistrySubKeys(string subkey)
 		{

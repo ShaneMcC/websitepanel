@@ -43,6 +43,28 @@ namespace WebsitePanel.SilentInstaller
 	{
 		public const string ComponentNameParam = "cname";
 
+		public static readonly Hashtable ServerCliParams = new Hashtable
+		{
+			{ "ip", Global.Parameters.WebSiteIP },		// IP Address
+			{ "s", Global.Parameters.ServerPassword },	// Server password
+			{ "p", Global.Parameters.UserPassword },	// Service account password
+			{ "d", Global.Parameters.UserDomain },		// Service account domain (AD only)
+			{ "u", Global.Parameters.UserAccount },		// Service account name
+			{ "port", Global.Parameters.WebSitePort },	// TCP Port
+			{ "h", Global.Parameters.WebSiteDomain }	// Website domain (if any assigned)
+		};
+
+		public static readonly Hashtable EntServerCliParams = new Hashtable
+		{
+			{ "ip", Global.Parameters.WebSiteIP },				// IP Address
+			{ "pw", Global.Parameters.ServerAdminPassword },	// serveradmin password
+			{ "p", Global.Parameters.UserPassword },			// Service account password
+			{ "d", Global.Parameters.UserDomain },				// Service account domain (AD only)
+			{ "u", Global.Parameters.UserAccount },				// Service account name
+			{ "port", Global.Parameters.WebSitePort },			// TCP Port
+			{ "h", Global.Parameters.WebSiteDomain }			// Website domain (if any assigned)
+		};
+
 		[STAThread]
 		static void Main(string[] args)
 		{
@@ -123,7 +145,7 @@ namespace WebsitePanel.SilentInstaller
 
 		private static void ShowInstanceRunningErrorMessage()
 		{
-			ShowConsoleErrorMessage(Global.Messages.
+			//ShowConsoleErrorMessage(Global.Messages.);
 		}
 
 		private static void ShowSecurityError()
@@ -142,16 +164,7 @@ namespace WebsitePanel.SilentInstaller
 			{
 				//
 				return LoadInputFromCLI(
-					input: new Hashtable
-						{
-							{ "ip", Global.Parameters.WebSiteIP },
-							{ "s", Global.Parameters.ServerPassword },
-							{ "p", Global.Parameters.UserPassword },
-							{ "d", Global.Parameters.UserDomain },
-							{ "u", Global.Parameters.UserAccount },
-							{ "port", Global.Parameters.WebSitePort },
-							{ "h", Global.Parameters.WebSiteDomain }
-						},
+					ServerCliParams,
 					output: new Hashtable
 						{
 							{ Global.Parameters.WebSiteIP, "127.0.0.1" },

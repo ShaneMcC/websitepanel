@@ -91,9 +91,7 @@ namespace WebsitePanel.Installer.Controls
 			string fileName = row["FullFilePath"].ToString();
 			string installerPath = Utils.GetDbString(row["InstallerPath"]);
 			string installerType = Utils.GetDbString(row["InstallerType"]);
-			//if ( installerType.StartsWith("WebsitePanel.Setup.Portal")) installerType = "WebsitePanel.Setup.StandaloneSetup285";
-					
-			
+
 			if (CheckForInstalledComponent(componentCode))
 			{
 				AppContext.AppForm.ShowWarning("Component or its part is already installed.");
@@ -154,13 +152,13 @@ namespace WebsitePanel.Installer.Controls
 				this.componentSettingsXml = null;
 				this.componentCode = null;
 			}
-			
+
 		}
 
 		private bool CheckForInstalledComponent(string componentCode)
 		{
 			bool ret = false;
-			List<string> installedComponents = new List<string>(); 
+			List<string> installedComponents = new List<string>();
 			foreach (ComponentConfigElement componentConfig in AppConfigManager.AppConfiguration.Components)
 			{
 				string code = componentConfig.Settings["ComponentCode"].Value;
@@ -293,10 +291,10 @@ namespace WebsitePanel.Installer.Controls
 		private void Install()
 		{
 			LoadComponents();
-			foreach(DataGridViewRow gridRow in grdComponents.Rows)
+			foreach (DataGridViewRow gridRow in grdComponents.Rows)
 			{
 				DataRowView row = gridRow.DataBoundItem as DataRowView;
-				if ( row != null )
+				if (row != null)
 				{
 					string code = Utils.GetDbString(row["ComponentCode"]);
 					string version = Utils.GetDbString(row["Version"]);

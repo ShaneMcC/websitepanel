@@ -55,11 +55,15 @@ namespace WebsitePanel.Installer.Common
 		/// </summary>
 		static Log()
 		{
+			Initialize();
+		}
+
+		static void Initialize()
+		{
 			string fileName = LogFile;
 			FileStream fileLog = new FileStream(fileName, FileMode.Append);
 			TextWriterTraceListener fileListener = new TextWriterTraceListener(fileLog);
 			fileListener.TraceOutputOptions = TraceOptions.DateTime;
-			Trace.UseGlobalLock = true;
 			Trace.Listeners.Clear();
 			Trace.Listeners.Add(fileListener);
 			TextWriterTraceListener consoleListener = new TextWriterTraceListener(Console.Out);

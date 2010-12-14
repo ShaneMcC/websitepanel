@@ -11,7 +11,7 @@
 //   this list of conditions  and  the  following  disclaimer in  the documentation
 //   and/or other materials provided with the distribution.
 //
-// - Neither  the  appPoolName  of  the  SMB SAAS Systems Inc.  nor   the   names  of  its
+// - Neither  the  name  of  the  SMB SAAS Systems Inc.  nor   the   names  of  its
 //   contributors may be used to endorse or  promote  products  derived  from  this
 //   software without specific prior written permission.
 //
@@ -133,7 +133,7 @@ namespace WebsitePanel.Setup
 				if (iRet == 1)
 				{
 					iRet = GetVersionAdv(ref osvi);
-					strDetails = Environment.NewLine + "Version: " + osvi.dwMajorVersion + "." + osvi.dwMinorVersion + "." + osvi.dwBuildNumber + Environment.NewLine + osvi.szCSDVersion;
+					strDetails = Environment.NewLine + "Release: " + osvi.dwMajorVersion + "." + osvi.dwMinorVersion + "." + osvi.dwBuildNumber + Environment.NewLine + osvi.szCSDVersion;
 					if (Len(osvi) == 0)
 					{
 						return "Windows 95" + strDetails;
@@ -150,7 +150,7 @@ namespace WebsitePanel.Setup
 				else
 				{
 					iRet = GetVersionEx(xosvi);
-					strDetails = Environment.NewLine + "Version: " + xosvi.dwMajorVersion + "." + xosvi.dwMinorVersion + "." + xosvi.dwBuildNumber + Environment.NewLine + xosvi.szCSDVersion + " (" + xosvi.wServicePackMajor + "." + xosvi.wServicePackMinor + ")";
+					strDetails = Environment.NewLine + "Release: " + xosvi.dwMajorVersion + "." + xosvi.dwMinorVersion + "." + xosvi.dwBuildNumber + Environment.NewLine + xosvi.szCSDVersion + " (" + xosvi.wServicePackMajor + "." + xosvi.wServicePackMinor + ")";
 					if (xosvi.dwMajorVersion == (byte)OSMajorVersion.VER_OS_NT4)
 					{
 						return "Windows NT 4" + strDetails;

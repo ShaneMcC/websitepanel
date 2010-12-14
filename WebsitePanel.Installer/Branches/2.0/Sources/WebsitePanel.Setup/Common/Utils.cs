@@ -11,7 +11,7 @@
 //   this list of conditions  and  the  following  disclaimer in  the documentation
 //   and/or other materials provided with the distribution.
 //
-// - Neither  the  appPoolName  of  the  SMB SAAS Systems Inc.  nor   the   names  of  its
+// - Neither  the  name  of  the  SMB SAAS Systems Inc.  nor   the   names  of  its
 //   contributors may be used to endorse or  promote  products  derived  from  this
 //   software without specific prior written permission.
 //
@@ -56,9 +56,9 @@ namespace WebsitePanel.Setup
 		#region Resources
 
 		/// <summary>
-		/// Get resource stream from assembly by specified resource appPoolName.
+		/// Get resource stream from assembly by specified resource name.
 		/// </summary>
-		/// <param appPoolName="resourceName">Name of the resource.</param>
+		/// <param name="resourceName">Name of the resource.</param>
 		/// <returns>Resource stream.</returns>
 		public static Stream GetResourceStream(string resourceName)
 		{
@@ -73,7 +73,7 @@ namespace WebsitePanel.Setup
 		/// <summary>
 		/// Computes the SHA1 hash value
 		/// </summary>
-		/// <param appPoolName="plainText"></param>
+		/// <param name="plainText"></param>
 		/// <returns></returns>
 		public static string ComputeSHA1(string plainText)
 		{
@@ -218,8 +218,8 @@ namespace WebsitePanel.Setup
 		/// <summary>
 		/// Converts string to int
 		/// </summary>
-		/// <param appPoolName="value">String containing a number to convert</param>
-		/// <param appPoolName="defaultValue">Default value</param>
+		/// <param name="value">String containing a number to convert</param>
+		/// <param name="defaultValue">Default value</param>
 		/// <returns>
 		///The Int32 number equivalent to the number contained in value.
 		/// </returns>
@@ -244,8 +244,8 @@ namespace WebsitePanel.Setup
 		/// <summary>
 		/// ParseBool
 		/// </summary>
-		/// <param appPoolName="value">Value</param>
-		/// <param appPoolName="defaultValue">Dafault value</param>
+		/// <param name="value">EventData</param>
+		/// <param name="defaultValue">Dafault value</param>
 		/// <returns>bool</returns>
 		public static bool ParseBool(string value, bool defaultValue)
 		{
@@ -268,8 +268,8 @@ namespace WebsitePanel.Setup
 		/// <summary>
 		/// Converts string to decimal
 		/// </summary>
-		/// <param appPoolName="value">String containing a number to convert</param>
-		/// <param appPoolName="defaultValue">Default value</param>
+		/// <param name="value">String containing a number to convert</param>
+		/// <param name="defaultValue">Default value</param>
 		/// <returns>The Decimal number equivalent to the number contained in value.</returns>
 		public static decimal ParseDecimal(string value, decimal defaultValue)
 		{
@@ -292,8 +292,8 @@ namespace WebsitePanel.Setup
 		/// <summary>
 		/// Converts string to double 
 		/// </summary>
-		/// <param appPoolName="value">String containing a number to convert</param>
-		/// <param appPoolName="defaultValue">Default value</param>
+		/// <param name="value">String containing a number to convert</param>
+		/// <param name="defaultValue">Default value</param>
 		/// <returns>The double number equivalent to the number contained in value.</returns>
 		public static double ParseDouble(string value, double defaultValue)
 		{
@@ -320,7 +320,7 @@ namespace WebsitePanel.Setup
 		/// <summary>
 		/// Converts db value to string
 		/// </summary>
-		/// <param appPoolName="val">Value</param>
+		/// <param name="val">EventData</param>
 		/// <returns>string</returns>
 		public static string GetDbString(object val)
 		{
@@ -333,7 +333,7 @@ namespace WebsitePanel.Setup
 		/// <summary>
 		/// Converts db value to short
 		/// </summary>
-		/// <param appPoolName="val">Value</param>
+		/// <param name="val">EventData</param>
 		/// <returns>short</returns>
 		public static short GetDbShort(object val)
 		{
@@ -346,7 +346,7 @@ namespace WebsitePanel.Setup
 		/// <summary>
 		/// Converts db value to int
 		/// </summary>
-		/// <param appPoolName="val">Value</param>
+		/// <param name="val">EventData</param>
 		/// <returns>int</returns>
 		public static int GetDbInt32(object val)
 		{
@@ -359,7 +359,7 @@ namespace WebsitePanel.Setup
 		/// <summary>
 		/// Converts db value to bool
 		/// </summary>
-		/// <param appPoolName="val">Value</param>
+		/// <param name="val">EventData</param>
 		/// <returns>bool</returns>
 		public static bool GetDbBool(object val)
 		{
@@ -372,7 +372,7 @@ namespace WebsitePanel.Setup
 		/// <summary>
 		/// Converts db value to decimal
 		/// </summary>
-		/// <param appPoolName="val">Value</param>
+		/// <param name="val">EventData</param>
 		/// <returns>decimal</returns>
 		public static decimal GetDbDecimal(object val)
 		{
@@ -386,7 +386,7 @@ namespace WebsitePanel.Setup
 		/// <summary>
 		/// Converts db value to datetime
 		/// </summary>
-		/// <param appPoolName="val">Value</param>
+		/// <param name="val">EventData</param>
 		/// <returns>DateTime</returns>
 		public static DateTime GetDbDateTime(object val)
 		{
@@ -533,5 +533,59 @@ namespace WebsitePanel.Setup
             else
                 return null;
         }
+
+		public static void OpenFirewallPort(string name, string port, Version iisVersion)
+		{
+			bool iis7 = (iisVersion.Major == 7);
+			if (iis7)
+			{
+				//TODO: Add IIS7 support
+			}
+			else
+			{
+				if (Utils.IsWindowsFirewallEnabled() &&
+					Utils.IsWindowsFirewallExceptionsAllowed())
+				{
+					//SetProgressText("Opening port in windows firewall...");
+
+					Log.WriteStart(String.Format("Opening port {0} in windows firewall", port));
+
+					Utils.OpenWindowsFirewallPort(name, port);
+
+					//update log
+					Log.WriteEnd("Opened port in windows firewall");
+					InstallLog.AppendLine(String.Format("- Opened port {0} in Windows Firewall", port));
+				}
+			}
+		}
+
+		public static string[] GetApplicationUrls(string ip, string domain, string port, string virtualDir)
+		{
+			List<string> urls = new List<string>();
+
+			// IP address, [port] and [virtualDir]
+			string url = ip;
+			if (String.IsNullOrEmpty(domain))
+			{
+				if (!String.IsNullOrEmpty(port) && port != "80")
+					url += ":" + port;
+				if (!String.IsNullOrEmpty(virtualDir))
+					url += "/" + virtualDir;
+				urls.Add(url);
+			}
+
+			// domain, [port] and [virtualDir]
+			if (!String.IsNullOrEmpty(domain))
+			{
+				url = domain;
+				if (!String.IsNullOrEmpty(port) && port != "80")
+					url += ":" + port;
+				if (!String.IsNullOrEmpty(virtualDir))
+					url += "/" + virtualDir;
+				urls.Add(url);
+			}
+
+			return urls.ToArray();
+		}
 	}
 }

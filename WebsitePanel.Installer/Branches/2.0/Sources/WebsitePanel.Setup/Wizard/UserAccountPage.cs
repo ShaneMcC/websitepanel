@@ -11,7 +11,7 @@
 //   this list of conditions  and  the  following  disclaimer in  the documentation
 //   and/or other materials provided with the distribution.
 //
-// - Neither  the  appPoolName  of  the  SMB SAAS Systems Inc.  nor   the   names  of  its
+// - Neither  the  name  of  the  SMB SAAS Systems Inc.  nor   the   names  of  its
 //   contributors may be used to endorse or  promote  products  derived  from  this
 //   software without specific prior written permission.
 //
@@ -126,7 +126,7 @@ namespace WebsitePanel.Setup
 			{
 				if (domain.Trim().Length == 0)
 				{
-					ShowWarning("Please enter domain appPoolName");
+					ShowWarning("Please enter domain name");
 					return false;
 				}
 
@@ -146,7 +146,7 @@ namespace WebsitePanel.Setup
 
 			if (name.Trim().Length == 0)
 			{
-				ShowWarning("Please enter user appPoolName");
+				ShowWarning("Please enter user name");
 				return false;
 			}
 
@@ -260,7 +260,7 @@ namespace WebsitePanel.Setup
 			string domain = (chkUseActiveDirectory.Checked ? txtDomain.Text : null);
 
 			Log.WriteInfo(string.Format("Domain: {0}", domain));
-			Log.WriteInfo(string.Format("User appPoolName: {0}", userName));
+			Log.WriteInfo(string.Format("User name: {0}", userName));
 
 
 			if (!ProcessSettings())

@@ -11,7 +11,7 @@
 //   this list of conditions  and  the  following  disclaimer in  the documentation
 //   and/or other materials provided with the distribution.
 //
-// - Neither  the  appPoolName  of  the  SMB SAAS Systems Inc.  nor   the   names  of  its
+// - Neither  the  name  of  the  SMB SAAS Systems Inc.  nor   the   names  of  its
 //   contributors may be used to endorse or  promote  products  derived  from  this
 //   software without specific prior written permission.
 //
@@ -34,15 +34,23 @@ using WebsitePanel.Setup.Common;
 
 namespace WebsitePanel.Setup
 {
-    /// <summary>
-    /// Variables container.
-    /// </summary>
+	/// <summary>
+	/// Variables container.
+	/// </summary>
 	public sealed class SetupVariables
 	{
+		public string DatabaseUserPassword { get; set; }
+		public bool NewDatabaseUser { get; set; }
 		/// <summary>
 		/// Installation folder
 		/// </summary>
 		public string InstallationFolder { get; set; }
+
+		public string InstallFolder
+		{
+			get { return InstallationFolder; }
+			set { InstallationFolder = value; }
+		}
 
 		/// <summary>
 		/// Component id
@@ -50,7 +58,7 @@ namespace WebsitePanel.Setup
 		public string ComponentId { get; set; }
 
 		public string ComponentDescription { get; set; }
-	
+
 
 		/// <summary>
 		/// Component code
@@ -58,12 +66,12 @@ namespace WebsitePanel.Setup
 		public string ComponentCode { get; set; }
 
 		/// <summary>
-		/// Component appPoolName
+		/// Component name
 		/// </summary>
 		public string ComponentName { get; set; }
 
 		/// <summary>
-		/// Component appPoolName
+		/// Component name
 		/// </summary>
 		public string ApplicationName { get; set; }
 
@@ -73,9 +81,9 @@ namespace WebsitePanel.Setup
 		}
 
 		public string Instance { get; set; }
-	
+
 		/// <summary>
-		/// Install actions
+		/// Install currentScenario
 		/// </summary>
 		public SetupActions SetupAction { get; set; }
 
@@ -89,11 +97,17 @@ namespace WebsitePanel.Setup
 		/// </summary>
 		public int ReleaseId { get; set; }
 
+		// Workaround
+		public string Release
+		{
+			get { return Version; }
+			set { Version = value; }
+		}
+
 		/// <summary>
-		/// Release appPoolName
+		/// Release name
 		/// </summary>
 		public string Version { get; set; }
-
 
 		/// <summary>
 		/// Connection string
@@ -115,6 +129,12 @@ namespace WebsitePanel.Setup
 		/// </summary>
 		public string DbInstallConnectionString { get; set; }
 
+		public string InstallConnectionString
+		{
+			get { return DbInstallConnectionString; }
+			set { DbInstallConnectionString = value; }
+		}
+
 		/// <summary>
 		/// Create database
 		/// </summary>
@@ -125,6 +145,12 @@ namespace WebsitePanel.Setup
 		public bool NewWebApplicationPool { get; set; }
 
 		public string WebApplicationPoolName { get; set; }
+
+		public string ApplicationPool
+		{
+			get { return WebApplicationPoolName; }
+			set { WebApplicationPoolName = value; }
+		}
 
 		/// <summary>
 		/// Virtual directory
@@ -166,12 +192,12 @@ namespace WebsitePanel.Setup
 		/// User Membership
 		/// </summary>
 		public string[] UserMembership { get; set; }
-	
 
-        /// <summary>
-        /// Welcome screen has been skipped
-        /// </summary>
-        public bool WelcomeScreenSkipped { get; set; }
+
+		/// <summary>
+		/// Welcome screen has been skipped
+		/// </summary>
+		public bool WelcomeScreenSkipped { get; set; }
 
 		public string InstallerFolder { get; set; }
 
@@ -202,6 +228,16 @@ namespace WebsitePanel.Setup
 		public string EnterpriseServerURL { get; set; }
 
 		public string UserDomain { get; set; }
+
+		public string Domain
+		{
+			get { return UserDomain; }
+			set { UserDomain = value; }
+		}
+
+		public bool NewUserAccount { get; set; }
+
+		public bool NewApplicationPool { get; set; }
 
 		public ServerItem[] SQLServers { get; set; }
 
@@ -237,6 +273,6 @@ namespace WebsitePanel.Setup
 		{
 			return (SetupVariables)this.MemberwiseClone();
 		}
-	
+
 	}
 }

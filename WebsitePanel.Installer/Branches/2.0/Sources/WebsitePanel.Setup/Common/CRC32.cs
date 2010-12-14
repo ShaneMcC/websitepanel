@@ -11,7 +11,7 @@
 //   this list of conditions  and  the  following  disclaimer in  the documentation
 //   and/or other materials provided with the distribution.
 //
-// - Neither  the  appPoolName  of  the  SMB SAAS Systems Inc.  nor   the   names  of  its
+// - Neither  the  name  of  the  SMB SAAS Systems Inc.  nor   the   names  of  its
 //   contributors may be used to endorse or  promote  products  derived  from  this
 //   software without specific prior written permission.
 //
@@ -77,7 +77,7 @@ namespace WebsitePanel.Setup
 		/// <summary>
 		/// Builds a crc32 table given a polynomial
 		/// </summary>
-		/// <param appPoolName="ulPolynomial"></param>
+		/// <param name="ulPolynomial"></param>
 		/// <returns></returns>
 		protected static uint[] BuildCRC32Table(uint ulPolynomial)
 		{
@@ -146,9 +146,9 @@ namespace WebsitePanel.Setup
 		/// <summary>
 		/// 
 		/// </summary>
-		/// <param appPoolName="buffer"></param>
-		/// <param appPoolName="offset"></param>
-		/// <param appPoolName="count"></param>
+		/// <param name="buffer"></param>
+		/// <param name="offset"></param>
+		/// <param name="count"></param>
 		protected override void HashCore(byte[] buffer, int offset, int count)
 		{
 			// Save the text in the buffer. 
@@ -203,9 +203,9 @@ namespace WebsitePanel.Setup
 		/// <summary>
 		/// Overloaded. Computes the hash value for the input data.
 		/// </summary>
-		/// <param appPoolName="buffer"></param>
-		/// <param appPoolName="offset"></param>
-		/// <param appPoolName="count"></param>
+		/// <param name="buffer"></param>
+		/// <param name="offset"></param>
+		/// <param name="count"></param>
 		/// <returns></returns>
 		new public byte[] ComputeHash(byte[] buffer, int offset, int count)
 		{

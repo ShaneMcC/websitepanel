@@ -11,7 +11,7 @@
 //   this list of conditions  and  the  following  disclaimer in  the documentation
 //   and/or other materials provided with the distribution.
 //
-// - Neither  the  appPoolName  of  the  SMB SAAS Systems Inc.  nor   the   names  of  its
+// - Neither  the  name  of  the  SMB SAAS Systems Inc.  nor   the   names  of  its
 //   contributors may be used to endorse or  promote  products  derived  from  this
 //   software without specific prior written permission.
 //
@@ -192,21 +192,21 @@ namespace WebsitePanel.Setup
 		{
 			if (txtSqlServer.Text.Trim().Length == 0)
 			{
-				ShowWarning("Please enter valid SQL Server appPoolName.");
+				ShowWarning("Please enter valid SQL Server name.");
 				return false;
 			}
 			if (cbAuthentication.SelectedIndex == 1)
 			{
 				if (txtLogin.Text.Trim().Length == 0)
 				{
-					ShowWarning("Please enter valid Login appPoolName.");
+					ShowWarning("Please enter valid Login name.");
 					return false;
 				}
 			}
 			string database = txtDatabase.Text;
 			if (database.Trim().Length == 0 || !SqlUtils.IsValidDatabaseName(database))
 			{
-				ShowWarning("Please enter valid database appPoolName.");
+				ShowWarning("Please enter valid database name.");
 				return false;
 			}
 			

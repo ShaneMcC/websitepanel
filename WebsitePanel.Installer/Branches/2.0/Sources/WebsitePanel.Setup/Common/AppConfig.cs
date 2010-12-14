@@ -11,7 +11,7 @@
 //   this list of conditions  and  the  following  disclaimer in  the documentation
 //   and/or other materials provided with the distribution.
 //
-// - Neither  the  appPoolName  of  the  SMB SAAS Systems Inc.  nor   the   names  of  its
+// - Neither  the  name  of  the  SMB SAAS Systems Inc.  nor   the   names  of  its
 //   contributors may be used to endorse or  promote  products  derived  from  this
 //   software without specific prior written permission.
 //
@@ -128,6 +128,33 @@ namespace WebsitePanel.Setup
 			XmlUtils.SetXmlAttribute(settingNode, "value", value.ToString());
 		}
 
+		public static void LoadComponentSettings(SetupVariables vars)
+		{
+			XmlNode componentNode = GetComponentConfig(vars.ComponentId);
+			//
+			if (componentNode != null)
+			{
+				var typeRef = vars.GetType();
+				//
+				XmlNodeList settingNodes = componentNode.SelectNodes("settings/add");
+				//
+				foreach (XmlNode item in settingNodes)
+				{
+					var sName = XmlUtils.GetXmlAttribute(item, "key");
+					var sValue = XmlUtils.GetXmlAttribute(item, "value");
+					//
+					if (String.IsNullOrEmpty(sName))
+						continue;
+					//
+					var objProperty = typeRef.GetProperty(sName);
+					//
+					if (objProperty == null)
+						continue;
+					// Set property value
+					objProperty.SetValue(vars, Convert.ChangeType(sValue, objProperty.PropertyType), null);
+				}
+			}
+		}
 
 		public static string GetComponentSettingStringValue(string componentId, string settingName)
 		{

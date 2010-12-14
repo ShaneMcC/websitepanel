@@ -11,7 +11,7 @@
 //   this list of conditions  and  the  following  disclaimer in  the documentation
 //   and/or other materials provided with the distribution.
 //
-// - Neither  the  appPoolName  of  the  SMB SAAS Systems Inc.  nor   the   names  of  its
+// - Neither  the  name  of  the  SMB SAAS Systems Inc.  nor   the   names  of  its
 //   contributors may be used to endorse or  promote  products  derived  from  this
 //   software without specific prior written permission.
 //
@@ -66,7 +66,7 @@ namespace WebsitePanel.Setup
 
 			//general settings
 			wizard.SetupVariables.ApplicationName = Utils.GetStringSetupParameter(args, "ApplicationName");
-			wizard.SetupVariables.Version = Utils.GetStringSetupParameter(args, "Version");
+			wizard.SetupVariables.Version = Utils.GetStringSetupParameter(args, "Release");
 			wizard.SetupVariables.Installer = Utils.GetStringSetupParameter(args, "Installer");
 			wizard.SetupVariables.InstallerPath = Utils.GetStringSetupParameter(args, "InstallerPath");
 			wizard.SetupVariables.IISVersion = Utils.GetVersionSetupParameter(args, "IISVersion");
@@ -234,7 +234,7 @@ namespace WebsitePanel.Setup
 			ExpressInstallPage page6 = new ExpressInstallPage();
 			wizard.SetupVariables.ComponentName = string.Empty;
 
-			//create install actions
+			//create install currentScenario
 
 			//************ Server **************
 			InstallAction action = new InstallAction(ActionTypes.InitSetupVariables);

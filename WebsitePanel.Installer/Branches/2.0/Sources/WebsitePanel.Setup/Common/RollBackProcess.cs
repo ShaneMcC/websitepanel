@@ -11,7 +11,7 @@
 //   this list of conditions  and  the  following  disclaimer in  the documentation
 //   and/or other materials provided with the distribution.
 //
-// - Neither  the  appPoolName  of  the  SMB SAAS Systems Inc.  nor   the   names  of  its
+// - Neither  the  name  of  the  SMB SAAS Systems Inc.  nor   the   names  of  its
 //   contributors may be used to endorse or  promote  products  derived  from  this
 //   software without specific prior written permission.
 //
@@ -42,7 +42,7 @@ namespace WebsitePanel.Setup
 		/// <summary>
 		/// Initializes a new instance of the class.
 		/// </summary>
-		/// <param appPoolName="bar">Progress bar.</param>
+		/// <param name="bar">Progress bar.</param>
 		public RollBackProcess(ProgressBar bar)
 		{
 			this.progressBar = bar;

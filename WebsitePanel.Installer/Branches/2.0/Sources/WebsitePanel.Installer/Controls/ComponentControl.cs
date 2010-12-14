@@ -342,7 +342,10 @@ namespace WebsitePanel.Installer.Controls
 					args["BaseDirectory"] = FileUtils.GetCurrentDirectory();
                     args["IISVersion"] = Global.IISVersion;
 					args["ParentForm"] = FindForm();
+					args[Global.Parameters.ShellMode] = Global.VisualInstallerShell;
+					//
 					result = (DialogResult)AssemblyLoader.Execute(path, type, method, new object[] { args });
+					//
 					Log.WriteInfo(string.Format("Installer returned {0}", result));
 					Log.WriteEnd("Installer finished");
 

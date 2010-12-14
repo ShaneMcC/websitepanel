@@ -11,7 +11,7 @@
 //   this list of conditions  and  the  following  disclaimer in  the documentation
 //   and/or other materials provided with the distribution.
 //
-// - Neither  the  appPoolName  of  the  SMB SAAS Systems Inc.  nor   the   names  of  its
+// - Neither  the  name  of  the  SMB SAAS Systems Inc.  nor   the   names  of  its
 //   contributors may be used to endorse or  promote  products  derived  from  this
 //   software without specific prior written permission.
 //
@@ -54,6 +54,11 @@ namespace WebsitePanel.Setup
 		public static void AppendLine(string value)
 		{
 			sb.AppendLine(value);
+		}
+
+		public static void AppendLine(string format, params object[] args)
+		{
+			sb.AppendLine(String.Format(format, args));
 		}
 
 		public static void AppendLine()

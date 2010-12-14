@@ -11,7 +11,7 @@
 //   this list of conditions  and  the  following  disclaimer in  the documentation
 //   and/or other materials provided with the distribution.
 //
-// - Neither  the  appPoolName  of  the  SMB SAAS Systems Inc.  nor   the   names  of  its
+// - Neither  the  name of  the  SMB SAAS Systems Inc.  nor   the   names  of  its
 //   contributors may be used to endorse or  promote  products  derived  from  this
 //   software without specific prior written permission.
 //
@@ -34,6 +34,7 @@ using System.ComponentModel;
 using System.Drawing;
 using System.Runtime.CompilerServices;
 using System.Windows.Forms;
+using WebsitePanel.Setup.Actions;
 
 namespace WebsitePanel.Setup
 {
@@ -64,7 +65,6 @@ namespace WebsitePanel.Setup
 		private Font textFont;
 
 		delegate void VoidCallback();
-
 
         public Wizard()
         {
@@ -559,7 +559,6 @@ namespace WebsitePanel.Setup
 			}
 		}
 
-
         [Browsable(false)]
         public override Color BackColor
         {
@@ -848,6 +847,8 @@ namespace WebsitePanel.Setup
 			get { return setupVariables; }
 			set { setupVariables = value; }
 		}
+
+		public IActionManager ActionManager { get; set; }
 		#endregion
 
 		internal void RollBack()
@@ -855,6 +856,9 @@ namespace WebsitePanel.Setup
 			RollBackPage page = new RollBackPage();
 			page.NextPage = null;
 			page.PreviousPage = null;
+			// Disable Cancel button
+			page.AllowCancel = false;
+			//
 			this.Controls.Add(page);
 			this.SelectedPage = page;
 		}

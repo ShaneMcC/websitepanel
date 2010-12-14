@@ -11,7 +11,7 @@
 //   this list of conditions  and  the  following  disclaimer in  the documentation
 //   and/or other materials provided with the distribution.
 //
-// - Neither  the  appPoolName  of  the  SMB SAAS Systems Inc.  nor   the   names  of  its
+// - Neither  the  name  of  the  SMB SAAS Systems Inc.  nor   the   names  of  its
 //   contributors may be used to endorse or  promote  products  derived  from  this
 //   software without specific prior written permission.
 //
@@ -97,10 +97,10 @@ namespace WebsitePanel.Setup
 		/// <summary>
 		/// Creates virtual directory.
 		/// </summary>
-		/// <param appPoolName="siteId">Site id.</param>
-		/// <param appPoolName="directoryName">Directory appPoolName.</param>
-		/// <param appPoolName="contentPath">Content path.</param>
-        /// <param appPoolName="aspNet">ASP.NET version</param>
+		/// <param name="siteId">Site id.</param>
+		/// <param name="directoryName">Directory name.</param>
+		/// <param name="contentPath">Content path.</param>
+        /// <param name="aspNet">ASP.NET version</param>
 		internal static void CreateVirtualDirectory(string siteId, string directoryName, string contentPath,
             AspNetVersion aspNet)
 		{
@@ -111,15 +111,15 @@ namespace WebsitePanel.Setup
 
 			// create a new virtual directory
 			ManagementObject objDir = wmi.GetClass("IIsWebVirtualDir").CreateInstance();
-			objDir.Properties["Name"].Value = dirId;
+			objDir.Properties["Name"].EventData = dirId;
 			objDir.Put();
 			objDir.InvokeMethod("AppCreate",new Object[] {true});
 
 			// update directory properties
 			ManagementObject objDirSetting = wmi.GetClass("IIsWebVirtualDirSetting").CreateInstance();
-			objDirSetting.Properties["Name"].Value = dirId;
-			objDirSetting.Properties["AppFriendlyName"].Value = directoryName;
-			objDirSetting.Properties["Path"].Value = contentPath;
+			objDirSetting.Properties["Name"].EventData = dirId;
+			objDirSetting.Properties["AppFriendlyName"].EventData = directoryName;
+			objDirSetting.Properties["Path"].EventData = contentPath;
 
             // save object again
             objDirSetting.Put();
@@ -149,7 +149,7 @@ namespace WebsitePanel.Setup
 		/// <summary>
 		/// Checks if the site exists.
 		/// </summary>
-		/// <param appPoolName="siteId">SiteID</param>
+		/// <param name="siteId">SiteID</param>
 		/// <returns></returns>
 		internal static bool SiteIdExists(string siteId)
 		{
@@ -160,7 +160,7 @@ namespace WebsitePanel.Setup
 		/// <summary>
 		/// Checks if the site exists.
 		/// </summary>
-		/// <param appPoolName="siteId">SiteID</param>
+		/// <param name="siteId">SiteID</param>
 		/// <returns></returns>
 		internal static bool IIS7SiteExists(string siteId)
 		{
@@ -172,7 +172,7 @@ namespace WebsitePanel.Setup
 		/// <summary>
 		/// Retreives site by site id.
 		/// </summary>
-		/// <param appPoolName="siteId">Site id.</param>
+		/// <param name="siteId">Site id.</param>
 		/// <returns>Site object.</returns>
 		internal static WebSiteItem GetSite(string siteId)
 		{
@@ -260,9 +260,9 @@ namespace WebsitePanel.Setup
 		/// <summary>
 		/// Checks site bindings.
 		/// </summary>
-		/// <param appPoolName="ip">IP address.</param>
-		/// <param appPoolName="port">TCP port.</param>
-		/// <param appPoolName="host">Host header value.</param>
+		/// <param name="ip">IP address.</param>
+		/// <param name="port">TCP port.</param>
+		/// <param name="host">Host header value.</param>
 		/// <returns>True if site binding exist, otherwise false.</returns>
 		internal static bool CheckSiteBindings(string ip, string port, string host)
 		{
@@ -293,7 +293,7 @@ namespace WebsitePanel.Setup
 		/// <summary>
 		/// Creates site.
 		/// </summary>
-		/// <param appPoolName="site">Site object.</param>
+		/// <param name="site">Site object.</param>
 		/// <returns>Site id.</returns>
 		internal static string CreateSite(WebSiteItem site)
 		{
@@ -362,7 +362,7 @@ namespace WebsitePanel.Setup
 		/// <summary>
 		/// Creates site.
 		/// </summary>
-		/// <param appPoolName="site">Site object.</param>
+		/// <param name="site">Site object.</param>
 		/// <returns>Site id.</returns>
 		internal static string CreateIIS7Site(WebSiteItem site)
 		{
@@ -409,12 +409,12 @@ namespace WebsitePanel.Setup
 		/// <summary>
 		/// Updates site
 		/// </summary>
-		/// <param appPoolName="siteId"></param>
-		/// <param appPoolName="contentPath"></param>
-		/// <param appPoolName="ip"></param>
-		/// <param appPoolName="port"></param>
-		/// <param appPoolName="host"></param>
-        /// <param appPoolName="aspNet">ASP.NET version</param>
+		/// <param name="siteId"></param>
+		/// <param name="contentPath"></param>
+		/// <param name="ip"></param>
+		/// <param name="port"></param>
+		/// <param name="host"></param>
+        /// <param name="aspNet">ASP.NET version</param>
 		internal static void UpdateSite(string siteId, string contentPath, string ip, string port, string host,
             AspNetVersion aspNet)
 		{
@@ -470,8 +470,8 @@ namespace WebsitePanel.Setup
 		/// <summary>
 		/// Changes site state.
 		/// </summary>
-		/// <param appPoolName="siteId">Site id.</param>
-		/// <param appPoolName="state">Server state.</param>
+		/// <param name="siteId">Site id.</param>
+		/// <param name="state">Server state.</param>
 		internal static void ChangeSiteState(string siteId, ServerState state)
 		{
 			ManagementObject objSite = wmi.GetObject(String.Format("IIsWebServer='{0}'", siteId));
@@ -610,8 +610,8 @@ namespace WebsitePanel.Setup
 		/// <summary>
 		/// Checks whether virtual directory exists.
 		/// </summary>
-		/// <param appPoolName="siteId">Site id.</param>
-		/// <param appPoolName="directoryName">Directory appPoolName.</param>
+		/// <param name="siteId">Site id.</param>
+		/// <param name="directoryName">Directory name.</param>
 		/// <returns>True if viertual directory exists, otherwise false.</returns>
 		internal static bool VirtualDirectoryExists(string siteId, string directoryName)
 		{
@@ -623,8 +623,8 @@ namespace WebsitePanel.Setup
 		/// <summary>
 		/// Deletes virtual directory
 		/// </summary>
-		/// <param appPoolName="siteId"></param>
-		/// <param appPoolName="directoryName"></param>
+		/// <param name="siteId"></param>
+		/// <param name="directoryName"></param>
 		internal static void DeleteVirtualDirectory(string siteId, string directoryName)
 		{
 			try
@@ -642,7 +642,7 @@ namespace WebsitePanel.Setup
 		/// <summary>
 		/// Deletes site
 		/// </summary>
-		/// <param appPoolName="siteId"></param>
+		/// <param name="siteId"></param>
 		internal static void DeleteSite(string siteId)
 		{
 			try
@@ -659,7 +659,7 @@ namespace WebsitePanel.Setup
 		/// <summary>
 		/// Deletes site
 		/// </summary>
-		/// <param appPoolName="siteId"></param>
+		/// <param name="siteId"></param>
 		internal static void DeleteIIS7Site(string siteId)
 		{
 			try
@@ -681,9 +681,9 @@ namespace WebsitePanel.Setup
 		/// <summary>
 		/// Check if there is already a web site with the specified server binding.
 		/// </summary>
-		/// <param appPoolName="ip">IP address</param>
-		/// <param appPoolName="port">Port number</param>
-		/// <param appPoolName="host">Host header value</param>
+		/// <param name="ip">IP address</param>
+		/// <param name="port">Port number</param>
+		/// <param name="host">Host header value</param>
 		/// <returns></returns>
 		internal static string GetSiteIdByBinding(string ip, string port, string host)
 		{
@@ -725,9 +725,9 @@ namespace WebsitePanel.Setup
 		/// <summary>
 		/// Check if there is already a web site with the specified server binding.
 		/// </summary>
-		/// <param appPoolName="ip">IP address</param>
-		/// <param appPoolName="port">Port number</param>
-		/// <param appPoolName="host">Host header value</param>
+		/// <param name="ip">IP address</param>
+		/// <param name="port">Port number</param>
+		/// <param name="host">Host header value</param>
 		/// <returns></returns>
 		internal static string GetIIS7SiteIdByBinding(string ip, string port, string host)
 		{
@@ -759,7 +759,7 @@ namespace WebsitePanel.Setup
 		/// <summary>
 		/// Checks whether application pool exists
 		/// </summary>
-		/// <param appPoolName="appPoolName"></param>
+		/// <param name="name"></param>
 		/// <returns></returns>
 		internal static bool ApplicationPoolExists(string name)
 		{
@@ -771,7 +771,7 @@ namespace WebsitePanel.Setup
 		/// <summary>
 		/// Checks whether application pool exists
 		/// </summary>
-		/// <param appPoolName="appPoolName"></param>
+		/// <param name="name"></param>
 		/// <returns></returns>
 		internal static bool IIS7ApplicationPoolExists(string name)
 		{
@@ -783,9 +783,9 @@ namespace WebsitePanel.Setup
 		/// <summary>
 		/// Ctreates application pool
 		/// </summary>
-		/// <param appPoolName="appPoolName"></param>
-		/// <param appPoolName="username"></param>
-		/// <param appPoolName="password"></param>
+		/// <param name="name"></param>
+		/// <param name="username"></param>
+		/// <param name="password"></param>
 		internal static void CreateApplicationPool(string name, string username, string password)
 		{
 			// create pool
@@ -849,9 +849,9 @@ namespace WebsitePanel.Setup
 		/// <summary>
 		/// Ctreates application pool
 		/// </summary>
-		/// <param appPoolName="appPoolName"></param>
-		/// <param appPoolName="username"></param>
-		/// <param appPoolName="password"></param>
+		/// <param name="name"></param>
+		/// <param name="username"></param>
+		/// <param name="password"></param>
 		internal static void CreateIIS7ApplicationPool(string name, string username, string password)
 		{
 			ServerManager serverManager = new ServerManager();
@@ -875,7 +875,7 @@ namespace WebsitePanel.Setup
 		/// <summary>
 		/// Deletes application pool
 		/// </summary>
-		/// <param appPoolName="appPoolName"></param>
+		/// <param name="name"></param>
 		internal static void DeleteApplicationPool(string name)
 		{
 			try
@@ -893,7 +893,7 @@ namespace WebsitePanel.Setup
 		/// <summary>
 		/// Deletes application pool
 		/// </summary>
-		/// <param appPoolName="appPoolName"></param>
+		/// <param name="name"></param>
 		internal static void DeleteIIS7ApplicationPool(string name)
 		{
 			try
@@ -915,9 +915,9 @@ namespace WebsitePanel.Setup
 		/// <summary>
 		/// Updates application pool
 		/// </summary>
-		/// <param appPoolName="appPoolName"></param>
-		/// <param appPoolName="username"></param>
-		/// <param appPoolName="password"></param>
+		/// <param name="name"></param>
+		/// <param name="username"></param>
+		/// <param name="password"></param>
 		internal static void UpdateApplicationPool(string name, string username, string password)
 		{
 			ManagementObject objPool = wmi.GetObject(String.Format("IIsApplicationPoolSetting='W3SVC/AppPools/{0}'",
@@ -941,9 +941,9 @@ namespace WebsitePanel.Setup
 		/// <summary>
 		/// Updates application pool
 		/// </summary>
-		/// <param appPoolName="appPoolName"></param>
-		/// <param appPoolName="username"></param>
-		/// <param appPoolName="password"></param>
+		/// <param name="name"></param>
+		/// <param name="username"></param>
+		/// <param name="password"></param>
 		internal static void UpdateIIS7ApplicationPool(string name, string username, string password)
 		{
 			ServerManager serverManager = new ServerManager();
@@ -965,9 +965,9 @@ namespace WebsitePanel.Setup
 		/// <summary>
 		/// Updates virtual directory application pool
 		/// </summary>
-		/// <param appPoolName="siteId"></param>
-		/// <param appPoolName="directoryName"></param>
-		/// <param appPoolName="applicationPoolName"></param>
+		/// <param name="siteId"></param>
+		/// <param name="directoryName"></param>
+		/// <param name="applicationPoolName"></param>
 		internal static void UpdateVirtualDirectoryApplicationPool(string siteId, string directoryName, string applicationPoolName)
 		{
 			ManagementObject obj = wmi.GetObject(
@@ -979,7 +979,7 @@ namespace WebsitePanel.Setup
 		/// <summary>
 		/// Returns number of sites/virtual directories in the specified application pool.
 		/// </summary>
-		/// <param appPoolName="applicationPoolName"></param>
+		/// <param name="applicationPoolName"></param>
 		/// <returns></returns>
 		internal static int GetApplicationPoolSitesCount(string applicationPoolName)
 		{
@@ -991,7 +991,7 @@ namespace WebsitePanel.Setup
 		/// <summary>
 		/// Returns number of sites/virtual directories in the specified application pool.
 		/// </summary>
-		/// <param appPoolName="applicationPoolName"></param>
+		/// <param name="applicationPoolName"></param>
 		/// <returns></returns>
 		internal static int GetIIS7ApplicationPoolSitesCount(string applicationPoolName)
 		{

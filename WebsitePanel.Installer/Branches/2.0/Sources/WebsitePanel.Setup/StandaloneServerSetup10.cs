@@ -6,7 +6,7 @@ using System.Windows.Forms;
 namespace WebsitePanel.Setup
 {
 	/// <summary>
-	/// Version 1.1.0
+	/// Release 1.1.0
 	/// </summary>
 	public class StandaloneServerSetup110 : StandaloneServerSetup
 	{
@@ -17,7 +17,7 @@ namespace WebsitePanel.Setup
 	}
 
     /// <summary>
-    /// Version 1.0.2
+    /// Release 1.0.2
     /// </summary>
     public class StandaloneServerSetup102 : StandaloneServerSetup101
     {
@@ -28,7 +28,7 @@ namespace WebsitePanel.Setup
     }
 
     /// <summary>
-    /// Version 1.0.1
+    /// Release 1.0.1
     /// </summary>
     public class StandaloneServerSetup101 : StandaloneServerSetup
     {
@@ -39,7 +39,7 @@ namespace WebsitePanel.Setup
     }
 
     /// <summary>
-    /// Version 1.0
+    /// Release 1.0
     /// </summary>
     public class StandaloneServerSetup10 : StandaloneServerSetup
     {

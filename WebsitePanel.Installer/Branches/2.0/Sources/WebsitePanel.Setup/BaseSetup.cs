@@ -11,7 +11,7 @@
 //   this list of conditions  and  the  following  disclaimer in  the documentation
 //   and/or other materials provided with the distribution.
 //
-// - Neither  the  appPoolName  of  the  SMB SAAS Systems Inc.  nor   the   names  of  its
+// - Neither  the  name  of  the  SMB SAAS Systems Inc.  nor   the   names  of  its
 //   contributors may be used to endorse or  promote  products  derived  from  this
 //   software without specific prior written permission.
 //
@@ -46,14 +46,13 @@ namespace WebsitePanel.Setup
 
 			vars.SetupAction = SetupActions.Install;
 			vars.InstallationFolder = Path.Combine("C:\\WebsitePanel", vars.ComponentName);
-			string componentId = Guid.NewGuid().ToString();
-			vars.ComponentId = componentId;
-			vars.Instance = string.Empty;
+			vars.ComponentId = Guid.NewGuid().ToString();
+			vars.Instance = String.Empty;
 
 			//create component settings node
-			vars.ComponentConfig = AppConfig.CreateComponentConfig(componentId);
+			vars.ComponentConfig = AppConfig.CreateComponentConfig(vars.ComponentId);
 			//add default component settings
-			CreateComponentSettingsFromSetupVariables(vars, componentId);
+			CreateComponentSettingsFromSetupVariables(vars, vars.ComponentId);
 		}
 
 		public static DialogResult UninstallBase(object obj)
@@ -109,7 +108,7 @@ namespace WebsitePanel.Setup
 			//IntroductionPage page1 = new IntroductionPage();
 			WebPage page2 = new WebPage();
 			ExpressInstallPage page3 = new ExpressInstallPage();
-			//create install actions
+			//create install currentScenario
 			InstallAction action = new InstallAction(ActionTypes.UpdateWebSite);
 			action.Description = "Updating web site...";
 			page3.Actions.Add(action);
@@ -174,7 +173,7 @@ namespace WebsitePanel.Setup
 			IntroductionPage introPage = new IntroductionPage();
 			LicenseAgreementPage licPage = new LicenseAgreementPage();
 			ExpressInstallPage page2 = new ExpressInstallPage();
-			//create install actions
+			//create install currentScenario
 			InstallAction action = new InstallAction(ActionTypes.StopApplicationPool);
 			action.Description = "Stopping IIS Application Pool...";
 			page2.Actions.Add(action);
@@ -302,7 +301,9 @@ namespace WebsitePanel.Setup
 
 			// Add some extra variables if any, coming from SilentInstaller
 			#region SilentInstaller CLI arguments
-			if (args[Global.Parameters.ShellMode] == Global.SilentInstallerShell)
+			var shellMode = Utils.GetStringSetupParameter(args, Global.Parameters.ShellMode);
+			//
+			if (shellMode.Equals(Global.SilentInstallerShell, StringComparison.OrdinalIgnoreCase))
 			{
 				vars.WebSiteIP = Utils.GetStringSetupParameter(args, Global.Parameters.WebSiteIP);
 				vars.WebSitePort = Utils.GetStringSetupParameter(args, Global.Parameters.WebSitePort);

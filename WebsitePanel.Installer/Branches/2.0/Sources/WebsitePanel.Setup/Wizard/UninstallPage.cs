@@ -11,7 +11,7 @@
 //   this list of conditions  and  the  following  disclaimer in  the documentation
 //   and/or other materials provided with the distribution.
 //
-// - Neither  the  appPoolName  of  the  SMB SAAS Systems Inc.  nor   the   names  of  its
+// - Neither  the  name  of  the  SMB SAAS Systems Inc.  nor   the   names  of  its
 //   contributors may be used to endorse or  promote  products  derived  from  this
 //   software without specific prior written permission.
 //
@@ -35,6 +35,7 @@ using System.Data;
 using System.Text;
 using System.Threading;
 using System.Windows.Forms;
+using WebsitePanel.Setup.Actions;
 
 namespace WebsitePanel.Setup
 {
@@ -90,92 +91,26 @@ namespace WebsitePanel.Setup
 			{
 				this.lblProcess.Text = "Creating uninstall script...";
 				this.Update();
-				
-				//default actions
-				List<InstallAction> actions = GetUninstallActions(componentId);
-				
-				//add external actions
-				foreach (InstallAction extAction in Actions)
+				//
+				Wizard.ActionManager.ActionProgressChanged += new EventHandler<ActionProgressEventArgs<int>>((object sender, ActionProgressEventArgs<int> e) =>
 				{
-					actions.Add(extAction);
-				}
-				
-				//process actions
-				for (int i = 0; i < actions.Count; i++)
+					lblProcess.Text = e.StatusMessage;
+				});
+
+				Wizard.ActionManager.TotalProgressChanged += new EventHandler<ProgressEventArgs>((object sender, ProgressEventArgs e) =>
 				{
-					InstallAction action = actions[i];
-					this.lblProcess.Text = action.Description;
-					this.progressBar.Value = i * 100 / actions.Count;
-					this.Update();
+					progressBar.Value = e.Value;
+				});
 
-					try
-					{
-
-						switch (action.ActionType)
-						{
-							case ActionTypes.DeleteRegistryKey:
-								DeleteRegistryKey(action.Key, action.Empty);
-								break;
-							case ActionTypes.DeleteDirectory:
-								DeleteDirectory(action.Path);
-								break;
-							case ActionTypes.DeleteDatabase:
-								DeleteDatabase(
-									action.ConnectionString,
-									action.Name);
-								break;
-							case ActionTypes.DeleteDatabaseUser:
-								DeleteDatabaseUser(
-									action.ConnectionString,
-									action.UserName);
-								break;
-							case ActionTypes.DeleteDatabaseLogin:
-								DeleteDatabaseLogin(
-									action.ConnectionString,
-									action.UserName);
-								break;
-							case ActionTypes.DeleteWebSite:
-								if (iis7)
-									DeleteIIS7WebSite(action.SiteId);
-								else
-									DeleteWebSite(action.SiteId);
-								break;
-							case ActionTypes.DeleteVirtualDirectory:
-								DeleteVirtualDirectory(
-									action.SiteId,
-									action.Name);
-								break;
-							case ActionTypes.DeleteUserMembership:
-								DeleteUserMembership(action.Domain, action.Name, action.Membership);
-								break;
-							case ActionTypes.DeleteUserAccount:
-								DeleteUserAccount(action.Domain, action.Name);
-								break;
-							case ActionTypes.DeleteApplicationPool:
-								if (iis7)
-									DeleteIIS7ApplicationPool(action.Name);
-								else
-									DeleteApplicationPool(action.Name);
-								break;
-							case ActionTypes.UpdateConfig:
-								UpdateSystemConfiguration(action.Key);
-								break;
-							case ActionTypes.DeleteShortcuts:
-								DeleteShortcuts(action.Name);
-								break;
-							case ActionTypes.UnregisterWindowsService:
-								UnregisterWindowsService(action.Path, action.Name);
-								break;
-						}
-					}
-					catch (Exception ex)
-					{
-						if (!Utils.IsThreadAbortException(ex))
-							Log.WriteError("Uninstall error", ex);
-					}
-				}
+				Wizard.ActionManager.ActionError += new EventHandler<ActionErrorEventArgs>((object sender, ActionErrorEventArgs e) =>
+				{
+					ShowError();
+					Rollback();
+					//
+					return;
+				});
+				//
 				this.progressBar.Value = 100;
-
 			}
 			catch (Exception ex)
 			{
@@ -564,7 +499,6 @@ namespace WebsitePanel.Setup
 				throw;
 			}
 		}
-		
 
 		private void DeleteUserMembership(string domain, string username, string[] membership)
 		{
