@@ -37,9 +37,12 @@ namespace WebsitePanel.Installer.Common
 	{
 		public const string VisualInstallerShell = "VisualInstallerShell";
 		public const string SilentInstallerShell = "SilentInstallerShell";
+		public const string DefaultInstallPathRoot = @"C:\WebsitePanel";
 
 		public abstract class Parameters
 		{
+			public const string ComponentId = "ComponentId";
+			public const string EnterpriseServerUrl = "EnterpriseServerUrl";
 			public const string ShellMode = "ShellMode";
 			public const string ShellVersion = "ShellVersion";
 			public const string IISVersion = "IISVersion";
@@ -62,20 +65,102 @@ namespace WebsitePanel.Installer.Common
 			public const string UserPassword = "UserPassword";
 			public const string CryptoKey = "CryptoKey";
 			public const string ServerAdminPassword = "ServerAdminPassword";
+			public const string SetupXml = "SetupXml";
+			public const string ParentForm = "ParentForm";
+			public const string Component = "Component";
+			public const string FullFilePath = "FullFilePath";
+			public const string DatabaseServer = "DatabaseServer";
+			public const string DbServerAdmin = "DbServerAdmin";
+			public const string DbServerAdminPassword = "DbServerAdminPassword";
+			public const string DatabaseName = "DatabaseName";
 		}
 
 		public abstract class Messages
 		{
 			public const string NotEnoughPermissionsError = "You do not have the appropriate permissions to perform this operation. Make sure you are running the application from the local disk and you have local system administrator privileges.";
-			public const string InstallerObsoleteMessage = "WebsitePanel Installer {0} or higher required.";
+			public const string InstallerVersionIsObsolete = "WebsitePanel Installer {0} or higher required.";
+			public const string ComponentIsAlreadyInstalled = "Component or its part is already installed.";
+		}
+
+		public abstract class Server
+		{
+			public const string ComponentName = "Server";
+			public const string ServiceDescription = "WebsitePanel Server is a set of services running on the remote server to be controlled. Server application should be reachable from Enterprise Server one.";
+			public const string ServiceAccount = "WPServer";
+			public const string DefaultPort = "9003";
+			public const string DefaultIP = "127.0.0.1";
+		}
+
+		public abstract class WebPortal
+		{
+			public const string ComponentName = "Portal";
+			public const string ServiceDescription = "WebsitePanel Portal is a control panel itself with user interface which allows managing user accounts, hosting spaces, web sites, FTP accounts, files, etc.";
+			public const string ServiceAccount = "WPPortal";
+			public const string DefaultPort = "9001";
+			public const string DefaultIP = "127.0.0.1";
+			public const string DefaultEntServURL = "http://127.0.0.1:9002";
+		}
+
+		public abstract class EntServer
+		{
+			public const string ComponentName = "Enterprise Server";
+			public const string ServiceDescription = "Enterprise Server is the heart of WebsitePanel system. It includes all business logic of the application. Enterprise Server should have access to Server and be accessible from Portal applications.";
+			public const string ServiceAccount = "WPEnterpriseServer";
+			public const string DefaultPort = "9002";
+			public const string DefaultIP = "127.0.0.1";
+			public const string DefaultDbServer = @"localhost\sqlexpress";
+			public const string DefaultDatabase = "WebsitePanel";
+			public const string AspNetConnectionStringFormat = "server={0};database={1};uid={2};pwd={3};";
 		}
 
 		private Global()
 		{
 		}
 
-		public static Version IISVersion { get; set; }
-		public static OS.WindowsVersion OSVersion { get; set; }
+		public static string[] ServiceUserMembership
+		{
+			get
+			{
+				if (IISVersion.Major == 7)
+				{
+					return new string[] { "IIS_IUSRS" };
+				}
+				//
+				return new string[] { "IIS_WPG" };
+			}
+		}
+
+		private static Version iisVersion;
+		//
+		public static Version IISVersion
+		{
+			get
+			{
+				if (iisVersion == null)
+				{
+					iisVersion = RegistryUtils.GetIISVersion();
+				}
+				//
+				return iisVersion;
+			}
+		}
+
+		//
+		private static OS.WindowsVersion osVersion;
+
+		public static OS.WindowsVersion OSVersion
+		{
+			get
+			{
+				if (osVersion == null)
+				{
+					osVersion = OS.GetVersion();
+				}
+				//
+				return osVersion;
+			}
+		}
+
 		public static XmlDocument SetupXmlDocument { get; set; }
 	}
 

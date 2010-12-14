@@ -35,7 +35,6 @@ using System.Data;
 using System.Text;
 using System.Threading;
 using System.Windows.Forms;
-using WebsitePanel.Setup.Actions;
 
 namespace WebsitePanel.Setup
 {
@@ -91,26 +90,92 @@ namespace WebsitePanel.Setup
 			{
 				this.lblProcess.Text = "Creating uninstall script...";
 				this.Update();
-				//
-				Wizard.ActionManager.ActionProgressChanged += new EventHandler<ActionProgressEventArgs<int>>((object sender, ActionProgressEventArgs<int> e) =>
-				{
-					lblProcess.Text = e.StatusMessage;
-				});
 
-				Wizard.ActionManager.TotalProgressChanged += new EventHandler<ProgressEventArgs>((object sender, ProgressEventArgs e) =>
-				{
-					progressBar.Value = e.Value;
-				});
+				//default actions
+				List<InstallAction> actions = GetUninstallActions(componentId);
 
-				Wizard.ActionManager.ActionError += new EventHandler<ActionErrorEventArgs>((object sender, ActionErrorEventArgs e) =>
+				//add external actions
+				foreach (InstallAction extAction in Actions)
 				{
-					ShowError();
-					Rollback();
-					//
-					return;
-				});
-				//
+					actions.Add(extAction);
+				}
+
+				//process actions
+				for (int i = 0, progress = 1; i < actions.Count; i++, progress++)
+				{
+					InstallAction action = actions[i];
+					this.lblProcess.Text = action.Description;
+					this.progressBar.Value = progress * 100 / actions.Count;
+					this.Update();
+
+					try
+					{
+
+						switch (action.ActionType)
+						{
+							case ActionTypes.DeleteRegistryKey:
+								DeleteRegistryKey(action.Key, action.Empty);
+								break;
+							case ActionTypes.DeleteDirectory:
+								DeleteDirectory(action.Path);
+								break;
+							case ActionTypes.DeleteDatabase:
+								DeleteDatabase(
+									action.ConnectionString,
+									action.Name);
+								break;
+							case ActionTypes.DeleteDatabaseUser:
+								DeleteDatabaseUser(
+									action.ConnectionString,
+									action.UserName);
+								break;
+							case ActionTypes.DeleteDatabaseLogin:
+								DeleteDatabaseLogin(
+									action.ConnectionString,
+									action.UserName);
+								break;
+							case ActionTypes.DeleteWebSite:
+								if (iis7)
+									DeleteIIS7WebSite(action.SiteId);
+								else
+									DeleteWebSite(action.SiteId);
+								break;
+							case ActionTypes.DeleteVirtualDirectory:
+								DeleteVirtualDirectory(
+									action.SiteId,
+									action.Name);
+								break;
+							case ActionTypes.DeleteUserMembership:
+								DeleteUserMembership(action.Domain, action.Name, action.Membership);
+								break;
+							case ActionTypes.DeleteUserAccount:
+								DeleteUserAccount(action.Domain, action.Name);
+								break;
+							case ActionTypes.DeleteApplicationPool:
+								if (iis7)
+									DeleteIIS7ApplicationPool(action.Name);
+								else
+									DeleteApplicationPool(action.Name);
+								break;
+							case ActionTypes.UpdateConfig:
+								UpdateSystemConfiguration(action.Key);
+								break;
+							case ActionTypes.DeleteShortcuts:
+								DeleteShortcuts(action.Name);
+								break;
+							case ActionTypes.UnregisterWindowsService:
+								UnregisterWindowsService(action.Path, action.Name);
+								break;
+						}
+					}
+					catch (Exception ex)
+					{
+						if (!Utils.IsThreadAbortException(ex))
+							Log.WriteError("Uninstall error", ex);
+					}
+				}
 				this.progressBar.Value = 100;
+
 			}
 			catch (Exception ex)
 			{
@@ -142,7 +207,7 @@ namespace WebsitePanel.Setup
 					if (!Utils.IsThreadAbortException(ex))
 						Log.WriteError("Windows service stop error", ex);
 				}
-				
+
 				int exitCode = Utils.RunProcess(path, "/u");
 				if (exitCode == 0)
 				{
@@ -220,6 +285,7 @@ namespace WebsitePanel.Setup
 				list.Add(action);
 			}
 
+
 			//database
 			bool deleteDatabase = AppConfig.GetComponentSettingBooleanValue(componentId, "NewDatabase");
 			if (deleteDatabase)
@@ -246,7 +312,6 @@ namespace WebsitePanel.Setup
 				action.Log = string.Format("- Delete {0} database user", username);
 				list.Add(action);
 			}
-
 			//database login (from standalone setup)
 			string loginName = AppConfig.GetComponentSettingStringValue(componentId, "DatabaseLogin");
 			if (!string.IsNullOrEmpty(loginName))
@@ -259,6 +324,8 @@ namespace WebsitePanel.Setup
 				action.Log = string.Format("- Delete {0} database login", loginName);
 				list.Add(action);
 			}
+
+
 
 			//virtual directory
 			bool deleteVirtualDirectory = AppConfig.GetComponentSettingBooleanValue(componentId, "NewVirtualDirectory");
@@ -291,7 +358,7 @@ namespace WebsitePanel.Setup
 			if (deleteAppPool)
 			{
 				string appPoolName = AppConfig.GetComponentSettingStringValue(componentId, "ApplicationPool");
-				if ( string.IsNullOrEmpty(appPoolName))
+				if (string.IsNullOrEmpty(appPoolName))
 					appPoolName = WebUtils.WEBSITEPANEL_ADMIN_POOL;
 				action = new InstallAction(ActionTypes.DeleteApplicationPool);
 				action.Name = appPoolName;
@@ -363,7 +430,7 @@ namespace WebsitePanel.Setup
 			catch (Exception ex)
 			{
 				if (Utils.IsThreadAbortException(ex))
-					return; 
+					return;
 
 				Log.WriteError("I/O error", ex);
 				InstallLog.AppendLine(string.Format("- Failed to delete \"{0}\" folder", path));
@@ -425,7 +492,7 @@ namespace WebsitePanel.Setup
 				Log.WriteError("Config error", ex);
 				InstallLog.AppendLine("- Failed to update system configuration");
 				throw;
-			}			
+			}
 		}
 
 		private void DeleteDatabase(string connectionString, string database)
@@ -500,6 +567,7 @@ namespace WebsitePanel.Setup
 			}
 		}
 
+
 		private void DeleteUserMembership(string domain, string username, string[] membership)
 		{
 			try
@@ -539,7 +607,7 @@ namespace WebsitePanel.Setup
 			{
 				if (Utils.IsThreadAbortException(ex))
 					return;
-				
+
 				Log.WriteError("User account delete error", ex);
 				InstallLog.AppendLine(string.Format("- Failed to delete \"{0}\" user account ", username));
 				throw;

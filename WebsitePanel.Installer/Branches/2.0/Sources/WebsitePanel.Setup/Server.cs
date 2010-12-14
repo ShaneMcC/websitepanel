@@ -54,7 +54,12 @@ namespace WebsitePanel.Setup
 			var shellMode = Utils.GetStringSetupParameter(args, Global.Parameters.ShellMode);
 			Version version = new Version(shellVersion);
 			//
-			var setupVariables = new SetupVariables();
+			var setupVariables = new SetupVariables
+			{
+				SetupAction = SetupActions.Install,
+				UserMembership = Global.ServiceUserMembership,
+				IISVersion = Global.IISVersion
+			};
 			//
 			InitInstall(args, setupVariables);
 			//Unattended setup
@@ -68,24 +73,29 @@ namespace WebsitePanel.Setup
 			{
 				if (version < new Version(minimalInstallerVersion))
 				{
-					Console.WriteLine(String.Format(Global.Messages.InstallerObsoleteMessage, minimalInstallerVersion));
+					Console.WriteLine(String.Format(Global.Messages.InstallerVersionIsObsolete, minimalInstallerVersion));
 					//
 					return false;
 				}
 
 				try
 				{
+					var success = true;
 					//
 					setupVariables.ServerPassword = Utils.GetStringSetupParameter(args, Global.Parameters.ServerPassword);
 					//
 					sam.ActionError += new EventHandler<ActionErrorEventArgs>((object sender, ActionErrorEventArgs e) =>
 					{
+						Installer.Common.Utils.ShowConsoleErrorMessage(e.ErrorMessage);
+						//
 						Log.WriteError(e.ErrorMessage);
+						//
+						success = false;
 					});
 					//
 					sam.Start();
 					//
-					return true;
+					return success;
 				}
 				catch (Exception ex)
 				{
@@ -98,7 +108,7 @@ namespace WebsitePanel.Setup
 			{
 				if (version < new Version(minimalInstallerVersion))
 				{
-					MessageBox.Show(String.Format(Global.Messages.InstallerObsoleteMessage, minimalInstallerVersion), "Setup Wizard", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+					MessageBox.Show(String.Format(Global.Messages.InstallerVersionIsObsolete, minimalInstallerVersion), "Setup Wizard", MessageBoxButtons.OK, MessageBoxIcon.Warning);
 					//
 					return DialogResult.Cancel;
 				}
@@ -141,14 +151,22 @@ namespace WebsitePanel.Setup
 		public static object Uninstall(object obj)
 		{
 			Hashtable args = Utils.GetSetupParameters(obj);
-			string shellVersion = Utils.GetStringSetupParameter(args, "ShellVersion");
-			string componentId = Utils.GetStringSetupParameter(args, "ComponentId");
+			//
+			string shellVersion = Utils.GetStringSetupParameter(args, Global.Parameters.ShellVersion);
+			//
+			var setupVariables = new SetupVariables
+			{
+				ComponentId = Utils.GetStringSetupParameter(args, Global.Parameters.ComponentId),
+				SetupAction = SetupActions.Uninstall,
+				IISVersion = Global.IISVersion
+			};
+			//
 			AppConfig.LoadConfiguration();
 
 			InstallerForm form = new InstallerForm();
 			Wizard wizard = form.Wizard;
-			wizard.SetupVariables.SetupAction = SetupActions.Uninstall;
-			wizard.SetupVariables.IISVersion = Utils.GetVersionSetupParameter(args, "IISVersion");
+			wizard.SetupVariables = setupVariables;
+			//
 			if (wizard.SetupVariables.IISVersion.Major == 7)
 				wizard.SetupVariables.UserMembership = new string[] { "AD:Domain Admins", "SID:" + SystemSID.ADMINISTRATORS, "IIS_IUSRS" };
 			else
@@ -166,20 +184,20 @@ namespace WebsitePanel.Setup
 			wizard.SelectedPage = page1;
 
 			//show wizard
-			IWin32Window owner = args["ParentForm"] as IWin32Window;
+			IWin32Window owner = args[Global.Parameters.ParentForm] as IWin32Window;
 			return form.ShowModal(owner);
 		}
 
 		public static object Setup(object obj)
 		{
 			var args = Utils.GetSetupParameters(obj);
-			var shellVersion = Utils.GetStringSetupParameter(args, "ShellVersion");
+			var shellVersion = Utils.GetStringSetupParameter(args, Global.Parameters.ShellVersion);
 			//
 			var setupVariables = new SetupVariables
 			{
-				ComponentId = Utils.GetStringSetupParameter(args, "ComponentId"),
+				ComponentId = Utils.GetStringSetupParameter(args, Global.Parameters.ComponentId),
 				SetupAction = SetupActions.Setup,
-				IISVersion = Utils.GetVersionSetupParameter(args, "IISVersion"),
+				IISVersion = Global.IISVersion,
 				ConfigurationFile = "web.config"
 			};
 			//
@@ -214,7 +232,7 @@ namespace WebsitePanel.Setup
 			wizard.SelectedPage = page1;
 
 			//show wizard
-			IWin32Window owner = args["ParentForm"] as IWin32Window;
+			IWin32Window owner = args[Global.Parameters.ParentForm] as IWin32Window;
 			return form.ShowModal(owner);
 		}
 
@@ -222,20 +240,24 @@ namespace WebsitePanel.Setup
 		{
 			Hashtable args = Utils.GetSetupParameters(obj);
 
-			string componentId = Utils.GetStringSetupParameter(args, "ComponentId");
+			var setupVariables = new SetupVariables
+			{
+				ComponentId = Utils.GetStringSetupParameter(args, Global.Parameters.ComponentId),
+				SetupAction = SetupActions.Update,
+				BaseDirectory = Utils.GetStringSetupParameter(args, Global.Parameters.BaseDirectory),
+				UpdateVersion = Utils.GetStringSetupParameter(args, "UpdateVersion"),
+				InstallerFolder = Utils.GetStringSetupParameter(args, Global.Parameters.InstallerFolder),
+				Installer = Utils.GetStringSetupParameter(args, Global.Parameters.Installer),
+				InstallerType = Utils.GetStringSetupParameter(args, Global.Parameters.InstallerType),
+				InstallerPath = Utils.GetStringSetupParameter(args, Global.Parameters.InstallerPath)
+			};
 
 			AppConfig.LoadConfiguration();
 
 			InstallerForm form = new InstallerForm();
 			Wizard wizard = form.Wizard;
 			//
-			wizard.SetupVariables.SetupAction = SetupActions.Update;
-			wizard.SetupVariables.BaseDirectory = Utils.GetStringSetupParameter(args, "BaseDirectory");
-			wizard.SetupVariables.UpdateVersion = Utils.GetStringSetupParameter(args, "UpdateVersion");
-			wizard.SetupVariables.InstallerFolder = Utils.GetStringSetupParameter(args, "InstallerFolder");
-			wizard.SetupVariables.Installer = Utils.GetStringSetupParameter(args, "Installer");
-			wizard.SetupVariables.InstallerType = Utils.GetStringSetupParameter(args, "InstallerType");
-			wizard.SetupVariables.InstallerPath = Utils.GetStringSetupParameter(args, "InstallerPath");
+			wizard.SetupVariables = setupVariables;
 			//
 			AppConfig.LoadComponentSettings(wizard.SetupVariables);
 
@@ -266,7 +288,7 @@ namespace WebsitePanel.Setup
 			wizard.SelectedPage = introPage;
 
 			//show wizard
-			IWin32Window owner = args["ParentForm"] as IWin32Window;
+			IWin32Window owner = args[Global.Parameters.ParentForm] as IWin32Window;
 			return form.ShowModal(owner);
 		}
 	}

@@ -45,7 +45,7 @@ namespace WebsitePanel.Setup
 			LoadSetupVariablesFromParameters(vars, args);
 
 			vars.SetupAction = SetupActions.Install;
-			vars.InstallationFolder = Path.Combine("C:\\WebsitePanel", vars.ComponentName);
+			vars.InstallationFolder = Path.Combine(Global.DefaultInstallPathRoot, vars.ComponentName);
 			vars.ComponentId = Guid.NewGuid().ToString();
 			vars.Instance = String.Empty;
 
@@ -58,19 +58,22 @@ namespace WebsitePanel.Setup
 		public static DialogResult UninstallBase(object obj)
 		{
 			Hashtable args = Utils.GetSetupParameters(obj);
-			string shellVersion = Utils.GetStringSetupParameter(args, "ShellVersion");
-			string componentId = Utils.GetStringSetupParameter(args, "ComponentId");
+			string shellVersion = Utils.GetStringSetupParameter(args, Global.Parameters.ShellVersion);
+			var setupVariables = new SetupVariables
+			{
+				ComponentId = Utils.GetStringSetupParameter(args, Global.Parameters.ComponentId),
+				SetupAction = SetupActions.Uninstall,
+				IISVersion = Global.IISVersion,
+				UserMembership = Global.ServiceUserMembership
+			};
+			//
 			AppConfig.LoadConfiguration();
 
 			InstallerForm form = new InstallerForm();
 			Wizard wizard = form.Wizard;
-			wizard.SetupVariables.SetupAction = SetupActions.Uninstall;
-			wizard.SetupVariables.IISVersion = Utils.GetVersionSetupParameter(args, "IISVersion");
-			wizard.SetupVariables.IISVersion = Utils.GetVersionSetupParameter(args, "IISVersion");
-			wizard.SetupVariables.UserMembership = (wizard.SetupVariables.IISVersion.Major == 7) ?
-				new string[] { "IIS_IUSRS" } :
-				new string[] { "IIS_WPG" };
-			LoadSetupVariablesFromConfig(wizard.SetupVariables, componentId);
+			wizard.SetupVariables = setupVariables;
+			//
+			AppConfig.LoadComponentSettings(wizard.SetupVariables);
 
 			IntroductionPage page1 = new IntroductionPage();
 			ConfirmUninstallPage page2 = new ConfirmUninstallPage();
@@ -82,7 +85,7 @@ namespace WebsitePanel.Setup
 			wizard.SelectedPage = page1;
 
 			//show wizard
-			IWin32Window owner = args["ParentForm"] as IWin32Window;
+			IWin32Window owner = args[Global.Parameters.ParentForm] as IWin32Window;
 			return form.ShowModal(owner);
 		}
 

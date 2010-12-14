@@ -89,18 +89,13 @@ namespace WebsitePanel.Installer
 			Application.SetCompatibleTextRenderingDefault(false);
 
 			//check OS version
-			OS.WindowsVersion version = OS.GetVersion();
-			Global.OSVersion = version;
-			Log.WriteInfo(string.Format("{0} detected", version));
+			Log.WriteInfo("{0} detected", Global.OSVersion);
 
 			//check IIS version
-			Version iisVersion = RegistryUtils.GetIISVersion();
-			if (iisVersion.Major == 0)
+			if (Global.IISVersion.Major == 0)
 				Log.WriteError("IIS not found.");
 			else
-				Log.WriteInfo(string.Format("IIS {0} detected", iisVersion));
-
-			Global.IISVersion = iisVersion;
+				Log.WriteInfo("IIS {0} detected", Global.IISVersion);
 
 			ApplicationForm mainForm = new ApplicationForm();
 

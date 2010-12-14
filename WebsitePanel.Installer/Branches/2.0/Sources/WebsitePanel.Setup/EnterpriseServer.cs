@@ -55,26 +55,23 @@ namespace WebsitePanel.Setup
 
 			var setupVariables = new SetupVariables
 			{
-				ConnectionString = "server={0};database={1};uid={2};pwd={3};",
-				DatabaseServer = "localhost\\sqlexpress",
-				Database = "WebsitePanel",
+				ConnectionString = Global.EntServer.AspNetConnectionStringFormat,
+				DatabaseServer = Global.EntServer.DefaultDbServer,
+				Database = Global.EntServer.DefaultDatabase,
 				CreateDatabase = true,
-				WebSiteIP = "127.0.0.1",
-				WebSitePort = "9002",
+				WebSiteIP = Global.EntServer.DefaultIP,
+				WebSitePort = Global.EntServer.DefaultPort,
 				WebSiteDomain = String.Empty,
 				NewWebSite = true,
 				NewVirtualDirectory = false,
 				ConfigurationFile = "web.config",
 				UpdateServerAdminPassword = true,
-				ServerAdminPassword = ""
+				ServerAdminPassword = "",
+				UserMembership = Global.ServiceUserMembership
 			};
+
 			//
 			InitInstall(args, setupVariables);
-			//
-			setupVariables.UserMembership = (setupVariables.IISVersion.Major == 7 )? 
-				new string[] { "IIS_IUSRS" } :
-				new string[] { "IIS_WPG" };
-
 			//
 			var eam = new EntServerActionManager(setupVariables);
 			//
@@ -84,24 +81,37 @@ namespace WebsitePanel.Setup
 			{
 				if (version < new Version(minimalInstallerVersion))
 				{
-					Console.WriteLine(String.Format(Global.Messages.InstallerObsoleteMessage, minimalInstallerVersion));
+					Installer.Common.Utils.ShowConsoleErrorMessage(Global.Messages.InstallerVersionIsObsolete, minimalInstallerVersion);
 					//
 					return false;
 				}
 
 				try
 				{
+					var success = true;
 					//
 					setupVariables.ServerAdminPassword = Utils.GetStringSetupParameter(args, Global.Parameters.ServerAdminPassword);
+					setupVariables.Database = Utils.GetStringSetupParameter(args, Global.Parameters.DatabaseName);
+					setupVariables.DatabaseServer = Utils.GetStringSetupParameter(args, Global.Parameters.DatabaseServer);
+					//
+					setupVariables.DbInstallConnectionString = SqlUtils.BuildDbServerMasterConnectionString(
+						setupVariables.DatabaseServer,
+						Utils.GetStringSetupParameter(args, Global.Parameters.DbServerAdmin),
+						Utils.GetStringSetupParameter(args, Global.Parameters.DbServerAdminPassword)
+					);
 					//
 					eam.ActionError += new EventHandler<ActionErrorEventArgs>((object sender, ActionErrorEventArgs e) =>
 					{
+						Installer.Common.Utils.ShowConsoleErrorMessage(e.ErrorMessage);
+						//
 						Log.WriteError(e.ErrorMessage);
+						//
+						success = false;
 					});
 					//
 					eam.Start();
 					//
-					return true;
+					return success;
 				}
 				catch (Exception ex)
 				{
@@ -114,7 +124,7 @@ namespace WebsitePanel.Setup
 			{
 				if (version < new Version(minimalInstallerVersion))
 				{
-					MessageBox.Show(string.Format(Global.Messages.InstallerObsoleteMessage, minimalInstallerVersion), "Setup Wizard", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+					MessageBox.Show(string.Format(Global.Messages.InstallerVersionIsObsolete, minimalInstallerVersion), "Setup Wizard", MessageBoxButtons.OK, MessageBoxIcon.Warning);
 					return DialogResult.Cancel;
 				}
 
@@ -150,7 +160,7 @@ namespace WebsitePanel.Setup
 				wizard.SelectedPage = introPage;
 
 				//show wizard
-				IWin32Window owner = args["ParentForm"] as IWin32Window;
+				IWin32Window owner = args[Global.Parameters.ParentForm] as IWin32Window;
 				return form.ShowModal(owner);
 			}
 		}
@@ -164,22 +174,23 @@ namespace WebsitePanel.Setup
 		{
 			Hashtable args = Utils.GetSetupParameters(obj);
 			string shellVersion = Utils.GetStringSetupParameter(args, "ShellVersion");
-			string componentId = Utils.GetStringSetupParameter(args, "ComponentId");
+			//
+			var setupVariables = new SetupVariables
+			{
+				ComponentId = Utils.GetStringSetupParameter(args, Global.Parameters.ComponentId),
+				ConfigurationFile = "web.config",
+				IISVersion = Global.IISVersion,
+				SetupAction = SetupActions.Setup
+			};
+			//
 			AppConfig.LoadConfiguration();
 
 			InstallerForm form = new InstallerForm();
 			Wizard wizard = form.Wizard;
-			wizard.SetupVariables.SetupAction = SetupActions.Setup;
-			LoadSetupVariablesFromConfig(wizard.SetupVariables, componentId);
-			wizard.SetupVariables.WebSiteId = AppConfig.GetComponentSettingStringValue(componentId, "WebSiteId");
-			wizard.SetupVariables.WebSiteIP = AppConfig.GetComponentSettingStringValue(componentId, "WebSiteIP");
-			wizard.SetupVariables.WebSitePort = AppConfig.GetComponentSettingStringValue(componentId, "WebSitePort");
-			wizard.SetupVariables.WebSiteDomain = AppConfig.GetComponentSettingStringValue(componentId, "WebSiteDomain");
-			wizard.SetupVariables.NewWebSite = AppConfig.GetComponentSettingBooleanValue(componentId, "NewWebSite");
-			wizard.SetupVariables.NewVirtualDirectory = AppConfig.GetComponentSettingBooleanValue(componentId, "NewVirtualDirectory");
-			wizard.SetupVariables.VirtualDirectory = AppConfig.GetComponentSettingStringValue(componentId, "VirtualDirectory");
-			wizard.SetupVariables.IISVersion = Utils.GetVersionSetupParameter(args, "IISVersion");
-			wizard.SetupVariables.ConfigurationFile = "web.config";
+			wizard.SetupVariables = setupVariables;
+			//
+			AppConfig.LoadComponentSettings(wizard.SetupVariables);
+
 			//IntroductionPage page1 = new IntroductionPage();
 			WebPage page1 = new WebPage();
 			ServerAdminPasswordPage page2 = new ServerAdminPasswordPage();
@@ -203,7 +214,7 @@ namespace WebsitePanel.Setup
 			wizard.SelectedPage = page1;
 
 			//show wizard
-			IWin32Window owner = args["ParentForm"] as IWin32Window;
+			IWin32Window owner = args[Global.Parameters.ParentForm] as IWin32Window;
 			return form.ShowModal(owner);
 		}
 
@@ -211,36 +222,20 @@ namespace WebsitePanel.Setup
 		{
 			Hashtable args = Utils.GetSetupParameters(obj);
 
-            // check installer version
-            //string shellVersion = Utils.GetStringSetupParameter(args, "ShellVersion");
-            //Release version = new Release(shellVersion);
-            //if (version < new Release("1.0.1"))
-            //{
-            //    MessageBox.Show("WebsitePanel Installer 1.0.1 or higher required.", "Setup Wizard", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-            //    return DialogResult.Cancel;
-            //}
-
-			string componentId = Utils.GetStringSetupParameter(args, "ComponentId");
+			var setupVariables = new SetupVariables
+			{
+				ComponentId = Utils.GetStringSetupParameter(args, Global.Parameters.ComponentId),
+				SetupAction = SetupActions.Update,
+				IISVersion = Global.IISVersion
+			};
 
 			AppConfig.LoadConfiguration();
 
 			InstallerForm form = new InstallerForm();
 			Wizard wizard = form.Wizard;
-			LoadSetupVariablesFromConfig(wizard.SetupVariables, componentId);
-            //if (wizard.SetupVariables.Release != "1.5.3")
-            //{
-            //    MessageBox.Show("Please update to version 1.5.3", "Setup Wizard", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-            //    return DialogResult.Cancel;
-            //}
-
-			wizard.SetupVariables.SetupAction = SetupActions.Update;
-			wizard.SetupVariables.BaseDirectory = Utils.GetStringSetupParameter(args, "BaseDirectory");
-			wizard.SetupVariables.UpdateVersion = Utils.GetStringSetupParameter(args, "UpdateVersion");
-			wizard.SetupVariables.InstallerFolder = Utils.GetStringSetupParameter(args, "InstallerFolder");
-			wizard.SetupVariables.Installer = Utils.GetStringSetupParameter(args, "Installer");
-			wizard.SetupVariables.InstallerType = Utils.GetStringSetupParameter(args, "InstallerType");
-			wizard.SetupVariables.InstallerPath = Utils.GetStringSetupParameter(args, "InstallerPath");
-			wizard.SetupVariables.IISVersion = Utils.GetVersionSetupParameter(args, "IISVersion");
+			wizard.SetupVariables = setupVariables;
+			//
+			AppConfig.LoadComponentSettings(wizard.SetupVariables);
 
 			IntroductionPage introPage = new IntroductionPage();
 			LicenseAgreementPage licPage = new LicenseAgreementPage();
@@ -264,7 +259,6 @@ namespace WebsitePanel.Setup
 			action.Path = "setup\\update_db.sql";
 			page2.Actions.Add(action);
 
-
 			action = new InstallAction(ActionTypes.UpdateConfig);
 			action.Description = "Updating system configuration...";
 			page2.Actions.Add(action);
@@ -275,7 +269,7 @@ namespace WebsitePanel.Setup
 			wizard.SelectedPage = introPage;
 
 			//show wizard
-			Form parentForm = args["ParentForm"] as Form;
+			Form parentForm = args[Global.Parameters.ParentForm] as Form;
 			return form.ShowDialog(parentForm);
 		}
 	}

@@ -331,6 +331,8 @@ namespace WebsitePanel.Setup.Actions
 				// Notify external clients
 				OnActionError();
 				//
+				Rollback();
+				//
 				return;
 			}
 			#endregion

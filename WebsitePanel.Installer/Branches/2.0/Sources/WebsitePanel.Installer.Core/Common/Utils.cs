@@ -138,6 +138,37 @@ namespace WebsitePanel.Installer.Common
 
 		#endregion
 
+		public static void ShowConsoleErrorMessage(string format, params object[] args)
+		{
+			Console.WriteLine(String.Format(format, args));
+		}
+
+		public static bool CheckForInstalledComponent(string componentCode)
+		{
+			bool ret = false;
+			List<string> installedComponents = new List<string>();
+			foreach (ComponentConfigElement componentConfig in AppConfigManager.AppConfiguration.Components)
+			{
+				string code = componentConfig.Settings[Global.Parameters.ComponentCode].Value;
+				installedComponents.Add(code);
+				if (code == componentCode)
+				{
+					ret = true;
+					break;
+				}
+			}
+			//
+			if (componentCode == "standalone")
+			{
+				if (installedComponents.Contains("server") ||
+					installedComponents.Contains("enterprise server") ||
+					installedComponents.Contains("portal"))
+					ret = true;
+			}
+			//
+			return ret;
+		}
+
 		public static bool IsThreadAbortException(Exception ex)
 		{
 			Exception innerException = ex;

@@ -230,18 +230,14 @@ namespace WebsitePanel.Setup
 
 		private string CreateConnectionString()
 		{
-			string ret = string.Empty;
 			if (cbAuthentication.SelectedIndex == 0)
 			{
-				ret = string.Format("Server={0};Database={1};Integrated Security=SSPI;",
-					txtSqlServer.Text, "master");
+				return SqlUtils.BuildDbServerMasterConnectionString(txtSqlServer.Text, null, null);
 			}
 			else
 			{
-				ret = string.Format("Server={0};Database={1};User id={2};Password={3};",
-					txtSqlServer.Text, "master", txtLogin.Text, txtPassword.Text);
+				return SqlUtils.BuildDbServerMasterConnectionString(txtSqlServer.Text, txtLogin.Text, txtPassword.Text);
 			}
-			return ret;
 		}
 
 	}

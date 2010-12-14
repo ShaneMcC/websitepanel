@@ -43,31 +43,42 @@ namespace WebsitePanel.SilentInstaller
 	{
 		public const string ComponentNameParam = "cname";
 
+		public static readonly Hashtable ServiceCliParams = new Hashtable
+		{
+			{ "webip", Global.Parameters.WebSiteIP },		// IP Address
+			{ "upassw", Global.Parameters.UserPassword },	// Service account password
+			{ "udomaim", Global.Parameters.UserDomain },		// Service account domain (AD only)
+			{ "uname", Global.Parameters.UserAccount },		// Service account name
+			{ "webport", Global.Parameters.WebSitePort },	// TCP Port
+			{ "webdom", Global.Parameters.WebSiteDomain }	// Website domain (if any assigned)
+		};
+
 		public static readonly Hashtable ServerCliParams = new Hashtable
 		{
-			{ "ip", Global.Parameters.WebSiteIP },		// IP Address
-			{ "s", Global.Parameters.ServerPassword },	// Server password
-			{ "p", Global.Parameters.UserPassword },	// Service account password
-			{ "d", Global.Parameters.UserDomain },		// Service account domain (AD only)
-			{ "u", Global.Parameters.UserAccount },		// Service account name
-			{ "port", Global.Parameters.WebSitePort },	// TCP Port
-			{ "h", Global.Parameters.WebSiteDomain }	// Website domain (if any assigned)
+			{ "passw", Global.Parameters.ServerPassword },	// Server password
 		};
 
 		public static readonly Hashtable EntServerCliParams = new Hashtable
 		{
-			{ "ip", Global.Parameters.WebSiteIP },				// IP Address
-			{ "pw", Global.Parameters.ServerAdminPassword },	// serveradmin password
-			{ "p", Global.Parameters.UserPassword },			// Service account password
-			{ "d", Global.Parameters.UserDomain },				// Service account domain (AD only)
-			{ "u", Global.Parameters.UserAccount },				// Service account name
-			{ "port", Global.Parameters.WebSitePort },			// TCP Port
-			{ "h", Global.Parameters.WebSiteDomain }			// Website domain (if any assigned)
+			{ "passw", Global.Parameters.ServerAdminPassword },		// serveradmin password
+			{ "dbname", Global.Parameters.DatabaseName },			// Database name
+			{ "dbserver", Global.Parameters.DatabaseServer },		// Database server
+			{ "dbadmin", Global.Parameters.DbServerAdmin },			// Database server administrator login
+			{ "dbpassw", Global.Parameters.DbServerAdminPassword }, // Database server administrator password
+		};
+
+		public static readonly Hashtable WebPortalCliParams = new Hashtable
+		{
+			{ "esurl", Global.Parameters.EnterpriseServerUrl },	// Enterprise Server URL
 		};
 
 		[STAThread]
 		static void Main(string[] args)
 		{
+#if DEBUG
+			Console.WriteLine("Please connect a debugger and then press any key to continue...");
+			Console.ReadKey();
+#endif
 			//
 			//check security permissions
 			if (!Utils.CheckSecurity())
@@ -95,18 +106,13 @@ namespace WebsitePanel.SilentInstaller
 			Log.WriteApplicationStart();
 
 			//check OS version
-			OS.WindowsVersion version = OS.GetVersion();
-			Global.OSVersion = version;
-			Log.WriteInfo(string.Format("{0} detected", version));
+			Log.WriteInfo("{0} detected", Global.OSVersion);
 
 			//check IIS version
-			Version iisVersion = RegistryUtils.GetIISVersion();
-			if (iisVersion.Major == 0)
+			if (Global.IISVersion.Major == 0)
 				Log.WriteError("IIS not found.");
 			else
-				Log.WriteInfo(string.Format("IIS {0} detected", iisVersion));
-
-			Global.IISVersion = iisVersion;
+				Log.WriteInfo("IIS {0} detected", Global.IISVersion);
 			//
 			var cname = GetCommandLineArgumentValue(ComponentNameParam);
 
@@ -131,7 +137,7 @@ namespace WebsitePanel.SilentInstaller
 			if (record == null)
 			{
 				Log.WriteError(String.Format("{0} => {1}", ComponentNameParam, cname));
-				Console.WriteLine("Incorrect component name specified");
+				Utils.ShowConsoleErrorMessage("Incorrect component name specified");
 				return;
 			}
 			//
@@ -150,30 +156,67 @@ namespace WebsitePanel.SilentInstaller
 
 		private static void ShowSecurityError()
 		{
-			ShowConsoleErrorMessage(Global.Messages.NotEnoughPermissionsError);
-		}
-
-		private static void ShowConsoleErrorMessage(string p)
-		{
-			Console.WriteLine(p);
+			Utils.ShowConsoleErrorMessage(Global.Messages.NotEnoughPermissionsError);
 		}
 
 		static Hashtable ParseInputFromCLI(string cname)
 		{
-			if (cname.Equals("server", StringComparison.OrdinalIgnoreCase))
+			//
+			if (cname.Equals(Global.Server.ComponentName, StringComparison.OrdinalIgnoreCase))
 			{
 				//
 				return LoadInputFromCLI(
 					ServerCliParams,
+					ServiceCliParams,
 					output: new Hashtable
 						{
-							{ Global.Parameters.WebSiteIP, "127.0.0.1" },
+							{ Global.Parameters.WebSiteIP, Global.Server.DefaultIP },
 							{ Global.Parameters.WebSiteDomain, String.Empty },
-							{ Global.Parameters.WebSitePort, "9003" },
-							{ Global.Parameters.UserAccount, "WSPServer" },
+							{ Global.Parameters.WebSitePort, Global.Server.DefaultPort },
+							{ Global.Parameters.UserAccount, Global.Server.ServiceAccount },
 							{ Global.Parameters.UserDomain, String.Empty },
 							{ Global.Parameters.UserPassword, String.Empty },
-							{ Global.Parameters.ServerPassword, null }
+							{ Global.Parameters.ServerPassword, null }  // Required CLI parameters must be initialized with null value!
+						}
+				);
+			}
+			else if (cname.Equals(Global.EntServer.ComponentName, StringComparison.OrdinalIgnoreCase))
+			{
+				//
+				return LoadInputFromCLI(
+					EntServerCliParams,
+					ServiceCliParams,
+					output: new Hashtable
+						{
+							{ Global.Parameters.WebSiteIP, Global.EntServer.DefaultIP },
+							{ Global.Parameters.WebSiteDomain, String.Empty },
+							{ Global.Parameters.WebSitePort, Global.EntServer.DefaultPort },
+							{ Global.Parameters.UserAccount, Global.EntServer.ServiceAccount },
+							{ Global.Parameters.UserDomain, String.Empty },
+							{ Global.Parameters.UserPassword, String.Empty },
+							{ Global.Parameters.DatabaseName, Global.EntServer.DefaultDatabase },
+							{ Global.Parameters.DbServerAdmin, String.Empty },
+							{ Global.Parameters.DbServerAdminPassword, String.Empty },
+							{ Global.Parameters.DatabaseServer, Global.EntServer.DefaultDbServer },
+							{ Global.Parameters.ServerAdminPassword, null }  // Required CLI parameters must be initialized with null value!
+						}
+				);
+			}
+			else if (cname.Equals(Global.WebPortal.ComponentName, StringComparison.OrdinalIgnoreCase))
+			{
+				//
+				return LoadInputFromCLI(
+					WebPortalCliParams,
+					ServiceCliParams,
+					output: new Hashtable
+						{
+							{ Global.Parameters.WebSiteIP, Global.WebPortal.DefaultIP },
+							{ Global.Parameters.WebSiteDomain, String.Empty },
+							{ Global.Parameters.WebSitePort, Global.WebPortal.DefaultPort },
+							{ Global.Parameters.UserAccount, Global.WebPortal.ServiceAccount },
+							{ Global.Parameters.UserDomain, String.Empty },
+							{ Global.Parameters.UserPassword, String.Empty },
+							{ Global.Parameters.EnterpriseServerUrl, null } // Required CLI parameters must be initialized with null value!
 						}
 				);
 			}
@@ -184,24 +227,36 @@ namespace WebsitePanel.SilentInstaller
 		/// <summary>
 		/// Loads an input from the command-line interface into a Hashtable instance to use for calls to the Installer and checks whether or not the required parameters are set.
 		/// </summary>
-		/// <param name="input">Input from the command-line interface (CLI)</param>
+		/// <param name="inputA">A collection with service-specific parameter names to match the input from the command-line interface (CLI)</param>
+		/// <param name="inputB">A collection with service-generic parameter names to match the input from the command-line interface (CLI)</param>
 		/// <param name="output">An output storage to put the input data into</param>
 		/// <returns>This method</returns>
-		static Hashtable LoadInputFromCLI(Hashtable input, Hashtable output)
+		static Hashtable LoadInputFromCLI(Hashtable inputA, Hashtable inputB, Hashtable output)
 		{
-			//
-			foreach (var item in input.Keys)
+			// Process service
+			foreach (var item in inputA.Keys)
 			{
 				var cli_argv = GetCommandLineArgumentValue(item as String);
 				//
 				if (String.IsNullOrEmpty(cli_argv))
 					continue;
 				// Assign argument value from CLI
-				output[input[item]] = cli_argv;
+				output[inputA[item]] = cli_argv;
+			}
+			//
+			foreach (var item in inputB.Keys)
+			{
+				var cli_argv = GetCommandLineArgumentValue(item as String);
+				//
+				if (String.IsNullOrEmpty(cli_argv))
+					continue;
+				// Assign argument value from CLI
+				output[inputB[item]] = cli_argv;
 			}
 			// Ensure all required parameters are set
 			foreach (var item in output.Keys)
 			{
+				// If a parameter is required, then you should assign null value
 				if (output[item] == null)
 				{
 					throw new ArgumentNullException(item as String);
@@ -223,9 +278,10 @@ namespace WebsitePanel.SilentInstaller
 			string installerPath = Utils.GetDbString(row["InstallerPath"]);
 			string installerType = Utils.GetDbString(row["InstallerType"]);
 
-			if (CheckForInstalledComponent(componentCode))
+			if (Utils.CheckForInstalledComponent(componentCode))
 			{
-				//AppContext.AppForm.ShowWarning("Component or its part is already installed.");
+				Console.WriteLine(Global.Messages.ComponentIsAlreadyInstalled);
+				//
 				return;
 			}
 			try
@@ -257,7 +313,7 @@ namespace WebsitePanel.SilentInstaller
 					args[Global.Parameters.IISVersion] = Global.IISVersion;
 					args[Global.Parameters.ShellVersion] = AssemblyLoader.GetShellVersion();
 					args[Global.Parameters.ShellMode] = Global.SilentInstallerShell;
-					args["SetupXml"] = String.Empty;
+					args[Global.Parameters.SetupXml] = String.Empty;
 
 					// Run the installer
 					var res = AssemblyLoader.Execute(path, installerType, method, new object[] { args });
@@ -284,30 +340,6 @@ namespace WebsitePanel.SilentInstaller
 				//this.componentCode = null;
 			}
 
-		}
-
-		static bool CheckForInstalledComponent(string componentCode)
-		{
-			bool ret = false;
-			List<string> installedComponents = new List<string>();
-			foreach (ComponentConfigElement componentConfig in AppConfigManager.AppConfiguration.Components)
-			{
-				string code = componentConfig.Settings["ComponentCode"].Value;
-				installedComponents.Add(code);
-				if (code == componentCode)
-				{
-					ret = true;
-					break;
-				}
-			}
-			if (componentCode == "standalone")
-			{
-				if (installedComponents.Contains("server") ||
-					installedComponents.Contains("enterprise server") ||
-					installedComponents.Contains("portal"))
-					ret = true;
-			}
-			return ret;
 		}
 
 		static void loader_StatusChanged(object sender, LoaderEventArgs<string> e)
@@ -360,7 +392,8 @@ namespace WebsitePanel.SilentInstaller
 				string arg = args[i].ToLower();
 				if (arg.StartsWith(key))
 				{
-					return arg.Substring(key.Length);
+					// Remove leading and trailing double quotes if any
+					return args[i].Substring(key.Length).TrimStart('"').TrimEnd('"');
 				}
 			}
 			return null;

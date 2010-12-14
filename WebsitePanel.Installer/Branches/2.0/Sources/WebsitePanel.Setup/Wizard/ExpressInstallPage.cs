@@ -2190,7 +2190,7 @@ namespace WebsitePanel.Setup
 				//check for existing site
 				var oldSiteId = iis7 ? WebUtils.GetIIS7SiteIdByBinding(ip, port, domain) : WebUtils.GetSiteIdByBinding(ip, port, domain);
 				// We found out that other web site has this combination of {IP:Port:Host Header} already assigned
-				if (!oldSiteId.Equals(Wizard.SetupVariables.WebSiteId))
+				if (oldSiteId != null && !oldSiteId.Equals(Wizard.SetupVariables.WebSiteId))
 				{
 					// get site name
 					string oldSiteName = iis7 ? oldSiteId : WebUtils.GetSite(oldSiteId).Name;

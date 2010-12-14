@@ -185,8 +185,6 @@ namespace WebsitePanel.Setup
 			action.SetAttribute("name", name);
 		}
 
-
-
 		internal static void ProcessAction(XmlNode action)
 		{
 			switch(action.Name)

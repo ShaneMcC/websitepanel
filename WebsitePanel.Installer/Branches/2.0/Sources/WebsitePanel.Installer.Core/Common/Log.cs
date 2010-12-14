@@ -147,6 +147,16 @@ namespace WebsitePanel.Installer.Common
 		}
 
 		/// <summary>
+		/// Writes formatted informational message into the log
+		/// </summary>
+		/// <param name="format"></param>
+		/// <param name="args"></param>
+		public static void WriteInfo(string format, params object[] args)
+		{
+			WriteInfo(String.Format(format, args));
+		}
+
+		/// <summary>
 		/// Write info message to log
 		/// </summary>
 		/// <param name="message"></param>

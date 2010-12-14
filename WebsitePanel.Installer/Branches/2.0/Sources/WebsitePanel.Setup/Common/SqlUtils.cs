@@ -45,6 +45,23 @@ namespace WebsitePanel.Setup
 		{
 		}
 
+		public static string BuildDbServerMasterConnectionString(string dbServer, string dbLogin, string dbPassw)
+		{
+			return BuildDbServerConnectionString(dbServer, "master", dbLogin, dbPassw);
+		}
+
+		public static string BuildDbServerConnectionString(string dbServer, string dbName, string dbLogin, string dbPassw)
+		{
+			if (String.IsNullOrEmpty(dbLogin) && String.IsNullOrEmpty(dbPassw))
+			{
+				return String.Format("Server={0};Database={1};Integrated Security=SSPI;", dbServer, dbName);
+			}
+			else
+			{
+				return String.Format("Server={0};Database={1};User id={2};Password={3};", dbServer, dbName, dbLogin, dbPassw);
+			}
+		}
+
 		/// <summary>
 		/// Check sql connection.
 		/// </summary>
