@@ -45,31 +45,40 @@ namespace WebsitePanel.SilentInstaller
 
 		public static readonly Hashtable ServiceCliParams = new Hashtable
 		{
-			{ "webip", Global.Parameters.WebSiteIP },		// IP Address
-			{ "upassw", Global.Parameters.UserPassword },	// Service account password
-			{ "udomaim", Global.Parameters.UserDomain },		// Service account domain (AD only)
-			{ "uname", Global.Parameters.UserAccount },		// Service account name
-			{ "webport", Global.Parameters.WebSitePort },	// TCP Port
-			{ "webdom", Global.Parameters.WebSiteDomain }	// Website domain (if any assigned)
+			{ Global.CLI.WebSiteIP, Global.Parameters.WebSiteIP },		// IP Address
+			{ Global.CLI.ServiceAccountPassword, Global.Parameters.UserPassword },	// Service account password
+			{ Global.CLI.ServiceAccountDomain, Global.Parameters.UserDomain },		// Service account domain (AD only)
+			{ Global.CLI.ServiceAccountName, Global.Parameters.UserAccount },		// Service account name
+			{ Global.CLI.WebSitePort, Global.Parameters.WebSitePort },	// TCP Port
+			{ Global.CLI.WebSiteDomain, Global.Parameters.WebSiteDomain }	// Website domain (if any assigned)
 		};
 
 		public static readonly Hashtable ServerCliParams = new Hashtable
 		{
-			{ "passw", Global.Parameters.ServerPassword },	// Server password
+			{ Global.Server.CLI.ServerPassword, Global.Parameters.ServerPassword },	// Server password
 		};
 
 		public static readonly Hashtable EntServerCliParams = new Hashtable
 		{
-			{ "passw", Global.Parameters.ServerAdminPassword },		// serveradmin password
-			{ "dbname", Global.Parameters.DatabaseName },			// Database name
-			{ "dbserver", Global.Parameters.DatabaseServer },		// Database server
-			{ "dbadmin", Global.Parameters.DbServerAdmin },			// Database server administrator login
-			{ "dbpassw", Global.Parameters.DbServerAdminPassword }, // Database server administrator password
+			{ Global.EntServer.CLI.ServeradminPassword, Global.Parameters.ServerAdminPassword },		// serveradmin password
+			{ Global.EntServer.CLI.DatabaseName, Global.Parameters.DatabaseName },			// Database name
+			{ Global.EntServer.CLI.DatabaseServer, Global.Parameters.DatabaseServer },		// Database server
+			{ Global.EntServer.CLI.DbServerAdmin, Global.Parameters.DbServerAdmin },			// Database server administrator login
+			{ Global.EntServer.CLI.DbServerAdminPassword, Global.Parameters.DbServerAdminPassword }, // Database server administrator password
 		};
 
 		public static readonly Hashtable WebPortalCliParams = new Hashtable
 		{
-			{ "esurl", Global.Parameters.EnterpriseServerUrl },	// Enterprise Server URL
+			{ Global.WebPortal.CLI.EnterpriseServerUrl, Global.Parameters.EnterpriseServerUrl },	// Enterprise Server URL
+		};
+
+		public static readonly Hashtable StdServerSetupCliParams = new Hashtable
+		{
+			{ Global.EntServer.CLI.DatabaseServer, Global.Parameters.DatabaseServer },
+			{ Global.EntServer.CLI.DatabaseName, Global.Parameters.DatabaseName },
+			{ Global.EntServer.CLI.DbServerAdmin , Global.Parameters.DbServerAdmin },
+			{ Global.EntServer.CLI.DbServerAdminPassword, Global.Parameters.DbServerAdminPassword },
+			{ Global.EntServer.CLI.ServeradminPassword, Global.Parameters.ServerAdminPassword }
 		};
 
 		[STAThread]
@@ -79,8 +88,14 @@ namespace WebsitePanel.SilentInstaller
 			Console.WriteLine("Please connect a debugger and then press any key to continue...");
 			Console.ReadKey();
 #endif
-			//
-			//check security permissions
+			// Ensure arguments supplied for the application
+			if (args.Length == 0)
+			{
+				Utils.ShowConsoleErrorMessage(Global.Messages.NoInputParametersSpecified);
+				return;
+			}
+
+			// Check user's security permissions
 			if (!Utils.CheckSecurity())
 			{
 				ShowSecurityError();
@@ -88,7 +103,7 @@ namespace WebsitePanel.SilentInstaller
 				return;
 			}
 
-			//check administrator permissions
+			// Check administrator permissions
 			if (!Utils.IsAdministrator())
 			{
 				ShowSecurityError();
@@ -96,13 +111,16 @@ namespace WebsitePanel.SilentInstaller
 				return;
 			}
 
-			//check for running instance
+			// Check for running instance
 			if (!Utils.IsNewInstance())
 			{
 				ShowInstanceRunningErrorMessage();
 				return;
 			}
 
+			// Make sure no other installations could be run at the same time
+			Utils.SaveMutex();
+			//
 			Log.WriteApplicationStart();
 
 			//check OS version
@@ -142,7 +160,7 @@ namespace WebsitePanel.SilentInstaller
 			}
 			//
 			var cli_args = ParseInputFromCLI(cname);
-			//Utils.SaveMutex();
+			//
 			StartInstaller(record, cli_args);
 			//
 			Console.WriteLine("Press any key to continue...");
@@ -151,7 +169,7 @@ namespace WebsitePanel.SilentInstaller
 
 		private static void ShowInstanceRunningErrorMessage()
 		{
-			//ShowConsoleErrorMessage(Global.Messages.);
+			Utils.ShowConsoleErrorMessage(Global.Messages.AnotherInstanceIsRunning);
 		}
 
 		private static void ShowSecurityError()
@@ -162,7 +180,7 @@ namespace WebsitePanel.SilentInstaller
 		static Hashtable ParseInputFromCLI(string cname)
 		{
 			//
-			if (cname.Equals(Global.Server.ComponentName, StringComparison.OrdinalIgnoreCase))
+			if (cname.Equals(Global.Server.ComponentCode, StringComparison.OrdinalIgnoreCase))
 			{
 				//
 				return LoadInputFromCLI(
@@ -180,7 +198,7 @@ namespace WebsitePanel.SilentInstaller
 						}
 				);
 			}
-			else if (cname.Equals(Global.EntServer.ComponentName, StringComparison.OrdinalIgnoreCase))
+			else if (cname.Equals(Global.EntServer.ComponentCode, StringComparison.OrdinalIgnoreCase))
 			{
 				//
 				return LoadInputFromCLI(
@@ -202,7 +220,7 @@ namespace WebsitePanel.SilentInstaller
 						}
 				);
 			}
-			else if (cname.Equals(Global.WebPortal.ComponentName, StringComparison.OrdinalIgnoreCase))
+			else if (cname.Equals(Global.WebPortal.ComponentCode, StringComparison.OrdinalIgnoreCase))
 			{
 				//
 				return LoadInputFromCLI(
@@ -218,6 +236,24 @@ namespace WebsitePanel.SilentInstaller
 							{ Global.Parameters.UserPassword, String.Empty },
 							{ Global.Parameters.EnterpriseServerUrl, null } // Required CLI parameters must be initialized with null value!
 						}
+				);
+			}
+			else if (cname.Equals(Global.StandaloneServer.ComponentCode, StringComparison.OrdinalIgnoreCase))
+			{
+				return LoadInputFromCLI(
+					StdServerSetupCliParams,
+					ServiceCliParams,
+					output: new Hashtable
+					{
+						{ Global.Parameters.WebSiteIP, Global.WebPortal.DefaultIP },
+						{ Global.Parameters.WebSiteDomain, String.Empty },
+						{ Global.Parameters.WebSitePort, Global.WebPortal.DefaultPort },
+						{ Global.Parameters.DatabaseName, null },
+						{ Global.Parameters.DatabaseServer, null },
+						{ Global.Parameters.DbServerAdmin, String.Empty },
+						{ Global.Parameters.DbServerAdminPassword, String.Empty },
+						{ Global.Parameters.ServerAdminPassword, null }
+					}
 				);
 			}
 			//

@@ -150,6 +150,12 @@ namespace WebsitePanel.Setup.Actions
 			}
 		}
 
+		protected List<Action> CurrentScenario
+		{
+			get { return currentScenario; }
+			set { currentScenario = value; }
+		}
+
 		#region Events
 		/// <summary>
 		/// 
@@ -383,8 +389,6 @@ namespace WebsitePanel.Setup.Actions
 				totalValue = Convert.ToInt32(progress * 100 / (lastSuccessActionIndex + 1));
 				//
 				UpdateTotalProgress(totalValue);
-				//
-				Thread.Sleep(new TimeSpan(0, 0, 1));
 			}
 			//
 			Log.WriteEnd("Rolled back");

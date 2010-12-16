@@ -34,6 +34,7 @@ using System.Collections.Generic;
 using System.Management;
 using WebsitePanel.Setup.Windows;
 using System.Globalization;
+using WebsitePanel.Installer.Common;
 
 namespace WebsitePanel.Setup
 {

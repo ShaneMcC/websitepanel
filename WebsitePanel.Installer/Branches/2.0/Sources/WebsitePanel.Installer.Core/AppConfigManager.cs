@@ -4,6 +4,7 @@ using System.Text;
 using WebsitePanel.Installer.Common;
 using System.Configuration;
 using WebsitePanel.Installer.Configuration;
+using System.IO;
 
 namespace WebsitePanel.Installer.Core
 {
@@ -24,8 +25,10 @@ namespace WebsitePanel.Installer.Core
 		public static void LoadConfiguration()
 		{
 			Log.WriteStart("Loading application configuration");
-			//appConfig = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
-			appConfig = ConfigurationManager.OpenExeConfiguration(AppConfigFileNameWithoutExtension);
+			//
+			var exePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, AppConfigFileNameWithoutExtension);
+			//
+			appConfig = ConfigurationManager.OpenExeConfiguration(exePath);
 			//
 			Log.WriteEnd("Application configuration loaded");
 		}

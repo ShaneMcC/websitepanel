@@ -67,7 +67,6 @@ namespace WebsitePanel.Setup
 				ConfigurationFile = "web.config",
 				UpdateServerAdminPassword = true,
 				ServerAdminPassword = "",
-				UserMembership = Global.ServiceUserMembership
 			};
 
 			//

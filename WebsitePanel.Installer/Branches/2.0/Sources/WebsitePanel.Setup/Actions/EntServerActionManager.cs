@@ -59,8 +59,6 @@ namespace WebsitePanel.Setup.Actions
 				}
 				//update log
 				Log.WriteEnd(LogEndInstallMessage);
-
-				AppConfig.SetComponentSettingStringValue(vars.ComponentId, Global.Parameters.CryptoKey, vars.CryptoKey);
 			}
 			catch (Exception ex)
 			{
@@ -471,6 +469,7 @@ namespace WebsitePanel.Setup.Actions
 	{
 		void IInstallAction.Run(SetupVariables vars)
 		{
+			AppConfig.EnsureComponentConfig(vars.ComponentId);
 			//
 			AppConfig.SetComponentSettingStringValue(vars.ComponentId, "Database", vars.Database);
 			AppConfig.SetComponentSettingBooleanValue(vars.ComponentId, "NewDatabase", true);
@@ -478,7 +477,10 @@ namespace WebsitePanel.Setup.Actions
 			AppConfig.SetComponentSettingStringValue(vars.ComponentId, "DatabaseUser", vars.Database);
 			AppConfig.SetComponentSettingBooleanValue(vars.ComponentId, "NewDatabaseUser", vars.NewDatabaseUser);
 			//
-			AppConfig.SetComponentSettingStringValue(vars.ComponentId, "ConnectionString", vars.ConnectionString);
+			AppConfig.SetComponentSettingStringValue(vars.ComponentId, Global.Parameters.ConnectionString, vars.ConnectionString);
+			AppConfig.SetComponentSettingStringValue(vars.ComponentId, Global.Parameters.DatabaseServer, vars.DatabaseServer);
+			AppConfig.SetComponentSettingStringValue(vars.ComponentId, Global.Parameters.InstallConnectionString, vars.DbInstallConnectionString);
+			AppConfig.SetComponentSettingStringValue(vars.ComponentId, Global.Parameters.CryptoKey, vars.CryptoKey);
 			//
 			AppConfig.SaveConfiguration();
 		}
@@ -504,6 +506,26 @@ namespace WebsitePanel.Setup.Actions
 
 	public class EntServerActionManager : BaseActionManager
 	{
+		public static readonly List<Action> InstallScenario = new List<Action>
+		{
+			new SetCommonDistributiveParamsAction(),
+			new SetEntServerWebSettingsAction(),
+			new EnsureServiceAccntSecured(),
+			new CopyFilesAction(),
+			new SetEntServerCryptoKeyAction(),
+			new CreateWindowsAccountAction(),
+			new SetNtfsPermissionsAction(),
+			new CreateWebApplicationPoolAction(),
+			new CreateWebSiteAction(),
+			new CreateDatabaseAction(),
+			new CreateDatabaseUserAction(),
+			new ExecuteInstallSqlAction(),
+			new UpdateServeradminPasswAction(),
+			new SaveAspNetDbConnectionStringAction(),
+			new SaveComponentConfigSettingsAction(),
+			new SaveEntServerConfigSettingsAction()
+		};
+
 		public EntServerActionManager(SetupVariables sessionVars) : base(sessionVars)
 		{
 			Initialize += new EventHandler(EntServerActionManager_PreInit);
@@ -522,37 +544,7 @@ namespace WebsitePanel.Setup.Actions
 
 		private void LoadInstallationScenario()
 		{
-			AddAction(new SetCommonDistributiveParamsAction());
-			//
-			AddAction(new SetEntServerWebSettingsAction());
-			//
-			AddAction(new EnsureServiceAccntSecured());
-			//
-			AddAction(new CopyFilesAction());
-			//
-			AddAction(new SetEntServerCryptoKeyAction());
-			//
-			AddAction(new CreateWindowsAccountAction());
-			//
-			AddAction(new SetNtfsPermissionsAction());
-			//
-			AddAction(new CreateWebApplicationPoolAction());
-			//
-			AddAction(new CreateWebSiteAction());
-			//
-			AddAction(new CreateDatabaseAction());
-			//
-			AddAction(new CreateDatabaseUserAction());
-			//
-			AddAction(new ExecuteInstallSqlAction());
-			//
-			AddAction(new UpdateServeradminPasswAction());
-			//
-			AddAction(new SaveAspNetDbConnectionStringAction());
-			//
-			AddAction(new SaveComponentConfigSettingsAction());
-			//
-			AddAction(new SaveEntServerConfigSettingsAction());
+			CurrentScenario.AddRange(InstallScenario);
 		}
 	}
 }

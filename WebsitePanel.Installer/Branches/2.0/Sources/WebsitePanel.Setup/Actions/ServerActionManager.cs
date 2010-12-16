@@ -6,6 +6,7 @@ using WebsitePanel.Setup.Web;
 using WebsitePanel.Setup.Windows;
 using Ionic.Zip;
 using System.Xml;
+using WebsitePanel.Installer.Common;
 
 namespace WebsitePanel.Setup.Actions
 {
@@ -246,9 +247,8 @@ namespace WebsitePanel.Setup.Actions
 	public class CreateWebApplicationPoolAction : Action, IInstallAction, IUninstallAction
 	{
 		public const string AppPoolNameFormatString = "{0} Pool";
-		public const string LogStartInstallMessage = "";
+		public const string LogStartInstallMessage = "Creating application pool for the web site...";
 		public const string LogStartUninstallMessage = "Removing application pool...";
-		public const string LogEndUninstallMessage = "Completed";
 		public const string LogUninstallAppPoolNotFoundMessage = "Application pool not found";
 
 		public static string GetWebIdentity(SetupVariables vars)
@@ -418,7 +418,7 @@ namespace WebsitePanel.Setup.Actions
 			finally
 			{
 				//update log
-				Log.WriteEnd(LogEndUninstallMessage);
+				//Log.WriteEnd(LogEndUninstallMessage);
 			}
 		}
 
@@ -619,10 +619,7 @@ namespace WebsitePanel.Setup.Actions
 	public class CopyFilesAction : Action, IInstallAction, IUninstallAction
 	{
 		public const string LogStartInstallMessage = "Copying files...";
-		public const string LogEndInstallMessage = "Completed";
-
 		public const string LogStartUninstallMessage = "Deleting files copied...";
-		public const string LogEndUninstallMessage = "Completed";
 
 		internal void DoFilesCopyProcess(string source, string destination)
 		{
@@ -715,9 +712,7 @@ namespace WebsitePanel.Setup.Actions
 				//showing copy process
 				DoFilesCopyProcess(source, destination);
 				//
-				Log.WriteEnd(LogEndInstallMessage);
 				InstallLog.AppendLine(String.Format("- Copied {0} files", component));
-				Finish(LogEndInstallMessage);
 				// rollback
 				//RollBack.RegisterDirectoryAction(destination);
 			}
@@ -761,8 +756,6 @@ namespace WebsitePanel.Setup.Actions
 				{
 					FileUtils.DeleteDirectory(path);
 				}
-				//
-				Log.WriteEnd(LogEndUninstallMessage);
 			}
 			catch (Exception ex)
 			{
@@ -797,7 +790,6 @@ namespace WebsitePanel.Setup.Actions
 	public class SetServerPasswordAction : Action, IInstallAction
 	{
 		public const string LogStartInstallMessage = "Setting server password...";
-		public const string LogEndInstallMessage = "Completed";
 
 		public override bool Indeterminate
 		{
@@ -831,8 +823,6 @@ namespace WebsitePanel.Setup.Actions
 				{
 					writer.Write(content);
 				}
-				//
-				Finish(LogEndInstallMessage);
 			}
 			catch (Exception ex)
 			{
@@ -866,9 +856,6 @@ namespace WebsitePanel.Setup.Actions
 
 	public class SetCommonDistributiveParamsAction : Action, IPrepareDefaultsAction
 	{
-		public const string LogStartMessage = "Retrieving default setup parameters...";
-		public const string LogEndMessage = "Completed";
-
 		public override bool Indeterminate
 		{
 			get { return true; }
@@ -876,7 +863,6 @@ namespace WebsitePanel.Setup.Actions
 
 		void IPrepareDefaultsAction.Run(SetupVariables vars)
 		{
-			//Begin(LogStartMessage);
 			//
 			if (String.IsNullOrEmpty(vars.InstallationFolder))
 				vars.InstallationFolder = String.Format(@"C:\WebsitePanel\{0}", vars.ComponentName);
@@ -886,11 +872,6 @@ namespace WebsitePanel.Setup.Actions
 			// Force create new web site
 			vars.NewWebSite = true;
 			vars.NewVirtualDirectory = false;
-			// Configure default group membership for the service account
-			if (vars.IISVersion.Major == 7)
-				vars.UserMembership = new string[] { "AD:Domain Admins", "SID:" + SystemSID.ADMINISTRATORS, "IIS_IUSRS" };
-			else
-				vars.UserMembership = new string[] { "AD:Domain Admins", "SID:" + SystemSID.ADMINISTRATORS, "IIS_WPG" };
 			//
 			if (String.IsNullOrEmpty(vars.ConfigurationFile))
 				vars.ConfigurationFile = "web.config";
@@ -899,15 +880,12 @@ namespace WebsitePanel.Setup.Actions
 			if (String.IsNullOrEmpty(vars.ServerPassword))
 				vars.ServerPassword = "password";
 #endif
-			//
-			//Finish(LogEndMessage);
 		}
 	}
 
 	public class EnsureServiceAccntSecured : Action, IPrepareDefaultsAction
 	{
 		public const string LogStartMessage = "Verifying setup parameters...";
-		public const string LogEndMessage = "Completed";
 
 		public override bool Indeterminate
 		{
@@ -927,11 +905,8 @@ namespace WebsitePanel.Setup.Actions
 		}
 	}
 
-	public class SetServerDefaultWebSiteSettingsAction : Action, IPrepareDefaultsAction
+	public class SetServerDefaultInstallationSettingsAction : Action, IPrepareDefaultsAction
 	{
-		public const string LogStartMessage = "Retrieving default IP address of the component...";
-		public const string LogEndMessage = "Completed";
-
 		public override bool Indeterminate
 		{
 			get { return true; }
@@ -941,13 +916,13 @@ namespace WebsitePanel.Setup.Actions
 		{
 			//
 			if (String.IsNullOrEmpty(vars.WebSiteIP))
-				vars.WebSiteIP = "127.0.0.1";
+				vars.WebSiteIP = Global.Server.DefaultIP;
 			//
 			if (String.IsNullOrEmpty(vars.WebSitePort))
-				vars.WebSitePort = "9003";
+				vars.WebSitePort = Global.Server.DefaultPort;
 			//
 			if (string.IsNullOrEmpty(vars.UserAccount))
-				vars.UserAccount = "WPServer";
+				vars.UserAccount = Global.Server.ServiceAccount;
 		}
 	}
 
@@ -967,6 +942,8 @@ namespace WebsitePanel.Setup.Actions
 			Begin(LogStartInstallMessage);
 			//
 			Log.WriteStart(LogStartInstallMessage);
+			//
+			AppConfig.EnsureComponentConfig(vars.ComponentId);
 			//
 			AppConfig.SetComponentSettingStringValue(vars.ComponentId, "ApplicationName", vars.ApplicationName);
 			AppConfig.SetComponentSettingStringValue(vars.ComponentId, "ComponentCode", vars.ComponentCode);
@@ -1023,7 +1000,7 @@ namespace WebsitePanel.Setup.Actions
 
 				Log.WriteInfo(String.Format(LogUninstallInfoMessage, vars.ComponentFullName));
 
-				XmlUtils.RemoveXmlNode(AppConfig.GetComponentConfig(vars.ComponentFullName));
+				XmlUtils.RemoveXmlNode(AppConfig.GetComponentConfig(vars.ComponentId));
 
 				AppConfig.SaveConfiguration();
 
@@ -1267,6 +1244,20 @@ namespace WebsitePanel.Setup.Actions
 
 	public class ServerActionManager : BaseActionManager
 	{
+		public static readonly List<Action> InstallScenario = new List<Action>
+		{
+			new SetCommonDistributiveParamsAction(),
+			new SetServerDefaultInstallationSettingsAction(),
+			new EnsureServiceAccntSecured(),
+			new CopyFilesAction(),
+			new SetServerPasswordAction(),
+			new CreateWindowsAccountAction(),
+			new SetNtfsPermissionsAction(),
+			new CreateWebApplicationPoolAction(),
+			new CreateWebSiteAction(),
+			new SaveComponentConfigSettingsAction()
+		};
+
 		public ServerActionManager(SetupVariables sessionVars)
 			: base(sessionVars)
 		{
@@ -1288,25 +1279,7 @@ namespace WebsitePanel.Setup.Actions
 
 		protected virtual void LoadInstallationScenario()
 		{
-			AddAction(new SetCommonDistributiveParamsAction());
-			//
-			AddAction(new SetServerDefaultWebSiteSettingsAction());
-			//
-			AddAction(new EnsureServiceAccntSecured());
-			// Copy files first
-			AddAction(new CopyFilesAction());
-			//
-			AddAction(new SetServerPasswordAction());
-			//
-			AddAction(new CreateWindowsAccountAction());
-			//
-			AddAction(new SetNtfsPermissionsAction());
-			//
-			AddAction(new CreateWebApplicationPoolAction());
-			//
-			AddAction(new CreateWebSiteAction());
-			//
-			AddAction(new SaveComponentConfigSettingsAction());
+			CurrentScenario.AddRange(InstallScenario);
 		}
 	}	
 }

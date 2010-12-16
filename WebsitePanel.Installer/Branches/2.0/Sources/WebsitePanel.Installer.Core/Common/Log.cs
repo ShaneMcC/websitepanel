@@ -61,13 +61,18 @@ namespace WebsitePanel.Installer.Common
 		static void Initialize()
 		{
 			string fileName = LogFile;
+			//
+			Trace.Listeners.Clear();
+			//
 			FileStream fileLog = new FileStream(fileName, FileMode.Append);
+			//
 			TextWriterTraceListener fileListener = new TextWriterTraceListener(fileLog);
 			fileListener.TraceOutputOptions = TraceOptions.DateTime;
-			Trace.Listeners.Clear();
 			Trace.Listeners.Add(fileListener);
+			//
 			TextWriterTraceListener consoleListener = new TextWriterTraceListener(Console.Out);
 			Trace.Listeners.Add(consoleListener);
+			//
 			Trace.AutoFlush = true;
 		}
 
@@ -75,7 +80,10 @@ namespace WebsitePanel.Installer.Common
 		{
 			get
 			{
-				System.Configuration.Configuration appConfig = ConfigurationManager.OpenExeConfiguration(AppConfigManager.AppConfigFileNameWithoutExtension);
+				//
+				var exePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, AppConfigManager.AppConfigFileNameWithoutExtension);
+				//
+				System.Configuration.Configuration appConfig = ConfigurationManager.OpenExeConfiguration(exePath);
 				InstallerSection section = appConfig.GetSection("installer") as InstallerSection;
 
 				string fileName = section.GetStringSetting("Log.FileName");

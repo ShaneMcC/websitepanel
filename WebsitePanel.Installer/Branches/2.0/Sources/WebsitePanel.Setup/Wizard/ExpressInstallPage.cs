@@ -50,6 +50,7 @@ using WebsitePanel.Providers.ResultObjects;
 using System.Reflection;
 using System.Collections.Specialized;
 using WebsitePanel.Setup.Actions;
+using WebsitePanel.Installer.Common;
 
 namespace WebsitePanel.Setup
 {
@@ -2628,7 +2629,6 @@ namespace WebsitePanel.Setup
 					{
 						//for iis7 we use fqdn\user
 						identity = string.Format("{0}\\{1}", userDomain, userName);
-						
 					}
 					else 
 					{

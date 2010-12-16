@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.IO;
 using System.Xml;
+using WebsitePanel.Installer.Common;
 
 namespace WebsitePanel.Setup.Actions
 {
@@ -14,10 +15,25 @@ namespace WebsitePanel.Setup.Actions
 		{
 			//
 			if (String.IsNullOrEmpty(vars.WebSitePort))
-				vars.WebSitePort = "9003";
+				vars.WebSitePort = Global.WebPortal.DefaultPort;
 			//
 			if (String.IsNullOrEmpty(vars.UserAccount))
-				vars.UserAccount = "WPPortal";
+				vars.UserAccount = Global.WebPortal.ServiceAccount;
+
+			// By default we use public ip for the component
+			if (String.IsNullOrEmpty(vars.WebSiteIP))
+			{
+				var serverIPs = WebUtils.GetIPv4Addresses();
+				//
+				if (serverIPs != null && serverIPs.Length > 0)
+				{
+					vars.WebSiteIP = serverIPs[0];
+				}
+				else
+				{
+					vars.WebSiteIP = Global.LoopbackIPv4;
+				}
+			}
 		}
 	}
 
@@ -186,6 +202,21 @@ namespace WebsitePanel.Setup.Actions
 
 	public class WebPortalActionManager : BaseActionManager
 	{
+		public static readonly List<Action> InstallScenario = new List<Action>
+		{
+			new SetCommonDistributiveParamsAction(),
+			new SetWebPortalWebSettingsAction(),
+			new EnsureServiceAccntSecured(),
+			new CopyFilesAction(),
+			new CreateWindowsAccountAction(),
+			new SetNtfsPermissionsAction(),
+			new CreateWebApplicationPoolAction(),
+			new CreateWebSiteAction(),
+			new UpdateEnterpriseServerUrlAction(),
+			new SaveComponentConfigSettingsAction(),
+			new CreateDesktopShortcutsAction()
+		};
+
 		public WebPortalActionManager(SetupVariables sessionVars)
 			: base(sessionVars)
 		{
@@ -205,27 +236,7 @@ namespace WebsitePanel.Setup.Actions
 
 		private void LoadInstallationScenario()
 		{
-			AddAction(new SetCommonDistributiveParamsAction());
-			//
-			AddAction(new SetWebPortalWebSettingsAction());
-			//
-			AddAction(new EnsureServiceAccntSecured());
-			//
-			AddAction(new CopyFilesAction());
-			//
-			AddAction(new CreateWindowsAccountAction());
-			//
-			AddAction(new SetNtfsPermissionsAction());
-			//
-			AddAction(new CreateWebApplicationPoolAction());
-			//
-			AddAction(new CreateWebSiteAction());
-			//
-			AddAction(new UpdateEnterpriseServerUrlAction());
-			//
-			AddAction(new SaveComponentConfigSettingsAction());
-			//
-			AddAction(new CreateDesktopShortcutsAction());
+			CurrentScenario.AddRange(InstallScenario);
 		}
 	}
 }

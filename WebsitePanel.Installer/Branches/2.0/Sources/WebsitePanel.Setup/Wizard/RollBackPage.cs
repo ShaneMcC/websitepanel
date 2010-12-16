@@ -78,8 +78,6 @@ namespace WebsitePanel.Setup
 				Wizard.ActionManager.TotalProgressChanged += new EventHandler<ProgressEventArgs>((object sender, ProgressEventArgs e) =>
 				{
 					this.progressBar.Value = e.Value;
-					//
-					Thread.Sleep(new TimeSpan(0, 0, 2));
 				});
 				//
 				Wizard.ActionManager.Rollback();

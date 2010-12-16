@@ -50,7 +50,7 @@ namespace WebsitePanel.Setup
 			vars.Instance = String.Empty;
 
 			//create component settings node
-			vars.ComponentConfig = AppConfig.CreateComponentConfig(vars.ComponentId);
+			//vars.ComponentConfig = AppConfig.CreateComponentConfig(vars.ComponentId);
 			//add default component settings
 			CreateComponentSettingsFromSetupVariables(vars, vars.ComponentId);
 		}
@@ -62,9 +62,9 @@ namespace WebsitePanel.Setup
 			var setupVariables = new SetupVariables
 			{
 				ComponentId = Utils.GetStringSetupParameter(args, Global.Parameters.ComponentId),
+				ComponentCode = Utils.GetStringSetupParameter(args, Global.Parameters.ComponentCode),
 				SetupAction = SetupActions.Uninstall,
-				IISVersion = Global.IISVersion,
-				UserMembership = Global.ServiceUserMembership
+				IISVersion = Global.IISVersion
 			};
 			//
 			AppConfig.LoadConfiguration();

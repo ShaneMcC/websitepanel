@@ -32,6 +32,7 @@ using System.Configuration;
 using System.Collections.Generic;
 using System.Text;
 using WebsitePanel.Installer.Core;
+using System.IO;
 
 namespace WebsitePanel.Setup
 {
@@ -46,8 +47,11 @@ namespace WebsitePanel.Setup
 
 		public static void LoadConfiguration()
 		{
-			//appConfig = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
-			appConfig = ConfigurationManager.OpenExeConfiguration(AppConfigManager.AppConfigFileNameWithoutExtension);
+			//
+			var exePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, AppConfigManager.AppConfigFileNameWithoutExtension);
+			//
+			appConfig = ConfigurationManager.OpenExeConfiguration(exePath);
+			//
 			ConfigurationSection section = appConfig.Sections["installer"];
 			if (section == null)
 				throw new ConfigurationErrorsException("instalelr section not found");
@@ -63,6 +67,16 @@ namespace WebsitePanel.Setup
 			{
 				return xmlConfig;
 			}
+		}
+
+		public static void EnsureComponentConfig(string componentId)
+		{
+			var xmlConfigNode = GetComponentConfig(componentId);
+			//
+			if (xmlConfigNode != null)
+				return;
+			//
+			CreateComponentConfig(componentId);
 		}
 
 		public static XmlNode CreateComponentConfig(string componentId)

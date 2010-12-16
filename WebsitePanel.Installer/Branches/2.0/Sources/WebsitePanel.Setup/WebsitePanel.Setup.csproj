@@ -104,6 +104,7 @@
     <Compile Include="Actions\IPrerequisiteAction.cs" />
     <Compile Include="Actions\IUninstallAction.cs" />
     <Compile Include="Actions\ServerActionManager.cs" />
+    <Compile Include="Actions\StandaloneServerActionManager.cs" />
     <Compile Include="Actions\WebPortalActionManager.cs" />
     <Compile Include="Common\AppConfig.cs" />
     <Compile Include="Common\ConfigurationCheck.cs" />
@@ -118,7 +119,6 @@
     <Compile Include="Common\RegistryUtils.cs" />
     <Compile Include="Common\RollBack.cs" />
     <Compile Include="Common\RollBackProcess.cs" />
-    <Compile Include="Common\SecurityEnums.cs" />
     <Compile Include="Common\SecurityUtils.cs" />
     <Compile Include="Common\SetupActions.cs" />
     <Compile Include="Common\SetupVariables.cs" />

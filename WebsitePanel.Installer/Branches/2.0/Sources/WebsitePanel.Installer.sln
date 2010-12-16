@@ -3,6 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 11.00
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{129305D5-A9E6-4DCE-BFF6-41809E13EEEE}"
 	ProjectSection(SolutionItems) = preProject
 		..\..\LICENSE.txt = ..\..\LICENSE.txt
+		Local.testsettings = Local.testsettings
 		..\..\Readme.htm = ..\..\Readme.htm
 		..\..\ReleaseNotes.htm = ..\..\ReleaseNotes.htm
 	EndProjectSection

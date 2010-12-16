@@ -31,6 +31,7 @@ using System.Xml;
 using System.Collections.Generic;
 using System.Text;
 using WebsitePanel.Setup.Common;
+using WebsitePanel.Installer.Common;
 
 namespace WebsitePanel.Setup
 {
@@ -39,6 +40,9 @@ namespace WebsitePanel.Setup
 	/// </summary>
 	public sealed class SetupVariables
 	{
+		//
+		public static readonly SetupVariables Empty = new SetupVariables();
+
 		public string DatabaseUserPassword { get; set; }
 		public bool NewDatabaseUser { get; set; }
 		/// <summary>
@@ -191,7 +195,28 @@ namespace WebsitePanel.Setup
 		/// <summary>
 		/// User Membership
 		/// </summary>
-		public string[] UserMembership { get; set; }
+		public string[] UserMembership
+		{
+			get
+			{
+				if (ComponentCode.Equals(Global.Server.ComponentCode, StringComparison.OrdinalIgnoreCase))
+				{
+					return Global.Server.ServiceUserMembership; 
+				}
+				else if(ComponentCode.Equals(Global.EntServer.ComponentCode, StringComparison.OrdinalIgnoreCase))
+				{
+					return Global.EntServer.ServiceUserMembership;
+				}
+				else if (ComponentCode.Equals(Global.WebPortal.ComponentCode, StringComparison.OrdinalIgnoreCase))
+				{
+					return Global.WebPortal.ServiceUserMembership;
+				}
+				else
+				{
+					return new string[] {};
+				}
+			}
+		}
 
 
 		/// <summary>

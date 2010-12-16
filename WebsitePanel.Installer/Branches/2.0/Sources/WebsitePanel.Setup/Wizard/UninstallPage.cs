@@ -374,8 +374,7 @@ namespace WebsitePanel.Setup
 				string username = AppConfig.GetComponentSettingStringValue(componentId, "UserAccount");
 				string domain = AppConfig.GetComponentSettingStringValue(componentId, "Domain");
 				//membership
-				if (Wizard.SetupVariables.UserMembership != null &&
-					Wizard.SetupVariables.UserMembership.Length > 0)
+				if (Wizard.SetupVariables.UserMembership != null && Wizard.SetupVariables.UserMembership.Length > 0)
 				{
 					action = new InstallAction(ActionTypes.DeleteUserMembership);
 					action.Name = username;

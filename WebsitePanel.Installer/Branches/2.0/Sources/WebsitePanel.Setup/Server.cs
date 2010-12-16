@@ -57,7 +57,6 @@ namespace WebsitePanel.Setup
 			var setupVariables = new SetupVariables
 			{
 				SetupAction = SetupActions.Install,
-				UserMembership = Global.ServiceUserMembership,
 				IISVersion = Global.IISVersion
 			};
 			//
@@ -73,7 +72,7 @@ namespace WebsitePanel.Setup
 			{
 				if (version < new Version(minimalInstallerVersion))
 				{
-					Console.WriteLine(String.Format(Global.Messages.InstallerVersionIsObsolete, minimalInstallerVersion));
+					Installer.Common.Utils.ShowConsoleErrorMessage(Global.Messages.InstallerVersionIsObsolete, minimalInstallerVersion);
 					//
 					return false;
 				}
@@ -166,11 +165,6 @@ namespace WebsitePanel.Setup
 			InstallerForm form = new InstallerForm();
 			Wizard wizard = form.Wizard;
 			wizard.SetupVariables = setupVariables;
-			//
-			if (wizard.SetupVariables.IISVersion.Major == 7)
-				wizard.SetupVariables.UserMembership = new string[] { "AD:Domain Admins", "SID:" + SystemSID.ADMINISTRATORS, "IIS_IUSRS" };
-			else
-				wizard.SetupVariables.UserMembership = new string[] { "AD:Domain Admins", "SID:" + SystemSID.ADMINISTRATORS, "IIS_WPG" };
 
 			AppConfig.LoadComponentSettings(wizard.SetupVariables);
 

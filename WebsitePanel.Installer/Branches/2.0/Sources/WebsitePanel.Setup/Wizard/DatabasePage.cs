@@ -160,9 +160,9 @@ namespace WebsitePanel.Setup
 				SetupVariables.DatabaseServer = server;
 				SetupVariables.DbInstallConnectionString = connectionString;
 
-				AppConfig.SetComponentSettingStringValue(SetupVariables.ComponentId, "Database", database);
-				AppConfig.SetComponentSettingStringValue(SetupVariables.ComponentId, "DatabaseServer", server);
-				AppConfig.SetComponentSettingStringValue(SetupVariables.ComponentId, "InstallConnectionString", connectionString);
+				//AppConfig.SetComponentSettingStringValue(SetupVariables.ComponentId, "Database", database);
+				//AppConfig.SetComponentSettingStringValue(SetupVariables.ComponentId, "DatabaseServer", server);
+				//AppConfig.SetComponentSettingStringValue(SetupVariables.ComponentId, "InstallConnectionString", connectionString);
 			}
 			catch
 			{

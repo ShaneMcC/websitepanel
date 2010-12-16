@@ -36,6 +36,7 @@ using Microsoft.Web.Management;
 using Microsoft.Web.Administration;
 using System.DirectoryServices;
 using System.Text.RegularExpressions;
+using WebsitePanel.Installer.Common;
 
 namespace WebsitePanel.Setup
 {

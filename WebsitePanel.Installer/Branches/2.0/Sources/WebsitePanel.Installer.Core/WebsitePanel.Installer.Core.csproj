@@ -53,6 +53,7 @@
     <Compile Include="Common\Log.cs" />
     <Compile Include="Common\OS.cs" />
     <Compile Include="Common\RegistryUtils.cs" />
+    <Compile Include="Common\SecurityEnums.cs" />
     <Compile Include="Common\Utils.cs" />
     <Compile Include="Configuration\ComponentCollection.cs" />
     <Compile Include="Configuration\ComponentConfigElement.cs" />

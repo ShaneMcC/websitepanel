@@ -261,13 +261,13 @@ namespace WebsitePanel.Installer.Controls
 			Log.WriteStart("Uninstalling component");
 			
 			ComponentConfigElement element = AppContext.ScopeNode.Tag as ComponentConfigElement;
-			string installer = element.GetStringSetting("Installer");
-			string path = element.GetStringSetting("InstallerPath");
-			string type = element.GetStringSetting("InstallerType");
+			string installer = element.GetStringSetting(Global.Parameters.Installer);
+			string path = element.GetStringSetting(Global.Parameters.InstallerPath);
+			string type = element.GetStringSetting(Global.Parameters.InstallerType);
 			string componentId = element.ID;
-			string componentCode = element.GetStringSetting("ComponentCode");
-			string componentName = element.GetStringSetting("ComponentName");
-			string release = element.GetStringSetting("Release");
+			string componentCode = element.GetStringSetting(Global.Parameters.ComponentCode);
+			string componentName = element.GetStringSetting(Global.Parameters.ComponentName);
+			string release = element.GetStringSetting(Global.Parameters.Release);
 
 			try
 			{
@@ -282,14 +282,21 @@ namespace WebsitePanel.Installer.Controls
 					path = Path.Combine(tmpFolder, path);
 					Update();
 					string method = "Uninstall";
+					//
 					Log.WriteStart(string.Format("Running installer {0}.{1} from {2}", type, method, path));
-					Hashtable args = new Hashtable();
-					args["ComponentId"] = componentId;
-					args["ShellVersion"] = AppContext.AppForm.Version;
-					args["BaseDirectory"] = FileUtils.GetCurrentDirectory();
-					args["IISVersion"] = Global.IISVersion;
-					args["ParentForm"] = FindForm();
+					//
+					var args = new Hashtable
+					{
+						{ Global.Parameters.ComponentId, componentId },
+						{ Global.Parameters.ComponentCode, componentCode },
+						{ Global.Parameters.ShellVersion, AppContext.AppForm.Version },
+						{ Global.Parameters.BaseDirectory, FileUtils.GetCurrentDirectory() },
+						{ Global.Parameters.IISVersion, Global.IISVersion },
+						{ Global.Parameters.ParentForm,  FindForm() },
+					};
+					//
 					result = (DialogResult)AssemblyLoader.Execute(path, type, method, new object[] { args });
+					//
 					Log.WriteInfo(string.Format("Installer returned {0}", result));
 					Log.WriteEnd("Installer finished");
 					Update();

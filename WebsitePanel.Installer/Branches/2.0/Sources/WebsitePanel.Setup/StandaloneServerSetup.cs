@@ -34,322 +34,239 @@ using System.Windows.Forms;
 using System.Collections;
 using System.Text;
 using WebsitePanel.Setup.Web;
+using WebsitePanel.Installer.Common;
+using WebsitePanel.Setup.Actions;
 
 namespace WebsitePanel.Setup
 {
 	public class StandaloneServerSetup : BaseSetup
 	{
-		public static DialogResult Install(object obj)
+		public static object Install(object obj)
 		{
 			return InstallBase(obj, "1.0.6");
 		}
 
-		internal static DialogResult InstallBase(object obj, string minimalInstallerVersion)
+		internal static object InstallBase(object obj, string minimalInstallerVersion)
 		{
 			Hashtable args = Utils.GetSetupParameters(obj);
 
 			//check CS version
-			string shellVersion = Utils.GetStringSetupParameter(args, "ShellVersion");
+			string shellVersion = Utils.GetStringSetupParameter(args, Global.Parameters.ShellVersion);
+			var shellMode = Utils.GetStringSetupParameter(args, Global.Parameters.ShellMode);
 			Version version = new Version(shellVersion);
-			if (version < new Version(minimalInstallerVersion))
-			{
-				MessageBox.Show(
-					string.Format("WebsitePanel Installer {0} or higher required.", minimalInstallerVersion),
-					"Setup Wizard", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-				return DialogResult.Cancel;
-			}
-
-			InstallerForm form = new InstallerForm();
-			Wizard wizard = form.Wizard;
-			//load config file
-			AppConfig.LoadConfiguration();
-
-			//general settings
-			wizard.SetupVariables.ApplicationName = Utils.GetStringSetupParameter(args, "ApplicationName");
-			wizard.SetupVariables.Version = Utils.GetStringSetupParameter(args, "Release");
-			wizard.SetupVariables.Installer = Utils.GetStringSetupParameter(args, "Installer");
-			wizard.SetupVariables.InstallerPath = Utils.GetStringSetupParameter(args, "InstallerPath");
-			wizard.SetupVariables.IISVersion = Utils.GetVersionSetupParameter(args, "IISVersion");
-			wizard.SetupVariables.SetupAction = SetupActions.Install;
-			wizard.SetupVariables.SetupXml = Utils.GetStringSetupParameter(args, "SetupXml");
-		
 
 			//********************  Server ****************
-			//general settings 
-			string serverId = Guid.NewGuid().ToString();
-			wizard.SetupVariables.ServerComponentId = serverId;
-			wizard.SetupVariables.ComponentId = serverId;
-			wizard.SetupVariables.Instance = string.Empty;
-			wizard.SetupVariables.ComponentName = "Server";
-			wizard.SetupVariables.ComponentCode = "server";
-			wizard.SetupVariables.ComponentDescription = "WebsitePanel Server is a set of services running on the remote server to be controlled. Server application should be reachable from Enterprise Server one.";
-			wizard.SetupVariables.InstallerFolder = Path.Combine(Utils.GetStringSetupParameter(args, "InstallerFolder"), "Server");
-			wizard.SetupVariables.InstallerType = Utils.GetStringSetupParameter(args, "InstallerType").Replace("StandaloneServerSetup", "Server");
-			wizard.SetupVariables.InstallationFolder = Path.Combine(Utils.GetSystemDrive(), "WebsitePanel\\Server");
-			//web settings
-			wizard.SetupVariables.UserAccount = "WPServer";
-			wizard.SetupVariables.UserPassword = Guid.NewGuid().ToString("P");
-			wizard.SetupVariables.UserDomain = null;
-			wizard.SetupVariables.WebSiteIP = "127.0.0.1";
-			wizard.SetupVariables.WebSitePort = "9003";
-			wizard.SetupVariables.WebSiteDomain = string.Empty;
-			wizard.SetupVariables.NewWebSite = true;
-			wizard.SetupVariables.NewVirtualDirectory = false;
-			wizard.SetupVariables.UserMembership = (wizard.SetupVariables.IISVersion.Major == 7) ?
-				new string[] { "AD:Domain Admins", "SID:" + SystemSID.ADMINISTRATORS, "IIS_IUSRS" } :
-				new string[] { "AD:Domain Admins", "SID:" + SystemSID.ADMINISTRATORS, "IIS_WPG" };
-			wizard.SetupVariables.ConfigurationFile = "web.config";
-			
-			wizard.SetupVariables.UpdateServerPassword = true;
-
-			//Unattended setup
-			LoadComponentVariablesFromSetupXml(wizard.SetupVariables.ComponentCode, wizard.SetupVariables.SetupXml, wizard.SetupVariables);
-
-			//create component settings node
-			wizard.SetupVariables.ComponentConfig = AppConfig.CreateComponentConfig(serverId);
-			//write component settings to xml
-			CreateComponentSettingsFromSetupVariables(wizard.SetupVariables, serverId);
-			//save settings
-			SetupVariables serverSetupVariables = wizard.SetupVariables.Clone();
-
-			//server password
-			string serverPassword = serverSetupVariables.ServerPassword;
-			if ( string.IsNullOrEmpty(serverPassword))
+			var serverSetup = new SetupVariables
 			{
-				serverPassword = Guid.NewGuid().ToString("N").Substring(0, 10);
-			}
-			serverSetupVariables.ServerPassword = Utils.ComputeSHA1(serverPassword);
-			//add password to config
-			AppConfig.SetComponentSettingStringValue(serverSetupVariables.ComponentId, "Password", serverSetupVariables.ServerPassword);
-			wizard.SetupVariables.RemoteServerPassword = serverPassword;
-			//server url
-			wizard.SetupVariables.RemoteServerUrl = GetUrl(serverSetupVariables.WebSiteDomain, serverSetupVariables.WebSiteIP, serverSetupVariables.WebSitePort);
-
-			//********************  Portal ****************
-			//general settings
-			string portalId = Guid.NewGuid().ToString();
-			wizard.SetupVariables.PortalComponentId = portalId;
-			wizard.SetupVariables.ComponentId = portalId;
-			wizard.SetupVariables.Instance = string.Empty;
-			wizard.SetupVariables.ComponentName = "Portal";
-			wizard.SetupVariables.ComponentCode = "portal";
-			wizard.SetupVariables.ComponentDescription = "WebsitePanel Portal is a control panel itself with user interface which allows managing user accounts, hosting spaces, web sites, FTP accounts, files, etc.";
-			wizard.SetupVariables.InstallerFolder = Path.Combine(Utils.GetStringSetupParameter(args, "InstallerFolder"), "Portal");
-			wizard.SetupVariables.InstallerType = Utils.GetStringSetupParameter(args, "InstallerType").Replace("StandaloneServerSetup", "Portal");
-			wizard.SetupVariables.InstallationFolder = Path.Combine(Utils.GetSystemDrive(), "WebsitePanel\\Portal");
-			//web settings
-			wizard.SetupVariables.UserAccount = "WPPortal";
-			wizard.SetupVariables.UserPassword = Guid.NewGuid().ToString("P");
-			wizard.SetupVariables.UserDomain = null;
-			wizard.SetupVariables.WebSiteIP = string.Empty; //empty - to detect IP 
-			wizard.SetupVariables.WebSitePort = "9001";
-			wizard.SetupVariables.WebSiteDomain = string.Empty;
-			wizard.SetupVariables.NewWebSite = true;
-			wizard.SetupVariables.NewVirtualDirectory = false;
-			wizard.SetupVariables.UserMembership = (wizard.SetupVariables.IISVersion.Major == 7) ?
-				new string[] { "IIS_IUSRS" } :
-				new string[] { "IIS_WPG" };
-			wizard.SetupVariables.ConfigurationFile = "web.config";
-			//ES url
-			wizard.SetupVariables.EnterpriseServerURL = "http://127.0.0.1:9002";
-			
-			//Unattended setup
-			LoadComponentVariablesFromSetupXml(wizard.SetupVariables.ComponentCode, wizard.SetupVariables.SetupXml, wizard.SetupVariables);
-
-			//create component settings node
-			wizard.SetupVariables.ComponentConfig = AppConfig.CreateComponentConfig(portalId);
-			//add default component settings
-			CreateComponentSettingsFromSetupVariables(wizard.SetupVariables, portalId);
-			//save settings
-			SetupVariables portalSetupVariables = wizard.SetupVariables.Clone();
+				ComponentId = Guid.NewGuid().ToString(),
+				Instance = String.Empty,
+				ComponentName = Global.Server.ComponentName,
+				ComponentCode = Global.Server.ComponentCode,
+				ComponentDescription = Global.Server.ComponentDescription,
+				//
+				ServerPassword = Guid.NewGuid().ToString("N").Substring(0, 10),
+				//
+				SetupAction = SetupActions.Install,
+				IISVersion = Global.IISVersion,
+				ApplicationName = Utils.GetStringSetupParameter(args, Global.Parameters.ApplicationName),
+				Version = Utils.GetStringSetupParameter(args, Global.Parameters.Version),
+				Installer = Utils.GetStringSetupParameter(args, Global.Parameters.Installer),
+				InstallerPath = Utils.GetStringSetupParameter(args, Global.Parameters.InstallerPath),
+				SetupXml = Utils.GetStringSetupParameter(args, Global.Parameters.SetupXml),
+				//
+				InstallerFolder = Path.Combine(Utils.GetStringSetupParameter(args, Global.Parameters.InstallerFolder), Global.Server.ComponentName),
+				InstallerType = Utils.GetStringSetupParameter(args, Global.Parameters.InstallerType).Replace(Global.StandaloneServer.SetupController, Global.Server.SetupController),
+				InstallationFolder = Path.Combine(Path.Combine(Utils.GetSystemDrive(), "WebsitePanel"), Global.Server.ComponentName),
+				ConfigurationFile = "web.config",
+			};
+			// Load config file
+			AppConfig.LoadConfiguration();
+			//
+			LoadComponentVariablesFromSetupXml(serverSetup.ComponentCode, serverSetup.SetupXml, serverSetup);
+			//
+			//serverSetup.ComponentConfig = AppConfig.CreateComponentConfig(serverSetup.ComponentId);
+			//serverSetup.RemoteServerUrl = GetUrl(serverSetup.WebSiteDomain, serverSetup.WebSiteIP, serverSetup.WebSitePort);
+			//
+			//CreateComponentSettingsFromSetupVariables(serverSetup, serverSetup.ComponentId);
 
 			//********************  Enterprise Server ****************
-			//general settings 
-			string enterpriseServerId = Guid.NewGuid().ToString();
-			wizard.SetupVariables.EnterpriseServerComponentId = enterpriseServerId;
-			wizard.SetupVariables.ComponentId = enterpriseServerId;
-			wizard.SetupVariables.Instance = string.Empty;
-			wizard.SetupVariables.ComponentName = "Enterprise Server";
-			wizard.SetupVariables.ComponentCode = "enterprise server";
-			wizard.SetupVariables.ComponentDescription = "Enterprise Server is the heart of WebsitePanel system. It includes all business logic of the application. Enterprise Server should have access to Server and be accessible from Portal applications.";
-			wizard.SetupVariables.InstallerFolder = Path.Combine(Utils.GetStringSetupParameter(args, "InstallerFolder"), "Enterprise Server");
-			wizard.SetupVariables.InstallerType = Utils.GetStringSetupParameter(args, "InstallerType").Replace("StandaloneServerSetup", "EnterpriseServer");
-			wizard.SetupVariables.InstallationFolder = Path.Combine(Utils.GetSystemDrive(), "WebsitePanel\\Enterprise Server");
-			//web settings
-			wizard.SetupVariables.UserAccount = "WPEnterpriseServer";
-			wizard.SetupVariables.UserPassword = Guid.NewGuid().ToString("P");
-			wizard.SetupVariables.UserDomain = null;
-			wizard.SetupVariables.WebSiteIP = "127.0.0.1";
-			wizard.SetupVariables.WebSitePort = "9002";
-			wizard.SetupVariables.WebSiteDomain = string.Empty;
-			wizard.SetupVariables.NewWebSite = true;
-			wizard.SetupVariables.NewVirtualDirectory = false;
-			wizard.SetupVariables.UserMembership = (wizard.SetupVariables.IISVersion.Major == 7) ?
-				new string[] { "IIS_IUSRS" } :
-				new string[] { "IIS_WPG" };
-			wizard.SetupVariables.ConfigurationFile = "web.config";
-			//db settings
-			wizard.SetupVariables.DatabaseServer = "localhost\\sqlexpress";
-			wizard.SetupVariables.Database = "WebsitePanel";
-			wizard.SetupVariables.CreateDatabase = true;
-			//serveradmin settings
-			wizard.SetupVariables.UpdateServerAdminPassword = true;
-			wizard.SetupVariables.ServerAdminPassword = string.Empty;
-			
-			//Unattended setup
-			LoadComponentVariablesFromSetupXml(wizard.SetupVariables.ComponentCode, wizard.SetupVariables.SetupXml, wizard.SetupVariables);
+			var esServerSetup = new SetupVariables
+			{
+				ComponentId = Guid.NewGuid().ToString(),
+				SetupAction = SetupActions.Install,
+				IISVersion = Global.IISVersion,
+				//
+				Instance = String.Empty,
+				ComponentName = Global.EntServer.ComponentName,
+				ComponentCode = Global.EntServer.ComponentCode,
+				ApplicationName = Utils.GetStringSetupParameter(args, Global.Parameters.ApplicationName),
+				Version = Utils.GetStringSetupParameter(args, Global.Parameters.Version),
+				ComponentDescription = Global.EntServer.ComponentDescription,
+				Installer = Utils.GetStringSetupParameter(args, Global.Parameters.Installer),
+				InstallerFolder = Path.Combine(Utils.GetStringSetupParameter(args, Global.Parameters.InstallerFolder), Global.EntServer.ComponentName),
+				InstallerType = Utils.GetStringSetupParameter(args, Global.Parameters.InstallerType).Replace(Global.StandaloneServer.SetupController, Global.EntServer.SetupController),
+				InstallationFolder = Path.Combine(Path.Combine(Utils.GetSystemDrive(), "WebsitePanel"), Global.EntServer.ComponentName),
+				InstallerPath = Utils.GetStringSetupParameter(args, Global.Parameters.InstallerPath),
+				SetupXml = Utils.GetStringSetupParameter(args, Global.Parameters.SetupXml),
+				//
+				ConfigurationFile = "web.config",
+				ConnectionString = Global.EntServer.AspNetConnectionStringFormat,
+				DatabaseServer = Global.EntServer.DefaultDbServer,
+				Database = Global.EntServer.DefaultDatabase,
+				CreateDatabase = true,
+				UpdateServerAdminPassword = true,
+				//
+				WebSiteIP = Global.EntServer.DefaultIP,
+				WebSitePort = Global.EntServer.DefaultPort,
+				WebSiteDomain = String.Empty,
+			};
+			//
+			LoadComponentVariablesFromSetupXml(esServerSetup.ComponentCode, esServerSetup.SetupXml, esServerSetup);
+			//
+			//esServerSetup.ComponentConfig = AppConfig.CreateComponentConfig(esServerSetup.ComponentId);
+			//
+			//CreateComponentSettingsFromSetupVariables(esServerSetup, esServerSetup.ComponentId);
 
-			//create component settings node
-			wizard.SetupVariables.ComponentConfig = AppConfig.CreateComponentConfig(enterpriseServerId);
-			//add default component settings
-			CreateComponentSettingsFromSetupVariables(wizard.SetupVariables, enterpriseServerId);
-			//save settings
-			SetupVariables enterpiseServerSetupVariables = wizard.SetupVariables.Clone();
-			///////////////////////
-		
-			//create wizard pages
-			IntroductionPage introPage = new IntroductionPage();
-			LicenseAgreementPage licPage = new LicenseAgreementPage();
-			ConfigurationCheckPage page2 = new ConfigurationCheckPage();
-			ConfigurationCheck check1 = new ConfigurationCheck(CheckTypes.OperationSystem, "Operating System Requirement");
-			ConfigurationCheck check2 = new ConfigurationCheck(CheckTypes.IISVersion, "IIS Requirement");
-			ConfigurationCheck check3 = new ConfigurationCheck(CheckTypes.ASPNET, "ASP.NET Requirement");
-			ConfigurationCheck check4 = new ConfigurationCheck(CheckTypes.WPServer, "WebsitePanel Server Requirement");
-			check4.SetupVariables = serverSetupVariables;
-			ConfigurationCheck check5 = new ConfigurationCheck(CheckTypes.WPEnterpriseServer, "WebsitePanel Enterprise Server Requirement");
-			check5.SetupVariables = enterpiseServerSetupVariables;
-			ConfigurationCheck check6 = new ConfigurationCheck(CheckTypes.WPPortal, "WebsitePanel Portal Requirement");
-			check6.SetupVariables = portalSetupVariables;
+			//********************  Portal ****************
+			#region Portal Setup Variables
+			var portalSetup = new SetupVariables
+				{
+					ComponentId = Guid.NewGuid().ToString(),
+					SetupAction = SetupActions.Install,
+					IISVersion = Global.IISVersion,
+					//
+					Instance = String.Empty,
+					ComponentName = Global.WebPortal.ComponentName,
+					ComponentCode = Global.WebPortal.ComponentCode,
+					ApplicationName = Utils.GetStringSetupParameter(args, Global.Parameters.ApplicationName),
+					Version = Utils.GetStringSetupParameter(args, Global.Parameters.Version),
+					ComponentDescription = Global.WebPortal.ComponentDescription,
+					Installer = Utils.GetStringSetupParameter(args, Global.Parameters.Installer),
+					InstallerFolder = Path.Combine(Utils.GetStringSetupParameter(args, Global.Parameters.InstallerFolder), Global.WebPortal.ComponentName),
+					InstallerType = Utils.GetStringSetupParameter(args, Global.Parameters.InstallerType).Replace(Global.StandaloneServer.SetupController, Global.WebPortal.SetupController),
+					InstallationFolder = Path.Combine(Path.Combine(Utils.GetSystemDrive(), "WebsitePanel"), Global.WebPortal.ComponentName),
+					InstallerPath = Utils.GetStringSetupParameter(args, Global.Parameters.InstallerPath),
+					SetupXml = Utils.GetStringSetupParameter(args, Global.Parameters.SetupXml),
+					//
+					ConfigurationFile = "web.config",
+					EnterpriseServerURL = Global.WebPortal.DefaultEntServURL,
+				};
+			//
+			LoadComponentVariablesFromSetupXml(portalSetup.ComponentCode, portalSetup.SetupXml, portalSetup);
+			//
+			//portalSetup.ComponentConfig = AppConfig.CreateComponentConfig(portalSetup.ComponentId);
+			//
+			//CreateComponentSettingsFromSetupVariables(portalSetup, portalSetup.ComponentId); 
+			#endregion
 
-			page2.Checks.AddRange(new ConfigurationCheck[] { check1, check2, check3, check4, check5, check6 });
-			WebPage page3 = new WebPage();
-			//use portal settings for this page
-			page3.SetupVariables = portalSetupVariables;
-			DatabasePage page4 = new DatabasePage();
-			//use ES settings for this page
-			page4.SetupVariables = enterpiseServerSetupVariables;
-			ServerAdminPasswordPage page5 = new ServerAdminPasswordPage();
-			page5.SetupVariables = enterpiseServerSetupVariables;
-			page5.NoteText = "Note: Both serveradmin and admin accounts will use this password. You can always change password for serveradmin or admin accounts through control panel."; 
-			ExpressInstallPage page6 = new ExpressInstallPage();
-			wizard.SetupVariables.ComponentName = string.Empty;
+			//
+			var stdssam = new StandaloneServerActionManager(serverSetup, esServerSetup, portalSetup);
+			//
+			stdssam.PrepareDistributiveDefaults();
 
-			//create install currentScenario
+			//
+			if (shellMode.Equals(Global.SilentInstallerShell, StringComparison.OrdinalIgnoreCase))
+			{
+				// Validate the setup controller's bootstrapper version
+				if (version < new Version(minimalInstallerVersion))
+				{
+					Installer.Common.Utils.ShowConsoleErrorMessage(Global.Messages.InstallerVersionIsObsolete, minimalInstallerVersion);
+					//
+					return false;
+				}
 
-			//************ Server **************
-			InstallAction action = new InstallAction(ActionTypes.InitSetupVariables);
-			action.Description = "Installing WebsitePanel Server...";
-			action.SetupVariables = serverSetupVariables;
-			page6.Actions.Add(action);
+				try
+				{
+					var success = true;
+					
+					// Retrieve WebsitePanel Enterprise Server component's settings from the command-line
+					esServerSetup.ServerAdminPassword = Utils.GetStringSetupParameter(args, Global.Parameters.ServerAdminPassword);
+					esServerSetup.Database = Utils.GetStringSetupParameter(args, Global.Parameters.DatabaseName);
+					esServerSetup.DatabaseServer = Utils.GetStringSetupParameter(args, Global.Parameters.DatabaseServer);
+					esServerSetup.DbInstallConnectionString = SqlUtils.BuildDbServerMasterConnectionString(
+						esServerSetup.DatabaseServer,
+						Utils.GetStringSetupParameter(args, Global.Parameters.DbServerAdmin),
+						Utils.GetStringSetupParameter(args, Global.Parameters.DbServerAdminPassword)
+					);
 
-			action = new InstallAction(ActionTypes.CopyFiles);
-			action.Description = "Copying files...";
-			page6.Actions.Add(action);
+					//
+					stdssam.ActionError += new EventHandler<ActionErrorEventArgs>((object sender, ActionErrorEventArgs e) =>
+					{
+						Installer.Common.Utils.ShowConsoleErrorMessage(e.ErrorMessage);
+						//
+						Log.WriteError(e.ErrorMessage);
+						//
+						success = false;
+					});
+					//
+					stdssam.Start();
+					//
+					return success;
+				}
+				catch (Exception ex)
+				{
+					Log.WriteError("Failed to install the component", ex);
+					//
+					return false;
+				}
+			}
+			else
+			{
+				// Validate the setup controller's bootstrapper version
+				if (version < new Version(minimalInstallerVersion))
+				{
+					MessageBox.Show(String.Format(Global.Messages.InstallerVersionIsObsolete, minimalInstallerVersion),
+						"Setup Wizard", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+					//
+					return DialogResult.Cancel;
+				}
 
-			action = new InstallAction(ActionTypes.CreateWebSite);
-			action.Description = "Creating web site...";
-			page6.Actions.Add(action);
-
-			action = new InstallAction(ActionTypes.FolderPermissions);
-			action.Description = "Configuring folder permissions...";
-			page6.Actions.Add(action);
-
-			action = new InstallAction(ActionTypes.ServerPassword);
-			action.Description = "Setting server password...";
-			page6.Actions.Add(action);
-
-			//************* Enterprise server *********
-			action = new InstallAction(ActionTypes.InitSetupVariables);
-			action.Description = "Installing WebsitePanel Enterprise Server...";
-			action.SetupVariables = enterpiseServerSetupVariables;
-			page6.Actions.Add(action);
-
-			action = new InstallAction(ActionTypes.CopyFiles);
-			action.Description = "Copying files...";
-			page6.Actions.Add(action);
-
-			action = new InstallAction(ActionTypes.CreateWebSite);
-			action.Description = "Creating web site...";
-			page6.Actions.Add(action);
-
-			action = new InstallAction(ActionTypes.CryptoKey);
-			action.Description = "Generating crypto key...";
-			page6.Actions.Add(action);
-
-			action = new InstallAction(ActionTypes.CreateDatabase);
-			action.Description = "Creating SQL Server database...";
-			page6.Actions.Add(action);
-
-			action = new InstallAction(ActionTypes.CreateDatabaseUser);
-			action.Description = "Creating SQL Server user...";
-			page6.Actions.Add(action);
-
-			action = new InstallAction(ActionTypes.ExecuteSql);
-			action.Description = "Creating database objects...";
-			action.Path = "setup\\install_db.sql";
-			page6.Actions.Add(action);
-
-			action = new InstallAction(ActionTypes.CreateWPServerLogin);
-			action.Description = "Creating WebsitePanel login...";
-			page6.Actions.Add(action);
-
-			action = new InstallAction(ActionTypes.UpdateServerAdminPassword);
-			action.Description = "Updating serveradmin password...";
-			page6.Actions.Add(action);
-
-			action = new InstallAction(ActionTypes.UpdateLicenseInformation);
-			action.Description = "Updating license information...";
-			page6.Actions.Add(action);
-
-			//************* Portal *********
-			action = new InstallAction(ActionTypes.InitSetupVariables);
-			action.Description = "Installing WebsitePanel Portal...";
-			action.SetupVariables = portalSetupVariables;
-			page6.Actions.Add(action);
-
-			action = new InstallAction(ActionTypes.CopyFiles);
-			action.Description = "Copying files...";
-			page6.Actions.Add(action);
-
-			action = new InstallAction(ActionTypes.CopyWebConfig);
-			action.Description = "Copying web.config...";
-			page6.Actions.Add(action);
-
-			action = new InstallAction(ActionTypes.CreateWebSite);
-			action.Description = "Creating web site...";
-			page6.Actions.Add(action);
-
-			action = new InstallAction(ActionTypes.UpdateEnterpriseServerUrl);
-			action.Description = "Updating site settings...";
-			page6.Actions.Add(action);
-
-			action = new InstallAction(ActionTypes.UpdateConfig);
-			action.Description = "Updating system configuration...";
-			page6.Actions.Add(action);
-
-			action = new InstallAction(ActionTypes.CreateShortcuts);
-			action.Description = "Creating shortcut...";
-			page6.Actions.Add(action);
-
-			//************* Standalone server provisioning *********
-			action = new InstallAction(ActionTypes.InitSetupVariables);
-			action.SetupVariables = enterpiseServerSetupVariables;
-			page6.Actions.Add(action);
-
-			action = new InstallAction(ActionTypes.ConfigureStandaloneServerData);
-			action.Description = "Configuring server data...";
-			action.Url = portalSetupVariables.EnterpriseServerURL;
-			page6.Actions.Add(action);
-
-			SetupCompletePage page7 = new SetupCompletePage();
-			page7.SetupVariables = portalSetupVariables;
-			wizard.Controls.AddRange(new Control[] { introPage, licPage, page2, page3, page4, page5, page6, page7 });
-			wizard.LinkPages();
-			wizard.SelectedPage = introPage;
-
-			//show wizard
-			IWin32Window owner = args["ParentForm"] as IWin32Window;
-			return form.ShowModal(owner);
+				// NOTE: there is no assignment to SetupVariables property of the wizard as usually because we have three components 
+				// to setup here and thus we have created SwapSetupVariablesAction setup action to swap corresponding variables 
+				// back and forth while executing the installation scenario.
+				InstallerForm form = new InstallerForm();
+				Wizard wizard = form.Wizard;
+				wizard.SetupVariables = serverSetup;
+				// Assign corresponding action manager to the wizard.
+				wizard.ActionManager = stdssam;
+				// Initialize wizard pages and their properties
+				var introPage = new IntroductionPage();
+				var licPage = new LicenseAgreementPage();
+				var page2 = new ConfigurationCheckPage();			
+				// Setup prerequisites validation
+				page2.Checks.AddRange(new ConfigurationCheck[] { 
+					new ConfigurationCheck(CheckTypes.OperationSystem, "Operating System Requirement"), 
+					new ConfigurationCheck(CheckTypes.IISVersion, "IIS Requirement"), 
+					new ConfigurationCheck(CheckTypes.ASPNET, "ASP.NET Requirement"), 
+					// Validate Server installation prerequisites
+					new ConfigurationCheck(CheckTypes.WPServer, "WebsitePanel Server Requirement") { SetupVariables = serverSetup }, 
+					// Validate EnterpriseServer installation prerequisites
+					new ConfigurationCheck(CheckTypes.WPEnterpriseServer, "WebsitePanel Enterprise Server Requirement") { SetupVariables = esServerSetup }, 
+					// Validate WebPortal installation prerequisites
+					new ConfigurationCheck(CheckTypes.WPPortal, "WebsitePanel Portal Requirement") { SetupVariables = portalSetup }
+				});
+				// Assign WebPortal setup variables set to acquire corresponding settings
+				var page3 = new WebPage { SetupVariables = portalSetup };
+				// Assign EnterpriseServer setup variables set to acquire corresponding settings
+				var page4 = new DatabasePage { SetupVariables = esServerSetup };
+				// Assign EnterpriseServer setup variables set to acquire corresponding settings
+				var page5 = new ServerAdminPasswordPage
+				{
+					SetupVariables = esServerSetup,
+					NoteText = "Note: Both serveradmin and admin accounts will use this password. You can always change password for serveradmin or admin accounts through control panel."
+				};
+				//
+				var page6 = new ExpressInstallPage2();
+				// Assign WebPortal setup variables set to acquire corresponding settings
+				var page7 = new SetupCompletePage { SetupVariables = portalSetup };
+				//
+				wizard.Controls.AddRange(new Control[] { introPage, licPage, page2, page3, page4, page5, page6, page7 });
+				wizard.LinkPages();
+				wizard.SelectedPage = introPage;
+				// Run wizard
+				IWin32Window owner = args[Global.Parameters.ParentForm] as IWin32Window;
+				return form.ShowModal(owner);
+			}
 		}
 
 		public static DialogResult Uninstall(object obj)
@@ -434,3 +351,4 @@ namespace WebsitePanel.Setup
 
 	}
 }
+ 

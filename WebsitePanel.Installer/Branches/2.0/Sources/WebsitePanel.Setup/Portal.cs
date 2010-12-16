@@ -65,8 +65,6 @@ namespace WebsitePanel.Setup
 			//
 			InitInstall(args, setupVariables);
 			//
-			setupVariables.UserMembership = Global.ServiceUserMembership;
-			//
 			var wam = new WebPortalActionManager(setupVariables);
 			//
 			wam.PrepareDistributiveDefaults();
@@ -156,7 +154,6 @@ namespace WebsitePanel.Setup
 			{
 				ComponentId = Utils.GetStringSetupParameter(args, Global.Parameters.ComponentId),
 				IISVersion = Global.IISVersion,
-				UserMembership = Global.ServiceUserMembership,
 				SetupAction = SetupActions.Uninstall
 			};
 			//
