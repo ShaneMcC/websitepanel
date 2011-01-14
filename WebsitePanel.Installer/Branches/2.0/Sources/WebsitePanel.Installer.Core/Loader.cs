@@ -1,4 +1,4 @@
-﻿// Copyright (c) 2010, SMB SAAS Systems Inc.
+﻿// Copyright (c) 2011, SMB SAAS Systems Inc.
 // All rights reserved.
 //
 // Redistribution and use in source and binary forms, with or without modification,
@@ -43,6 +43,7 @@ namespace WebsitePanel.Installer.Core
 	{
 		public string StatusMessage { get; set; }
 		public T EventData { get; set; }
+		public bool Cancellable { get; set; }
 	}
 
 	/// <summary>
@@ -94,22 +95,39 @@ namespace WebsitePanel.Installer.Core
 
 		private void RaiseOnStatusChangedEvent(string statusMessage, string eventData)
 		{
+			RaiseOnStatusChangedEvent(statusMessage, eventData, true);
+		}
+
+		private void RaiseOnStatusChangedEvent(string statusMessage, string eventData, bool cancellable)
+		{
 			if (StatusChanged == null)
 			{
 				return;
 			}
 			// No event data for status updates
-			StatusChanged(this, new LoaderEventArgs<String> { StatusMessage = statusMessage, EventData = eventData });
+			StatusChanged(this, new LoaderEventArgs<String> { 
+				StatusMessage = statusMessage, 
+				EventData = eventData, 
+				Cancellable = cancellable 
+			});
 		}
 
 		private void RaiseOnProgressChangedEvent(int eventData)
+		{
+			RaiseOnProgressChangedEvent(eventData, true);
+		}
+
+		private void RaiseOnProgressChangedEvent(int eventData, bool cancellable)
 		{
 			if (ProgressChanged == null)
 			{
 				return;
 			}
 			//
-			ProgressChanged(this, new LoaderEventArgs<int> { EventData = eventData });
+			ProgressChanged(this, new LoaderEventArgs<int> {
+				EventData = eventData,
+				Cancellable = cancellable
+			});
 		}
 
 		private void RaiseOnOperationFailedEvent(Exception ex)
@@ -257,7 +275,7 @@ namespace WebsitePanel.Installer.Core
 				//
 				Log.WriteStart("Downloading file");
 				Log.WriteInfo(string.Format("Downloading file \"{0}\" to \"{1}\"", sourceFile, destinationFile));
-				
+
 				long downloaded = 0;
 				long fileSize = service.GetFileSize(sourceFile);
 				if (fileSize == 0)
@@ -277,7 +295,7 @@ namespace WebsitePanel.Installer.Core
 					FileUtils.AppendFileContent(destinationFile, content);
 					downloaded += content.Length;
 					//update progress bar
-					RaiseOnStatusChangedEvent(DownloadingSetupFilesMessage, 
+					RaiseOnStatusChangedEvent(DownloadingSetupFilesMessage,
 						string.Format(DownloadProgressMessage, downloaded / 1024, fileSize / 1024));
 					//
 					RaiseOnProgressChangedEvent(Convert.ToInt32((downloaded * 100) / fileSize));
@@ -304,51 +322,81 @@ namespace WebsitePanel.Installer.Core
 			try
 			{
 				int val = 0;
+				// Negative value means no progress made yet
+				int progress = -1;
+				//
 				Log.WriteStart("Unzipping file");
 				Log.WriteInfo(string.Format("Unzipping file \"{0}\" to the folder \"{1}\"", zipFile, destFolder));
 
 				long zipSize = 0;
-				using (ZipFile zip = ZipFile.Read(zipFile))
+				var zipInfo = ZipFile.Read(zipFile);
+				try
 				{
-					foreach (ZipEntry entry in zip)
+					foreach (ZipEntry entry in zipInfo)
 					{
 						if (!entry.IsDirectory)
 							zipSize += entry.UncompressedSize;
 					}
 				}
-
-				RaiseOnProgressChangedEvent(0);
+				finally
+				{
+					if (zipInfo != null)
+					{
+						zipInfo.Dispose();
+					}
+				}
 
 				long unzipped = 0;
-				using (ZipFile zip = ZipFile.Read(zipFile))
+				//
+				var zip = ZipFile.Read(zipFile);
+				//
+				try
 				{
 					foreach (ZipEntry entry in zip)
 					{
+						//
 						entry.Extract(destFolder, ExtractExistingFileAction.OverwriteSilently);
+						//
 						if (!entry.IsDirectory)
 							unzipped += entry.UncompressedSize;
 
 						if (zipSize != 0)
 						{
 							val = Convert.ToInt32(unzipped * 100 / zipSize);
+							// Skip to raise the progress event change when calculated progress 
+							// and the current progress value are even
+							if (val == progress)
+							{
+								continue;
+							}
 							//
-							RaiseOnStatusChangedEvent(PreparingSetupFilesMessage, String.Format(PrepareSetupProgressMessage, val));
+							RaiseOnStatusChangedEvent(
+								PreparingSetupFilesMessage, 
+								String.Format(PrepareSetupProgressMessage, val),
+								false);
 							//
-							RaiseOnProgressChangedEvent(val);
+							RaiseOnProgressChangedEvent(val, false);
 						}
 					}
+					// Notify client the operation can be cancelled at this time
+					RaiseOnProgressChangedEvent(100);
+					//
+					Log.WriteEnd("Unzipped file");
 				}
-				//
-				RaiseOnStatusChangedEvent(PreparingSetupFilesMessage, "100%");
-				//
-				Log.WriteEnd("Unzipped file");
+				finally
+				{
+					if (zip != null)
+					{
+						zip.Dispose();
+					}
+				}
 			}
 			catch (Exception ex)
 			{
 				if (Utils.IsThreadAbortException(ex))
 					return;
-
-				throw;
+				//
+				RaiseOnOperationFailedEvent(ex);
 			}
 		}
 

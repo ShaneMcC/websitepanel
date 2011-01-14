@@ -1,4 +1,4 @@
-// Copyright (c) 2010, SMB SAAS Systems Inc.
+// Copyright (c) 2011, SMB SAAS Systems Inc.
 // All rights reserved.
 //
 // Redistribution and use in source and binary forms, with or without modification,
@@ -70,9 +70,6 @@ namespace WebsitePanel.Installer.Common
 			fileListener.TraceOutputOptions = TraceOptions.DateTime;
 			Trace.Listeners.Add(fileListener);
 			//
-			TextWriterTraceListener consoleListener = new TextWriterTraceListener(Console.Out);
-			Trace.Listeners.Add(consoleListener);
-			//
 			Trace.AutoFlush = true;
 		}
 
@@ -80,17 +77,18 @@ namespace WebsitePanel.Installer.Common
 		{
 			get
 			{
+				string fileName = "WebsitePanel.Installer.log";
 				//
-				var exePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, AppConfigManager.AppConfigFileNameWithoutExtension);
-				//
-				System.Configuration.Configuration appConfig = ConfigurationManager.OpenExeConfiguration(exePath);
-				InstallerSection section = appConfig.GetSection("installer") as InstallerSection;
-
-				string fileName = section.GetStringSetting("Log.FileName");
 				if (string.IsNullOrEmpty(fileName))
 				{
 					fileName = "Installer.log";
 				}
+				// Ensure the path is correct
+				if (!Path.IsPathRooted(fileName))
+				{
+					fileName = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, fileName);
+				}
+				//
 				return fileName;
 			}
 		}

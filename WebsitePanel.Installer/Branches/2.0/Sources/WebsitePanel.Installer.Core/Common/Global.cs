@@ -1,4 +1,4 @@
-// Copyright (c) 2010, SMB SAAS Systems Inc.
+// Copyright (c) 2011, SMB SAAS Systems Inc.
 // All rights reserved.
 //
 // Redistribution and use in source and binary forms, with or without modification,
@@ -40,6 +40,7 @@ namespace WebsitePanel.Installer.Common
 		public const string SilentInstallerShell = "SilentInstallerShell";
 		public const string DefaultInstallPathRoot = @"C:\WebsitePanel";
 		public const string LoopbackIPv4 = "127.0.0.1";
+		public const string InstallerProductCode = "cfg core";
 
 		public abstract class Parameters
 		{
@@ -87,6 +88,13 @@ namespace WebsitePanel.Installer.Common
 			public const string ComponentIsAlreadyInstalled = "Component or its part is already installed.";
 			public const string AnotherInstanceIsRunning = "Another instance of the installation process is already running.";
 			public const string NoInputParametersSpecified = "No input parameters specified";
+			public const int InstallationError = -1000;
+			public const int UnknownComponentCodeError = -999;
+			public const int SuccessInstallation = 0;
+			public const int AnotherInstanceIsRunningError = -998;
+			public const int NotEnoughPermissionsErrorCode = -997;
+			public const int NoInputParametersSpecifiedError = -996;
+			public const int ComponentIsAlreadyInstalledError = -995;
 		}
 
 		public abstract class Server
@@ -103,19 +111,6 @@ namespace WebsitePanel.Installer.Common
 			public const string DefaultPort = "9003";
 			public const string DefaultIP = "127.0.0.1";
 			public const string SetupController = "Server";
-
-			public static string[] ServiceUserMembership
-			{
-				get
-				{
-					if (IISVersion.Major == 7)
-					{
-						return new string[] { "AD:Domain Admins", "SID:" + SystemSID.ADMINISTRATORS, "IIS_IUSRS" };
-					}
-					//
-					return new string[] { "AD:Domain Admins", "SID:" + SystemSID.ADMINISTRATORS, "IIS_WPG" };
-				}
-			}
 		}
 
 		public abstract class StandaloneServer
@@ -131,7 +126,7 @@ namespace WebsitePanel.Installer.Common
 			public const string ComponentDescription = "WebsitePanel Portal is a control panel itself with user interface which allows managing user accounts, hosting spaces, web sites, FTP accounts, files, etc.";
 			public const string ServiceAccount = "WPPortal";
 			public const string DefaultPort = "9001";
-			public const string DefaultIP = "127.0.0.1";
+			public const string DefaultIP = "";
 			public const string DefaultEntServURL = "http://127.0.0.1:9002";
 			public const string ComponentCode = "portal";
 			public const string SetupController = "Portal";
@@ -221,13 +216,21 @@ namespace WebsitePanel.Installer.Common
 		}
 
 		//
-		private static OS.WindowsVersion osVersion;
+		private static OS.WindowsVersion osVersion = OS.WindowsVersion.Unknown;
+
+		/// <summary>
+		/// Represents Setup Control Panel Accounts system settings set (SCPA)
+		/// </summary>
+		public class SCPA
+		{
+			public const string SettingsKeyName = "EnabledSCPA";
+		}
 
 		public static OS.WindowsVersion OSVersion
 		{
 			get
 			{
-				if (osVersion == null)
+				if (osVersion == OS.WindowsVersion.Unknown)
 				{
 					osVersion = OS.GetVersion();
 				}

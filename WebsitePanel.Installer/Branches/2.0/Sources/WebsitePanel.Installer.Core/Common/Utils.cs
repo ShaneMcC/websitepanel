@@ -1,4 +1,4 @@
-// Copyright (c) 2010, SMB SAAS Systems Inc.
+// Copyright (c) 2011, SMB SAAS Systems Inc.
 // All rights reserved.
 //
 // Redistribution and use in source and binary forms, with or without modification,
@@ -44,6 +44,7 @@ using System.Threading;
 
 using WebsitePanel.Installer.Core;
 using WebsitePanel.Installer.Configuration;
+using System.Xml;
 
 namespace WebsitePanel.Installer.Common
 {
@@ -55,6 +56,38 @@ namespace WebsitePanel.Installer.Common
 
 	public static class Utils
 	{
+		public static void FixConfigurationSectionDefinition()
+		{
+			var appConfigPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, String.Concat(AppConfigManager.AppConfigFileNameWithoutExtension, ".config"));
+			//
+			try
+			{
+				var configXmlDoc = new XmlDocument();
+				//
+				configXmlDoc.Load(appConfigPath);
+				//
+				var sectionDef = configXmlDoc.SelectSingleNode("//configSections/section[@name='installer']");
+				//
+				if (sectionDef == null)
+				{
+					return;
+				}
+				//
+				var typeDefString = sectionDef.Attributes["type"].Value;
+				//
+				if (typeDefString.EndsWith("WebsitePanel.Installer.Core") == false)
+				{
+					sectionDef.Attributes["type"].Value = "WebsitePanel.Installer.Configuration.InstallerSection, WebsitePanel.Installer.Core";
+					//
+					configXmlDoc.Save(appConfigPath);
+				}
+			}
+			catch (Exception ex)
+			{
+				Trace.TraceError("Failed to fix configuration section definition. Exception: {0}", ex);
+			}
+		}
+
 		#region DB
 
 		/// <summary>

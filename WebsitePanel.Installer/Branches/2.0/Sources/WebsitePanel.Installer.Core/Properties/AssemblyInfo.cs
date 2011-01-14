@@ -5,12 +5,12 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("WebsitePanel.Installer.Core")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyTitle("WebsitePanel Installer Core")]
+[assembly: AssemblyDescription("WebsitePanel Installer Core")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("Microsoft")]
-[assembly: AssemblyProduct("WebsitePanel.Installer.Core")]
-[assembly: AssemblyCopyright("Copyright © Microsoft 2010")]
+[assembly: AssemblyCompany("SMB SAAS Systems Inc.")]
+[assembly: AssemblyProduct("WebsitePanel Installer Core")]
+[assembly: AssemblyCopyright("Copyright © 2011 SMB SAAS Systems Inc.")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

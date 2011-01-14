@@ -23,7 +23,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>pdbonly</DebugType>
+    <DebugType>none</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
@@ -46,19 +46,30 @@
     <Compile Include="..\VersionInfo.cs">
       <Link>VersionInfo.cs</Link>
     </Compile>
-    <Compile Include="AppConfigManager.cs" />
+    <Compile Include="AppConfigManager.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Common\AssemblyLoader.cs" />
     <Compile Include="Common\FileUtils.cs" />
-    <Compile Include="Common\Global.cs" />
+    <Compile Include="Common\Global.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Common\Log.cs" />
     <Compile Include="Common\OS.cs" />
     <Compile Include="Common\RegistryUtils.cs" />
-    <Compile Include="Common\SecurityEnums.cs" />
     <Compile Include="Common\Utils.cs" />
-    <Compile Include="Configuration\ComponentCollection.cs" />
-    <Compile Include="Configuration\ComponentConfigElement.cs" />
-    <Compile Include="Configuration\ConfigKeys.cs" />
-    <Compile Include="Configuration\InstallerSection.cs" />
+    <Compile Include="Configuration\ComponentCollection.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Configuration\ComponentConfigElement.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Configuration\ConfigKeys.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Configuration\InstallerSection.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Loader.cs" />
     <Compile Include="Properties\Settings.Designer.cs">
       <AutoGen>True</AutoGen>
