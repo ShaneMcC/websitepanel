@@ -36,7 +36,7 @@
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>..\..\Build\</OutputPath>
+    <OutputPath>..\..\Build\debug\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -45,7 +45,7 @@
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>none</DebugType>
     <Optimize>true</Optimize>
-    <OutputPath>..\..\Build\</OutputPath>
+    <OutputPath>..\..\Build\release\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -112,6 +112,7 @@
     <Compile Include="Common\CRC32.cs" />
     <Compile Include="Common\ES.cs" />
     <Compile Include="Common\FileUtils.cs" />
+    <Compile Include="Common\Global.cs" />
     <Compile Include="Common\InstallAction.cs" />
     <Compile Include="Common\InstallLog.cs" />
     <Compile Include="Common\Log.cs" />
@@ -119,6 +120,7 @@
     <Compile Include="Common\RegistryUtils.cs" />
     <Compile Include="Common\RollBack.cs" />
     <Compile Include="Common\RollBackProcess.cs" />
+    <Compile Include="Common\SecurityEnums.cs" />
     <Compile Include="Common\SecurityUtils.cs" />
     <Compile Include="Common\SetupActions.cs" />
     <Compile Include="Common\SetupVariables.cs" />
@@ -391,12 +393,6 @@
       <ProductName>Windows Installer 3.1</ProductName>
       <Install>true</Install>
     </BootstrapperPackage>
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\WebsitePanel.Installer.Core\WebsitePanel.Installer.Core.csproj">
-      <Project>{0E4A3F5B-0BB1-4F63-863D-7B0182B378CF}</Project>
-      <Name>WebsitePanel.Installer.Core</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

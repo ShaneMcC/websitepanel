@@ -1,4 +1,4 @@
-// Copyright (c) 2010, SMB SAAS Systems Inc.
+// Copyright (c) 2011, SMB SAAS Systems Inc.
 // All rights reserved.
 //
 // Redistribution and use in source and binary forms, with or without modification,
@@ -32,7 +32,6 @@ using System.Windows.Forms;
 using System.Collections;
 using System.Xml;
 using System.Collections.Generic;
-using WebsitePanel.Installer.Common;
 
 namespace WebsitePanel.Setup
 {
@@ -52,7 +51,7 @@ namespace WebsitePanel.Setup
 			//create component settings node
 			//vars.ComponentConfig = AppConfig.CreateComponentConfig(vars.ComponentId);
 			//add default component settings
-			CreateComponentSettingsFromSetupVariables(vars, vars.ComponentId);
+			//CreateComponentSettingsFromSetupVariables(vars, vars.ComponentId);
 		}
 
 		public static DialogResult UninstallBase(object obj)
@@ -316,20 +315,6 @@ namespace WebsitePanel.Setup
 				vars.UserPassword = Utils.GetStringSetupParameter(args, Global.Parameters.UserPassword);
 			}
 			#endregion
-		}
-
-		public static void CreateComponentSettingsFromSetupVariables(SetupVariables setupVariables, string componentId)
-		{
-			AppConfig.SetComponentSettingStringValue(componentId, "ApplicationName", setupVariables.ApplicationName);
-			AppConfig.SetComponentSettingStringValue(componentId, "ComponentCode", setupVariables.ComponentCode);
-			AppConfig.SetComponentSettingStringValue(componentId, "ComponentName", setupVariables.ComponentName);
-			AppConfig.SetComponentSettingStringValue(componentId, "ComponentDescription", setupVariables.ComponentDescription);
-			AppConfig.SetComponentSettingStringValue(componentId, "Release", setupVariables.Version);
-			AppConfig.SetComponentSettingStringValue(componentId, "Instance", setupVariables.Instance);
-			AppConfig.SetComponentSettingStringValue(componentId, "InstallFolder", setupVariables.InstallationFolder);
-			AppConfig.SetComponentSettingStringValue(componentId, "Installer", setupVariables.Installer);
-			AppConfig.SetComponentSettingStringValue(componentId, "InstallerType", setupVariables.InstallerType);
-			AppConfig.SetComponentSettingStringValue(componentId, "InstallerPath", setupVariables.InstallerPath);
 		}
 
 		public static string GetDefaultDBName(string componentName)

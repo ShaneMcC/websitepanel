@@ -1,4 +1,4 @@
-// Copyright (c) 2010, SMB SAAS Systems Inc.
+// Copyright (c) 2011, SMB SAAS Systems Inc.
 // All rights reserved.
 //
 // Redistribution and use in source and binary forms, with or without modification,
@@ -31,13 +31,14 @@ using System.Xml;
 using System.Configuration;
 using System.Collections.Generic;
 using System.Text;
-using WebsitePanel.Installer.Core;
 using System.IO;
 
 namespace WebsitePanel.Setup
 {
 	public sealed class AppConfig
 	{
+		public const string AppConfigFileNameWithoutExtension = "WebsitePanel.Installer.exe";
+
 		private AppConfig()
 		{
 		}
@@ -48,7 +49,7 @@ namespace WebsitePanel.Setup
 		public static void LoadConfiguration()
 		{
 			//
-			var exePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, AppConfigManager.AppConfigFileNameWithoutExtension);
+			var exePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, AppConfigFileNameWithoutExtension);
 			//
 			appConfig = ConfigurationManager.OpenExeConfiguration(exePath);
 			//

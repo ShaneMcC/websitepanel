@@ -1,4 +1,4 @@
-// Copyright (c) 2010, SMB SAAS Systems Inc.
+// Copyright (c) 2011, SMB SAAS Systems Inc.
 // All rights reserved.
 //
 // Redistribution and use in source and binary forms, with or without modification,
@@ -31,7 +31,6 @@ using System.Xml;
 using System.Collections.Generic;
 using System.Text;
 using WebsitePanel.Setup.Common;
-using WebsitePanel.Installer.Common;
 
 namespace WebsitePanel.Setup
 {
@@ -42,6 +41,8 @@ namespace WebsitePanel.Setup
 	{
 		//
 		public static readonly SetupVariables Empty = new SetupVariables();
+		public bool EnableScpaMode { get; set; }
+		public string PeerAdminPassword { get; set; }
 
 		public string DatabaseUserPassword { get; set; }
 		public bool NewDatabaseUser { get; set; }
@@ -284,7 +285,43 @@ namespace WebsitePanel.Setup
 
 		public string SetupXml { get; set; }
 
-		public string RemoteServerUrl { get; set; }
+		public string RemoteServerUrl
+		{
+			get
+			{
+				string address = "http://";
+				string server = String.Empty;
+				string ipPort = String.Empty;
+				//server 
+				if (String.IsNullOrEmpty(WebSiteDomain) == false 
+					&& WebSiteDomain.Trim().Length > 0)
+				{
+					//domain 
+					server = WebSiteDomain.Trim();
+				}
+				else
+				{
+					//ip
+					if (String.IsNullOrEmpty(WebSiteIP) == false 
+						&& WebSiteIP.Trim().Length > 0)
+					{
+						server = WebSiteIP.Trim();
+					}
+				}
+				//port
+				if (server.Length > 0 &&
+					WebSiteIP.Trim().Length > 0 &&
+					WebSitePort.Trim() != "80")
+				{
+					ipPort = ":" + WebSitePort.Trim();
+				}
+
+				//address string
+				address += server + ipPort;
+				//
+				return address;
+			}
+		}
 
 		public string RemoteServerPassword { get; set; }
 

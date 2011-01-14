@@ -1,4 +1,4 @@
-// Copyright (c) 2010, SMB SAAS Systems Inc.
+// Copyright (c) 2011, SMB SAAS Systems Inc.
 // All rights reserved.
 //
 // Redistribution and use in source and binary forms, with or without modification,
@@ -36,7 +36,6 @@ using Microsoft.Web.Management;
 using Microsoft.Web.Administration;
 using System.DirectoryServices;
 using System.Text.RegularExpressions;
-using WebsitePanel.Installer.Common;
 
 namespace WebsitePanel.Setup
 {

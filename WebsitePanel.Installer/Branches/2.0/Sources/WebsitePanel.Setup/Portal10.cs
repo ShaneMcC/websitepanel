@@ -12,7 +12,7 @@ namespace WebsitePanel.Setup
 	{
 		public static new object Install(object obj)
 		{
-			return Portal.InstallBase(obj, "1.0.0");
+			return Portal.InstallBase(obj, "1.1.0");
 		}
 
 		public static new DialogResult Uninstall(object obj)
@@ -27,7 +27,7 @@ namespace WebsitePanel.Setup
 
 		public static new DialogResult Update(object obj)
 		{
-			return UpdateBase(obj, "1.0.0", "1.1.0", false);
+			return UpdateBase(obj, "1.1.0", "1.1.0", false);
 		}
 	}
 
@@ -38,7 +38,7 @@ namespace WebsitePanel.Setup
 	{
 		public static new object Install(object obj)
 		{
-			return Portal.InstallBase(obj, "1.0.0");
+			return Portal.InstallBase(obj, "1.1.0");
 		}
 
 		public static new DialogResult Uninstall(object obj)
@@ -53,7 +53,7 @@ namespace WebsitePanel.Setup
 
 		public static new DialogResult Update(object obj)
 		{
-			return UpdateBase(obj, "1.0.0", "1.0.2", false, new InstallAction(ActionTypes.AddCustomErrorsPage));
+			return UpdateBase(obj, "1.1.0", "1.0.2", false, new InstallAction(ActionTypes.AddCustomErrorsPage));
 		}
 	}
     /// Release 1.0.2

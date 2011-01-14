@@ -1,4 +1,32 @@
-﻿using System;
+﻿// Copyright (c) 2011, SMB SAAS Systems Inc.
+// All rights reserved.
+//
+// Redistribution and use in source and binary forms, with or without modification,
+// are permitted provided that the following conditions are met:
+//
+// - Redistributions of source code must  retain  the  above copyright notice, this
+//   list of conditions and the following disclaimer.
+//
+// - Redistributions in binary form  must  reproduce the  above  copyright  notice,
+//   this list of conditions  and  the  following  disclaimer in  the documentation
+//   and/or other materials provided with the distribution.
+//
+// - Neither  the  name of  the  SMB SAAS Systems Inc.  nor   the   names  of  its
+//   contributors may be used to endorse or  promote  products  derived  from  this
+//   software without specific prior written permission.
+//
+// THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
+// ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING,  BUT  NOT  LIMITED TO, THE IMPLIED
+// WARRANTIES  OF  MERCHANTABILITY   AND  FITNESS  FOR  A  PARTICULAR  PURPOSE  ARE
+// DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR
+// ANY DIRECT, INDIRECT, INCIDENTAL,  SPECIAL,  EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+// (INCLUDING, BUT NOT LIMITED TO,  PROCUREMENT  OF  SUBSTITUTE  GOODS OR SERVICES;
+// LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)  HOWEVER  CAUSED AND ON
+// ANY  THEORY  OF  LIABILITY,  WHETHER  IN  CONTRACT,  STRICT  LIABILITY,  OR TORT
+// (INCLUDING NEGLIGENCE OR OTHERWISE)  ARISING  IN  ANY WAY OUT OF THE USE OF THIS
+// SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+using System;
 using System.Collections.Generic;
 using System.Text;
 using System.IO;
@@ -25,9 +53,8 @@ namespace WebsitePanel.Setup.Actions
 
 	public abstract class Action
 	{
-		protected event EventHandler<ActionProgressEventArgs<int>> InstallProgressChange;
-		protected event EventHandler<ActionProgressEventArgs<int>> UninstallProgressChange;
-		protected event EventHandler<ActionProgressEventArgs<bool>> PrerequisiteComplete;
+		public event EventHandler<ActionProgressEventArgs<int>> ProgressChange;
+		public event EventHandler<ActionProgressEventArgs<bool>> PrerequisiteComplete;
 
 		protected object objectLock = new Object();
 
@@ -51,10 +78,10 @@ namespace WebsitePanel.Setup.Actions
 
 		protected void OnInstallProgressChanged(string message, int progress)
 		{
-			if (InstallProgressChange == null)
+			if (ProgressChange == null)
 				return;
 			//
-			InstallProgressChange(this, new ActionProgressEventArgs<int>
+			ProgressChange(this, new ActionProgressEventArgs<int>
 			{
 				StatusMessage = message,
 				EventData = progress,
@@ -64,10 +91,10 @@ namespace WebsitePanel.Setup.Actions
 
 		protected void OnUninstallProgressChanged(string message, int progress)
 		{
-			if (UninstallProgressChange == null)
+			if (ProgressChange == null)
 				return;
 			//
-			UninstallProgressChange(this, new ActionProgressEventArgs<int>
+			ProgressChange(this, new ActionProgressEventArgs<int>
 			{
 				StatusMessage = message,
 				EventData = progress,
@@ -285,62 +312,58 @@ namespace WebsitePanel.Setup.Actions
 
 			#region Executing the installation session
 			//
-			try
+			int totalValue = 0;
+			for (int i = 0, progress = 1; i < currentScenario.Count; i++, progress++)
 			{
+				var item = currentScenario[i];
+				// Get the next action from the queue
+				var action = item as IInstallAction;
+				// Take the action's type to log as much information about it as possible
+				currentActionType = item.GetType();
 				//
-				int totalValue = 0;
-				for (int i = 0, progress = 1; i < currentScenario.Count; i++, progress++)
+				if (action != null)
 				{
-					var item = currentScenario[i];
-					// Get the next action from the queue
-					var action = item as IInstallAction;
-					// Take the action's type to log as much information about it as possible
-					currentActionType = item.GetType();
-					//
-					if (action != null)
+					item.ProgressChange += new EventHandler<ActionProgressEventArgs<int>>(action_ProgressChanged);
+
+					try
 					{
-						//
-						action.ProgressChange += new EventHandler<ActionProgressEventArgs<int>>(action_ProgressChanged);
 						// Execute an install action
 						action.Run(SessionVariables);
+					}
+					catch (Exception ex)
+					{
 						//
-						action.ProgressChange -= new EventHandler<ActionProgressEventArgs<int>>(action_ProgressChanged);
-						// Calculate overall current progress status
-						totalValue = Convert.ToInt32(progress * 100 / currentScenario.Count);
-						// Update overall progress status
-						UpdateTotalProgress(totalValue);
+						if (currentActionType != default(Type))
+						{
+							Log.WriteError(String.Format("Failed to execute '{0}' type of action.", currentActionType));
+						}
 						//
-						Thread.Sleep(new TimeSpan(0, 0, 2));
+						Log.WriteError("Here is the original exception...", ex);
+						//
+						if (Utils.IsThreadAbortException(ex))
+							return;
+						// Notify external clients
+						OnActionError();
+						//
+						Rollback();
+						//
+						return;
 					}
 					//
-					lastSuccessActionIndex = i;
+					item.ProgressChange -= new EventHandler<ActionProgressEventArgs<int>>(action_ProgressChanged);
+					// Calculate overall current progress status
+					totalValue = Convert.ToInt32(progress * 100 / currentScenario.Count);
+					// Update overall progress status
+					UpdateTotalProgress(totalValue);
 				}
 				//
-				totalValue = 100;
-				//
-				UpdateTotalProgress(totalValue);
-				//
-				Thread.Sleep(new TimeSpan(0, 0, 2));
+				lastSuccessActionIndex = i;
 			}
-			catch (Exception ex)
-			{
-				//
-				if (currentActionType != default(Type))
-				{
-					Log.WriteError(String.Format("Failed to execute '{0}' type of action.", currentActionType));
-				}
-				//
-				Log.WriteError("Here is the original exception...", ex);
-				//
-				if (Utils.IsThreadAbortException(ex))
-					return;
-				// Notify external clients
-				OnActionError();
-				//
-				Rollback();
-				//
-				return;
-			}
+			//
+			totalValue = 100;
+			//
+			UpdateTotalProgress(totalValue);
+			//
 			#endregion
 		}
 

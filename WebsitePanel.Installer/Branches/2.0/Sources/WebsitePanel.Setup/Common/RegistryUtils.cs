@@ -1,4 +1,4 @@
-// Copyright (c) 2010, SMB SAAS Systems Inc.
+// Copyright (c) 2011, SMB SAAS Systems Inc.
 // All rights reserved.
 //
 // Redistribution and use in source and binary forms, with or without modification,
@@ -236,6 +236,13 @@ namespace WebsitePanel.Setup
 		{
 			object ret = GetRegistryKeyValue("SOFTWARE\\Microsoft\\ASP.NET\\2.0.50727.0", "DllFullPath");
 			return ( ret != null );
+		}
+
+		public static Version GetIISVersion()
+		{
+			int major = GetRegistryKeyInt32Value("SOFTWARE\\Microsoft\\InetStp", "MajorVersion");
+			int minor = GetRegistryKeyInt32Value("SOFTWARE\\Microsoft\\InetStp", "MinorVersion");
+			return new Version(major, minor);
 		}
 	}
 }

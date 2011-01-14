@@ -1,4 +1,4 @@
-// Copyright (c) 2010, SMB SAAS Systems Inc.
+// Copyright (c) 2011, SMB SAAS Systems Inc.
 // All rights reserved.
 //
 // Redistribution and use in source and binary forms, with or without modification,
@@ -118,8 +118,6 @@ namespace WebsitePanel.Setup
 					Log.WriteStart("Created a new folder");
 				}
 				Wizard.SetupVariables.InstallationFolder = installFolder;
-				string componentId = Wizard.SetupVariables.ComponentId;
-				AppConfig.SetComponentSettingStringValue(componentId, "InstallFolder", installFolder);
 
 				base.OnBeforeMoveNext(e);
 			}

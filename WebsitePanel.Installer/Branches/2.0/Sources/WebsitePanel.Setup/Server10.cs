@@ -12,7 +12,7 @@ namespace WebsitePanel.Setup
 	{
 		public static new object Install(object obj)
 		{
-			return Server.InstallBase(obj, "1.0.0");
+			return Server.InstallBase(obj, "1.1.0");
 		}
 
 		public static new object Uninstall(object obj)
@@ -27,7 +27,7 @@ namespace WebsitePanel.Setup
 
 		public static new object Update(object obj)
 		{
-			return UpdateBase(obj, "1.0.0", "1.1.0", false);
+			return UpdateBase(obj, "1.1.0", "1.1.0", false);
 		}
 	}
 	/// <summary>
@@ -37,7 +37,7 @@ namespace WebsitePanel.Setup
 	{
 		public static new object Install(object obj)
 		{
-			return Server.InstallBase(obj, "1.0.0");
+			return Server.InstallBase(obj, "1.1.0");
 		}
 
 		public static new object Uninstall(object obj)
@@ -52,7 +52,7 @@ namespace WebsitePanel.Setup
 
 		public static new object Update(object obj)
 		{
-			return UpdateBase(obj, "1.0.0", "1.0.2", false);
+			return UpdateBase(obj, "1.1.0", "1.0.2", false);
 		}
 	}
     /// Release 1.0.2

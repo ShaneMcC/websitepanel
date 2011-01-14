@@ -12,7 +12,7 @@ namespace WebsitePanel.Setup
 	{
 		public static new object Install(object obj)
 		{
-			return StandaloneServerSetup.InstallBase(obj, "1.0.0");
+			return StandaloneServerSetup.InstallBase(obj, "1.1.0");
 		}
 	}
 
@@ -23,7 +23,7 @@ namespace WebsitePanel.Setup
 	{
 		public static new object Install(object obj)
 		{
-			return StandaloneServerSetup.InstallBase(obj, "1.0.0");
+			return StandaloneServerSetup.InstallBase(obj, "1.1.0");
 		}
 	}
 

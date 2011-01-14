@@ -1,4 +1,4 @@
-// Copyright (c) 2010, SMB SAAS Systems Inc.
+// Copyright (c) 2011, SMB SAAS Systems Inc.
 // All rights reserved.
 //
 // Redistribution and use in source and binary forms, with or without modification,
@@ -33,7 +33,6 @@ using System.Configuration;
 using System.Windows.Forms;
 using System.Collections;
 using System.Text;
-using WebsitePanel.Installer.Common;
 using WebsitePanel.Setup.Actions;
 
 namespace WebsitePanel.Setup
@@ -73,7 +72,7 @@ namespace WebsitePanel.Setup
 			{
 				if (version < new Version(minimalInstallerVersion))
 				{
-					Installer.Common.Utils.ShowConsoleErrorMessage(Global.Messages.InstallerVersionIsObsolete, minimalInstallerVersion);
+					Utils.ShowConsoleErrorMessage(Global.Messages.InstallerVersionIsObsolete, minimalInstallerVersion);
 					//
 					return false;
 				}
@@ -86,7 +85,7 @@ namespace WebsitePanel.Setup
 					//
 					wam.ActionError += new EventHandler<ActionErrorEventArgs>((object sender, ActionErrorEventArgs e) =>
 					{
-						Installer.Common.Utils.ShowConsoleErrorMessage(e.ErrorMessage);
+						Utils.ShowConsoleErrorMessage(e.ErrorMessage);
 						//
 						Log.WriteError(e.ErrorMessage);
 						//

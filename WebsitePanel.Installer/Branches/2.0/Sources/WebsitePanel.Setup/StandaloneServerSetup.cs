@@ -1,4 +1,4 @@
-// Copyright (c) 2010, SMB SAAS Systems Inc.
+// Copyright (c) 2011, SMB SAAS Systems Inc.
 // All rights reserved.
 //
 // Redistribution and use in source and binary forms, with or without modification,
@@ -34,8 +34,8 @@ using System.Windows.Forms;
 using System.Collections;
 using System.Text;
 using WebsitePanel.Setup.Web;
-using WebsitePanel.Installer.Common;
 using WebsitePanel.Setup.Actions;
+using System.Threading;
 
 namespace WebsitePanel.Setup
 {
@@ -170,7 +170,7 @@ namespace WebsitePanel.Setup
 				// Validate the setup controller's bootstrapper version
 				if (version < new Version(minimalInstallerVersion))
 				{
-					Installer.Common.Utils.ShowConsoleErrorMessage(Global.Messages.InstallerVersionIsObsolete, minimalInstallerVersion);
+					Utils.ShowConsoleErrorMessage(Global.Messages.InstallerVersionIsObsolete, minimalInstallerVersion);
 					//
 					return false;
 				}
@@ -180,7 +180,22 @@ namespace WebsitePanel.Setup
 					var success = true;
 					
 					// Retrieve WebsitePanel Enterprise Server component's settings from the command-line
-					esServerSetup.ServerAdminPassword = Utils.GetStringSetupParameter(args, Global.Parameters.ServerAdminPassword);
+					var adminPassword = Utils.GetStringSetupParameter(args, Global.Parameters.ServerAdminPassword);
+					// This has been designed to make an installation process via Web PI more secure
+					if (String.IsNullOrEmpty(adminPassword))
+					{
+						// Set serveradmin password
+						esServerSetup.ServerAdminPassword = Guid.NewGuid().ToString();
+						// Set peer admin password
+						esServerSetup.PeerAdminPassword = Guid.NewGuid().ToString();
+						// Instruct provisioning scenario to enter the application in SCPA mode (Setup Control Panel Acounts)
+						esServerSetup.EnableScpaMode = true;
+					}
+					else
+					{
+						esServerSetup.ServerAdminPassword = esServerSetup.PeerAdminPassword = adminPassword;
+					}
+					//
 					esServerSetup.Database = Utils.GetStringSetupParameter(args, Global.Parameters.DatabaseName);
 					esServerSetup.DatabaseServer = Utils.GetStringSetupParameter(args, Global.Parameters.DatabaseServer);
 					esServerSetup.DbInstallConnectionString = SqlUtils.BuildDbServerMasterConnectionString(
@@ -192,7 +207,7 @@ namespace WebsitePanel.Setup
 					//
 					stdssam.ActionError += new EventHandler<ActionErrorEventArgs>((object sender, ActionErrorEventArgs e) =>
 					{
-						Installer.Common.Utils.ShowConsoleErrorMessage(e.ErrorMessage);
+						Utils.ShowConsoleErrorMessage(e.ErrorMessage);
 						//
 						Log.WriteError(e.ErrorMessage);
 						//

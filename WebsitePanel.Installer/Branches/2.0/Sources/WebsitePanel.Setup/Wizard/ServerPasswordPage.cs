@@ -1,4 +1,4 @@
-// Copyright (c) 2010, SMB SAAS Systems Inc.
+// Copyright (c) 2011, SMB SAAS Systems Inc.
 // All rights reserved.
 //
 // Redistribution and use in source and binary forms, with or without modification,
@@ -103,11 +103,16 @@ namespace WebsitePanel.Setup
 					e.Cancel = true;
 					return;
 				}
-				//string hash = Utils.ComputeSHA1(txtPassword.StatusMessage);
-				//Wizard.SetupVariables.ServerPassword = hash;
-				Wizard.SetupVariables.ServerPassword = txtPassword.Text;
+				//
+				if (Wizard.SetupVariables.SetupAction == SetupActions.Setup)
+				{
+					Wizard.SetupVariables.ServerPassword = Utils.ComputeSHA1(txtPassword.Text);
+				}
+				else
+				{
+					Wizard.SetupVariables.ServerPassword = txtPassword.Text;
+				}
 				Wizard.SetupVariables.UpdateServerPassword = true;
-				//AppConfig.SetComponentSettingStringValue(Wizard.SetupVariables.ComponentId, "Password", hash);
 			}
 			catch
 			{

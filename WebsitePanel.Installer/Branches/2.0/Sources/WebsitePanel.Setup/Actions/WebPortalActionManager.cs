@@ -1,9 +1,36 @@
-﻿using System;
+﻿// Copyright (c) 2011, SMB SAAS Systems Inc.
+// All rights reserved.
+//
+// Redistribution and use in source and binary forms, with or without modification,
+// are permitted provided that the following conditions are met:
+//
+// - Redistributions of source code must  retain  the  above copyright notice, this
+//   list of conditions and the following disclaimer.
+//
+// - Redistributions in binary form  must  reproduce the  above  copyright  notice,
+//   this list of conditions  and  the  following  disclaimer in  the documentation
+//   and/or other materials provided with the distribution.
+//
+// - Neither  the  name of  the  SMB SAAS Systems Inc.  nor   the   names  of  its
+//   contributors may be used to endorse or  promote  products  derived  from  this
+//   software without specific prior written permission.
+//
+// THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
+// ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING,  BUT  NOT  LIMITED TO, THE IMPLIED
+// WARRANTIES  OF  MERCHANTABILITY   AND  FITNESS  FOR  A  PARTICULAR  PURPOSE  ARE
+// DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR
+// ANY DIRECT, INDIRECT, INCIDENTAL,  SPECIAL,  EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+// (INCLUDING, BUT NOT LIMITED TO,  PROCUREMENT  OF  SUBSTITUTE  GOODS OR SERVICES;
+// LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)  HOWEVER  CAUSED AND ON
+// ANY  THEORY  OF  LIABILITY,  WHETHER  IN  CONTRACT,  STRICT  LIABILITY,  OR TORT
+// (INCLUDING NEGLIGENCE OR OTHERWISE)  ARISING  IN  ANY WAY OUT OF THE USE OF THIS
+// SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+using System;
 using System.Collections.Generic;
 using System.Text;
 using System.IO;
 using System.Xml;
-using WebsitePanel.Installer.Common;
 
 namespace WebsitePanel.Setup.Actions
 {
@@ -85,24 +112,6 @@ namespace WebsitePanel.Setup.Actions
 				throw;
 			}
 		}
-
-		event EventHandler<ActionProgressEventArgs<int>> IInstallAction.ProgressChange
-		{
-			add
-			{
-				lock (objectLock)
-				{
-					InstallProgressChange += value;
-				}
-			}
-			remove
-			{
-				lock (objectLock)
-				{
-					InstallProgressChange -= value;
-				}
-			}
-		}
 	}
 
 	public class CreateDesktopShortcutsAction : Action, IInstallAction
@@ -180,22 +189,50 @@ namespace WebsitePanel.Setup.Actions
 				Log.WriteInfo(String.Format("Shortcut url: {0}", url));
 			}
 		}
+	}
 
-		event EventHandler<ActionProgressEventArgs<int>> IInstallAction.ProgressChange
+	public class CopyWebConfigAction : Action, IInstallAction
+	{
+		void IInstallAction.Run(SetupVariables vars)
 		{
-			add
+			try
 			{
-				lock (objectLock)
+				Log.WriteStart("Copying web.config");
+				string configPath = Path.Combine(vars.InstallationFolder, "web.config");
+				string config7Path = Path.Combine(vars.InstallationFolder, "web7.config");
+
+				bool iis7 = (vars.IISVersion.Major == 7);
+				if (!File.Exists(config7Path))
 				{
-					InstallProgressChange += value;
+					Log.WriteInfo(string.Format("File {0} not found", config7Path));
+					return;
 				}
+
+				if (iis7)
+				{
+					if (!File.Exists(configPath))
+					{
+						Log.WriteInfo(string.Format("File {0} not found", configPath));
+						return;
+					}
+
+					FileUtils.DeleteFile(configPath);
+					File.Move(config7Path, configPath);
+				}
+				else
+				{
+					FileUtils.DeleteFile(config7Path);
+				}
+				Log.WriteEnd("Copied web.config");
 			}
-			remove
+			catch (Exception ex)
 			{
-				lock (objectLock)
-				{
-					InstallProgressChange -= value;
-				}
+				if (Utils.IsThreadAbortException(ex))
+					return;
+				//
+				Log.WriteError("Copy web.config error", ex);
+				//
+				throw;
 			}
 		}
 	}
@@ -208,7 +245,9 @@ namespace WebsitePanel.Setup.Actions
 			new SetWebPortalWebSettingsAction(),
 			new EnsureServiceAccntSecured(),
 			new CopyFilesAction(),
+			new CopyWebConfigAction(),
 			new CreateWindowsAccountAction(),
+			new ConfigureAspNetTempFolderPermissionsAction(),
 			new SetNtfsPermissionsAction(),
 			new CreateWebApplicationPoolAction(),
 			new CreateWebSiteAction(),

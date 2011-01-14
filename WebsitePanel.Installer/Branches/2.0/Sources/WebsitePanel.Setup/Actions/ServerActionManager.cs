@@ -1,4 +1,32 @@
-﻿using System;
+﻿// Copyright (c) 2011, SMB SAAS Systems Inc.
+// All rights reserved.
+//
+// Redistribution and use in source and binary forms, with or without modification,
+// are permitted provided that the following conditions are met:
+//
+// - Redistributions of source code must  retain  the  above copyright notice, this
+//   list of conditions and the following disclaimer.
+//
+// - Redistributions in binary form  must  reproduce the  above  copyright  notice,
+//   this list of conditions  and  the  following  disclaimer in  the documentation
+//   and/or other materials provided with the distribution.
+//
+// - Neither  the  name of  the  SMB SAAS Systems Inc.  nor   the   names  of  its
+//   contributors may be used to endorse or  promote  products  derived  from  this
+//   software without specific prior written permission.
+//
+// THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
+// ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING,  BUT  NOT  LIMITED TO, THE IMPLIED
+// WARRANTIES  OF  MERCHANTABILITY   AND  FITNESS  FOR  A  PARTICULAR  PURPOSE  ARE
+// DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR
+// ANY DIRECT, INDIRECT, INCIDENTAL,  SPECIAL,  EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+// (INCLUDING, BUT NOT LIMITED TO,  PROCUREMENT  OF  SUBSTITUTE  GOODS OR SERVICES;
+// LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)  HOWEVER  CAUSED AND ON
+// ANY  THEORY  OF  LIABILITY,  WHETHER  IN  CONTRACT,  STRICT  LIABILITY,  OR TORT
+// (INCLUDING NEGLIGENCE OR OTHERWISE)  ARISING  IN  ANY WAY OUT OF THE USE OF THIS
+// SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+using System;
 using System.Collections.Generic;
 using System.Text;
 using System.IO;
@@ -6,7 +34,6 @@ using WebsitePanel.Setup.Web;
 using WebsitePanel.Setup.Windows;
 using Ionic.Zip;
 using System.Xml;
-using WebsitePanel.Installer.Common;
 
 namespace WebsitePanel.Setup.Actions
 {
@@ -102,24 +129,6 @@ namespace WebsitePanel.Setup.Actions
 			CreateUserAccount(vars);
 		}
 
-		event EventHandler<ActionProgressEventArgs<int>> IInstallAction.ProgressChange
-		{
-			add
-			{
-				lock (objectLock)
-				{
-					InstallProgressChange += value;
-				}
-			}
-			remove
-			{
-				lock (objectLock)
-				{
-					InstallProgressChange -= value;
-				}
-			}
-		}
-
 		void IUninstallAction.Run(SetupVariables vars)
 		{
 			try
@@ -156,22 +165,86 @@ namespace WebsitePanel.Setup.Actions
 				throw;
 			}
 		}
+	}
 
-		event EventHandler<ActionProgressEventArgs<int>> IUninstallAction.ProgressChange
+	public class ConfigureAspNetTempFolderPermissionsAction : Action, IInstallAction
+	{
+		void IInstallAction.Run(SetupVariables vars)
 		{
-			add
+			try
 			{
-				lock (objectLock)
+				string path;
+				if (vars.IISVersion.Major == 6)
 				{
-					UninstallProgressChange += value;
+					// IIS_WPG -> C:\WINDOWS\Temp
+					path = Environment.GetEnvironmentVariable("TMP", EnvironmentVariableTarget.Machine);
+					SetFolderPermission(path, "IIS_WPG", NtfsPermission.Modify);
+
+					// IIS_WPG - > C:\WINDOWS\Microsoft.NET\Framework\v2.0.50727\Temporary ASP.NET Files
+					path = Path.Combine(System.Runtime.InteropServices.RuntimeEnvironment.GetRuntimeDirectory(),
+						"Temporary ASP.NET Files");
+					if (Utils.IsWin64() && Utils.IIS32Enabled())
+						path = path.Replace("Framework64", "Framework");
+					SetFolderPermission(path, "IIS_WPG", NtfsPermission.Modify);
 				}
+				// NETWORK_SERVICE -> C:\WINDOWS\Temp
+				path = Environment.GetEnvironmentVariable("TMP", EnvironmentVariableTarget.Machine);
+				//
+				SetFolderPermissionBySid(path, SystemSID.NETWORK_SERVICE, NtfsPermission.Modify);
+
 			}
-			remove
+			catch (Exception ex)
 			{
-				lock (objectLock)
+				if (Utils.IsThreadAbortException(ex))
+					return;
+
+				Log.WriteError("Security error", ex);
+			}
+		}
+
+		private void SetFolderPermission(string path, string account, NtfsPermission permission)
+		{
+			try
+			{
+				if (!FileUtils.DirectoryExists(path))
 				{
-					UninstallProgressChange -= value;
+					FileUtils.CreateDirectory(path);
+					Log.WriteInfo(string.Format("Created {0} folder", path));
 				}
+
+				Log.WriteStart(string.Format("Setting '{0}' permission for '{1}' folder for '{2}' account", permission, path, account));
+				SecurityUtils.GrantNtfsPermissions(path, null, account, permission, true, true);
+				Log.WriteEnd("Set security permissions");
+			}
+			catch (Exception ex)
+			{
+				if (Utils.IsThreadAbortException(ex))
+					return;
+
+				Log.WriteError("Security error", ex);
+			}
+		}
+
+		private void SetFolderPermissionBySid(string path, string account, NtfsPermission permission)
+		{
+			try
+			{
+				if (!FileUtils.DirectoryExists(path))
+				{
+					FileUtils.CreateDirectory(path);
+					Log.WriteInfo(string.Format("Created {0} folder", path));
+				}
+
+				Log.WriteStart(string.Format("Setting '{0}' permission for '{1}' folder for '{2}' account", permission, path, account));
+				SecurityUtils.GrantNtfsPermissionsBySid(path, account, permission, true, true);
+				Log.WriteEnd("Set security permissions");
+			}
+			catch (Exception ex)
+			{
+				if (Utils.IsThreadAbortException(ex))
+					return;
+
+				Log.WriteError("Security error", ex);
 			}
 		}
 	}
@@ -222,24 +295,6 @@ namespace WebsitePanel.Setup.Actions
 				Log.WriteError(LogInstallErrorMessage, ex);
 
 				throw;
-			}
-		}
-
-		event EventHandler<ActionProgressEventArgs<int>> IInstallAction.ProgressChange
-		{
-			add
-			{
-				lock (objectLock)
-				{
-					InstallProgressChange += value;
-				}
-			}
-			remove
-			{
-				lock (objectLock)
-				{
-					InstallProgressChange -= value;
-				}
 			}
 		}
 	}
@@ -357,24 +412,6 @@ namespace WebsitePanel.Setup.Actions
 			}
 		}
 
-		event EventHandler<ActionProgressEventArgs<int>> IInstallAction.ProgressChange
-		{
-			add
-			{
-				lock (objectLock)
-				{
-					InstallProgressChange += value;
-				}
-			}
-			remove
-			{
-				lock (objectLock)
-				{
-					InstallProgressChange -= value;
-				}
-			}
-		}
-
 		void IUninstallAction.Run(SetupVariables vars)
 		{
 			try
@@ -419,24 +456,6 @@ namespace WebsitePanel.Setup.Actions
 			{
 				//update log
 				//Log.WriteEnd(LogEndUninstallMessage);
-			}
-		}
-
-		event EventHandler<ActionProgressEventArgs<int>> IUninstallAction.ProgressChange
-		{
-			add
-			{
-				lock (objectLock)
-				{
-					UninstallProgressChange += value;
-				}
-			}
-			remove
-			{
-				lock (objectLock)
-				{
-					UninstallProgressChange -= value;
-				}
 			}
 		}
 	}
@@ -542,24 +561,6 @@ namespace WebsitePanel.Setup.Actions
 			}
 		}
 
-		event EventHandler<ActionProgressEventArgs<int>> IInstallAction.ProgressChange
-		{
-			add
-			{
-				lock (objectLock)
-				{
-					InstallProgressChange += value;
-				}
-			}
-			remove
-			{
-				lock (objectLock)
-				{
-					InstallProgressChange -= value;
-				}
-			}
-		}
-
 		void IUninstallAction.Run(SetupVariables vars)
 		{
 			var iisVersion = vars.IISVersion;
@@ -594,24 +595,6 @@ namespace WebsitePanel.Setup.Actions
 
 				Log.WriteError("Web site delete error", ex);
 				throw;
-			}
-		}
-
-		event EventHandler<ActionProgressEventArgs<int>> IUninstallAction.ProgressChange
-		{
-			add
-			{
-				lock (objectLock)
-				{
-					UninstallProgressChange += value;
-				}
-			}
-			remove
-			{
-				lock (objectLock)
-				{
-					UninstallProgressChange -= value;
-				}
 			}
 		}
 	}
@@ -725,24 +708,6 @@ namespace WebsitePanel.Setup.Actions
 			}
 		}
 
-		event EventHandler<ActionProgressEventArgs<int>> IInstallAction.ProgressChange
-		{
-			add
-			{
-				lock (objectLock)
-				{
-					InstallProgressChange += value;
-				}
-			}
-			remove
-			{
-				lock (objectLock)
-				{
-					InstallProgressChange -= value;
-				}
-			}
-		}
-
 		void IUninstallAction.Run(SetupVariables vars)
 		{
 			try
@@ -765,24 +730,6 @@ namespace WebsitePanel.Setup.Actions
 				Log.WriteError("Directory delete error", ex);
 
 				throw;
-			}
-		}
-
-		event EventHandler<ActionProgressEventArgs<int>> IUninstallAction.ProgressChange
-		{
-			add
-			{
-				lock (objectLock)
-				{
-					UninstallProgressChange += value;
-				}
-			}
-			remove
-			{
-				lock (objectLock)
-				{
-					UninstallProgressChange -= value;
-				}
 			}
 		}
 	}
@@ -834,24 +781,6 @@ namespace WebsitePanel.Setup.Actions
 				throw;
 			}
 		}
-
-		event EventHandler<ActionProgressEventArgs<int>> IInstallAction.ProgressChange
-		{
-			add
-			{
-				lock (objectLock)
-				{
-					InstallProgressChange += value;
-				}
-			}
-			remove
-			{
-				lock (objectLock)
-				{
-					InstallProgressChange -= value;
-				}
-			}
-		}
 	}
 
 	public class SetCommonDistributiveParamsAction : Action, IPrepareDefaultsAction
@@ -875,11 +804,6 @@ namespace WebsitePanel.Setup.Actions
 			//
 			if (String.IsNullOrEmpty(vars.ConfigurationFile))
 				vars.ConfigurationFile = "web.config";
-			//
-#if DEBUG
-			if (String.IsNullOrEmpty(vars.ServerPassword))
-				vars.ServerPassword = "password";
-#endif
 		}
 	}
 
@@ -974,24 +898,6 @@ namespace WebsitePanel.Setup.Actions
 			AppConfig.SaveConfiguration();
 		}
 
-		event EventHandler<ActionProgressEventArgs<int>> IInstallAction.ProgressChange
-		{
-			add
-			{
-				lock (objectLock)
-				{
-					InstallProgressChange += value;
-				}
-			}
-			remove
-			{
-				lock (objectLock)
-				{
-					InstallProgressChange -= value;
-				}
-			}
-		}
-
 		void IUninstallAction.Run(SetupVariables vars)
 		{
 			try
@@ -1019,194 +925,6 @@ namespace WebsitePanel.Setup.Actions
 				throw;
 			}
 		}
-
-		event EventHandler<ActionProgressEventArgs<int>> IUninstallAction.ProgressChange
-		{
-			add
-			{
-				lock (objectLock)
-				{
-					UninstallProgressChange += value;
-				}
-			}
-			remove
-			{
-				lock (objectLock)
-				{
-					UninstallProgressChange -= value;
-				}
-			}
-		}
-	}
-
-	public class UpdateWebSiteSettingsAction : Action, IInstallAction
-	{
-		public const string LogStartUpdateMessage = "Updating web site...";
-		public const string LogEndUpdateMessage = "Updated web site";
-
-		void IInstallAction.Run(SetupVariables vars)
-		{
-			string component = vars.ComponentFullName;
-			string siteId = vars.WebSiteId;
-			string ip = vars.WebSiteIP;
-			string port = vars.WebSitePort;
-			string domain = vars.WebSiteDomain;
-			bool update = vars.UpdateWebSite;
-			Version iisVersion = vars.IISVersion;
-			bool iis7 = (iisVersion.Major == 7);
-
-			//updating web site
-			try
-			{
-				//
-				OnInstallProgressChanged(LogStartUpdateMessage, 0);
-				Log.WriteStart(LogStartUpdateMessage);
-				//
-				Log.WriteInfo(String.Format("Updating web site \"{0}\" ( IP: {1}, Port: {2}, Domain: {3} )", siteId, ip, port, domain));
-
-				//check for existing site
-				string oldSiteId = iis7 ? WebUtils.GetIIS7SiteIdByBinding(ip, port, domain) : WebUtils.GetSiteIdByBinding(ip, port, domain);
-				// We are trying to update a web site that seems not to be a WebsitePanel node...
-				if (!oldSiteId.Equals(vars.WebSiteId, StringComparison.OrdinalIgnoreCase))
-				{
-					// get site name
-					string oldSiteName = iis7 ? oldSiteId : WebUtils.GetSite(oldSiteId).Name;
-					throw new Exception(
-						String.Format("'{0}' web site already has server binding ( IP: {1}, Port: {2}, Domain: {3} )",
-						oldSiteName, ip, port, domain));
-				}
-				// Re-apply binding only if it differs from the existing one
-				if (String.IsNullOrEmpty(oldSiteId))
-				{
-					ServerBinding newBinding = new ServerBinding(ip, port, domain);
-					if (iis7)
-						WebUtils.UpdateIIS7SiteBindings(siteId, new ServerBinding[] { newBinding });
-					else
-						WebUtils.UpdateSiteBindings(siteId, new ServerBinding[] { newBinding });
-				}
-				// update config setings
-				string componentId = vars.ComponentId;
-				AppConfig.SetComponentSettingStringValue(componentId, "WebSiteIP", ip);
-				AppConfig.SetComponentSettingStringValue(componentId, "WebSitePort", port);
-				AppConfig.SetComponentSettingStringValue(componentId, "WebSiteDomain", domain);
-
-				//update log
-				Log.WriteEnd(LogEndUpdateMessage);
-
-				//update install log
-				InstallLog.AppendLine("- Updated web site");
-				InstallLog.AppendLine("  You can access the application by the following URLs:");
-				string[] urls = Utils.GetApplicationUrls(ip, domain, port, null);
-				foreach (string url in urls)
-				{
-					InstallLog.AppendLine("  http://" + url);
-				}
-			}
-			catch (Exception ex)
-			{
-				if (Utils.IsThreadAbortException(ex))
-					return;
-
-				Log.WriteError("Update web site error", ex);
-				throw;
-			}
-
-			//opening windows firewall ports
-			try
-			{
-				Utils.OpenFirewallPort(component, port, vars.IISVersion);
-			}
-			catch (Exception ex)
-			{
-				if (Utils.IsThreadAbortException(ex))
-					return;
-
-				Log.WriteError("Open windows firewall port error", ex);
-			}
-		}
-
-		event EventHandler<ActionProgressEventArgs<int>> IInstallAction.ProgressChange
-		{
-			add
-			{
-				lock (objectLock)
-				{
-					InstallProgressChange += value;
-				}
-			}
-			remove
-			{
-				lock (objectLock)
-				{
-					InstallProgressChange -= value;
-				}
-			}
-		}
-	}
-
-	public class UpdateServerPasswordAction : Action, IInstallAction
-	{
-		void IInstallAction.Run(SetupVariables vars)
-		{
-			try
-			{
-				if (!vars.UpdateServerPassword)
-					return;
-
-				string path = Path.Combine(vars.InstallationFolder, vars.ConfigurationFile);
-				string hash = Utils.ComputeSHA1(vars.ServerPassword);
-
-				if (!File.Exists(path))
-				{
-					Log.WriteInfo(string.Format("File {0} not found", path));
-					return;
-				}
-
-				Log.WriteStart("Updating configuration file (server password)");
-				Log.WriteInfo(String.Format("New server password is: '{0}'", vars.ServerPassword));
-				XmlDocument doc = new XmlDocument();
-				doc.Load(path);
-
-				XmlElement passwordNode = doc.SelectSingleNode("//websitepanel.server/security/password") as XmlElement;
-				if (passwordNode == null)
-				{
-					Log.WriteInfo("server password setting not found");
-					return;
-				}
-
-				passwordNode.SetAttribute("value", hash);
-				doc.Save(path);
-				//
-				Log.WriteEnd("Updated configuration file");
-				InstallLog.AppendLine("- Updated password in the configuration file");
-			}
-			catch (Exception ex)
-			{
-				if (Utils.IsThreadAbortException(ex))
-					return;
-				//
-				Log.WriteError("Configuration file update error", ex);
-				throw;
-			}
-		}
-
-		event EventHandler<ActionProgressEventArgs<int>> IInstallAction.ProgressChange
-		{
-			add
-			{
-				lock (objectLock)
-				{
-					InstallProgressChange += value;
-				}
-			}
-			remove
-			{
-				lock (objectLock)
-				{
-					InstallProgressChange -= value;
-				}
-			}
-		}
 	}
 
 	#endregion
@@ -1222,24 +940,6 @@ namespace WebsitePanel.Setup.Actions
 		{
 			throw new NotImplementedException();
 		}
-
-		event EventHandler<ActionProgressEventArgs<int>> IInstallAction.ProgressChange
-		{
-			add
-			{
-				lock (objectLock)
-				{
-					InstallProgressChange += value;
-				}
-			}
-			remove
-			{
-				lock (objectLock)
-				{
-					InstallProgressChange -= value;
-				}
-			}
-		}
 	}
 
 	public class ServerActionManager : BaseActionManager
@@ -1252,6 +952,7 @@ namespace WebsitePanel.Setup.Actions
 			new CopyFilesAction(),
 			new SetServerPasswordAction(),
 			new CreateWindowsAccountAction(),
+			new ConfigureAspNetTempFolderPermissionsAction(),
 			new SetNtfsPermissionsAction(),
 			new CreateWebApplicationPoolAction(),
 			new CreateWebSiteAction(),
