@@ -1,4 +1,4 @@
-// Copyright (c) 2010, SMB SAAS Systems Inc.
+// Copyright (c) 2011, SMB SAAS Systems Inc.
 // All rights reserved.
 //
 // Redistribution and use in source and binary forms, with or without modification,
@@ -99,11 +99,31 @@ namespace WebsitePanel.Installer.Controls
 		{
 			lblProcess.Text = e.StatusMessage;
 			lblValue.Text = e.EventData;
+			// Adjust Cancel button availability for an operation being performed
+			if (btnCancel.Enabled != e.Cancellable)
+			{
+				btnCancel.Enabled = e.Cancellable;
+			}
+			// This check allows to avoid extra form redrawing operations
+			if (ControlBox != e.Cancellable)
+			{
+				ControlBox = e.Cancellable;
+			}
 		}
 
 		void appLoader_ProgressChanged(object sender, Core.LoaderEventArgs<Int32> e)
 		{
 			progressBar.Value = e.EventData;
+			// Adjust Cancel button availability for an operation being performed
+			if (btnCancel.Enabled != e.Cancellable)
+			{
+				btnCancel.Enabled = e.Cancellable;
+			}
+			// This check allows to avoid extra form redrawing operations
+			if (ControlBox != e.Cancellable)
+			{
+				ControlBox = e.Cancellable;
+			}
 		}
 
 		void appLoader_OperationFailed(object sender, Core.LoaderEventArgs<Exception> e)
