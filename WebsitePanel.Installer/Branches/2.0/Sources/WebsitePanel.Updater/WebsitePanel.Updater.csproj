@@ -36,7 +36,7 @@
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>bin\</OutputPath>
+    <OutputPath>bin\Debug\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -46,7 +46,7 @@
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>none</DebugType>
     <Optimize>true</Optimize>
-    <OutputPath>bin\</OutputPath>
+    <OutputPath>bin\Release\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -152,6 +152,6 @@
   </Target>
   -->
   <PropertyGroup>
-    <PostBuildEvent>..\Resources\CompileUpdater.bat $(SolutionDir)</PostBuildEvent>
+    <PostBuildEvent>"$(SolutionDir)..\Resources\ILMerge.exe" "$(TargetPath)" "$(SolutionDir)..\Lib\Ionic.Zip.Reduced.dll" /out:$(SolutionDir)WebsitePanel.Installer\Updater.exe /ndebug</PostBuildEvent>
   </PropertyGroup>
 </Project>
