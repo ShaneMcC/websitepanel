@@ -1,4 +1,4 @@
-// Copyright (c) 2010, SMB SAAS Systems Inc.
+// Copyright (c) 2011, SMB SAAS Systems Inc.
 // All rights reserved.
 //
 // Redistribution and use in source and binary forms, with or without modification,
@@ -44,6 +44,7 @@ using System.Runtime.Remoting.Lifetime;
 using System.Security.Principal;
 using WebsitePanel.Installer.Core;
 using WebsitePanel.Installer.Configuration;
+using System.Reflection;
 
 namespace WebsitePanel.Installer
 {
@@ -60,6 +61,9 @@ namespace WebsitePanel.Installer
 		[STAThread]
 		static void Main()
 		{
+			//
+			Utils.FixConfigurationSectionDefinition();
+
 			//check security permissions
 			if (!Utils.CheckSecurity())
 			{
