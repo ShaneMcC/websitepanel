@@ -1,4 +1,4 @@
-﻿// Copyright (c) 2010, SMB SAAS Systems Inc.
+﻿// Copyright (c) 2011, SMB SAAS Systems Inc.
 // All rights reserved.
 //
 // Redistribution and use in source and binary forms, with or without modification,
@@ -82,101 +82,124 @@ namespace WebsitePanel.SilentInstaller
 		};
 
 		[STAThread]
-		static void Main(string[] args)
+		static int Main(string[] args)
 		{
-#if DEBUG
-			Console.WriteLine("Please connect a debugger and then press any key to continue...");
-			Console.ReadKey();
-#endif
+			//
+			Utils.FixConfigurationSectionDefinition();
+			//
 			// Ensure arguments supplied for the application
 			if (args.Length == 0)
 			{
-				Utils.ShowConsoleErrorMessage(Global.Messages.NoInputParametersSpecified);
-				return;
+				Log.WriteError(Global.Messages.NoInputParametersSpecified);
+				return Global.Messages.NoInputParametersSpecifiedError;
 			}
 
 			// Check user's security permissions
 			if (!Utils.CheckSecurity())
 			{
 				ShowSecurityError();
-				Console.ReadKey();
-				return;
+				return Global.Messages.NotEnoughPermissionsErrorCode;
 			}
 
 			// Check administrator permissions
 			if (!Utils.IsAdministrator())
 			{
 				ShowSecurityError();
-				Console.ReadKey();
-				return;
+				return Global.Messages.NotEnoughPermissionsErrorCode;
 			}
 
 			// Check for running instance
 			if (!Utils.IsNewInstance())
 			{
 				ShowInstanceRunningErrorMessage();
-				return;
+				return Global.Messages.AnotherInstanceIsRunningError;
 			}
 
-			// Make sure no other installations could be run at the same time
-			Utils.SaveMutex();
-			//
-			Log.WriteApplicationStart();
-
-			//check OS version
-			Log.WriteInfo("{0} detected", Global.OSVersion);
-
-			//check IIS version
-			if (Global.IISVersion.Major == 0)
-				Log.WriteError("IIS not found.");
-			else
-				Log.WriteInfo("IIS {0} detected", Global.IISVersion);
 			//
 			var cname = GetCommandLineArgumentValue(ComponentNameParam);
 
-			var service = ServiceProviderProxy.GetInstallerWebService();
-			var record = default(DataRow);
-			//
-			var ds = service.GetAvailableComponents();
-			//
-			foreach (DataRow row in ds.Tables[0].Rows)
+			if (Utils.CheckForInstalledComponent(cname))
 			{
-				string componentCode = Utils.GetDbString(row["ComponentCode"]);
+				Log.WriteError(Global.Messages.ComponentIsAlreadyInstalled);
 				//
-				if (!String.Equals(componentCode, cname, StringComparison.OrdinalIgnoreCase))
+				return Global.Messages.ComponentIsAlreadyInstalledError;
+			}
+
+			try
+			{
+				// Make sure no other installations could be run at the same time
+				Utils.SaveMutex();
+				//
+				Log.WriteApplicationStart();
+
+				//check OS version
+				Log.WriteInfo("{0} detected", Global.OSVersion);
+
+				//check IIS version
+				if (Global.IISVersion.Major == 0)
+					Log.WriteError("IIS not found.");
+				else
+					Log.WriteInfo("IIS {0} detected", Global.IISVersion);
+
+				var service = ServiceProviderProxy.GetInstallerWebService();
+				var record = default(DataRow);
+				//
+				var ds = service.GetAvailableComponents();
+				//
+				foreach (DataRow row in ds.Tables[0].Rows)
 				{
-					continue;
+					string componentCode = Utils.GetDbString(row["ComponentCode"]);
+					//
+					if (!String.Equals(componentCode, cname, StringComparison.OrdinalIgnoreCase))
+					{
+						continue;
+					}
+					//
+					record = row;
+					break;
 				}
 				//
-				record = row;
-				break;
+				if (record == null)
+				{
+					Log.WriteError(String.Format("{0} => {1}", ComponentNameParam, cname));
+					Log.WriteInfo("Incorrect component name specified");
+					return Global.Messages.UnknownComponentCodeError;
+				}
+				//
+				var cli_args = ParseInputFromCLI(cname);
+				//
+				StartInstaller(record, cli_args);
+				//
+				return Global.Messages.SuccessInstallation;
 			}
-			//
-			if (record == null)
+			catch (Exception ex)
 			{
-				Log.WriteError(String.Format("{0} => {1}", ComponentNameParam, cname));
-				Utils.ShowConsoleErrorMessage("Incorrect component name specified");
-				return;
+				Log.WriteError("Failed to install the component", ex);
+				//
+				return Global.Messages.InstallationError;
 			}
-			//
-			var cli_args = ParseInputFromCLI(cname);
-			//
-			StartInstaller(record, cli_args);
-			//
-			Console.WriteLine("Press any key to continue...");
-			Console.ReadKey();
+			finally
+			{
+				Log.WriteApplicationEnd();
+			}
 		}
 
 		private static void ShowInstanceRunningErrorMessage()
 		{
-			Utils.ShowConsoleErrorMessage(Global.Messages.AnotherInstanceIsRunning);
+			Log.WriteError(Global.Messages.AnotherInstanceIsRunning);
 		}
 
 		private static void ShowSecurityError()
 		{
-			Utils.ShowConsoleErrorMessage(Global.Messages.NotEnoughPermissionsError);
+			Log.WriteError(Global.Messages.NotEnoughPermissionsError);
 		}
 
+		/// <summary>
+		/// Parses user input from the command-line for the component specified and returns it in the form of a Hashtable to pass run the installer with arguments then.
+		/// </summary>
+		/// <param name="cname">Component code whose input from the command-line is being parsed</param>
+		/// <exception cref="System.Exception">Thrown when wrong component code is specified. See Global class for supported component codes.</exception>
+		/// <returns></returns>
 		static Hashtable ParseInputFromCLI(string cname)
 		{
 			//
@@ -248,11 +271,11 @@ namespace WebsitePanel.SilentInstaller
 						{ Global.Parameters.WebSiteIP, Global.WebPortal.DefaultIP },
 						{ Global.Parameters.WebSiteDomain, String.Empty },
 						{ Global.Parameters.WebSitePort, Global.WebPortal.DefaultPort },
-						{ Global.Parameters.DatabaseName, null },
-						{ Global.Parameters.DatabaseServer, null },
+						{ Global.Parameters.DatabaseName, Global.EntServer.DefaultDatabase },
+						{ Global.Parameters.DatabaseServer, Global.EntServer.DefaultDbServer },
 						{ Global.Parameters.DbServerAdmin, String.Empty },
 						{ Global.Parameters.DbServerAdminPassword, String.Empty },
-						{ Global.Parameters.ServerAdminPassword, null }
+						{ Global.Parameters.ServerAdminPassword, String.Empty }
 					}
 				);
 			}
@@ -314,12 +337,6 @@ namespace WebsitePanel.SilentInstaller
 			string installerPath = Utils.GetDbString(row["InstallerPath"]);
 			string installerType = Utils.GetDbString(row["InstallerType"]);
 
-			if (Utils.CheckForInstalledComponent(componentCode))
-			{
-				Console.WriteLine(Global.Messages.ComponentIsAlreadyInstalled);
-				//
-				return;
-			}
 			try
 			{
 				// download installer
@@ -327,7 +344,7 @@ namespace WebsitePanel.SilentInstaller
 				//
 				loader.OperationCompleted += new EventHandler<EventArgs>((object sender, EventArgs e) =>
 				{
-					Console.WriteLine("Download completed!");
+					Log.WriteInfo("Download completed!");
 					//
 					string tmpFolder = FileUtils.GetTempDirectory();
 					string path = Path.Combine(tmpFolder, installerPath);
@@ -381,22 +398,22 @@ namespace WebsitePanel.SilentInstaller
 		static void loader_StatusChanged(object sender, LoaderEventArgs<string> e)
 		{
 			if (String.IsNullOrEmpty(e.EventData))
-				Console.WriteLine(e.StatusMessage);
+				Log.WriteInfo(e.StatusMessage);
 			else
-				Console.WriteLine("{0} {1}", e.StatusMessage, e.EventData);
+				Log.WriteInfo("{0} {1}", e.StatusMessage, e.EventData);
 		}
 
 		static void loader_ProgressChanged(object sender, LoaderEventArgs<int> e)
 		{
 			if (!String.IsNullOrEmpty(e.StatusMessage))
-				Console.WriteLine("{0} {1}%", e.StatusMessage, e.EventData);
+				Log.WriteInfo("{0} {1}%", e.StatusMessage, e.EventData);
 			else
-				Console.WriteLine("Current progress is {0}%", e.EventData);
+				Log.WriteInfo("Current progress is {0}%", e.EventData);
 		}
 
 		static void loader_OperationFailed(object sender, LoaderEventArgs<Exception> e)
 		{
-			Console.WriteLine(e.EventData.ToString());
+			Log.WriteInfo(e.EventData.ToString());
 		}
 
 		/// <summary>

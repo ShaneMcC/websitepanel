@@ -1,4 +1,4 @@
-﻿// Copyright (c) 2010, SMB SAAS Systems Inc.
+﻿// Copyright (c) 2011, SMB SAAS Systems Inc.
 // All rights reserved.
 //
 // Redistribution and use in source and binary forms, with or without modification,
@@ -33,12 +33,12 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("WebsitePanel.SilentInstaller")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyTitle("WebsitePanel SilentInstaller")]
+[assembly: AssemblyDescription("WebsitePanel SilentInstaller")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("Microsoft")]
-[assembly: AssemblyProduct("WebsitePanel.SilentInstaller")]
-[assembly: AssemblyCopyright("Copyright © Microsoft 2010")]
+[assembly: AssemblyCompany("SMB SAAS Systems Inc.")]
+[assembly: AssemblyProduct("WebsitePanel SilentInstaller")]
+[assembly: AssemblyCopyright("Copyright © 2011 SMB SAAS Systems Inc.")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
