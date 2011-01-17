@@ -1,4 +1,4 @@
-// Copyright (c) 2010, SMB SAAS Systems Inc.
+// Copyright (c) 2011, SMB SAAS Systems Inc.
 // All rights reserved.
 //
 // Redistribution and use in source and binary forms, with or without modification,
@@ -38,11 +38,13 @@ using System.Security;
 using System.Security.Permissions;
 
 using WebsitePanel.Installer.Common;
-using WebsitePanel.Installer.Configuration;
 using WebsitePanel.Installer.Services;
 using System.Xml;
 using System.Runtime.Remoting.Lifetime;
 using System.Security.Principal;
+using WebsitePanel.Installer.Core;
+using WebsitePanel.Installer.Configuration;
+using System.Reflection;
 
 namespace WebsitePanel.Installer
 {
@@ -51,12 +53,17 @@ namespace WebsitePanel.Installer
 	/// </summary>
 	static class Program
 	{
+		public const string SetupFromXmlFileParam = "setupxml";
+
 		/// <summary>
 		/// The main entry point for the application.
 		/// </summary>
 		[STAThread]
 		static void Main()
 		{
+			//
+			Utils.FixConfigurationSectionDefinition();
+
 			//check security permissions
 			if (!Utils.CheckSecurity())
 			{
@@ -74,7 +81,7 @@ namespace WebsitePanel.Installer
 			//check for running instance
 			if ( !Utils.IsNewInstance())
 			{
-				Utils.ShowRunningInstance();
+				UiUtils.ShowRunningInstance();
 				return;
 			}
 
@@ -86,18 +93,13 @@ namespace WebsitePanel.Installer
 			Application.SetCompatibleTextRenderingDefault(false);
 
 			//check OS version
-			OS.WindowsVersion version = OS.GetVersion();
-			Global.OSVersion = version;
-			Log.WriteInfo(string.Format("{0} detected", version));
+			Log.WriteInfo("{0} detected", Global.OSVersion);
 
 			//check IIS version
-			Version iisVersion = RegistryUtils.GetIISVersion();
-			if (iisVersion.Major == 0)
+			if (Global.IISVersion.Major == 0)
 				Log.WriteError("IIS not found.");
 			else
-				Log.WriteInfo(string.Format("IIS {0} detected", iisVersion));
-
-			Global.IISVersion = iisVersion;
+				Log.WriteInfo("IIS {0} detected", Global.IISVersion);
 
 			ApplicationForm mainForm = new ApplicationForm();
 
@@ -108,28 +110,19 @@ namespace WebsitePanel.Installer
 				{
 					return;
 				}
-				////x64 support
-				//try
-				//{
-				//    Utils.CheckWin64(mainForm);
-				//}
-				//catch (Exception ex)
-				//{
-				//    Log.WriteError("IIS x64 error", ex);
-				//}
 			}
-
+			// Load setup parameters from an XML file
 			LoadSetupXmlFile();
-
 			//start application
 			mainForm.InitializeApplication();
 			Application.Run(mainForm);
+			//
 			Utils.SaveMutex();
 		}
 
 		private static void LoadSetupXmlFile()
 		{
-			string file = GetCommandLineArgumentValue("setupxml");
+			string file = GetCommandLineArgumentValue(SetupFromXmlFileParam);
 			if (!string.IsNullOrEmpty(file))
 			{
 				if (FileUtils.FileExists(file))
@@ -190,16 +183,12 @@ namespace WebsitePanel.Installer
 			Log.WriteApplicationEnd();
 		}
 
- 
-
-
-
 		/// <summary>
 		/// Check whether application is up-to-date
 		/// </summary>
 		private static bool CheckForUpdate(ApplicationForm mainForm)
 		{
-			if (!mainForm.AppConfiguration.GetBooleanSetting(ConfigKeys.Web_AutoCheck))
+			if (!AppConfigManager.AppConfiguration.GetBooleanSetting(ConfigKeys.Web_AutoCheck))
 				return false;
 
 			string appName = mainForm.Text;

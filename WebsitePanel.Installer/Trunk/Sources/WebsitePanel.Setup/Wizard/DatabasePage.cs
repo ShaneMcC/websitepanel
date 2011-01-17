@@ -1,4 +1,4 @@
-// Copyright (c) 2010, SMB SAAS Systems Inc.
+// Copyright (c) 2011, SMB SAAS Systems Inc.
 // All rights reserved.
 //
 // Redistribution and use in source and binary forms, with or without modification,
@@ -160,9 +160,9 @@ namespace WebsitePanel.Setup
 				SetupVariables.DatabaseServer = server;
 				SetupVariables.DbInstallConnectionString = connectionString;
 
-				AppConfig.SetComponentSettingStringValue(SetupVariables.ComponentId, "Database", database);
-				AppConfig.SetComponentSettingStringValue(SetupVariables.ComponentId, "DatabaseServer", server);
-				AppConfig.SetComponentSettingStringValue(SetupVariables.ComponentId, "InstallConnectionString", connectionString);
+				//AppConfig.SetComponentSettingStringValue(SetupVariables.ComponentId, "Database", database);
+				//AppConfig.SetComponentSettingStringValue(SetupVariables.ComponentId, "DatabaseServer", server);
+				//AppConfig.SetComponentSettingStringValue(SetupVariables.ComponentId, "InstallConnectionString", connectionString);
 			}
 			catch
 			{
@@ -230,18 +230,14 @@ namespace WebsitePanel.Setup
 
 		private string CreateConnectionString()
 		{
-			string ret = string.Empty;
 			if (cbAuthentication.SelectedIndex == 0)
 			{
-				ret = string.Format("Server={0};Database={1};Integrated Security=SSPI;",
-					txtSqlServer.Text, "master");
+				return SqlUtils.BuildDbServerMasterConnectionString(txtSqlServer.Text, null, null);
 			}
 			else
 			{
-				ret = string.Format("Server={0};Database={1};User id={2};Password={3};",
-					txtSqlServer.Text, "master", txtLogin.Text, txtPassword.Text);
+				return SqlUtils.BuildDbServerMasterConnectionString(txtSqlServer.Text, txtLogin.Text, txtPassword.Text);
 			}
-			return ret;
 		}
 
 	}

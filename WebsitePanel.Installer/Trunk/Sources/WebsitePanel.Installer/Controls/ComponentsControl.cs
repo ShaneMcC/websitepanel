@@ -1,4 +1,4 @@
-// Copyright (c) 2010, SMB SAAS Systems Inc.
+// Copyright (c) 2011, SMB SAAS Systems Inc.
 // All rights reserved.
 //
 // Redistribution and use in source and binary forms, with or without modification,
@@ -39,8 +39,9 @@ using System.Text;
 using System.Windows.Forms;
 
 using WebsitePanel.Installer.Common;
-using WebsitePanel.Installer.Configuration;
 using WebsitePanel.Installer.Services;
+using WebsitePanel.Installer.Core;
+using WebsitePanel.Installer.Configuration;
 
 namespace WebsitePanel.Installer.Controls
 {
@@ -81,21 +82,19 @@ namespace WebsitePanel.Installer.Controls
 
 		private void StartInstaller(DataRowView row)
 		{
-			string applicationName = Utils.GetDbString(row["ApplicationName"]);
-			string componentName = Utils.GetDbString(row["ComponentName"]);
-			string componentCode = Utils.GetDbString(row["ComponentCode"]);
-			string componentDescription = Utils.GetDbString(row["ComponentDescription"]);
-			string component = Utils.GetDbString(row["Component"]);
-			string version = Utils.GetDbString(row["Version"]);
-			string fileName = row["FullFilePath"].ToString();
-			string installerPath = Utils.GetDbString(row["InstallerPath"]);
-			string installerType = Utils.GetDbString(row["InstallerType"]);
-			//if ( installerType.StartsWith("WebsitePanel.Setup.Portal")) installerType = "WebsitePanel.Setup.StandaloneSetup285";
-					
-			
+			string applicationName = Utils.GetDbString(row[Global.Parameters.ApplicationName]);
+			string componentName = Utils.GetDbString(row[Global.Parameters.ComponentName]);
+			string componentCode = Utils.GetDbString(row[Global.Parameters.ComponentCode]);
+			string componentDescription = Utils.GetDbString(row[Global.Parameters.ComponentDescription]);
+			string component = Utils.GetDbString(row[Global.Parameters.Component]);
+			string version = Utils.GetDbString(row[Global.Parameters.Version]);
+			string fileName = row[Global.Parameters.FullFilePath].ToString();
+			string installerPath = Utils.GetDbString(row[Global.Parameters.InstallerPath]);
+			string installerType = Utils.GetDbString(row[Global.Parameters.InstallerType]);
+
 			if (CheckForInstalledComponent(componentCode))
 			{
-				AppContext.AppForm.ShowWarning("Component or its part is already installed.");
+				AppContext.AppForm.ShowWarning(Global.Messages.ComponentIsAlreadyInstalled);
 				return;
 			}
 			try
@@ -115,20 +114,21 @@ namespace WebsitePanel.Installer.Controls
 					//prepare installer args
 					Hashtable args = new Hashtable();
 
-					args["ComponentName"] = componentName;
-					args["ApplicationName"] = applicationName;
-					args["ComponentCode"] = componentCode;
-					args["ComponentDescription"] = componentDescription;
-					args["Version"] = version;
-					args["InstallerFolder"] = tmpFolder;
-					args["InstallerPath"] = installerPath;
-					args["InstallerType"] = installerType;
-					args["Installer"] = Path.GetFileName(fileName);
-					args["ShellVersion"] = AppContext.AppForm.Version;
-					args["BaseDirectory"] = FileUtils.GetCurrentDirectory();
-					args["IISVersion"] = Global.IISVersion;
-					args["SetupXml"] = this.componentSettingsXml;
-					args["ParentForm"] = FindForm();
+					args[Global.Parameters.ComponentName] = componentName;
+					args[Global.Parameters.ApplicationName] = applicationName;
+					args[Global.Parameters.ComponentCode] = componentCode;
+					args[Global.Parameters.ComponentDescription] = componentDescription;
+					args[Global.Parameters.Version] = version;
+					args[Global.Parameters.InstallerFolder] = tmpFolder;
+					args[Global.Parameters.InstallerPath] = installerPath;
+					args[Global.Parameters.InstallerType] = installerType;
+					args[Global.Parameters.Installer] = Path.GetFileName(fileName);
+					args[Global.Parameters.ShellVersion] = AssemblyLoader.GetShellVersion();
+					args[Global.Parameters.BaseDirectory] = FileUtils.GetCurrentDirectory();
+					args[Global.Parameters.ShellMode] = Global.VisualInstallerShell;
+					args[Global.Parameters.IISVersion] = Global.IISVersion;
+					args[Global.Parameters.SetupXml] = this.componentSettingsXml;
+					args[Global.Parameters.ParentForm] = FindForm();
 
 					//run installer
 					DialogResult res = (DialogResult)AssemblyLoader.Execute(path, installerType, method, new object[] { args });
@@ -152,14 +152,14 @@ namespace WebsitePanel.Installer.Controls
 				this.componentSettingsXml = null;
 				this.componentCode = null;
 			}
-			
+
 		}
 
 		private bool CheckForInstalledComponent(string componentCode)
 		{
 			bool ret = false;
-			List<string> installedComponents = new List<string>(); 
-			foreach (ComponentConfigElement componentConfig in AppContext.AppForm.AppConfiguration.Components)
+			List<string> installedComponents = new List<string>();
+			foreach (ComponentConfigElement componentConfig in AppConfigManager.AppConfiguration.Components)
 			{
 				string code = componentConfig.Settings["ComponentCode"].Value;
 				installedComponents.Add(code);
@@ -222,7 +222,8 @@ namespace WebsitePanel.Installer.Controls
 				Log.WriteStart("Loading list of available components");
 				lblDescription.Text = string.Empty;
 				//load components via web service
-				DataSet dsComponents = AppContext.AppForm.WebService.GetAvailableComponents();
+				var webService = ServiceProviderProxy.GetInstallerWebService();
+				DataSet dsComponents = webService.GetAvailableComponents();
 				//remove already installed components
 				foreach (DataRow row in dsComponents.Tables[0].Rows)
 				{
@@ -290,10 +291,10 @@ namespace WebsitePanel.Installer.Controls
 		private void Install()
 		{
 			LoadComponents();
-			foreach(DataGridViewRow gridRow in grdComponents.Rows)
+			foreach (DataGridViewRow gridRow in grdComponents.Rows)
 			{
 				DataRowView row = gridRow.DataBoundItem as DataRowView;
-				if ( row != null )
+				if (row != null)
 				{
 					string code = Utils.GetDbString(row["ComponentCode"]);
 					string version = Utils.GetDbString(row["Version"]);

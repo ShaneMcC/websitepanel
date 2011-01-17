@@ -1,4 +1,4 @@
-// Copyright (c) 2010, SMB SAAS Systems Inc.
+// Copyright (c) 2011, SMB SAAS Systems Inc.
 // All rights reserved.
 //
 // Redistribution and use in source and binary forms, with or without modification,
@@ -46,6 +46,33 @@ namespace WebsitePanel.Setup
 		/// </summary>
 		private FileUtils()
 		{
+		}
+
+		/// <summary>
+		/// Returns current application path.
+		/// </summary>
+		/// <returns>Curent application path.</returns>
+		public static string GetCurrentDirectory()
+		{
+			return AppDomain.CurrentDomain.BaseDirectory;
+		}
+
+		/// <summary>
+		/// Returns application temp directory.
+		/// </summary>
+		/// <returns>Application temp directory.</returns>
+		public static string GetTempDirectory()
+		{
+			return Path.Combine(GetCurrentDirectory(), "Tmp");
+		}
+
+		/// <summary>
+		/// Returns application data directory.
+		/// </summary>
+		/// <returns>Application data directory.</returns>
+		public static string GetDataDirectory()
+		{
+			return Path.Combine(GetCurrentDirectory(), "Data");
 		}
 
 		internal static void UnzipFile(string targetDir, string zipFile)

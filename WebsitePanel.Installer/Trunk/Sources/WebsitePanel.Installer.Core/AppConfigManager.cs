@@ -1,4 +1,4 @@
-// Copyright (c) 2010, SMB SAAS Systems Inc.
+﻿// Copyright (c) 2011, SMB SAAS Systems Inc.
 // All rights reserved.
 //
 // Redistribution and use in source and binary forms, with or without modification,
@@ -11,7 +11,7 @@
 //   this list of conditions  and  the  following  disclaimer in  the documentation
 //   and/or other materials provided with the distribution.
 //
-// - Neither  the  name  of  the  SMB SAAS Systems Inc.  nor   the   names  of  its
+// - Neither  the  name of  the  SMB SAAS Systems Inc.  nor   the   names  of  its
 //   contributors may be used to endorse or  promote  products  derived  from  this
 //   software without specific prior written permission.
 //
@@ -29,75 +29,79 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using WebsitePanel.Installer.Common;
 using System.Configuration;
+using WebsitePanel.Installer.Configuration;
+using System.IO;
+using System.Reflection;
 
-namespace WebsitePanel.Installer.Configuration
+
+namespace WebsitePanel.Installer.Core
 {
-	/// <summary>
-	/// Provides configuration system support for the <installerSettings> configuration section. 
-	/// </summary>
-	internal class InstallerSection : ConfigurationSection
+	public sealed class AppConfigManager
 	{
-		/// <summary>
-		/// Creates a new instance of the StudioSection class.
-		/// </summary>
-		public InstallerSection()
+		private static System.Configuration.Configuration appConfig;
+		public const string AppConfigFileNameWithoutExtension = "WebsitePanel.Installer.exe";
+
+		static AppConfigManager()
 		{
+			LoadConfiguration();
+		}
+
+		#region Core.Configuration
+		/// <summary>
+		/// Loads application configuration
+		/// </summary>
+		public static void LoadConfiguration()
+		{
+			Log.WriteStart("Loading application configuration");
+			//
+			var exePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, AppConfigFileNameWithoutExtension);
+			//
+			appConfig = ConfigurationManager.OpenExeConfiguration(exePath);
+			//
+			Log.WriteEnd("Application configuration loaded");
 		}
 
 		/// <summary>
-		/// Declare <connections> collection element represented
-		/// in the configuration file by the sub-section.
+		/// Returns application configuration section
 		/// </summary>
-		[ConfigurationProperty("components", IsDefaultCollection = false)]
-		public ComponentCollection Components
+		public static InstallerSection AppConfiguration
 		{
 			get
 			{
-				ComponentCollection componentCollection = (ComponentCollection)base["components"];
-				return componentCollection;
+				return appConfig.GetSection("installer") as InstallerSection;
 			}
 		}
 
-		[ConfigurationProperty("settings", IsDefaultCollection = false)]
-		public KeyValueConfigurationCollection Settings
+		/// <summary>
+		/// Saves application configuration
+		/// </summary>
+		public static void SaveConfiguration(bool showAlert)
 		{
-			get
+			if (appConfig != null)
 			{
-				return (KeyValueConfigurationCollection)base["settings"];
+				try
+				{
+					Log.WriteStart("Saving application configuration");
+					appConfig.Save();
+					Log.WriteEnd("Application configuration saved");
+					if (showAlert)
+					{
+						//ShowInfo("Application settings updated successfully.");
+					}
+				}
+				catch (Exception ex)
+				{
+					Log.WriteError("Core.Configuration error", ex);
+					if (showAlert)
+					{
+						//ShowError(ex);
+					}
+				}
 			}
-		}
-		
-		public string GetStringSetting(string key)
-		{
-			string ret = null;
-			if (Settings[key] != null)
-			{
-				ret = Settings[key].Value;
-			}
-			return ret;
-		}
-		
-		public int GetInt32Setting(string key)
-		{
-			int ret = 0;
-			if (Settings[key] != null)
-			{
-				string val = Settings[key].Value;
-				Int32.TryParse(val, out ret);
-			}
-			return ret;
 		}
 
-		public bool GetBooleanSetting(string key)
-		{
-			bool ret = false;
-			if (Settings[key] != null)
-			{
-				string val = Settings[key].Value;
-				Boolean.TryParse(val, out ret);
-			}
-			return ret;
-		}
+		#endregion
 	}
 }

@@ -1,4 +1,4 @@
-// Copyright (c) 2010, SMB SAAS Systems Inc.
+// Copyright (c) 2011, SMB SAAS Systems Inc.
 // All rights reserved.
 //
 // Redistribution and use in source and binary forms, with or without modification,
@@ -37,6 +37,7 @@ using System.Windows.Forms;
 
 using WebsitePanel.Setup.Web;
 using WebsitePanel.Setup.Windows;
+using WebsitePanel.Setup.Actions;
 
 namespace WebsitePanel.Setup
 {
@@ -73,8 +74,14 @@ namespace WebsitePanel.Setup
 				this.progressBar.Value = 0;
 				this.lblProcess.Text = "Rolling back...";
 				Log.WriteStart("Rolling back");
-				RollBackProcess process = new RollBackProcess(this.progressBar);
-				process.Run();
+				//
+				Wizard.ActionManager.TotalProgressChanged += new EventHandler<ProgressEventArgs>((object sender, ProgressEventArgs e) =>
+				{
+					this.progressBar.Value = e.Value;
+				});
+				//
+				Wizard.ActionManager.Rollback();
+				//
 				Log.WriteEnd("Rolled back");
 				this.progressBar.Value = 100;
 			}

@@ -1,4 +1,4 @@
-// Copyright (c) 2010, SMB SAAS Systems Inc.
+// Copyright (c) 2011, SMB SAAS Systems Inc.
 // All rights reserved.
 //
 // Redistribution and use in source and binary forms, with or without modification,
@@ -32,6 +32,9 @@ using System.Diagnostics;
 using System.IO;
 
 using WebsitePanel.Installer.Configuration;
+using System.Security.Principal;
+using WebsitePanel.Installer.Core;
+using System.Reflection;
 
 namespace WebsitePanel.Installer.Common
 {
@@ -52,15 +55,21 @@ namespace WebsitePanel.Installer.Common
 		/// </summary>
 		static Log()
 		{
+			Initialize();
+		}
+
+		static void Initialize()
+		{
 			string fileName = LogFile;
+			//
+			Trace.Listeners.Clear();
+			//
 			FileStream fileLog = new FileStream(fileName, FileMode.Append);
+			//
 			TextWriterTraceListener fileListener = new TextWriterTraceListener(fileLog);
 			fileListener.TraceOutputOptions = TraceOptions.DateTime;
-			Trace.UseGlobalLock = true;
-			Trace.Listeners.Clear();
 			Trace.Listeners.Add(fileListener);
-			TextWriterTraceListener consoleListener = new TextWriterTraceListener(Console.Out);
-			Trace.Listeners.Add(consoleListener);
+			//
 			Trace.AutoFlush = true;
 		}
 
@@ -68,14 +77,18 @@ namespace WebsitePanel.Installer.Common
 		{
 			get
 			{
-				System.Configuration.Configuration appConfig = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
-				InstallerSection section = appConfig.GetSection("installer") as InstallerSection;
-
-				string fileName = section.GetStringSetting("Log.FileName");
+				string fileName = "WebsitePanel.Installer.log";
+				//
 				if (string.IsNullOrEmpty(fileName))
 				{
 					fileName = "Installer.log";
 				}
+				// Ensure the path is correct
+				if (!Path.IsPathRooted(fileName))
+				{
+					fileName = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, fileName);
+				}
+				//
 				return fileName;
 			}
 		}
@@ -85,7 +98,7 @@ namespace WebsitePanel.Installer.Common
 		/// </summary>
 		/// <param name="message">Error message.</param>
 		/// <param name="ex">Exception.</param>
-		internal static void WriteError(string message, Exception ex)
+		public static void WriteError(string message, Exception ex)
 		{
 			try
 			{
@@ -100,7 +113,7 @@ namespace WebsitePanel.Installer.Common
 		/// Write error to the log.
 		/// </summary>
 		/// <param name="message">Error message.</param>
-		internal static void WriteError(string message)
+		public static void WriteError(string message)
 		{
 			try
 			{
@@ -114,7 +127,7 @@ namespace WebsitePanel.Installer.Common
 		/// Write to log
 		/// </summary>
 		/// <param name="message"></param>
-		internal static void Write(string message)
+		public static void Write(string message)
 		{
 			try
 			{
@@ -129,7 +142,7 @@ namespace WebsitePanel.Installer.Common
 		/// Write line to log
 		/// </summary>
 		/// <param name="message"></param>
-		internal static void WriteLine(string message)
+		public static void WriteLine(string message)
 		{
 			try
 			{
@@ -140,10 +153,20 @@ namespace WebsitePanel.Installer.Common
 		}
 
 		/// <summary>
+		/// Writes formatted informational message into the log
+		/// </summary>
+		/// <param name="format"></param>
+		/// <param name="args"></param>
+		public static void WriteInfo(string format, params object[] args)
+		{
+			WriteInfo(String.Format(format, args));
+		}
+
+		/// <summary>
 		/// Write info message to log
 		/// </summary>
 		/// <param name="message"></param>
-		internal static void WriteInfo(string message)
+		public static void WriteInfo(string message)
 		{
 			try
 			{
@@ -157,7 +180,7 @@ namespace WebsitePanel.Installer.Common
 		/// Write start message to log
 		/// </summary>
 		/// <param name="message"></param>
-		internal static void WriteStart(string message)
+		public static void WriteStart(string message)
 		{
 			try
 			{
@@ -171,7 +194,7 @@ namespace WebsitePanel.Installer.Common
 		/// Write end message to log
 		/// </summary>
 		/// <param name="message"></param>
-		internal static void WriteEnd(string message)
+		public static void WriteEnd(string message)
 		{
 			try
 			{
@@ -181,23 +204,24 @@ namespace WebsitePanel.Installer.Common
 			catch { }
 		}
 
-		internal static void WriteApplicationStart()
+		public static void WriteApplicationStart()
 		{
 			try
 			{
-				string name = typeof(Log).Assembly.GetName().Name;
-				string version = typeof(Log).Assembly.GetName().Version.ToString();
-				string line = string.Format("[{0:G}] {1} {2} Started", DateTime.Now, name, version);
+				string name = Assembly.GetEntryAssembly().GetName().Name;
+				string version = Assembly.GetEntryAssembly().GetName().Version.ToString();
+				string identity = WindowsIdentity.GetCurrent().Name;
+				string line = string.Format("[{0:G}] {1} {2} Started by {3}", DateTime.Now, name, version, identity);
 				Trace.WriteLine(line);
 			}
 			catch { }
 		}
 
-		internal static void WriteApplicationEnd()
+		public static void WriteApplicationEnd()
 		{
 			try
 			{
-				string name = typeof(Log).Assembly.GetName().Name;
+				string name = Assembly.GetEntryAssembly().GetName().Name;
 				string line = string.Format("[{0:G}] {1} Ended", DateTime.Now, name);
 				Trace.WriteLine(line);
 			}

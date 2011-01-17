@@ -1,4 +1,4 @@
-// Copyright (c) 2010, SMB SAAS Systems Inc.
+// Copyright (c) 2011, SMB SAAS Systems Inc.
 // All rights reserved.
 //
 // Redistribution and use in source and binary forms, with or without modification,
@@ -733,7 +733,7 @@ namespace WebsitePanel.Setup
 			try
 			{
 				DirectoryEntry user = null;
-				if (string.IsNullOrEmpty(domain))
+				if (String.IsNullOrEmpty(domain))
 				{
 					//local computer
 					user = new DirectoryEntry(

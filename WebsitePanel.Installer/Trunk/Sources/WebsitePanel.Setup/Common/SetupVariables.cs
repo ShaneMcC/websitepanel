@@ -1,4 +1,4 @@
-// Copyright (c) 2010, SMB SAAS Systems Inc.
+// Copyright (c) 2011, SMB SAAS Systems Inc.
 // All rights reserved.
 //
 // Redistribution and use in source and binary forms, with or without modification,
@@ -34,15 +34,28 @@ using WebsitePanel.Setup.Common;
 
 namespace WebsitePanel.Setup
 {
-    /// <summary>
-    /// Variables container.
-    /// </summary>
+	/// <summary>
+	/// Variables container.
+	/// </summary>
 	public sealed class SetupVariables
 	{
+		//
+		public static readonly SetupVariables Empty = new SetupVariables();
+		public bool EnableScpaMode { get; set; }
+		public string PeerAdminPassword { get; set; }
+
+		public string DatabaseUserPassword { get; set; }
+		public bool NewDatabaseUser { get; set; }
 		/// <summary>
 		/// Installation folder
 		/// </summary>
 		public string InstallationFolder { get; set; }
+
+		public string InstallFolder
+		{
+			get { return InstallationFolder; }
+			set { InstallationFolder = value; }
+		}
 
 		/// <summary>
 		/// Component id
@@ -50,7 +63,7 @@ namespace WebsitePanel.Setup
 		public string ComponentId { get; set; }
 
 		public string ComponentDescription { get; set; }
-	
+
 
 		/// <summary>
 		/// Component code
@@ -73,9 +86,9 @@ namespace WebsitePanel.Setup
 		}
 
 		public string Instance { get; set; }
-	
+
 		/// <summary>
-		/// Install actions
+		/// Install currentScenario
 		/// </summary>
 		public SetupActions SetupAction { get; set; }
 
@@ -89,11 +102,17 @@ namespace WebsitePanel.Setup
 		/// </summary>
 		public int ReleaseId { get; set; }
 
+		// Workaround
+		public string Release
+		{
+			get { return Version; }
+			set { Version = value; }
+		}
+
 		/// <summary>
 		/// Release name
 		/// </summary>
 		public string Version { get; set; }
-
 
 		/// <summary>
 		/// Connection string
@@ -115,12 +134,28 @@ namespace WebsitePanel.Setup
 		/// </summary>
 		public string DbInstallConnectionString { get; set; }
 
+		public string InstallConnectionString
+		{
+			get { return DbInstallConnectionString; }
+			set { DbInstallConnectionString = value; }
+		}
+
 		/// <summary>
 		/// Create database
 		/// </summary>
 		public bool CreateDatabase { get; set; }
 
 		public bool NewVirtualDirectory { get; set; }
+
+		public bool NewWebApplicationPool { get; set; }
+
+		public string WebApplicationPoolName { get; set; }
+
+		public string ApplicationPool
+		{
+			get { return WebApplicationPoolName; }
+			set { WebApplicationPoolName = value; }
+		}
 
 		/// <summary>
 		/// Virtual directory
@@ -161,13 +196,34 @@ namespace WebsitePanel.Setup
 		/// <summary>
 		/// User Membership
 		/// </summary>
-		public string[] UserMembership { get; set; }
-	
+		public string[] UserMembership
+		{
+			get
+			{
+				if (ComponentCode.Equals(Global.Server.ComponentCode, StringComparison.OrdinalIgnoreCase))
+				{
+					return Global.Server.ServiceUserMembership; 
+				}
+				else if(ComponentCode.Equals(Global.EntServer.ComponentCode, StringComparison.OrdinalIgnoreCase))
+				{
+					return Global.EntServer.ServiceUserMembership;
+				}
+				else if (ComponentCode.Equals(Global.WebPortal.ComponentCode, StringComparison.OrdinalIgnoreCase))
+				{
+					return Global.WebPortal.ServiceUserMembership;
+				}
+				else
+				{
+					return new string[] {};
+				}
+			}
+		}
 
-        /// <summary>
-        /// Welcome screen has been skipped
-        /// </summary>
-        public bool WelcomeScreenSkipped { get; set; }
+
+		/// <summary>
+		/// Welcome screen has been skipped
+		/// </summary>
+		public bool WelcomeScreenSkipped { get; set; }
 
 		public string InstallerFolder { get; set; }
 
@@ -199,6 +255,16 @@ namespace WebsitePanel.Setup
 
 		public string UserDomain { get; set; }
 
+		public string Domain
+		{
+			get { return UserDomain; }
+			set { UserDomain = value; }
+		}
+
+		public bool NewUserAccount { get; set; }
+
+		public bool NewApplicationPool { get; set; }
+
 		public ServerItem[] SQLServers { get; set; }
 
 		public string Product { get; set; }
@@ -219,7 +285,43 @@ namespace WebsitePanel.Setup
 
 		public string SetupXml { get; set; }
 
-		public string RemoteServerUrl { get; set; }
+		public string RemoteServerUrl
+		{
+			get
+			{
+				string address = "http://";
+				string server = String.Empty;
+				string ipPort = String.Empty;
+				//server 
+				if (String.IsNullOrEmpty(WebSiteDomain) == false 
+					&& WebSiteDomain.Trim().Length > 0)
+				{
+					//domain 
+					server = WebSiteDomain.Trim();
+				}
+				else
+				{
+					//ip
+					if (String.IsNullOrEmpty(WebSiteIP) == false 
+						&& WebSiteIP.Trim().Length > 0)
+					{
+						server = WebSiteIP.Trim();
+					}
+				}
+				//port
+				if (server.Length > 0 &&
+					WebSiteIP.Trim().Length > 0 &&
+					WebSitePort.Trim() != "80")
+				{
+					ipPort = ":" + WebSitePort.Trim();
+				}
+
+				//address string
+				address += server + ipPort;
+				//
+				return address;
+			}
+		}
 
 		public string RemoteServerPassword { get; set; }
 
@@ -233,6 +335,6 @@ namespace WebsitePanel.Setup
 		{
 			return (SetupVariables)this.MemberwiseClone();
 		}
-	
+
 	}
 }

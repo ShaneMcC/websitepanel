@@ -1,4 +1,4 @@
-// Copyright (c) 2010, SMB SAAS Systems Inc.
+// Copyright (c) 2011, SMB SAAS Systems Inc.
 // All rights reserved.
 //
 // Redistribution and use in source and binary forms, with or without modification,
@@ -72,7 +72,7 @@ namespace WebsitePanel.Setup
 				{
 					sb.AppendLine(action.Log);
 				}
-				//add external actions
+				//add external currentScenario
 				foreach (InstallAction extAction in UninstallPage.Actions)
 				{
 					sb.AppendLine(extAction.Log);

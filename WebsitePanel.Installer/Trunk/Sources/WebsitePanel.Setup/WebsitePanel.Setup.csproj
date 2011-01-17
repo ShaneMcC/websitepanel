@@ -36,7 +36,7 @@
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>..\..\Build\</OutputPath>
+    <OutputPath>..\..\Build\debug\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -45,7 +45,7 @@
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>none</DebugType>
     <Optimize>true</Optimize>
-    <OutputPath>..\..\Build\</OutputPath>
+    <OutputPath>..\..\Build\release\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -59,11 +59,11 @@
     <Reference Include="Microsoft.Web.Administration, Version=7.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\Lib\Microsoft.Web.Administration.dll</HintPath>
-      <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.Web.Management, Version=7.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\Lib\Microsoft.Web.Management.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="Microsoft.Web.Services3, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -94,12 +94,25 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\VersionInfo.cs">
+      <Link>VersionInfo.cs</Link>
+    </Compile>
+    <Compile Include="Actions\BaseActionManager.cs" />
+    <Compile Include="Actions\EntServerActionManager.cs" />
+    <Compile Include="Actions\IInstallAction.cs" />
+    <Compile Include="Actions\IPrepareDefaultsAction.cs" />
+    <Compile Include="Actions\IPrerequisiteAction.cs" />
+    <Compile Include="Actions\IUninstallAction.cs" />
+    <Compile Include="Actions\ServerActionManager.cs" />
+    <Compile Include="Actions\StandaloneServerActionManager.cs" />
+    <Compile Include="Actions\WebPortalActionManager.cs" />
     <Compile Include="Common\AppConfig.cs" />
     <Compile Include="Common\ConfigurationCheck.cs" />
     <Compile Include="Common\CopyProcess.cs" />
     <Compile Include="Common\CRC32.cs" />
     <Compile Include="Common\ES.cs" />
     <Compile Include="Common\FileUtils.cs" />
+    <Compile Include="Common\Global.cs" />
     <Compile Include="Common\InstallAction.cs" />
     <Compile Include="Common\InstallLog.cs" />
     <Compile Include="Common\Log.cs" />
@@ -163,6 +176,12 @@
     </Compile>
     <Compile Include="Wizard\ConfigurationCheckPage.Designer.cs">
       <DependentUpon>ConfigurationCheckPage.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Wizard\ExpressInstallPage2.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Wizard\ExpressInstallPage2.Designer.cs">
+      <DependentUpon>ExpressInstallPage2.cs</DependentUpon>
     </Compile>
     <Compile Include="Wizard\SetupCompletePage.cs">
       <SubType>UserControl</SubType>
@@ -281,6 +300,10 @@
       <SubType>Designer</SubType>
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Wizard\ExpressInstallPage2.resx">
+      <DependentUpon>ExpressInstallPage2.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Wizard\LicenseAgreementPage.resx">
       <DependentUpon>LicenseAgreementPage.cs</DependentUpon>

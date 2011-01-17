@@ -1,4 +1,4 @@
-// Copyright (c) 2010, SMB SAAS Systems Inc.
+// Copyright (c) 2011, SMB SAAS Systems Inc.
 // All rights reserved.
 //
 // Redistribution and use in source and binary forms, with or without modification,
@@ -137,7 +137,7 @@ namespace WebsitePanel.Setup
 		{
 			/*if (SetupVariables.NewVirtualDirectory)
 			{
-				this.txtAddress.Text = string.Empty;
+				this.txtAddress.StatusMessage = string.Empty;
 				return;
 			}*/
 			string address = "http://";
@@ -311,9 +311,13 @@ namespace WebsitePanel.Setup
 					SetupVariables.UpdateWebSite = true;
 					//load old settings from config
 					string componentId = SetupVariables.ComponentId;
-					string ip = AppConfig.GetComponentSettingStringValue(componentId, "WebSiteIP");
+					string ip = SetupVariables.WebSiteIP;
+					string port = SetupVariables.WebSitePort;
+					string domain = SetupVariables.WebSiteDomain;
+					//
+					/*string ip = AppConfig.GetComponentSettingStringValue(componentId, "WebSiteIP");
 					string port = AppConfig.GetComponentSettingStringValue(componentId, "WebSitePort");
-					string domain = AppConfig.GetComponentSettingStringValue(componentId, "WebSiteDomain");
+					string domain = AppConfig.GetComponentSettingStringValue(componentId, "WebSiteDomain");*/
 
 					if (newIP == ip && newPort == port && IsEqualString(newDomain,domain))
 					{

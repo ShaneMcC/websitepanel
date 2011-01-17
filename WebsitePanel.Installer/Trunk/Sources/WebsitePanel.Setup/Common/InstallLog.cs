@@ -1,4 +1,4 @@
-// Copyright (c) 2010, SMB SAAS Systems Inc.
+// Copyright (c) 2011, SMB SAAS Systems Inc.
 // All rights reserved.
 //
 // Redistribution and use in source and binary forms, with or without modification,
@@ -54,6 +54,11 @@ namespace WebsitePanel.Setup
 		public static void AppendLine(string value)
 		{
 			sb.AppendLine(value);
+		}
+
+		public static void AppendLine(string format, params object[] args)
+		{
+			sb.AppendLine(String.Format(format, args));
 		}
 
 		public static void AppendLine()

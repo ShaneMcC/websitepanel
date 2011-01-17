@@ -1,4 +1,4 @@
-// Copyright (c) 2010, SMB SAAS Systems Inc.
+// Copyright (c) 2011, SMB SAAS Systems Inc.
 // All rights reserved.
 //
 // Redistribution and use in source and binary forms, with or without modification,
@@ -111,15 +111,15 @@ namespace WebsitePanel.Setup
 
 			// create a new virtual directory
 			ManagementObject objDir = wmi.GetClass("IIsWebVirtualDir").CreateInstance();
-			objDir.Properties["Name"].Value = dirId;
+			objDir.Properties["Name"].EventData = dirId;
 			objDir.Put();
 			objDir.InvokeMethod("AppCreate",new Object[] {true});
 
 			// update directory properties
 			ManagementObject objDirSetting = wmi.GetClass("IIsWebVirtualDirSetting").CreateInstance();
-			objDirSetting.Properties["Name"].Value = dirId;
-			objDirSetting.Properties["AppFriendlyName"].Value = directoryName;
-			objDirSetting.Properties["Path"].Value = contentPath;
+			objDirSetting.Properties["Name"].EventData = dirId;
+			objDirSetting.Properties["AppFriendlyName"].EventData = directoryName;
+			objDirSetting.Properties["Path"].EventData = contentPath;
 
             // save object again
             objDirSetting.Put();

@@ -1,4 +1,4 @@
-// Copyright (c) 2010, SMB SAAS Systems Inc.
+// Copyright (c) 2011, SMB SAAS Systems Inc.
 // All rights reserved.
 //
 // Redistribution and use in source and binary forms, with or without modification,
@@ -42,46 +42,96 @@ using WebsitePanel.Installer.Common;
 
 namespace WebsitePanel.Installer.Controls
 {
+	public delegate void OperationProgressDelegate(int percentage);
+
 	/// <summary>
 	/// Loader form.
 	/// </summary>
 	internal partial class Loader : Form
 	{
-		private const int ChunkSize = 262144;
-		private Thread thread;
 		private AppContext appContext;
-		private string localFile;
-		private string remoteFile;
-		private string componentCode;
-		private string version;
-		private InstallerService service;
+		private Core.Loader appLoader;
 
 		public Loader()
 		{
 			InitializeComponent();
-			this.DialogResult = DialogResult.Cancel;
+			DialogResult = DialogResult.Cancel;
 		}
 
-		public Loader(AppContext context, string remoteFile):this()
+		public Loader(AppContext context, string remoteFile)
+			: this()
 		{
 			this.appContext = context;
-			this.remoteFile = remoteFile;
+			//
+			appLoader = new Core.Loader(remoteFile);
+			//
 			Start();
 		}
 
-		public Loader(AppContext context, string localFile, string componentCode, string version )	: this()
+		public Loader(AppContext context, string localFile, string componentCode, string version)
+			: this()
 		{
 			this.appContext = context;
-			this.localFile = localFile;
-			this.componentCode = componentCode;
-			this.version = version;
+			//
+			appLoader = new Core.Loader(localFile, componentCode, version);
+			//
 			Start();
 		}
 
 		private void Start()
 		{
-			thread = new Thread(new ThreadStart(ShowProcess));
-			thread.Start();
+			//
+			appLoader.OperationFailed += new EventHandler<Core.LoaderEventArgs<Exception>>(appLoader_OperationFailed);
+			appLoader.ProgressChanged += new EventHandler<Core.LoaderEventArgs<Int32>>(appLoader_ProgressChanged);
+			appLoader.StatusChanged += new EventHandler<Core.LoaderEventArgs<String>>(appLoader_StatusChanged);
+			appLoader.OperationCompleted += new EventHandler<EventArgs>(appLoader_OperationCompleted);
+			//
+			appLoader.LoadAppDistributive();
+		}
+
+		void appLoader_OperationCompleted(object sender, EventArgs e)
+		{
+			DialogResult = DialogResult.OK;
+			Close();
+		}
+
+		void appLoader_StatusChanged(object sender, Core.LoaderEventArgs<String> e)
+		{
+			lblProcess.Text = e.StatusMessage;
+			lblValue.Text = e.EventData;
+			// Adjust Cancel button availability for an operation being performed
+			if (btnCancel.Enabled != e.Cancellable)
+			{
+				btnCancel.Enabled = e.Cancellable;
+			}
+			// This check allows to avoid extra form redrawing operations
+			if (ControlBox != e.Cancellable)
+			{
+				ControlBox = e.Cancellable;
+			}
+		}
+
+		void appLoader_ProgressChanged(object sender, Core.LoaderEventArgs<Int32> e)
+		{
+			progressBar.Value = e.EventData;
+			// Adjust Cancel button availability for an operation being performed
+			if (btnCancel.Enabled != e.Cancellable)
+			{
+				btnCancel.Enabled = e.Cancellable;
+			}
+			// This check allows to avoid extra form redrawing operations
+			if (ControlBox != e.Cancellable)
+			{
+				ControlBox = e.Cancellable;
+			}
+		}
+
+		void appLoader_OperationFailed(object sender, Core.LoaderEventArgs<Exception> e)
+		{
+			appContext.AppForm.ShowError(e.EventData);
+			//
+			DialogResult = DialogResult.Abort;
+			Close();
 		}
 
 		private void btnCancel_Click(object sender, EventArgs e)
@@ -90,218 +140,17 @@ namespace WebsitePanel.Installer.Controls
 			Close();
 		}
 
-		/// <summary>
-		/// Displays process progress.
-		/// </summary>
-		public void ShowProcess()
-		{
-			progressBar.Value = 0;
-			try
-			{
-				service = appContext.AppForm.WebService;
-				string dataFolder = FileUtils.GetDataDirectory();
-				string tmpFolder = FileUtils.GetTempDirectory();
-				
-				if (!Directory.Exists(dataFolder))
-				{
-					Directory.CreateDirectory(dataFolder);
-					Log.WriteInfo("Data directory created");
-				}
-
-				if (Directory.Exists(tmpFolder))
-				{
-					FileUtils.DeleteTempDirectory();
-				}
-				
-				if (!Directory.Exists(tmpFolder))
-				{
-					Directory.CreateDirectory(tmpFolder);
-					Log.WriteInfo("Tmp directory created");
-				}
-
-				string fileToDownload = null;
-				if (!string.IsNullOrEmpty(localFile))
-				{
-					fileToDownload = localFile;
-				}
-				else
-				{
-					fileToDownload = Path.GetFileName(remoteFile);
-				}
-
-				string destinationFile = Path.Combine(dataFolder, fileToDownload);
-				string tmpFile = Path.Combine(tmpFolder, fileToDownload);
-
-				
-				//check whether file already downloaded
-				if (!File.Exists(destinationFile))
-				{
-					if ( string.IsNullOrEmpty(remoteFile) )
-					{
-						//need to get remote file name
-						lblProcess.Text = "Connecting...";
-						progressBar.Value = 0;
-						DataSet ds = service.GetReleaseFileInfo(componentCode, version);
-						progressBar.Value = 100;
-						if (ds != null &&
-							ds.Tables.Count > 0 &&
-							ds.Tables[0].Rows.Count > 0)
-						{
-							DataRow row = ds.Tables[0].Rows[0];
-							remoteFile = row["FullFilePath"].ToString();
-							fileToDownload = Path.GetFileName(remoteFile);
-							destinationFile = Path.Combine(dataFolder, fileToDownload);
-							tmpFile = Path.Combine(tmpFolder, fileToDownload);
-						}
-						else
-						{
-							throw new Exception("Installer not found"); 
-						}
-					}
-					
-					// download file to tmp folder
-					lblProcess.Text = "Downloading setup files...";
-					progressBar.Value = 0;
-					DownloadFile(remoteFile, tmpFile, progressBar);
-					progressBar.Value = 100;
-					
-					// copy downloaded file to data folder
-					lblProcess.Text = "Copying setup files...";
-					progressBar.Value = 0;
-					// Ensure that the target does not exist.
-					if (File.Exists(destinationFile))
-						FileUtils.DeleteFile(destinationFile);
-					File.Move(tmpFile, destinationFile);
-					progressBar.Value = 100;
-				}
-
-				// unzip file
-				lblProcess.Text = "Please wait while Setup prepares the necessary files...";
-				progressBar.Value = 0;
-				UnzipFile(destinationFile, tmpFolder, progressBar);
-				progressBar.Value = 100;
-
-				this.DialogResult = DialogResult.OK;
-				this.Close();
-			}
-			catch (Exception ex)
-			{
-				if (Utils.IsThreadAbortException(ex))
-					return;
-
-				Log.WriteError("Installer error", ex);
-				appContext.AppForm.ShowError(ex);
-				this.DialogResult = DialogResult.Abort;
-				this.Close();
-			}
-		}
-
-		private void DownloadFile(string sourceFile, string destinationFile, ProgressBar progressBar)
-		{
-			try
-			{
-				Log.WriteStart("Downloading file");
-				Log.WriteInfo(string.Format("Downloading file \"{0}\" to \"{1}\"", sourceFile, destinationFile));
-				lblValue.Text = string.Empty;
-				long downloaded = 0;
-				long fileSize = service.GetFileSize(sourceFile);
-				if (fileSize == 0)
-				{
-					throw new FileNotFoundException("Service returned empty file.", sourceFile);
-				}
-
-				byte[] content;
-
-				while (downloaded < fileSize)
-				{
-					content = service.GetFileChunk(sourceFile, (int)downloaded, ChunkSize);
-					if (content == null)
-					{
-						throw new FileNotFoundException("Service returned NULL file content.", sourceFile);
-					}
-					FileUtils.AppendFileContent(destinationFile, content);
-					downloaded += content.Length;
-					//update progress bar
-					lblValue.Text = string.Format("{0} KB of {1} KB", downloaded / 1024, fileSize / 1024);
-					progressBar.Value = Convert.ToInt32((downloaded * 100) / fileSize);
-
-					if (content.Length < ChunkSize)
-						break;
-				}
-				lblValue.Text = string.Empty;
-				Log.WriteEnd(string.Format("Downloaded {0} bytes", downloaded));
-			}
-			catch (Exception ex)
-			{
-				if (Utils.IsThreadAbortException(ex))
-					return;
-				
-				throw;
-			}
-		}
-
-		private void UnzipFile(string zipFile, string destFolder, ProgressBar progressBar)
-		{
-			try
-			{
-				int val = 0;
-				Log.WriteStart("Unzipping file");
-				Log.WriteInfo(string.Format("Unzipping file \"{0}\" to the folder \"{1}\"", zipFile, destFolder));
-
-				long zipSize = 0;
-				using (ZipFile zip = ZipFile.Read(zipFile))
-				{
-					foreach (ZipEntry entry in zip)
-					{
-						if (!entry.IsDirectory)
-							zipSize += entry.UncompressedSize;
-					}
-				}
-
-				progressBar.Minimum = 0;
-				progressBar.Maximum = 100;
-				progressBar.Value = 0;
-
-				long unzipped = 0;
-				using (ZipFile zip = ZipFile.Read(zipFile))
-				{
-					foreach (ZipEntry entry in zip)
-					{
-						entry.Extract(destFolder, ExtractExistingFileAction.OverwriteSilently);  
-						if (!entry.IsDirectory)
-							unzipped += entry.UncompressedSize;
-
-						if (zipSize != 0)
-						{
-							val = Convert.ToInt32(unzipped * 100 / zipSize);
-							lblValue.Text = string.Format("{0}%", val);
-							progressBar.Value = val;
-						}
-					}
-				}
-
-				lblValue.Text = "100%";
-				Log.WriteEnd("Unzipped file");
-			}
-			catch (Exception ex)
-			{
-				if (Utils.IsThreadAbortException(ex))
-					return;
-
-				throw;
-			}
-		}
-
 		private void OnLoaderFormClosing(object sender, FormClosingEventArgs e)
 		{
-			if (this.DialogResult == DialogResult.Cancel && this.thread != null)
+			if (this.DialogResult == DialogResult.Cancel)
 			{
-				if (this.thread.IsAlive)
-				{
-					this.thread.Abort();
-				}
-				this.thread.Join();
+				appLoader.AbortOperation();
 			}
+			// Remove event handlers
+			appLoader.OperationFailed -= new EventHandler<Core.LoaderEventArgs<Exception>>(appLoader_OperationFailed);
+			appLoader.ProgressChanged -= new EventHandler<Core.LoaderEventArgs<Int32>>(appLoader_ProgressChanged);
+			appLoader.StatusChanged -= new EventHandler<Core.LoaderEventArgs<String>>(appLoader_StatusChanged);
+			appLoader.OperationCompleted -= new EventHandler<EventArgs>(appLoader_OperationCompleted);
 		}
 	}
 }

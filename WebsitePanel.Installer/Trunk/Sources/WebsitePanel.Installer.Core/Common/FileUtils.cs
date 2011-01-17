@@ -1,4 +1,4 @@
-// Copyright (c) 2010, SMB SAAS Systems Inc.
+// Copyright (c) 2011, SMB SAAS Systems Inc.
 // All rights reserved.
 //
 // Redistribution and use in source and binary forms, with or without modification,
@@ -37,7 +37,7 @@ namespace WebsitePanel.Installer.Common
 	/// <summary>
 	/// File utils.
 	/// </summary>
-	internal sealed class FileUtils
+	public sealed class FileUtils
 	{
 		/// <summary>
 		/// Initializes a new instance of the class.
@@ -50,7 +50,7 @@ namespace WebsitePanel.Installer.Common
 		/// Creates drectory with the specified directory.
 		/// </summary>
 		/// <param name="path">The directory path to create.</param>
-		internal static void CreateDirectory(string path)
+		public static void CreateDirectory(string path)
 		{
 			string dir = Path.GetDirectoryName(path);
 			if(!Directory.Exists(dir))
@@ -65,7 +65,7 @@ namespace WebsitePanel.Installer.Common
 		/// </summary>
 		/// <param name="fileName">File name.</param>
 		/// <param name="content">The array of bytes to write.</param>
-		internal static void SaveFileContent(string fileName, byte[] content)
+		public static void SaveFileContent(string fileName, byte[] content)
 		{
 			FileStream stream = new FileStream(fileName, FileMode.Create);
 			stream.Write(content, 0, content.Length);
@@ -77,7 +77,7 @@ namespace WebsitePanel.Installer.Common
         /// </summary>
         /// <param name="fileName">File name.</param>
         /// <param name="content">The array of bytes to write.</param>
-        internal static void AppendFileContent(string fileName, byte[] content)
+        public static void AppendFileContent(string fileName, byte[] content)
         {
             FileStream stream = new FileStream(fileName, FileMode.Append, FileAccess.Write);
             stream.Write(content, 0, content.Length);
@@ -88,7 +88,7 @@ namespace WebsitePanel.Installer.Common
 		/// Deletes the specified file.
 		/// </summary>
 		/// <param name="fileName">The name of the file to be deleted.</param>
-		internal static void DeleteFile(string fileName)
+		public static void DeleteFile(string fileName)
 		{
 			int attempts = 0;
 			while (true)
@@ -140,7 +140,7 @@ namespace WebsitePanel.Installer.Common
 		/// Deletes the specified directory.
 		/// </summary>
 		/// <param name="directory">The name of the directory to be deleted.</param>
-		internal static void DeleteDirectory(string directory)
+		public static void DeleteDirectory(string directory)
 		{
 			if (!Directory.Exists(directory))
 				return;
@@ -211,7 +211,7 @@ namespace WebsitePanel.Installer.Common
 		/// </summary>
 		/// <param name="fileName">The path to check.</param>
 		/// <returns></returns>
-		internal static bool FileExists(string fileName)
+		public static bool FileExists(string fileName)
 		{
 			return File.Exists(fileName);
 		}
@@ -221,7 +221,7 @@ namespace WebsitePanel.Installer.Common
 		/// </summary>
 		/// <param name="path">The path to test.</param>
 		/// <returns></returns>
-		internal static bool DirectoryExists(string path)
+		public static bool DirectoryExists(string path)
 		{
 			return Directory.Exists(path);
 		}
@@ -230,7 +230,7 @@ namespace WebsitePanel.Installer.Common
 		/// Returns current application path.
 		/// </summary>
 		/// <returns>Curent application path.</returns>
-		internal static string GetCurrentDirectory()
+		public static string GetCurrentDirectory()
 		{
 			return AppDomain.CurrentDomain.BaseDirectory;
 		}
@@ -239,7 +239,7 @@ namespace WebsitePanel.Installer.Common
 		/// Returns application temp directory.
 		/// </summary>
 		/// <returns>Application temp directory.</returns>
-		internal static string GetTempDirectory()
+		public static string GetTempDirectory()
 		{
 			return Path.Combine(GetCurrentDirectory(), "Tmp");
 		}
@@ -248,7 +248,7 @@ namespace WebsitePanel.Installer.Common
 		/// Returns application data directory.
 		/// </summary>
 		/// <returns>Application data directory.</returns>
-		internal static string GetDataDirectory()
+		public static string GetDataDirectory()
 		{
 			return Path.Combine(GetCurrentDirectory(), "Data");
 		}
@@ -256,7 +256,7 @@ namespace WebsitePanel.Installer.Common
 		/// <summary>
 		/// Deletes application temp directory.
 		/// </summary>
-		internal static void DeleteTempDirectory()
+		public static void DeleteTempDirectory()
 		{
 			try
 			{

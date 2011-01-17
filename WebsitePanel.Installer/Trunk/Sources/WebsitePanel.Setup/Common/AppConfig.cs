@@ -1,4 +1,4 @@
-// Copyright (c) 2010, SMB SAAS Systems Inc.
+// Copyright (c) 2011, SMB SAAS Systems Inc.
 // All rights reserved.
 //
 // Redistribution and use in source and binary forms, with or without modification,
@@ -31,11 +31,14 @@ using System.Xml;
 using System.Configuration;
 using System.Collections.Generic;
 using System.Text;
+using System.IO;
 
 namespace WebsitePanel.Setup
 {
 	public sealed class AppConfig
 	{
+		public const string AppConfigFileNameWithoutExtension = "WebsitePanel.Installer.exe";
+
 		private AppConfig()
 		{
 		}
@@ -45,7 +48,11 @@ namespace WebsitePanel.Setup
 
 		public static void LoadConfiguration()
 		{
-			appConfig = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
+			//
+			var exePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, AppConfigFileNameWithoutExtension);
+			//
+			appConfig = ConfigurationManager.OpenExeConfiguration(exePath);
+			//
 			ConfigurationSection section = appConfig.Sections["installer"];
 			if (section == null)
 				throw new ConfigurationErrorsException("instalelr section not found");
@@ -61,6 +68,16 @@ namespace WebsitePanel.Setup
 			{
 				return xmlConfig;
 			}
+		}
+
+		public static void EnsureComponentConfig(string componentId)
+		{
+			var xmlConfigNode = GetComponentConfig(componentId);
+			//
+			if (xmlConfigNode != null)
+				return;
+			//
+			CreateComponentConfig(componentId);
 		}
 
 		public static XmlNode CreateComponentConfig(string componentId)
@@ -126,6 +143,33 @@ namespace WebsitePanel.Setup
 			XmlUtils.SetXmlAttribute(settingNode, "value", value.ToString());
 		}
 
+		public static void LoadComponentSettings(SetupVariables vars)
+		{
+			XmlNode componentNode = GetComponentConfig(vars.ComponentId);
+			//
+			if (componentNode != null)
+			{
+				var typeRef = vars.GetType();
+				//
+				XmlNodeList settingNodes = componentNode.SelectNodes("settings/add");
+				//
+				foreach (XmlNode item in settingNodes)
+				{
+					var sName = XmlUtils.GetXmlAttribute(item, "key");
+					var sValue = XmlUtils.GetXmlAttribute(item, "value");
+					//
+					if (String.IsNullOrEmpty(sName))
+						continue;
+					//
+					var objProperty = typeRef.GetProperty(sName);
+					//
+					if (objProperty == null)
+						continue;
+					// Set property value
+					objProperty.SetValue(vars, Convert.ChangeType(sValue, objProperty.PropertyType), null);
+				}
+			}
+		}
 
 		public static string GetComponentSettingStringValue(string componentId, string settingName)
 		{

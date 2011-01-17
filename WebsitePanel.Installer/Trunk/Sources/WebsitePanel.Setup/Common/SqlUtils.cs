@@ -1,4 +1,4 @@
-// Copyright (c) 2010, SMB SAAS Systems Inc.
+// Copyright (c) 2011, SMB SAAS Systems Inc.
 // All rights reserved.
 //
 // Redistribution and use in source and binary forms, with or without modification,
@@ -45,6 +45,23 @@ namespace WebsitePanel.Setup
 		{
 		}
 
+		public static string BuildDbServerMasterConnectionString(string dbServer, string dbLogin, string dbPassw)
+		{
+			return BuildDbServerConnectionString(dbServer, "master", dbLogin, dbPassw);
+		}
+
+		public static string BuildDbServerConnectionString(string dbServer, string dbName, string dbLogin, string dbPassw)
+		{
+			if (String.IsNullOrEmpty(dbLogin) && String.IsNullOrEmpty(dbPassw))
+			{
+				return String.Format("Server={0};Database={1};Integrated Security=SSPI;", dbServer, dbName);
+			}
+			else
+			{
+				return String.Format("Server={0};Database={1};User id={2};Password={3};", dbServer, dbName, dbLogin, dbPassw);
+			}
+		}
+
 		/// <summary>
 		/// Check sql connection.
 		/// </summary>
@@ -69,7 +86,7 @@ namespace WebsitePanel.Setup
         /// <summary>
         /// Gets the version of SQL Server instance.
         /// </summary>
-        /// <param name="connectionString">Connection string.</param>
+		/// <param name="connectionString">Connection string.</param>
         /// <returns>True if connecion is valid, otherwise false.</returns>
         internal static string GetSqlServerVersion(string connectionString)
         {
@@ -137,7 +154,7 @@ namespace WebsitePanel.Setup
 		{
 			DataSet ds = ExecuteQuery(connectionString, "SELECT Name FROM master..sysdatabases ORDER BY Name");
 			string[] ret = new string[ds.Tables[0].Rows.Count];
-			for(int i=0;i<ds.Tables[0].Rows.Count;i++)
+			for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
 			{
 				ret[i] = (string)ds.Tables[0].Rows[i]["Name"];
 			}
@@ -194,7 +211,7 @@ namespace WebsitePanel.Setup
 			finally
 			{
 				// close connection if required
-				if(conn != null && conn.State == ConnectionState.Open)
+				if (conn != null && conn.State == ConnectionState.Open)
 					conn.Close();
 			}
 		}
@@ -213,7 +230,7 @@ namespace WebsitePanel.Setup
 			finally
 			{
 				// close connection if required
-				if(conn != null && conn.State == ConnectionState.Open)
+				if (conn != null && conn.State == ConnectionState.Open)
 					conn.Close();
 			}
 		}
@@ -227,7 +244,7 @@ namespace WebsitePanel.Setup
 		internal static bool DatabaseExists(string connectionString, string databaseName)
 		{
 			return (ExecuteQuery(connectionString,
-				String.Format( "select name from master..sysdatabases where name = '{0}'", databaseName)).Tables[0].Rows.Count > 0);
+				String.Format("select name from master..sysdatabases where name = '{0}'", databaseName)).Tables[0].Rows.Count > 0);
 		}
 
 		/// <summary>
@@ -238,7 +255,7 @@ namespace WebsitePanel.Setup
 		internal static void CreateDatabase(string connectionString, string databaseName)
 		{
 				// create database in the default location
-			string commandText = string.Format("CREATE DATABASE {0} COLLATE Latin1_General_CI_AS;", databaseName);
+			string commandText = string.Format("CREATE DATABASE [{0}] COLLATE Latin1_General_CI_AS;", databaseName);
 			// create database
 			ExecuteNonQuery(connectionString, commandText);
 			// grant users access
@@ -255,7 +272,7 @@ namespace WebsitePanel.Setup
 		internal static bool CreateUser(string connectionString, string userName, string password, string database)
 		{
             bool userCreated = false;
-			if ( !UserExists(connectionString, userName) )
+			if (!UserExists(connectionString, userName))
 			{
 				ExecuteNonQuery(connectionString,
 					String.Format("CREATE LOGIN {0} WITH PASSWORD='{1}', DEFAULT_DATABASE={2}, CHECK_EXPIRATION=OFF, CHECK_POLICY=OFF",
@@ -268,7 +285,7 @@ namespace WebsitePanel.Setup
 
 		private static void AddUserToDatabase(string connectionString, string databaseName, string user)
 		{
-			if ( user == "sa" )
+			if (user == "sa")
 				return;
 
 			// grant database access
@@ -277,9 +294,9 @@ namespace WebsitePanel.Setup
 				ExecuteNonQuery(connectionString, 
 					string.Format("USE {0};EXEC sp_grantdbaccess '{1}';", databaseName, user));
 			}
-			catch(SqlException ex)
+			catch (SqlException ex)
 			{
-				if(ex.Number == 15023)
+				if (ex.Number == 15023)
 				{
 					// the user already exists in the database
 					// so, try to auto fix his login in the database
@@ -336,8 +353,8 @@ namespace WebsitePanel.Setup
         /// <summary>
         /// Deletes database user
         /// </summary>
-        /// <param name="connectionString">Connection string</param>
-        /// <param name="username">Username</param>
+		/// <param name="connectionString">Connection string</param>
+		/// <param name="username">Username</param>
         internal static void DeleteUser(string connectionString, string username)
         {
             // remove user from databases
@@ -361,7 +378,7 @@ namespace WebsitePanel.Setup
 		{
 			// remove all users from database
 			string[] users = GetDatabaseUsers(connectionString, databaseName);
-			foreach(string user in users)
+			foreach (string user in users)
 			{
 				RemoveUserFromDatabase(connectionString, databaseName, user);
 			}
@@ -384,7 +401,7 @@ namespace WebsitePanel.Setup
 			DataView dvUsers = ExecuteQuery(connectionString, cmdText).Tables[0].DefaultView;
 
 			string[] users = new string[dvUsers.Count];
-			for(int i = 0; i < dvUsers.Count; i++)
+			for (int i = 0; i < dvUsers.Count; i++)
 			{
 				users[i] = (string)dvUsers[i]["Name"];
 			}
@@ -398,7 +415,7 @@ namespace WebsitePanel.Setup
 				" inner join {1}..sysusers as su on so.uid = su.uid" + 
 				" where su.name = '{2}'", databaseName, databaseName, user)).Tables[0].DefaultView;
 			string[] objects = new string[dvObjects.Count];
-			for(int i = 0; i < dvObjects.Count; i++)
+			for (int i = 0; i < dvObjects.Count; i++)
 			{
 				objects[i] = (string)dvObjects[i]["Name"];
 			}
@@ -495,7 +512,7 @@ namespace WebsitePanel.Setup
 		{
 			// change ownership of user's objects
 			string[] userObjects = GetUserDatabaseObjects(connectionString, databaseName, user);
-			foreach(string userObject in userObjects)
+			foreach (string userObject in userObjects)
 			{
 				try
 				{
@@ -503,9 +520,9 @@ namespace WebsitePanel.Setup
 						String.Format("USE {0};EXEC sp_changeobjectowner '{1}.{2}', 'dbo'",
 						databaseName, user, userObject));
 				}
-				catch(SqlException ex)
+				catch (SqlException ex)
 				{
-					if(ex.Number == 15505)
+					if (ex.Number == 15505)
 					{
 						// Cannot change owner of object 'user.ObjectName' or one of its child objects because
 						// the new owner 'dbo' already has an object with the same name.
@@ -536,7 +553,7 @@ namespace WebsitePanel.Setup
 
 		internal static bool IsValidDatabaseName(string name)
 		{
-			if ( name == null || name.Trim().Length == 0 || name.Length > 128 )
+			if (name == null || name.Trim().Length == 0 || name.Length > 128)
 				return false; 
 
 			return Regex.IsMatch(name, "^[0-9A-z_@#$]+$", RegexOptions.Singleline);
@@ -556,7 +573,7 @@ namespace WebsitePanel.Setup
 		{
 			bakFile = databaseName + ".bak";
 			position = "1";
-			string backupName = "Backup "+DateTime.Now.ToString("yyyyMMddHHmmss");
+			string backupName = "Backup " + DateTime.Now.ToString("yyyyMMddHHmmss");
 			// backup database
 			ExecuteNonQuery(connectionString,
 				String.Format(@"BACKUP DATABASE [{0}] TO DISK = N'{1}' WITH NAME = '{2}'", // WITH INIT, NAME = '{2}'

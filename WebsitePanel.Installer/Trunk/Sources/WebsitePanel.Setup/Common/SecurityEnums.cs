@@ -1,4 +1,4 @@
-// Copyright (c) 2010, SMB SAAS Systems Inc.
+// Copyright (c) 2011, SMB SAAS Systems Inc.
 // All rights reserved.
 //
 // Redistribution and use in source and binary forms, with or without modification,
@@ -31,7 +31,7 @@ using System;
 namespace WebsitePanel.Setup
 {
     #region Security enums
-    internal enum ControlFlags
+    public enum ControlFlags
     {
         SE_OWNER_DEFAULTED = 0x1,
         SE_GROUP_DEFAULTED = 0x2,
@@ -49,7 +49,7 @@ namespace WebsitePanel.Setup
     }
 
     [Flags]
-    internal enum SystemAccessMask : uint
+    public enum SystemAccessMask : uint
     {
         // Grants the right to read data from the file. For a directory, this value grants 
         // the right to list the contents of the directory.
@@ -99,7 +99,7 @@ namespace WebsitePanel.Setup
     }
 
     [Flags]
-    internal enum AceFlags : uint
+	public enum AceFlags : uint
     {
         // Non-container child objects inherit the ACE as an effective ACE. For child objects that are containers, 
         // the ACE is inherited as an inherit-only ACE unless the NO_PROPAGATE_INHERIT_ACE bit flag is also set.

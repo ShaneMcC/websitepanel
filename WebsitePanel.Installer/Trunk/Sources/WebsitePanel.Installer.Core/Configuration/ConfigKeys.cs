@@ -1,4 +1,4 @@
-// Copyright (c) 2010, SMB SAAS Systems Inc.
+// Copyright (c) 2011, SMB SAAS Systems Inc.
 // All rights reserved.
 //
 // Redistribution and use in source and binary forms, with or without modification,
@@ -29,18 +29,18 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
-using System.Xml;
 
-namespace WebsitePanel.Installer.Common
+namespace WebsitePanel.Installer.Configuration
 {
-	public class Global
+	public class ConfigKeys
 	{
-		private Global()
-		{
-		}
-
-		public static Version IISVersion { get; set; }
-		public static OS.WindowsVersion OSVersion { get; set; }
-		public static XmlDocument SetupXmlDocument { get; set; }
+		public const string Web_Service = "Web.Service";
+		public const string Web_AutoCheck = "Web.AutoCheck";
+		public const string Web_Proxy_UseProxy = "Web.Proxy.UseProxy";
+		public const string Web_Proxy_Address = "Web.Proxy.Address";
+		public const string Web_Proxy_UserName = "Web.Proxy.UserName";
+		public const string Web_Proxy_Password = "Web.Proxy.Password";
+		public const string Settings_ImportSettings = "Settings.ImportSettings";
+		public const string Settings_IIS64 = "Settings.CheckIIS64";
 	}
 }

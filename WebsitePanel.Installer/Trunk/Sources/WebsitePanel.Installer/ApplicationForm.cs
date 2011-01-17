@@ -1,4 +1,4 @@
-// Copyright (c) 2010, SMB SAAS Systems Inc.
+// Copyright (c) 2011, SMB SAAS Systems Inc.
 // All rights reserved.
 //
 // Redistribution and use in source and binary forms, with or without modification,
@@ -46,6 +46,7 @@ using WebsitePanel.Installer.Services;
 using WebsitePanel.Installer.Configuration;
 using System.Xml;
 using System.Runtime.Remoting.Lifetime;
+using WebsitePanel.Installer.Core;
 
 namespace WebsitePanel.Installer
 {
@@ -54,7 +55,6 @@ namespace WebsitePanel.Installer
 	/// </summary>
 	internal partial class ApplicationForm : Form
 	{
-		private System.Configuration.Configuration appConfig;
 		private ProgressManager progressManager;
 		private ScopeNode activeScopeNode;
 		private static ApplicationForm instance;
@@ -72,7 +72,6 @@ namespace WebsitePanel.Installer
 			{
 				return;
 			}
-			LoadConfiguration();
 		}
 		#endregion
 
@@ -272,8 +271,9 @@ namespace WebsitePanel.Installer
 			}
 			else
 			{
+				AppConfigManager.LoadConfiguration();
 				Update();
-				LoadConfiguration();
+				//LoadConfiguration();
 				ScopeNode componentsNode = scopeTree.Nodes[0] as ScopeNode;
 				componentsNode.Nodes.Clear();
 				componentsNode.Populated = false;
@@ -349,7 +349,7 @@ namespace WebsitePanel.Installer
 		/// </summary>
 		internal void ShowSecurityError()
 		{
-			ShowError("You do not have the appropriate permissions to perform this operation. Make sure you are running the application from the local disk and you have local system administrator privileges.");
+			ShowError(Global.Messages.NotEnoughPermissionsError);
 		}
 
 		internal void ShowError(Exception ex)
@@ -387,7 +387,7 @@ namespace WebsitePanel.Installer
 			Log.WriteStart("Loading installed components");
 			node.Nodes.Clear();
 
-			foreach (ComponentConfigElement componentConfig in AppConfiguration.Components)
+			foreach (ComponentConfigElement componentConfig in AppConfigManager.AppConfiguration.Components)
 			{
 				string instance = string.Empty;
 				if (componentConfig.Settings["Instance"] != null &&
@@ -404,7 +404,7 @@ namespace WebsitePanel.Installer
 				AddComponentNode(node, title, componentConfig);
 			}
 			node.Populated = true;
-			Log.WriteEnd(string.Format("{0} installed component(s) loaded", AppConfiguration.Components.Count));
+			Log.WriteEnd(string.Format("{0} installed component(s) loaded", AppConfigManager.AppConfiguration.Components.Count));
 		}
 
 		/// <summary>
@@ -414,35 +414,7 @@ namespace WebsitePanel.Installer
 		{
 			get
 			{
-				InstallerService webService = new InstallerService();
-
-				string url = AppConfiguration.GetStringSetting(ConfigKeys.Web_Service);
-				if (!String.IsNullOrEmpty(url))
-				{
-					webService.Url = url;
-				}
-				else
-				{
-					webService.Url = "http://www.websitepanel.net/Services/InstallerService.asmx";
-				}
-
-				// check if we need to add a proxy to access Internet
-				bool useProxy = AppConfiguration.GetBooleanSetting(ConfigKeys.Web_Proxy_UseProxy);
-				if (useProxy)
-				{
-					string proxyServer = AppConfiguration.Settings[ConfigKeys.Web_Proxy_Address].Value;
-					if (!String.IsNullOrEmpty(proxyServer))
-					{
-						IWebProxy proxy = new WebProxy(proxyServer);
-						string proxyUsername = AppConfiguration.Settings[ConfigKeys.Web_Proxy_UserName].Value;
-						string proxyPassword = AppConfiguration.Settings[ConfigKeys.Web_Proxy_Password].Value;
-						if (!String.IsNullOrEmpty(proxyUsername))
-							proxy.Credentials = new NetworkCredential(proxyUsername, proxyPassword);
-						webService.Proxy = proxy;
-					}
-				}
-
-				return webService;
+				return ServiceProviderProxy.GetInstallerWebService();
 			}
 		}
 
@@ -456,7 +428,10 @@ namespace WebsitePanel.Installer
 			bool ret = false;
 			fileName = string.Empty;
 			Log.WriteStart("Checking for a new version");
-			DataSet ds = WebService.GetLatestComponentUpdate("cfg core");
+			//
+			var webService = ServiceProviderProxy.GetInstallerWebService();
+			DataSet ds = webService.GetLatestComponentUpdate("cfg core");
+			//
 			Log.WriteEnd("Checked for a new version");
 			if (ds != null && ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
 			{
@@ -501,18 +476,21 @@ namespace WebsitePanel.Installer
 				}
 			}
 			string targetFile = GetType().Module.FullyQualifiedName;
-			string url = WebService.Url;
+			//
+			var webService = ServiceProviderProxy.GetInstallerWebService();
+			string url = webService.Url;
+			//
 			string proxyServer = string.Empty;
 			string user = string.Empty;
 			string password = string.Empty;
 
 			// check if we need to add a proxy to access Internet
-			bool useProxy = AppConfiguration.GetBooleanSetting(ConfigKeys.Web_Proxy_UseProxy);
+			bool useProxy = AppConfigManager.AppConfiguration.GetBooleanSetting(ConfigKeys.Web_Proxy_UseProxy);
 			if (useProxy)
 			{
-				proxyServer = AppConfiguration.Settings[ConfigKeys.Web_Proxy_Address].Value;
-				user = AppConfiguration.Settings[ConfigKeys.Web_Proxy_UserName].Value;
-				password = AppConfiguration.Settings[ConfigKeys.Web_Proxy_Password].Value;
+				proxyServer = AppConfigManager.AppConfiguration.Settings[ConfigKeys.Web_Proxy_Address].Value;
+				user = AppConfigManager.AppConfiguration.Settings[ConfigKeys.Web_Proxy_UserName].Value;
+				password = AppConfigManager.AppConfiguration.Settings[ConfigKeys.Web_Proxy_Password].Value;
 			}
 
 			ProcessStartInfo info = new ProcessStartInfo();
@@ -585,58 +563,6 @@ namespace WebsitePanel.Installer
 			topLogoControl.HideProgress();
 			progressManager.FinishProgress();
 			EnableContent();
-		}
-
-		#endregion
-
-		#region Configuration
-		/// <summary>
-		/// Loads application configuration
-		/// </summary>
-		private void LoadConfiguration()
-		{
-			Log.WriteStart("Loading application configuration");
-			appConfig = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
-			Log.WriteEnd("Application configuration loaded");
-		}
-
-		/// <summary>
-		/// Returns application configuration section
-		/// </summary>
-		internal InstallerSection AppConfiguration
-		{
-			get
-			{
-				return appConfig.GetSection("installer") as InstallerSection;
-			}
-		}
-
-		/// <summary>
-		/// Saves application configuration
-		/// </summary>
-		internal void SaveConfiguration(bool showAlert)
-		{
-			if (appConfig != null)
-			{
-				try
-				{
-					Log.WriteStart("Saving application configuration");
-					appConfig.Save();
-					Log.WriteEnd("Application configuration saved");
-					if (showAlert)
-					{
-						ShowInfo("Application settings updated successfully.");
-					}
-				}
-				catch (Exception ex)
-				{
-					Log.WriteError("Configuration error", ex);
-					if (showAlert)
-					{
-						ShowError(ex);
-					}
-				}
-			}
 		}
 
 		#endregion

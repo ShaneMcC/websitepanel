@@ -1,4 +1,4 @@
-// Copyright (c) 2010, SMB SAAS Systems Inc.
+// Copyright (c) 2011, SMB SAAS Systems Inc.
 // All rights reserved.
 //
 // Redistribution and use in source and binary forms, with or without modification,
@@ -34,7 +34,7 @@ namespace WebsitePanel.Installer.Common
 	/// <summary>
 	/// Registry helper class.
 	/// </summary>
-	internal sealed class RegistryUtils
+	public sealed class RegistryUtils
 	{
 		/// <summary>
 		/// Initializes a new instance of the class.

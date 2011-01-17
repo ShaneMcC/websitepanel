@@ -1,4 +1,4 @@
-// Copyright (c) 2010, SMB SAAS Systems Inc.
+﻿// Copyright (c) 2011, SMB SAAS Systems Inc.
 // All rights reserved.
 //
 // Redistribution and use in source and binary forms, with or without modification,
@@ -11,7 +11,7 @@
 //   this list of conditions  and  the  following  disclaimer in  the documentation
 //   and/or other materials provided with the distribution.
 //
-// - Neither  the  name  of  the  SMB SAAS Systems Inc.  nor   the   names  of  its
+// - Neither  the  name of  the  SMB SAAS Systems Inc.  nor   the   names  of  its
 //   contributors may be used to endorse or  promote  products  derived  from  this
 //   software without specific prior written permission.
 //
@@ -27,20 +27,13 @@
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 using System;
-using System.Collections.Generic;
-using System.Text;
 
-namespace WebsitePanel.Installer.Configuration
+namespace WebsitePanel.Setup.Actions
 {
-	internal class ConfigKeys
+	public interface IPrerequisiteAction
 	{
-		public const string Web_Service = "Web.Service";
-		public const string Web_AutoCheck = "Web.AutoCheck";
-		public const string Web_Proxy_UseProxy = "Web.Proxy.UseProxy";
-		public const string Web_Proxy_Address = "Web.Proxy.Address";
-		public const string Web_Proxy_UserName = "Web.Proxy.UserName";
-		public const string Web_Proxy_Password = "Web.Proxy.Password";
-		public const string Settings_ImportSettings = "Settings.ImportSettings";
-		public const string Settings_IIS64 = "Settings.CheckIIS64";
+		bool Run(WebsitePanel.Setup.SetupVariables vars);
+		// The event
+		event EventHandler<ActionProgressEventArgs<bool>> Complete;
 	}
 }

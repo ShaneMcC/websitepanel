@@ -1,4 +1,4 @@
-// Copyright (c) 2010, SMB SAAS Systems Inc.
+// Copyright (c) 2011, SMB SAAS Systems Inc.
 // All rights reserved.
 //
 // Redistribution and use in source and binary forms, with or without modification,
@@ -37,9 +37,9 @@ using System.Runtime.Remoting.Lifetime;
 namespace WebsitePanel.Installer.Common
 {
 	[Serializable]
-	internal class AssemblyLoader : MarshalByRefObject
+	public class AssemblyLoader : MarshalByRefObject
 	{
-		internal object RemoteRun(string fileName, string typeName, string methodName, object[] parameters)
+		public object RemoteRun(string fileName, string typeName, string methodName, object[] parameters)
 		{
 			Assembly assembly = Assembly.LoadFrom(fileName);
 			Type type = assembly.GetType(typeName);
@@ -47,12 +47,12 @@ namespace WebsitePanel.Installer.Common
 			return method.Invoke(Activator.CreateInstance(type), parameters);
 		}
 
-		internal void AddTraceListener(TraceListener traceListener)
+		public void AddTraceListener(TraceListener traceListener)
 		{
 			Trace.Listeners.Add(traceListener);
 		}
 
-		internal static object Execute(string fileName, string typeName, string methodName, object[] parameters)
+		public static object Execute(string fileName, string typeName, string methodName, object[] parameters)
 		{
 			AppDomain domain = null;
 			try
@@ -90,6 +90,11 @@ namespace WebsitePanel.Installer.Common
 		static void OnDomainUnhandledException(object sender, UnhandledExceptionEventArgs e)
 		{
 			Log.WriteError("Remote domain error", (Exception)e.ExceptionObject);
+		}
+
+		public static string GetShellVersion()
+		{
+			return Assembly.GetEntryAssembly().GetName().Version.ToString();
 		}
 	}
 }

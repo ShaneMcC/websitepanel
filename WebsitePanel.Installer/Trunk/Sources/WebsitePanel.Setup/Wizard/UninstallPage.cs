@@ -1,4 +1,4 @@
-// Copyright (c) 2010, SMB SAAS Systems Inc.
+// Copyright (c) 2011, SMB SAAS Systems Inc.
 // All rights reserved.
 //
 // Redistribution and use in source and binary forms, with or without modification,
@@ -90,22 +90,22 @@ namespace WebsitePanel.Setup
 			{
 				this.lblProcess.Text = "Creating uninstall script...";
 				this.Update();
-				
+
 				//default actions
 				List<InstallAction> actions = GetUninstallActions(componentId);
-				
+
 				//add external actions
 				foreach (InstallAction extAction in Actions)
 				{
 					actions.Add(extAction);
 				}
-				
+
 				//process actions
-				for (int i = 0; i < actions.Count; i++)
+				for (int i = 0, progress = 1; i < actions.Count; i++, progress++)
 				{
 					InstallAction action = actions[i];
 					this.lblProcess.Text = action.Description;
-					this.progressBar.Value = i * 100 / actions.Count;
+					this.progressBar.Value = progress * 100 / actions.Count;
 					this.Update();
 
 					try
@@ -207,7 +207,7 @@ namespace WebsitePanel.Setup
 					if (!Utils.IsThreadAbortException(ex))
 						Log.WriteError("Windows service stop error", ex);
 				}
-				
+
 				int exitCode = Utils.RunProcess(path, "/u");
 				if (exitCode == 0)
 				{
@@ -358,7 +358,7 @@ namespace WebsitePanel.Setup
 			if (deleteAppPool)
 			{
 				string appPoolName = AppConfig.GetComponentSettingStringValue(componentId, "ApplicationPool");
-				if ( string.IsNullOrEmpty(appPoolName))
+				if (string.IsNullOrEmpty(appPoolName))
 					appPoolName = WebUtils.WEBSITEPANEL_ADMIN_POOL;
 				action = new InstallAction(ActionTypes.DeleteApplicationPool);
 				action.Name = appPoolName;
@@ -374,8 +374,7 @@ namespace WebsitePanel.Setup
 				string username = AppConfig.GetComponentSettingStringValue(componentId, "UserAccount");
 				string domain = AppConfig.GetComponentSettingStringValue(componentId, "Domain");
 				//membership
-				if (Wizard.SetupVariables.UserMembership != null &&
-					Wizard.SetupVariables.UserMembership.Length > 0)
+				if (Wizard.SetupVariables.UserMembership != null && Wizard.SetupVariables.UserMembership.Length > 0)
 				{
 					action = new InstallAction(ActionTypes.DeleteUserMembership);
 					action.Name = username;
@@ -430,7 +429,7 @@ namespace WebsitePanel.Setup
 			catch (Exception ex)
 			{
 				if (Utils.IsThreadAbortException(ex))
-					return; 
+					return;
 
 				Log.WriteError("I/O error", ex);
 				InstallLog.AppendLine(string.Format("- Failed to delete \"{0}\" folder", path));
@@ -492,7 +491,7 @@ namespace WebsitePanel.Setup
 				Log.WriteError("Config error", ex);
 				InstallLog.AppendLine("- Failed to update system configuration");
 				throw;
-			}			
+			}
 		}
 
 		private void DeleteDatabase(string connectionString, string database)
@@ -566,7 +565,7 @@ namespace WebsitePanel.Setup
 				throw;
 			}
 		}
-		
+
 
 		private void DeleteUserMembership(string domain, string username, string[] membership)
 		{
@@ -607,7 +606,7 @@ namespace WebsitePanel.Setup
 			{
 				if (Utils.IsThreadAbortException(ex))
 					return;
-				
+
 				Log.WriteError("User account delete error", ex);
 				InstallLog.AppendLine(string.Format("- Failed to delete \"{0}\" user account ", username));
 				throw;

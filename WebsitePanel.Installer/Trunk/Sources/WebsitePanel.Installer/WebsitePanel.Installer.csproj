@@ -17,6 +17,7 @@
     <UpgradeBackupLocation>
     </UpgradeBackupLocation>
     <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
+    <IsWebBootstrapper>false</IsWebBootstrapper>
     <PublishUrl>publish\</PublishUrl>
     <Install>true</Install>
     <InstallFrom>Disk</InstallFrom>
@@ -29,7 +30,6 @@
     <MapFileExtensions>true</MapFileExtensions>
     <ApplicationRevision>0</ApplicationRevision>
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
-    <IsWebBootstrapper>false</IsWebBootstrapper>
     <UseApplicationTrust>false</UseApplicationTrust>
     <BootstrapperEnabled>true</BootstrapperEnabled>
   </PropertyGroup>
@@ -46,11 +46,14 @@
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>none</DebugType>
     <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
+    <OutputPath>obj\Release\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup>
+    <RunPostBuildEvent>Always</RunPostBuildEvent>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Ionic.Zip.Reduced, Version=1.8.4.28, Culture=neutral, PublicKeyToken=edbe51ad942a3f5c, processorArchitecture=MSIL">
@@ -70,22 +73,20 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\VersionInfo.cs">
+      <Link>VersionInfo.cs</Link>
+    </Compile>
     <Compile Include="ApplicationForm.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="ApplicationForm.Designer.cs">
       <DependentUpon>ApplicationForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="Common\AssemblyLoader.cs" />
     <Compile Include="Common\AppContext.cs" />
-    <Compile Include="Common\FileUtils.cs" />
-    <Compile Include="Common\Global.cs" />
-    <Compile Include="Common\Log.cs" />
-    <Compile Include="Common\OS.cs" />
-    <Compile Include="Common\RegistryUtils.cs" />
     <Compile Include="Common\User32.cs" />
-    <Compile Include="Common\Utils.cs" />
-    <Compile Include="Configuration\ConfigKeys.cs" />
+    <Compile Include="Common\Utils.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Controls\ProgressIcon.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -97,9 +98,6 @@
     </Compile>
     <Compile Include="Common\ProgressManager.cs" />
     <Compile Include="Common\ScopeNode.cs" />
-    <Compile Include="Configuration\ComponentCollection.cs" />
-    <Compile Include="Configuration\ComponentConfigElement.cs" />
-    <Compile Include="Configuration\InstallerSection.cs" />
     <Compile Include="Controls\ComponentsControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -199,13 +197,11 @@
       <DependentUpon>Resources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
-    <Compile Include="Web References\Services\Reference.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Reference.map</DependentUpon>
-    </Compile>
   </ItemGroup>
   <ItemGroup>
+    <None Include="App.config" />
+    <None Include="App.Release.config" />
+    <None Include="App.Debug.config" />
     <None Include="Resources\Network16.ico" />
   </ItemGroup>
   <ItemGroup>
@@ -242,32 +238,7 @@
     <None Include="Resources\Folder16.ico" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="App.config" />
     <None Include="Resources\WebSitePanel.ico" />
-  </ItemGroup>
-  <ItemGroup>
-    <WebReferences Include="Web References\" />
-  </ItemGroup>
-  <ItemGroup>
-    <WebReferenceUrl Include="http://localhost/WebsitePanelSite/Services/InstallerService.asmx">
-      <UrlBehavior>Static</UrlBehavior>
-      <RelPath>Web References\Services\</RelPath>
-      <UpdateFromURL>http://localhost/WebsitePanelSite/Services/InstallerService.asmx</UpdateFromURL>
-      <ServiceLocationURL>
-      </ServiceLocationURL>
-      <CachedDynamicPropName>
-      </CachedDynamicPropName>
-      <CachedAppSettingsObjectName>Settings</CachedAppSettingsObjectName>
-      <CachedSettingsPropName>DNP_ConfigurationStudio_Services_InstallerService</CachedSettingsPropName>
-    </WebReferenceUrl>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Web References\Services\InstallerService.disco" />
-    <None Include="Web References\Services\InstallerService.wsdl" />
-    <None Include="Web References\Services\Reference.map">
-      <Generator>MSDiscoCodeGenerator</Generator>
-      <LastGenOutput>Reference.cs</LastGenOutput>
-    </None>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Controls\ProgressIcon.resx">
@@ -300,7 +271,20 @@
       <Install>true</Install>
     </BootstrapperPackage>
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\WebsitePanel.Installer.Core\WebsitePanel.Installer.Core.csproj">
+      <Project>{0E4A3F5B-0BB1-4F63-863D-7B0182B378CF}</Project>
+      <Name>WebsitePanel.Installer.Core</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>
+    </PostBuildEvent>
+  </PropertyGroup>
+  <PropertyGroup>
+    <PreBuildEvent>COPY "$(ProjectDir)App.$(ConfigurationName).config" "$(ProjectDir)App.config" /Y</PreBuildEvent>
+  </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

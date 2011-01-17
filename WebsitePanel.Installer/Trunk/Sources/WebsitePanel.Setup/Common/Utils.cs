@@ -1,4 +1,4 @@
-// Copyright (c) 2010, SMB SAAS Systems Inc.
+// Copyright (c) 2011, SMB SAAS Systems Inc.
 // All rights reserved.
 //
 // Redistribution and use in source and binary forms, with or without modification,
@@ -172,9 +172,12 @@ namespace WebsitePanel.Setup
 		{
 			if (args == null)
 				throw new ArgumentNullException("args");
-			if (!args.ContainsKey(paramName))
-				throw new Exception(string.Format("'{0}' parameter not found", paramName));
-
+			//
+			if (args.ContainsKey(paramName) == false)
+			{
+				return String.Empty;
+			}
+			//
 			return args[paramName];
 		}
 
@@ -244,7 +247,7 @@ namespace WebsitePanel.Setup
 		/// <summary>
 		/// ParseBool
 		/// </summary>
-		/// <param name="value">Value</param>
+		/// <param name="value">EventData</param>
 		/// <param name="defaultValue">Dafault value</param>
 		/// <returns>bool</returns>
 		public static bool ParseBool(string value, bool defaultValue)
@@ -320,7 +323,7 @@ namespace WebsitePanel.Setup
 		/// <summary>
 		/// Converts db value to string
 		/// </summary>
-		/// <param name="val">Value</param>
+		/// <param name="val">EventData</param>
 		/// <returns>string</returns>
 		public static string GetDbString(object val)
 		{
@@ -333,7 +336,7 @@ namespace WebsitePanel.Setup
 		/// <summary>
 		/// Converts db value to short
 		/// </summary>
-		/// <param name="val">Value</param>
+		/// <param name="val">EventData</param>
 		/// <returns>short</returns>
 		public static short GetDbShort(object val)
 		{
@@ -346,7 +349,7 @@ namespace WebsitePanel.Setup
 		/// <summary>
 		/// Converts db value to int
 		/// </summary>
-		/// <param name="val">Value</param>
+		/// <param name="val">EventData</param>
 		/// <returns>int</returns>
 		public static int GetDbInt32(object val)
 		{
@@ -359,7 +362,7 @@ namespace WebsitePanel.Setup
 		/// <summary>
 		/// Converts db value to bool
 		/// </summary>
-		/// <param name="val">Value</param>
+		/// <param name="val">EventData</param>
 		/// <returns>bool</returns>
 		public static bool GetDbBool(object val)
 		{
@@ -372,7 +375,7 @@ namespace WebsitePanel.Setup
 		/// <summary>
 		/// Converts db value to decimal
 		/// </summary>
-		/// <param name="val">Value</param>
+		/// <param name="val">EventData</param>
 		/// <returns>decimal</returns>
 		public static decimal GetDbDecimal(object val)
 		{
@@ -386,7 +389,7 @@ namespace WebsitePanel.Setup
 		/// <summary>
 		/// Converts db value to datetime
 		/// </summary>
-		/// <param name="val">Value</param>
+		/// <param name="val">EventData</param>
 		/// <returns>DateTime</returns>
 		public static DateTime GetDbDateTime(object val)
 		{
@@ -496,6 +499,10 @@ namespace WebsitePanel.Setup
             return (IntPtr.Size == 8);
         }
 
+		public static void ShowConsoleErrorMessage(string format, params object[] args)
+		{
+			Console.WriteLine(String.Format(format, args));
+		}
 
         public static bool IIS32Enabled()
         {
@@ -533,5 +540,59 @@ namespace WebsitePanel.Setup
             else
                 return null;
         }
+
+		public static void OpenFirewallPort(string name, string port, Version iisVersion)
+		{
+			bool iis7 = (iisVersion.Major == 7);
+			if (iis7)
+			{
+				//TODO: Add IIS7 support
+			}
+			else
+			{
+				if (Utils.IsWindowsFirewallEnabled() &&
+					Utils.IsWindowsFirewallExceptionsAllowed())
+				{
+					//SetProgressText("Opening port in windows firewall...");
+
+					Log.WriteStart(String.Format("Opening port {0} in windows firewall", port));
+
+					Utils.OpenWindowsFirewallPort(name, port);
+
+					//update log
+					Log.WriteEnd("Opened port in windows firewall");
+					InstallLog.AppendLine(String.Format("- Opened port {0} in Windows Firewall", port));
+				}
+			}
+		}
+
+		public static string[] GetApplicationUrls(string ip, string domain, string port, string virtualDir)
+		{
+			List<string> urls = new List<string>();
+
+			// IP address, [port] and [virtualDir]
+			string url = ip;
+			if (String.IsNullOrEmpty(domain))
+			{
+				if (!String.IsNullOrEmpty(port) && port != "80")
+					url += ":" + port;
+				if (!String.IsNullOrEmpty(virtualDir))
+					url += "/" + virtualDir;
+				urls.Add(url);
+			}
+
+			// domain, [port] and [virtualDir]
+			if (!String.IsNullOrEmpty(domain))
+			{
+				url = domain;
+				if (!String.IsNullOrEmpty(port) && port != "80")
+					url += ":" + port;
+				if (!String.IsNullOrEmpty(virtualDir))
+					url += "/" + virtualDir;
+				urls.Add(url);
+			}
+
+			return urls.ToArray();
+		}
 	}
 }

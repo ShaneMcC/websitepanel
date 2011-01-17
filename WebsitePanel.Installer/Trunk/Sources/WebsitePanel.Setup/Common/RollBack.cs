@@ -1,4 +1,4 @@
-// Copyright (c) 2010, SMB SAAS Systems Inc.
+// Copyright (c) 2011, SMB SAAS Systems Inc.
 // All rights reserved.
 //
 // Redistribution and use in source and binary forms, with or without modification,
@@ -42,7 +42,7 @@ namespace WebsitePanel.Setup
 		static RollBack()
 		{
 			script = new XmlDocument();
-			XmlElement root = script.CreateElement("actions");
+			XmlElement root = script.CreateElement("currentScenario");
 			script.AppendChild(root);
 		}
 
@@ -184,8 +184,6 @@ namespace WebsitePanel.Setup
 			action.SetAttribute("path", path);
 			action.SetAttribute("name", name);
 		}
-
-
 
 		internal static void ProcessAction(XmlNode action)
 		{

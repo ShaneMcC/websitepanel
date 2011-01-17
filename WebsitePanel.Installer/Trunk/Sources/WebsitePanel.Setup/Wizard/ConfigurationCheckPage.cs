@@ -1,4 +1,4 @@
-// Copyright (c) 2010, SMB SAAS Systems Inc.
+// Copyright (c) 2011, SMB SAAS Systems Inc.
 // All rights reserved.
 //
 // Redistribution and use in source and binary forms, with or without modification,
@@ -39,6 +39,7 @@ using System.DirectoryServices;
 using WebsitePanel.Setup.Web;
 using System.IO;
 using System.Management;
+using WebsitePanel.Setup.Actions;
 
 namespace WebsitePanel.Setup
 {
@@ -111,6 +112,7 @@ namespace WebsitePanel.Setup
 				this.Update();
 				CheckStatuses status = CheckStatuses.Success;
 				string details = string.Empty;
+				//
 				foreach (ListViewItem item in lvCheck.Items)
 				{
 					ConfigurationCheck check = (ConfigurationCheck)item.Tag;
@@ -118,6 +120,7 @@ namespace WebsitePanel.Setup
 					item.SubItems[2].Text = "Running";
 					this.Update();
 
+					#region Previous Prereq Verification
 					switch (check.CheckType)
 					{
 						case CheckTypes.OperationSystem:
@@ -142,6 +145,9 @@ namespace WebsitePanel.Setup
 							status = CheckStatuses.Warning;
 							break;
 					}
+
+					#endregion
+
 					switch (status)
 					{
 						case CheckStatuses.Success:
@@ -161,6 +167,14 @@ namespace WebsitePanel.Setup
 					item.SubItems[3].Text = details;
 					this.Update();
 				}
+				//
+				//actionManager.PrerequisiteComplete += new EventHandler<ActionProgressEventArgs<bool>>((object sender, ActionProgressEventArgs<bool> e) =>
+				//{
+					//
+				//});
+				//
+				//actionManager.VerifyDistributivePrerequisites();
+
 				ShowResult(pass);
 				if (pass)
 				{
@@ -196,7 +210,7 @@ namespace WebsitePanel.Setup
 		{
 			lvCheck.BeginUpdate();
 			ListViewItem item = new ListViewItem(string.Empty);
-			item.SubItems.AddRange(new string[]{check.Action, string.Empty, string.Empty});
+			item.SubItems.AddRange(new string[] { check.Action, string.Empty, string.Empty });
 			item.Tag = check;
 			lvCheck.Items.Add(item);
 			lvCheck.EndUpdate();
@@ -249,7 +263,7 @@ namespace WebsitePanel.Setup
 				{
 					details += " (32-bit mode)";
 				}
-				
+
 				Log.WriteInfo(string.Format("IIS check: {0}", details));
 				if (SetupVariables.IISVersion.Major < 6)
 				{
@@ -271,7 +285,7 @@ namespace WebsitePanel.Setup
 
 		private CheckStatuses CheckASPNET(out string details)
 		{
-			details = "ASP.NET 2.0 is installed."; 
+			details = "ASP.NET 2.0 is installed.";
 			CheckStatuses ret = CheckStatuses.Success;
 			try
 			{
@@ -330,7 +344,7 @@ namespace WebsitePanel.Setup
 			{
 				status = WebExtensionStatus.NotInstalled;
 				string path;
-				if ( Utils.IsWin64() && !Utils.IIS32Enabled())
+				if (Utils.IsWin64() && !Utils.IIS32Enabled())
 				{
 					//64-bit
 					path = Path.Combine(OS.GetWindowsDirectory(), @"Microsoft.NET\Framework64\v2.0.50727\aspnet_isapi.dll");
@@ -469,7 +483,7 @@ namespace WebsitePanel.Setup
 			details = string.Empty;
 
 			long spaceRequired = FileUtils.CalculateFolderSize(setupVariables.InstallerFolder);
-			
+
 			if (string.IsNullOrEmpty(setupVariables.InstallationFolder))
 			{
 				details = "Installation folder is not specified.";
@@ -602,7 +616,7 @@ namespace WebsitePanel.Setup
 		private static void EnableASPNET()
 		{
 			Log.WriteStart("Enabling ASP.NET Web Service Extension");
-			string name = ( Utils.IsWin64() && Utils.IIS32Enabled() ) ?
+			string name = (Utils.IsWin64() && Utils.IIS32Enabled()) ?
 				"ASP.NET v2.0.50727 (32-bit)" :
 				"ASP.NET v2.0.50727";
 			using (DirectoryEntry iisService = new DirectoryEntry("IIS://LocalHost/W3SVC"))

@@ -1,4 +1,4 @@
-// Copyright (c) 2010, SMB SAAS Systems Inc.
+// Copyright (c) 2011, SMB SAAS Systems Inc.
 // All rights reserved.
 //
 // Redistribution and use in source and binary forms, with or without modification,
@@ -37,7 +37,7 @@ namespace WebsitePanel.Installer.Configuration
 	/// <summary>
 	/// Represents a configuration element containing component info.
 	/// </summary>
-	internal class ComponentConfigElement : ConfigurationElement
+	public class ComponentConfigElement : ConfigurationElement
 	{
 		/// <summary>
 		/// Creates a new instance of the ServerConfigElement class.

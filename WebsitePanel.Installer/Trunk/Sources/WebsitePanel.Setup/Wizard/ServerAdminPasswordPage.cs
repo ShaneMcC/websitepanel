@@ -1,4 +1,4 @@
-// Copyright (c) 2010, SMB SAAS Systems Inc.
+// Copyright (c) 2011, SMB SAAS Systems Inc.
 // All rights reserved.
 //
 // Redistribution and use in source and binary forms, with or without modification,
@@ -114,8 +114,9 @@ namespace WebsitePanel.Setup
 					e.Cancel = true;
 					return;
 				}
-				
-				SetupVariables.ServerAdminPassword = txtPassword.Text;
+				// Use the same password for peer account
+				SetupVariables.ServerAdminPassword = SetupVariables.PeerAdminPassword = txtPassword.Text;
+				//
 				SetupVariables.UpdateServerAdminPassword = true;
 			}
 			catch

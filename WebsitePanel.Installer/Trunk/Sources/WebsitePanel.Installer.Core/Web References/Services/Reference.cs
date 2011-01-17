@@ -30,13 +30,13 @@ namespace WebsitePanel.Installer.Services {
     [System.Web.Services.WebServiceBindingAttribute(Name="InstallerServiceSoap", Namespace="http://websitepanel.net/services")]
     public partial class InstallerService : System.Web.Services.Protocols.SoapHttpClientProtocol {
         
-        private System.Threading.SendOrPostCallback GetLatestComponentUpdateOperationCompleted;
-        
-        private System.Threading.SendOrPostCallback GetReleaseFileInfoOperationCompleted;
-        
         private System.Threading.SendOrPostCallback GetAvailableComponentsOperationCompleted;
         
+        private System.Threading.SendOrPostCallback GetLatestComponentUpdateOperationCompleted;
+        
         private System.Threading.SendOrPostCallback GetComponentUpdateOperationCompleted;
+        
+        private System.Threading.SendOrPostCallback GetReleaseFileInfoOperationCompleted;
         
         private System.Threading.SendOrPostCallback GetFileChunkOperationCompleted;
         
@@ -46,7 +46,7 @@ namespace WebsitePanel.Installer.Services {
         
         /// <remarks/>
         public InstallerService() {
-            this.Url = "http://localhost/WebsitePanelSite/Services/InstallerService.asmx";
+            this.Url = global::WebsitePanel.Installer.Core.Properties.Settings.Default.WebsitePanel_Installer_Core_Services_InstallerService;
             if ((this.IsLocalFileSystemWebService(this.Url) == true)) {
                 this.UseDefaultCredentials = true;
                 this.useDefaultCredentialsSetExplicitly = false;
@@ -81,22 +81,49 @@ namespace WebsitePanel.Installer.Services {
         }
         
         /// <remarks/>
-        public event GetLatestComponentUpdateCompletedEventHandler GetLatestComponentUpdateCompleted;
-        
-        /// <remarks/>
-        public event GetReleaseFileInfoCompletedEventHandler GetReleaseFileInfoCompleted;
-        
-        /// <remarks/>
         public event GetAvailableComponentsCompletedEventHandler GetAvailableComponentsCompleted;
         
         /// <remarks/>
+        public event GetLatestComponentUpdateCompletedEventHandler GetLatestComponentUpdateCompleted;
+        
+        /// <remarks/>
         public event GetComponentUpdateCompletedEventHandler GetComponentUpdateCompleted;
+        
+        /// <remarks/>
+        public event GetReleaseFileInfoCompletedEventHandler GetReleaseFileInfoCompleted;
         
         /// <remarks/>
         public event GetFileChunkCompletedEventHandler GetFileChunkCompleted;
         
         /// <remarks/>
         public event GetFileSizeCompletedEventHandler GetFileSizeCompleted;
+        
+        /// <remarks/>
+        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://websitepanel.net/services/GetAvailableComponents", RequestNamespace="http://websitepanel.net/services", ResponseNamespace="http://websitepanel.net/services", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
+        public System.Data.DataSet GetAvailableComponents() {
+            object[] results = this.Invoke("GetAvailableComponents", new object[0]);
+            return ((System.Data.DataSet)(results[0]));
+        }
+        
+        /// <remarks/>
+        public void GetAvailableComponentsAsync() {
+            this.GetAvailableComponentsAsync(null);
+        }
+        
+        /// <remarks/>
+        public void GetAvailableComponentsAsync(object userState) {
+            if ((this.GetAvailableComponentsOperationCompleted == null)) {
+                this.GetAvailableComponentsOperationCompleted = new System.Threading.SendOrPostCallback(this.OnGetAvailableComponentsOperationCompleted);
+            }
+            this.InvokeAsync("GetAvailableComponents", new object[0], this.GetAvailableComponentsOperationCompleted, userState);
+        }
+        
+        private void OnGetAvailableComponentsOperationCompleted(object arg) {
+            if ((this.GetAvailableComponentsCompleted != null)) {
+                System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
+                this.GetAvailableComponentsCompleted(this, new GetAvailableComponentsCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
+            }
+        }
         
         /// <remarks/>
         [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://websitepanel.net/services/GetLatestComponentUpdate", RequestNamespace="http://websitepanel.net/services", ResponseNamespace="http://websitepanel.net/services", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
@@ -128,64 +155,6 @@ namespace WebsitePanel.Installer.Services {
         }
         
         /// <remarks/>
-        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://websitepanel.net/services/GetReleaseFileInfo", RequestNamespace="http://websitepanel.net/services", ResponseNamespace="http://websitepanel.net/services", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
-        public System.Data.DataSet GetReleaseFileInfo(string componentCode, string version) {
-            object[] results = this.Invoke("GetReleaseFileInfo", new object[] {
-                        componentCode,
-                        version});
-            return ((System.Data.DataSet)(results[0]));
-        }
-        
-        /// <remarks/>
-        public void GetReleaseFileInfoAsync(string componentCode, string version) {
-            this.GetReleaseFileInfoAsync(componentCode, version, null);
-        }
-        
-        /// <remarks/>
-        public void GetReleaseFileInfoAsync(string componentCode, string version, object userState) {
-            if ((this.GetReleaseFileInfoOperationCompleted == null)) {
-                this.GetReleaseFileInfoOperationCompleted = new System.Threading.SendOrPostCallback(this.OnGetReleaseFileInfoOperationCompleted);
-            }
-            this.InvokeAsync("GetReleaseFileInfo", new object[] {
-                        componentCode,
-                        version}, this.GetReleaseFileInfoOperationCompleted, userState);
-        }
-        
-        private void OnGetReleaseFileInfoOperationCompleted(object arg) {
-            if ((this.GetReleaseFileInfoCompleted != null)) {
-                System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
-                this.GetReleaseFileInfoCompleted(this, new GetReleaseFileInfoCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
-            }
-        }
-        
-        /// <remarks/>
-        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://websitepanel.net/services/GetAvailableComponents", RequestNamespace="http://websitepanel.net/services", ResponseNamespace="http://websitepanel.net/services", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
-        public System.Data.DataSet GetAvailableComponents() {
-            object[] results = this.Invoke("GetAvailableComponents", new object[0]);
-            return ((System.Data.DataSet)(results[0]));
-        }
-        
-        /// <remarks/>
-        public void GetAvailableComponentsAsync() {
-            this.GetAvailableComponentsAsync(null);
-        }
-        
-        /// <remarks/>
-        public void GetAvailableComponentsAsync(object userState) {
-            if ((this.GetAvailableComponentsOperationCompleted == null)) {
-                this.GetAvailableComponentsOperationCompleted = new System.Threading.SendOrPostCallback(this.OnGetAvailableComponentsOperationCompleted);
-            }
-            this.InvokeAsync("GetAvailableComponents", new object[0], this.GetAvailableComponentsOperationCompleted, userState);
-        }
-        
-        private void OnGetAvailableComponentsOperationCompleted(object arg) {
-            if ((this.GetAvailableComponentsCompleted != null)) {
-                System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
-                this.GetAvailableComponentsCompleted(this, new GetAvailableComponentsCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
-            }
-        }
-        
-        /// <remarks/>
         [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://websitepanel.net/services/GetComponentUpdate", RequestNamespace="http://websitepanel.net/services", ResponseNamespace="http://websitepanel.net/services", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
         public System.Data.DataSet GetComponentUpdate(string componentCode, string release) {
             object[] results = this.Invoke("GetComponentUpdate", new object[] {
@@ -213,6 +182,37 @@ namespace WebsitePanel.Installer.Services {
             if ((this.GetComponentUpdateCompleted != null)) {
                 System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
                 this.GetComponentUpdateCompleted(this, new GetComponentUpdateCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
+            }
+        }
+        
+        /// <remarks/>
+        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://websitepanel.net/services/GetReleaseFileInfo", RequestNamespace="http://websitepanel.net/services", ResponseNamespace="http://websitepanel.net/services", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
+        public System.Data.DataSet GetReleaseFileInfo(string componentCode, string version) {
+            object[] results = this.Invoke("GetReleaseFileInfo", new object[] {
+                        componentCode,
+                        version});
+            return ((System.Data.DataSet)(results[0]));
+        }
+        
+        /// <remarks/>
+        public void GetReleaseFileInfoAsync(string componentCode, string version) {
+            this.GetReleaseFileInfoAsync(componentCode, version, null);
+        }
+        
+        /// <remarks/>
+        public void GetReleaseFileInfoAsync(string componentCode, string version, object userState) {
+            if ((this.GetReleaseFileInfoOperationCompleted == null)) {
+                this.GetReleaseFileInfoOperationCompleted = new System.Threading.SendOrPostCallback(this.OnGetReleaseFileInfoOperationCompleted);
+            }
+            this.InvokeAsync("GetReleaseFileInfo", new object[] {
+                        componentCode,
+                        version}, this.GetReleaseFileInfoOperationCompleted, userState);
+        }
+        
+        private void OnGetReleaseFileInfoOperationCompleted(object arg) {
+            if ((this.GetReleaseFileInfoCompleted != null)) {
+                System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
+                this.GetReleaseFileInfoCompleted(this, new GetReleaseFileInfoCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
             }
         }
         
@@ -300,58 +300,6 @@ namespace WebsitePanel.Installer.Services {
     
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.0.30319.1")]
-    public delegate void GetLatestComponentUpdateCompletedEventHandler(object sender, GetLatestComponentUpdateCompletedEventArgs e);
-    
-    /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.0.30319.1")]
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.ComponentModel.DesignerCategoryAttribute("code")]
-    public partial class GetLatestComponentUpdateCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
-        
-        private object[] results;
-        
-        internal GetLatestComponentUpdateCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
-                base(exception, cancelled, userState) {
-            this.results = results;
-        }
-        
-        /// <remarks/>
-        public System.Data.DataSet Result {
-            get {
-                this.RaiseExceptionIfNecessary();
-                return ((System.Data.DataSet)(this.results[0]));
-            }
-        }
-    }
-    
-    /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.0.30319.1")]
-    public delegate void GetReleaseFileInfoCompletedEventHandler(object sender, GetReleaseFileInfoCompletedEventArgs e);
-    
-    /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.0.30319.1")]
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.ComponentModel.DesignerCategoryAttribute("code")]
-    public partial class GetReleaseFileInfoCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
-        
-        private object[] results;
-        
-        internal GetReleaseFileInfoCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
-                base(exception, cancelled, userState) {
-            this.results = results;
-        }
-        
-        /// <remarks/>
-        public System.Data.DataSet Result {
-            get {
-                this.RaiseExceptionIfNecessary();
-                return ((System.Data.DataSet)(this.results[0]));
-            }
-        }
-    }
-    
-    /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.0.30319.1")]
     public delegate void GetAvailableComponentsCompletedEventHandler(object sender, GetAvailableComponentsCompletedEventArgs e);
     
     /// <remarks/>
@@ -378,6 +326,32 @@ namespace WebsitePanel.Installer.Services {
     
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.0.30319.1")]
+    public delegate void GetLatestComponentUpdateCompletedEventHandler(object sender, GetLatestComponentUpdateCompletedEventArgs e);
+    
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.0.30319.1")]
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.ComponentModel.DesignerCategoryAttribute("code")]
+    public partial class GetLatestComponentUpdateCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
+        
+        private object[] results;
+        
+        internal GetLatestComponentUpdateCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
+                base(exception, cancelled, userState) {
+            this.results = results;
+        }
+        
+        /// <remarks/>
+        public System.Data.DataSet Result {
+            get {
+                this.RaiseExceptionIfNecessary();
+                return ((System.Data.DataSet)(this.results[0]));
+            }
+        }
+    }
+    
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.0.30319.1")]
     public delegate void GetComponentUpdateCompletedEventHandler(object sender, GetComponentUpdateCompletedEventArgs e);
     
     /// <remarks/>
@@ -389,6 +363,32 @@ namespace WebsitePanel.Installer.Services {
         private object[] results;
         
         internal GetComponentUpdateCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
+                base(exception, cancelled, userState) {
+            this.results = results;
+        }
+        
+        /// <remarks/>
+        public System.Data.DataSet Result {
+            get {
+                this.RaiseExceptionIfNecessary();
+                return ((System.Data.DataSet)(this.results[0]));
+            }
+        }
+    }
+    
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.0.30319.1")]
+    public delegate void GetReleaseFileInfoCompletedEventHandler(object sender, GetReleaseFileInfoCompletedEventArgs e);
+    
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.0.30319.1")]
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.ComponentModel.DesignerCategoryAttribute("code")]
+    public partial class GetReleaseFileInfoCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
+        
+        private object[] results;
+        
+        internal GetReleaseFileInfoCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
                 base(exception, cancelled, userState) {
             this.results = results;
         }

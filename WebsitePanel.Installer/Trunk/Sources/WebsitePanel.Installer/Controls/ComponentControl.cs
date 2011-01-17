@@ -1,4 +1,4 @@
-// Copyright (c) 2010, SMB SAAS Systems Inc.
+// Copyright (c) 2011, SMB SAAS Systems Inc.
 // All rights reserved.
 //
 // Redistribution and use in source and binary forms, with or without modification,
@@ -38,6 +38,8 @@ using System.Text;
 using System.Windows.Forms;
 
 using WebsitePanel.Installer.Common;
+using WebsitePanel.Installer.Services;
+using WebsitePanel.Installer.Core;
 using WebsitePanel.Installer.Configuration;
 
 namespace WebsitePanel.Installer.Controls
@@ -140,7 +142,10 @@ namespace WebsitePanel.Installer.Controls
 			try
 			{
 				Log.WriteInfo(string.Format("Checking {0} {1}", componentName, release));
-				ds = AppContext.AppForm.WebService.GetComponentUpdate(componentCode, release);
+				//
+				var webService = ServiceProviderProxy.GetInstallerWebService();
+				ds = webService.GetComponentUpdate(componentCode, release);
+				//
 				Log.WriteEnd("Component update checked");
 				AppContext.AppForm.FinishProgress();
 			}
@@ -256,13 +261,13 @@ namespace WebsitePanel.Installer.Controls
 			Log.WriteStart("Uninstalling component");
 			
 			ComponentConfigElement element = AppContext.ScopeNode.Tag as ComponentConfigElement;
-			string installer = element.GetStringSetting("Installer");
-			string path = element.GetStringSetting("InstallerPath");
-			string type = element.GetStringSetting("InstallerType");
+			string installer = element.GetStringSetting(Global.Parameters.Installer);
+			string path = element.GetStringSetting(Global.Parameters.InstallerPath);
+			string type = element.GetStringSetting(Global.Parameters.InstallerType);
 			string componentId = element.ID;
-			string componentCode = element.GetStringSetting("ComponentCode");
-			string componentName = element.GetStringSetting("ComponentName");
-			string release = element.GetStringSetting("Release");
+			string componentCode = element.GetStringSetting(Global.Parameters.ComponentCode);
+			string componentName = element.GetStringSetting(Global.Parameters.ComponentName);
+			string release = element.GetStringSetting(Global.Parameters.Release);
 
 			try
 			{
@@ -277,14 +282,21 @@ namespace WebsitePanel.Installer.Controls
 					path = Path.Combine(tmpFolder, path);
 					Update();
 					string method = "Uninstall";
+					//
 					Log.WriteStart(string.Format("Running installer {0}.{1} from {2}", type, method, path));
-					Hashtable args = new Hashtable();
-					args["ComponentId"] = componentId;
-					args["ShellVersion"] = AppContext.AppForm.Version;
-					args["BaseDirectory"] = FileUtils.GetCurrentDirectory();
-					args["IISVersion"] = Global.IISVersion;
-					args["ParentForm"] = FindForm();
+					//
+					var args = new Hashtable
+					{
+						{ Global.Parameters.ComponentId, componentId },
+						{ Global.Parameters.ComponentCode, componentCode },
+						{ Global.Parameters.ShellVersion, AppContext.AppForm.Version },
+						{ Global.Parameters.BaseDirectory, FileUtils.GetCurrentDirectory() },
+						{ Global.Parameters.IISVersion, Global.IISVersion },
+						{ Global.Parameters.ParentForm,  FindForm() },
+					};
+					//
 					result = (DialogResult)AssemblyLoader.Execute(path, type, method, new object[] { args });
+					//
 					Log.WriteInfo(string.Format("Installer returned {0}", result));
 					Log.WriteEnd("Installer finished");
 					Update();
@@ -308,7 +320,7 @@ namespace WebsitePanel.Installer.Controls
 		{
 			Log.WriteStart("Starting component setup");
 
-			ComponentConfigElement element = AppContext.ScopeNode.Tag as ComponentConfigElement;
+			var element = AppContext.ScopeNode.Tag as ComponentConfigElement;
 
 			string installer = element.GetStringSetting("Installer");
 			string path = element.GetStringSetting("InstallerPath");
@@ -337,7 +349,10 @@ namespace WebsitePanel.Installer.Controls
 					args["BaseDirectory"] = FileUtils.GetCurrentDirectory();
                     args["IISVersion"] = Global.IISVersion;
 					args["ParentForm"] = FindForm();
+					args[Global.Parameters.ShellMode] = Global.VisualInstallerShell;
+					//
 					result = (DialogResult)AssemblyLoader.Execute(path, type, method, new object[] { args });
+					//
 					Log.WriteInfo(string.Format("Installer returned {0}", result));
 					Log.WriteEnd("Installer finished");
 
