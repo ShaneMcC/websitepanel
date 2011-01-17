@@ -40,6 +40,9 @@ namespace WebsitePanel.EnterpriseServer
 	{
 		public const string SMTP_SETTINGS = "SmtpSettings";
 		public const string BACKUP_SETTINGS = "BackupSettings";
+		public const string SETUP_SETTINGS = "SetupSettings";
+
+		public static readonly SystemSettings Empty = new SystemSettings { SettingsArray = new string[][] {} };
 
 		private NameValueCollection settingsHash = null;
 		public string[][] SettingsArray;

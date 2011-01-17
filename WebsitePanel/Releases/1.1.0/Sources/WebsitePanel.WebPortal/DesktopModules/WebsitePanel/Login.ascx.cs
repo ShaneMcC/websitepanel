@@ -59,6 +59,8 @@ namespace WebsitePanel.Portal
 		{
 			if (!IsPostBack)
 			{
+				EnsureSCPA();
+				//
 				BindControls();
 			}
 
@@ -88,6 +90,18 @@ namespace WebsitePanel.Portal
 				// perform login
 				LoginUser(usr, psw, false, String.Empty, String.Empty);
 			}
+		}
+
+		private void EnsureSCPA()
+		{
+			var enabledScpa = ES.Services.Authentication.GetSystemSetupMode();
+			//
+			if (enabledScpa == false)
+			{
+				return;
+			}
+			//
+			Response.Redirect(EditUrl("scpa"), true);
 		}
 
 		private void BindControls()

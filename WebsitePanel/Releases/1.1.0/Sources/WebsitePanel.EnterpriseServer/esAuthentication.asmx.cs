@@ -70,5 +70,17 @@ namespace WebsitePanel.EnterpriseServer
         {
             return UserController.SendPasswordReminder(username, ip);
         }
+
+		[WebMethod]
+		public bool GetSystemSetupMode()
+		{
+			return SystemController.GetSystemSetupMode();
+		}
+
+		[WebMethod]
+		public int SetupControlPanelAccounts(string passwordA, string passwordB, string ip)
+		{
+			return SystemController.SetupControlPanelAccounts(passwordA, passwordB, ip);
+		}
     }
 }

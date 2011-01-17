@@ -198,6 +198,13 @@
     <Compile Include="SettingsExchangeHostedEditionOrganizationSummary.ascx.designer.cs">
       <DependentUpon>SettingsExchangeHostedEditionOrganizationSummary.ascx</DependentUpon>
     </Compile>
+    <Compile Include="SetupControlPanelAccounts.ascx.cs">
+      <DependentUpon>SetupControlPanelAccounts.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="SetupControlPanelAccounts.ascx.designer.cs">
+      <DependentUpon>SetupControlPanelAccounts.ascx</DependentUpon>
+    </Compile>
     <Compile Include="SpaceSettingsExchangeHostedEdition.ascx.cs">
       <DependentUpon>SpaceSettingsExchangeHostedEdition.ascx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -3358,6 +3365,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="SettingsExchangeHostedEditionOrganizationSummary.ascx" />
+    <Content Include="SetupControlPanelAccounts.ascx" />
     <Content Include="SpaceSettingsExchangeHostedEdition.ascx" />
     <Content Include="SettingsExchangeHostedEditionPolicy.ascx" />
     <Content Include="ExchangeHostedEdition\AddOrganizationDomain.ascx" />
@@ -4343,6 +4351,7 @@
     <Content Include="App_LocalResources\SettingsExchangeHostedEditionOrganizationSummary.ascx.resx">
       <SubType>Designer</SubType>
     </Content>
+    <Content Include="App_LocalResources\SetupControlPanelAccounts.ascx.resx" />
     <EmbeddedResource Include="UserControls\App_LocalResources\EditDomainsList.ascx.resx">
       <SubType>Designer</SubType>
     </EmbeddedResource>

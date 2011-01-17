@@ -3,8 +3,8 @@ GO
 
 -- update database version
 DECLARE @build_version nvarchar(10), @build_date datetime
-SET @build_version = '1.1.0.9'
-SET @build_date = '11/16/2010'
+SET @build_version = '1.1.0.10'
+SET @build_date = '1/6/2011'
 
 IF NOT EXISTS (SELECT * FROM [dbo].[Versions] WHERE [DatabaseVersion] = @build_version)
 BEGIN

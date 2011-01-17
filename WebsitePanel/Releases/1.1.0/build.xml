@@ -1,17 +1,17 @@
 <Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
 	<Import Project="C:\Program Files (x86)\MSBuild\MSBuildCommunityTasks\MSBuild.Community.Tasks.Targets"/>
 	<PropertyGroup>
-		<Version>1.1.0.9</Version>
+		<Version>1.1.0.10</Version>
 		<BuildConfiguration>Release</BuildConfiguration>
 		<SourcesPath>https://websitepanel.svn.sourceforge.net/svnroot/websitepanel/WebsitePanel/Trunk</SourcesPath>
-		<RootFolder>C:\Projects\Sourceforge\WebsitePanel</RootFolder>
-		<TrunkFolder>$(RootFolder)\Trunk</TrunkFolder>
+		<RootFolder>C:\Projects\Sourceforge\WebsitePanel\Releases\1.1.0</RootFolder>
+		<TrunkFolder>$(RootFolder)</TrunkFolder>
 
-		<SetupTrunkFolder>C:\Projects\Sourceforge\WebsitePanel.Installer\Trunk</SetupTrunkFolder>
-		<SetupBuildFolder>$(SetupTrunkFolder)\Build</SetupBuildFolder>
+		<SetupTrunkFolder>C:\Projects\Sourceforge\WebsitePanel.Installer\Branches\2.0</SetupTrunkFolder>
+		<SetupBuildFolder>$(SetupTrunkFolder)\Build\$(BuildConfiguration)</SetupBuildFolder>
 
-		<BuildFolder>$(TrunkFolder)\Build</BuildFolder>
-		<DeployFolder>$(TrunkFolder)\Deploy</DeployFolder>
+		<BuildFolder>$(TrunkFolder)\Build\$(BuildConfiguration)</BuildFolder>
+		<DeployFolder>$(TrunkFolder)\Deploy\$(BuildConfiguration)</DeployFolder>
 
 		<PreviousBuildFolder>C:\Projects\Sourceforge\WebsitePanel\Releases\1.0.2\Build</PreviousBuildFolder>
 
@@ -343,19 +343,26 @@
 		<!-- Copy Setup.dll -->
 		<MakeDir Directories="$(ServerInstall)\Setup"/>
 		<Copy SourceFiles="$(SetupBuildFolder)\setup.dll" DestinationFolder="$(ServerInstall)\Setup" />
+		<Copy SourceFiles="$(SetupBuildFolder)\setup.pdb" DestinationFolder="$(ServerInstall)\Setup" Condition="'$(BuildConfiguration)' == 'Debug'" />
 		<Copy SourceFiles="$(SetupBuildFolder)\setup.dll" DestinationFolder="$(ServerUpdate)\Setup" />
+		<Copy SourceFiles="$(SetupBuildFolder)\setup.pdb" DestinationFolder="$(ServerUpdate)\Setup" Condition="'$(BuildConfiguration)' == 'Debug'" />
 
 		<Copy SourceFiles="$(SetupBuildFolder)\setup.dll" DestinationFolder="$(EnterpriseServerInstall)\Setup" />
+		<Copy SourceFiles="$(SetupBuildFolder)\setup.pdb" DestinationFolder="$(EnterpriseServerInstall)\Setup" Condition="'$(BuildConfiguration)' == 'Debug'" />
 		<Copy SourceFiles="$(SetupBuildFolder)\setup.dll" DestinationFolder="$(EnterpriseServerUpdate)\Setup" />
+		<Copy SourceFiles="$(SetupBuildFolder)\setup.pdb" DestinationFolder="$(EnterpriseServerUpdate)\Setup" Condition="'$(BuildConfiguration)' == 'Debug'" />
 
 		<MakeDir Directories="$(PortalInstall)\Setup"/>
 		<Copy SourceFiles="$(SetupBuildFolder)\setup.dll" DestinationFolder="$(PortalInstall)\Setup" />
+		<Copy SourceFiles="$(SetupBuildFolder)\setup.pdb" DestinationFolder="$(PortalInstall)\Setup" Condition="'$(BuildConfiguration)' == 'Debug'" />
 		<Copy SourceFiles="$(SetupBuildFolder)\setup.dll" DestinationFolder="$(PortalUpdate)\Setup" />
+		<Copy SourceFiles="$(SetupBuildFolder)\setup.pdb" DestinationFolder="$(PortalUpdate)\Setup" Condition="'$(BuildConfiguration)' == 'Debug'" />
 
 		<RemoveDir Directories="$(StandaloneInstall)"/>
 		<MakeDir Directories="$(StandaloneInstall)"/>
 		<MakeDir Directories="$(StandaloneInstall)\Setup"/>
 		<Copy SourceFiles="$(SetupBuildFolder)\setup.dll" DestinationFolder="$(StandaloneInstall)\Setup" />
+		<Copy SourceFiles="$(SetupBuildFolder)\setup.pdb" DestinationFolder="$(StandaloneInstall)\Setup" Condition="'$(BuildConfiguration)' == 'Debug'" />
 	</Target>
 
 	<!-- Deploy -->

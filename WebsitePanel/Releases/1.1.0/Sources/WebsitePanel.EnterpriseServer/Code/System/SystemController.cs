@@ -118,5 +118,77 @@ namespace WebsitePanel.EnterpriseServer
 
 			return 0;
 		}
+
+		internal static bool GetSystemSetupMode()
+		{
+			var scpaSystemSettings = GetSystemSettings(SystemSettings.SETUP_SETTINGS);
+			// Flag either not found or empty
+			if (String.IsNullOrEmpty(scpaSystemSettings["EnabledSCPA"]))
+			{
+				return false;
+			}
+			//
+			return true;
+		}
+
+		internal static int SetupControlPanelAccounts(string passwordA, string passwordB, string ip)
+		{
+			try
+			{
+				TaskManager.StartTask("SYSTEM", "COMPLETE_SCPA");
+				//
+				TaskManager.WriteParameter("Password A", passwordA);
+				TaskManager.WriteParameter("Password B", passwordB);
+				TaskManager.WriteParameter("IP Address", ip);
+				//
+				var enabledScpaMode = GetSystemSetupMode();
+				//
+				if (enabledScpaMode == false)
+				{
+					//
+					TaskManager.WriteWarning("Attempt to execute SCPA procedure for an uknown reason");
+					//
+					return BusinessErrorCodes.FAILED_EXECUTE_SERVICE_OPERATION;
+				}
+
+				// Entering the security context into Supervisor mode
+				SecurityContext.SetThreadSupervisorPrincipal();
+				//
+				var accountA = UserController.GetUserInternally("serveradmin");
+				var accountB = UserController.GetUserInternally("admin");
+				//
+				var resultCodeA = UserController.ChangeUserPassword(accountA.UserId, passwordA);
+				//
+				if (resultCodeA < 0)
+				{
+					TaskManager.WriteParameter("Result Code A", resultCodeA);
+					//
+					return resultCodeA;
+				}
+				//
+				var resultCodeB = UserController.ChangeUserPassword(accountB.UserId, passwordB);
+				//
+				if (resultCodeB < 0)
+				{
+					TaskManager.WriteParameter("Result Code B", resultCodeB);
+					//
+					return resultCodeB;
+				}
+				// Disable SCPA mode
+				SetSystemSettings(SystemSettings.SETUP_SETTINGS, SystemSettings.Empty);
+				// Operation has succeeded
+				return 0;
+			}
+			catch (Exception ex)
+			{
+				TaskManager.WriteError(ex);
+				//
+				return BusinessErrorCodes.FAILED_EXECUTE_SERVICE_OPERATION;
+			}
+			finally
+			{
+				TaskManager.CompleteTask();
+			}
+		}
 	}
 }
