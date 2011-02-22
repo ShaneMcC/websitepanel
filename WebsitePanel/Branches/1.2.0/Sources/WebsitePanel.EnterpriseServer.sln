@@ -2,6 +2,7 @@ Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2010
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{C57D3F9F-7BA0-4D38-A159-B6EDA5C19B13}"
 	ProjectSection(SolutionItems) = preProject
+		..\Database\install_db.sql = ..\Database\install_db.sql
 		..\..\LICENSE.txt = ..\..\LICENSE.txt
 		..\..\Readme.htm = ..\..\Readme.htm
 		..\..\ReleaseNotes.htm = ..\..\ReleaseNotes.htm
