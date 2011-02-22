@@ -1,0 +1,301 @@
+﻿/* TOP MENU */
+.TopMenu ul.AspNet-Menu
+{
+    width: 100%;
+    z-index: 500;
+}
+
+.TopMenu ul.AspNet-Menu ul
+{
+    width: 10.5em;
+    left: 0;
+    top: 100%;
+	z-index: 501;
+}
+
+.TopMenu ul.AspNet-Menu ul ul
+{
+    top: -0.3em;
+	z-index: 502;
+}
+
+.TopMenu li.AspNet-Menu-Leaf a, /* leaves */
+.TopMenu li.AspNet-Menu-Leaf span
+{
+    background-image: none !important;
+}
+
+/*
+.TopMenu ul.AspNet-Menu li
+{
+	width: 150px;
+}
+*/
+
+.TopMenu ul.AspNet-Menu li a
+{
+    color: #ffffff;
+    padding: 8px 15px 8px 15px;
+    text-align: center;
+    font-family: Tahoma;
+    font-size: 9pt;
+    border-right: solid 1px #71A9DE;
+}
+
+.TopMenu ul.AspNet-Menu li span
+{
+    cursor: pointer;
+    color: #ffffff;
+    padding: 8px 25px 8px 15px;
+    background: transparent url(../Images/menu_popup.gif) right center no-repeat;
+    text-align: center;
+    font-family: Tahoma;
+    font-size: 9pt;
+    border-right: solid 1px #71A9DE;
+}
+
+.TopMenu ul.AspNet-Menu li:hover, 
+.TopMenu ul.AspNet-Menu li.AspNet-Menu-Hover
+{
+    background-image: url(../Images/top_menu_hover_bkg.gif);
+}
+
+.TopMenu ul.AspNet-Menu li:hover a, 
+.TopMenu ul.AspNet-Menu li:hover span
+.TopMenu ul.AspNet-Menu li.AspNet-Menu-Hover a,
+.TopMenu ul.AspNet-Menu li.AspNet-Menu-Hover span
+{
+	color: #ffffff;
+}
+
+.TopMenu ul.AspNet-Menu li ul li
+{
+	margin: 0px;
+	width: 100%;
+}
+
+.TopMenu ul.AspNet-Menu li ul li:hover, 
+.TopMenu ul.AspNet-Menu li ul li.AspNet-Menu-Hover
+{
+	background-color: #D1E9FF;
+	background-image: none;
+	margin: 0px;
+}
+
+.TopMenu .AspNet-Menu-Horizontal ul.AspNet-Menu ul
+{
+	border: solid 1px #3263BD;
+	background-color: #FFFFFF;
+}
+
+.TopMenu .AspNet-Menu-Horizontal ul.AspNet-Menu ul li a
+{
+    padding: 6px 15px 6px 15px;
+    text-align: left;
+    border: none;
+	margin: 0px;
+	color: #000000;
+}
+
+/* Third tier menus have to be positioned differently than second (or top) tier menu items because */
+/* they drop to the side, not below, their parent menu item. This is done by setting the last margin */
+/* value (which is equal to margin-left) to a value that is slightly smaller than the WIDTH of the */
+/* menu item. So, if you modify the rule above, then you should modify this (below) rule, too. */
+.TopMenu .AspNet-Menu-Horizontal ul.AspNet-Menu li ul li ul
+{
+    margin: 1.0em 0 0 10.35em;
+}
+
+
+
+
+
+
+/* LEFT MENU */
+.LeftMenu
+{
+    font-family: Verdana;
+    font-size: 8pt;
+}
+.LeftMenu ul
+{
+	background-color: #D1E9FF;
+}
+
+.LeftMenu ul.AspNet-Menu
+{
+    width: 190px;
+}
+
+.LeftMenu ul.AspNet-Menu ul,
+.LeftMenu ul.AspNet-Menu ul ul
+{
+    left: 190px;
+    top: -0.5em;
+    width: 190px;
+    z-index: 400;
+    border: solid 1px #86B9F7;
+    padding: 2px;
+}
+
+.LeftMenu li.AspNet-Menu-Leaf a, /* leaves */
+.LeftMenu li.AspNet-Menu-Leaf span
+{
+    background-image: none !important;
+}
+
+.LeftMenu ul.AspNet-Menu li a
+{
+    color: #000000;
+    padding: 6px 15px 6px 7px;
+    text-align: left;
+}
+
+.LeftMenu ul.AspNet-Menu li span
+{
+    cursor: pointer;
+    color: #333333;
+    padding: 6px 25px 6px 7px;
+    background: transparent url(../Images/menu_popup_right.gif) right center no-repeat;
+    text-align: left;
+}
+
+.LeftMenu ul.AspNet-Menu li:hover,
+.LeftMenu ul.AspNet-Menu li.AspNet-Menu-Hover
+{
+    background-image: url(../Images/left_menu_hover_bkg.gif);
+    background-repeat: no-repeat;
+}
+
+.LeftMenu .AspNet-Menu-Horizontal ul.AspNet-Menu ul
+{
+	border: solid 1px #CCCCCC;
+	background-color: #F8F8F8;
+}
+
+.LeftMenu .AspNet-Menu-Horizontal ul.AspNet-Menu ul li a
+{
+    padding: 7px 15px 7px 15px;
+    text-align: left;
+    border: none;
+	margin: 0px;
+}
+
+/* Third tier menus have to be positioned differently than second (or top) tier menu items because */
+/* they drop to the side, not below, their parent menu item. This is done by setting the last margin */
+/* value (which is equal to margin-left) to a value that is slightly smaller than the WIDTH of the */
+/* menu item. So, if you modify the rule above, then you should modify this (below) rule, too. */
+.LeftMenu .AspNet-Menu-Horizontal ul.AspNet-Menu li ul li ul
+{
+    margin: 1.0em 0 0 10.35em;
+}
+
+
+
+
+
+
+/* TOP MENU */
+.PopupMenu ul.AspNet-Menu
+{
+    width: 100%;
+    z-index: 500;
+}
+
+.PopupMenu ul.AspNet-Menu ul
+{
+    left: 0;
+    top: 100%;
+	z-index: 501;
+}
+
+.PopupMenu ul.AspNet-Menu ul ul
+{
+    top: -0.3em;
+	z-index: 502;
+}
+
+.PopupMenu li.AspNet-Menu-Leaf a, /* leaves */
+.PopupMenu li.AspNet-Menu-Leaf span
+{
+    background-image: none !important;
+}
+
+.PopupMenu ul.AspNet-Menu li
+{
+	/* width: 1em; */
+}
+
+.PopupMenu ul.AspNet-Menu li a
+{
+    color: #000000;
+    height: 12px;
+    width: 16px;
+    text-align: center;
+    font-family: Tahoma;
+    font-size: 9pt;
+}
+
+.PopupMenu ul.AspNet-Menu li span
+{
+    cursor: pointer;
+    color: #000000;
+    height: 12px;
+    width: 16px;
+    background: transparent url(../Images/menu_popup2.gif) center center no-repeat;
+    text-align: center;
+    font-family: Tahoma;
+    font-size: 9pt;
+}
+
+.PopupMenu ul.AspNet-Menu li:hover, 
+.PopupMenu ul.AspNet-Menu li.AspNet-Menu-Hover
+{
+    background-color: #f0f0f0;
+}
+
+.PopupMenu ul.AspNet-Menu li:hover a, 
+.PopupMenu ul.AspNet-Menu li:hover span
+.PopupMenu ul.AspNet-Menu li.AspNet-Menu-Hover a,
+.PopupMenu ul.AspNet-Menu li.AspNet-Menu-Hover span
+{
+	color: #ffffff;
+}
+
+.PopupMenu ul.AspNet-Menu li ul li
+{
+	margin: 0px;
+}
+
+.PopupMenu ul.AspNet-Menu li ul li:hover, 
+.PopupMenu ul.AspNet-Menu li ul li.AspNet-Menu-Hover
+{
+	background-color: #D1E9FF;
+	background-image: none;
+	margin: 0px;
+}
+
+.PopupMenu .AspNet-Menu-Horizontal ul.AspNet-Menu ul
+{
+	border: solid 1px #3263BD;
+	background-color: #FFFFFF;
+}
+
+.PopupMenu .AspNet-Menu-Horizontal ul.AspNet-Menu ul li a
+{
+	width: 160px;
+    padding: 6px 15px 6px 15px;
+    text-align: left;
+    border: none;
+	margin: 0px;
+	color: #000000;
+}
+
+/* Third tier menus have to be positioned differently than second (or top) tier menu items because */
+/* they drop to the side, not below, their parent menu item. This is done by setting the last margin */
+/* value (which is equal to margin-left) to a value that is slightly smaller than the WIDTH of the */
+/* menu item. So, if you modify the rule above, then you should modify this (below) rule, too. */
+.PopupMenu .AspNet-Menu-Horizontal ul.AspNet-Menu li ul li ul
+{
+    margin: 1.0em 0 0 10.35em;
+}

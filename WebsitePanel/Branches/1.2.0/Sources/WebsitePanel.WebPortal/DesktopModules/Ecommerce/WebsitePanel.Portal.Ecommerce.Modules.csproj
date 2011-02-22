@@ -1,0 +1,1194 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>9.0.21022</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{F01989EA-A888-41E1-9185-872E1455A07E}</ProjectGuid>
+    <ProjectTypeGuids>{349c5851-65df-11da-9384-00065b846f21};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>WebsitePanel.Ecommerce.Portal</RootNamespace>
+    <AssemblyName>WebsitePanel.Portal.Ecommerce.Modules</AssemblyName>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+    <OldToolsVersion>3.5</OldToolsVersion>
+    <UpgradeBackupLocation>
+    </UpgradeBackupLocation>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>..\..\bin\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+    <WarningsAsErrors>618</WarningsAsErrors>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>none</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>..\..\bin\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+    <WarningsAsErrors>618</WarningsAsErrors>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="AjaxControlToolkit, Version=1.0.10301.0, Culture=neutral, PublicKeyToken=28f01b0e84b6d53e, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\Lib\AjaxControlToolkit.dll</HintPath>
+    </Reference>
+    <Reference Include="AntiXssLibrary, Version=1.5.0.0, Culture=neutral, PublicKeyToken=5906d2bb3d8a12c4, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\Lib\AntiXssLibrary.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Web.Services3, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\Lib\Microsoft.Web.Services3.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Web.ApplicationServices" />
+    <Reference Include="System.Web.DynamicData" />
+    <Reference Include="System.Web.Entity" />
+    <Reference Include="System.Web.Extensions" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Web.Services" />
+    <Reference Include="System.EnterpriseServices" />
+    <Reference Include="System.Web.Mobile" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="WebsitePanel.EnterpriseServer.Base, Version=1.0.1.0, Culture=neutral, PublicKeyToken=da8782a6fc4d0081, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\Bin\WebsitePanel.EnterpriseServer.Base.dll</HintPath>
+    </Reference>
+    <Reference Include="WebsitePanel.EnterpriseServer.Client, Version=1.0.1.0, Culture=neutral, PublicKeyToken=da8782a6fc4d0081, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\Bin\WebsitePanel.EnterpriseServer.Client.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Categories.ascx" />
+    <Content Include="CategoriesAddCategory.ascx" />
+    <Content Include="CategoriesEditCategory.ascx" />
+    <Content Include="UserControls\PathBreadCrumb.ascx" />
+    <Content Include="UserControls\ProductCategories.ascx" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="..\..\..\VersionInfo.cs">
+      <Link>Code\VersionInfo.cs</Link>
+    </Compile>
+    <Compile Include="App_LocalResources\CategoriesAddCategory.ascx.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>CategoriesAddCategory.ascx.resx</DependentUpon>
+    </Compile>
+    <Compile Include="App_LocalResources\CategoriesEditCategory.ascx.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>CategoriesEditCategory.ascx.resx</DependentUpon>
+    </Compile>
+    <Compile Include="App_LocalResources\OrderCheckout.ascx.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>OrderCheckout.ascx.resx</DependentUpon>
+    </Compile>
+    <Compile Include="App_LocalResources\OrderComplete.ascx.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>OrderComplete.ascx.resx</DependentUpon>
+    </Compile>
+    <Compile Include="BillingCycles.ascx.cs">
+      <DependentUpon>BillingCycles.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="BillingCycles.ascx.designer.cs">
+      <DependentUpon>BillingCycles.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="BillingCyclesAddCycle.ascx.cs">
+      <DependentUpon>BillingCyclesAddCycle.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="BillingCyclesAddCycle.ascx.designer.cs">
+      <DependentUpon>BillingCyclesAddCycle.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="BillingCyclesEditCycle.ascx.cs">
+      <DependentUpon>BillingCyclesEditCycle.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="BillingCyclesEditCycle.ascx.designer.cs">
+      <DependentUpon>BillingCyclesEditCycle.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="Categories.ascx.cs">
+      <DependentUpon>Categories.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Categories.ascx.designer.cs">
+      <DependentUpon>Categories.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="CategoriesAddCategory.ascx.cs">
+      <DependentUpon>CategoriesAddCategory.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="CategoriesAddCategory.ascx.designer.cs">
+      <DependentUpon>CategoriesAddCategory.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="CategoriesEditCategory.ascx.cs">
+      <DependentUpon>CategoriesEditCategory.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="CategoriesEditCategory.ascx.designer.cs">
+      <DependentUpon>CategoriesEditCategory.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="Code\AssemblyInfo.cs" />
+    <Compile Include="Code\EC.cs" />
+    <Compile Include="Code\EcommerceSettings.cs" />
+    <Compile Include="Code\ecUtils.cs" />
+    <Compile Include="Code\Framework\CheckoutBasePage.cs">
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Code\Framework\ecControlBase.cs">
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Code\Framework\ecModuleBase.cs">
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Code\Framework\ecPanelFormatter.cs" />
+    <Compile Include="Code\Framework\ecPanelGlobals.cs" />
+    <Compile Include="Code\Framework\ecPanelRequest.cs" />
+    <Compile Include="Code\Framework\GroupRadioButton.cs" />
+    <Compile Include="Code\Framework\IPaymentMethod.cs" />
+    <Compile Include="Code\Framework\IPluginSettings.cs" />
+    <Compile Include="Code\Framework\IViewServiceDetails.cs" />
+    <Compile Include="Code\Framework\ManualContextValidator.cs" />
+    <Compile Include="Code\Framework\PasswordTextBox.cs" />
+    <Compile Include="Code\Framework\RadioGroupValidator.cs" />
+    <Compile Include="Code\Helpers\CategoryHelper.cs" />
+    <Compile Include="Code\Helpers\StorefrontHelper.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Code\Helpers\StorehouseHelper.cs" />
+    <Compile Include="Code\Keys.cs" />
+    <Compile Include="Code\PortalCache.cs" />
+    <Compile Include="Code\ProxyConfigurator.cs" />
+    <Compile Include="Code\Services\2Checkout.cs" />
+    <Compile Include="Code\Services\PayPalIPN.cs" />
+    <Compile Include="Code\Services\ServiceHandlerBase.cs" />
+    <Compile Include="Code\UrlBuilder.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="CustomerPaymentProfile.ascx.cs">
+      <DependentUpon>CustomerPaymentProfile.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="CustomerPaymentProfile.ascx.designer.cs">
+      <DependentUpon>CustomerPaymentProfile.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="CustomersInvoices.ascx.cs">
+      <DependentUpon>CustomersInvoices.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="CustomersInvoices.ascx.designer.cs">
+      <DependentUpon>CustomersInvoices.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="CustomersInvoicesViewInvoice.ascx.cs">
+      <DependentUpon>CustomersInvoicesViewInvoice.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="CustomersInvoicesViewInvoice.ascx.designer.cs">
+      <DependentUpon>CustomersInvoicesViewInvoice.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="CustomersPayments.ascx.cs">
+      <DependentUpon>CustomersPayments.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="CustomersPayments.ascx.designer.cs">
+      <DependentUpon>CustomersPayments.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="CustomersServices.ascx.cs">
+      <DependentUpon>CustomersServices.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="CustomersServices.ascx.designer.cs">
+      <DependentUpon>CustomersServices.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="CustomersServicesUpgradeService.ascx.cs">
+      <DependentUpon>CustomersServicesUpgradeService.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="CustomersServicesUpgradeService.ascx.designer.cs">
+      <DependentUpon>CustomersServicesUpgradeService.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="CustomersServicesViewService.ascx.cs">
+      <DependentUpon>CustomersServicesViewService.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="CustomersServicesViewService.ascx.designer.cs">
+      <DependentUpon>CustomersServicesViewService.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="DomainNames.ascx.cs">
+      <DependentUpon>DomainNames.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="DomainNames.ascx.designer.cs">
+      <DependentUpon>DomainNames.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="DomainNamesAddDomain.ascx.cs">
+      <DependentUpon>DomainNamesAddDomain.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="DomainNamesAddDomain.ascx.designer.cs">
+      <DependentUpon>DomainNamesAddDomain.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="DomainNamesEditDomain.ascx.cs">
+      <DependentUpon>DomainNamesEditDomain.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="DomainNamesEditDomain.ascx.designer.cs">
+      <DependentUpon>DomainNamesEditDomain.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="DomainRegistrarDirecti.ascx.cs">
+      <DependentUpon>DomainRegistrarDirecti.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="DomainRegistrarDirecti.ascx.designer.cs">
+      <DependentUpon>DomainRegistrarDirecti.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="DomainRegistrarEnom.ascx.cs">
+      <DependentUpon>DomainRegistrarEnom.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="DomainRegistrarEnom.ascx.designer.cs">
+      <DependentUpon>DomainRegistrarEnom.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="EcommerceSystemSettings.ascx.cs">
+      <DependentUpon>EcommerceSystemSettings.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="EcommerceSystemSettings.ascx.designer.cs">
+      <DependentUpon>EcommerceSystemSettings.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="HostingAddons.ascx.cs">
+      <DependentUpon>HostingAddons.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="HostingAddons.ascx.designer.cs">
+      <DependentUpon>HostingAddons.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="HostingAddonsAddAddon.ascx.cs">
+      <DependentUpon>HostingAddonsAddAddon.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="HostingAddonsAddAddon.ascx.designer.cs">
+      <DependentUpon>HostingAddonsAddAddon.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="HostingAddonsEditAddon.ascx.cs">
+      <DependentUpon>HostingAddonsEditAddon.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="HostingAddonsEditAddon.ascx.designer.cs">
+      <DependentUpon>HostingAddonsEditAddon.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="HostingPlans.ascx.cs">
+      <DependentUpon>HostingPlans.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="HostingPlans.ascx.designer.cs">
+      <DependentUpon>HostingPlans.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="HostingPlansAddPlan.ascx.cs">
+      <DependentUpon>HostingPlansAddPlan.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="HostingPlansAddPlan.ascx.designer.cs">
+      <DependentUpon>HostingPlansAddPlan.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="HostingPlansEditPlan.ascx.cs">
+      <DependentUpon>HostingPlansEditPlan.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="HostingPlansEditPlan.ascx.designer.cs">
+      <DependentUpon>HostingPlansEditPlan.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="NotificationNewInvoice.ascx.cs">
+      <DependentUpon>NotificationNewInvoice.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="NotificationNewInvoice.ascx.designer.cs">
+      <DependentUpon>NotificationNewInvoice.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="NotificationPaymentReceived.ascx.cs">
+      <DependentUpon>NotificationPaymentReceived.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="NotificationPaymentReceived.ascx.designer.cs">
+      <DependentUpon>NotificationPaymentReceived.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="NotificationServiceActivated.ascx.cs">
+      <DependentUpon>NotificationServiceActivated.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="NotificationServiceActivated.ascx.designer.cs">
+      <DependentUpon>NotificationServiceActivated.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="NotificationServiceCancelled.ascx.cs">
+      <DependentUpon>NotificationServiceCancelled.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="NotificationServiceCancelled.ascx.designer.cs">
+      <DependentUpon>NotificationServiceCancelled.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="NotificationServiceSuspended.ascx.cs">
+      <DependentUpon>NotificationServiceSuspended.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="NotificationServiceSuspended.ascx.designer.cs">
+      <DependentUpon>NotificationServiceSuspended.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="OrderFailed.ascx.cs">
+      <DependentUpon>OrderFailed.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="OrderFailed.ascx.designer.cs">
+      <DependentUpon>OrderFailed.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="OrderPassback.aspx.cs">
+      <DependentUpon>OrderPassback.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="OrderPassback.aspx.designer.cs">
+      <DependentUpon>OrderPassback.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="PaymentMethod2Checkout.ascx.cs">
+      <DependentUpon>PaymentMethod2Checkout.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="PaymentMethod2Checkout.ascx.designer.cs">
+      <DependentUpon>PaymentMethod2Checkout.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="PaymentMethodCreditCard.ascx.cs">
+      <DependentUpon>PaymentMethodCreditCard.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="PaymentMethodCreditCard.ascx.designer.cs">
+      <DependentUpon>PaymentMethodCreditCard.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="PaymentMethodOffline.ascx.cs">
+      <DependentUpon>PaymentMethodOffline.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="PaymentMethodOffline.ascx.designer.cs">
+      <DependentUpon>PaymentMethodOffline.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="PaymentMethodPayPalAccount.ascx.cs">
+      <DependentUpon>PaymentMethodPayPalAccount.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="PaymentMethodPayPalAccount.ascx.designer.cs">
+      <DependentUpon>PaymentMethodPayPalAccount.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="PaymentMethods\2CO_Payment.ascx.cs">
+      <DependentUpon>2CO_Payment.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="PaymentMethods\2CO_Payment.ascx.designer.cs">
+      <DependentUpon>2CO_Payment.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="PaymentMethods\CreditCard_Payment.ascx.cs">
+      <DependentUpon>CreditCard_Payment.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="PaymentMethods\CreditCard_Payment.ascx.designer.cs">
+      <DependentUpon>CreditCard_Payment.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="PaymentMethods\Offline_Payment.ascx.cs">
+      <DependentUpon>Offline_Payment.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="PaymentMethods\Offline_Payment.ascx.designer.cs">
+      <DependentUpon>Offline_Payment.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="PaymentMethods\PPAccount_Payment.ascx.cs">
+      <DependentUpon>PPAccount_Payment.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="PaymentMethods\PPAccount_Payment.ascx.designer.cs">
+      <DependentUpon>PPAccount_Payment.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="PP_Routine.aspx.cs">
+      <DependentUpon>PP_Routine.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="PP_Routine.aspx.designer.cs">
+      <DependentUpon>PP_Routine.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="ProductControls\DomainName_ServiceDetails.ascx.cs">
+      <DependentUpon>DomainName_ServiceDetails.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="ProductControls\DomainName_ServiceDetails.ascx.designer.cs">
+      <DependentUpon>DomainName_ServiceDetails.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="ProductControls\HostingAddon_ServiceDetails.ascx.cs">
+      <DependentUpon>HostingAddon_ServiceDetails.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="ProductControls\HostingAddon_ServiceDetails.ascx.designer.cs">
+      <DependentUpon>HostingAddon_ServiceDetails.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="ProductControls\HostingPlan_Brief.ascx.cs">
+      <DependentUpon>HostingPlan_Brief.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="ProductControls\HostingPlan_Brief.ascx.designer.cs">
+      <DependentUpon>HostingPlan_Brief.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="ProductControls\HostingPlan_Highlights.ascx.cs">
+      <DependentUpon>HostingPlan_Highlights.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="ProductControls\HostingPlan_Highlights.ascx.designer.cs">
+      <DependentUpon>HostingPlan_Highlights.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="ProductControls\HostingPlan_ServiceDetails.ascx.cs">
+      <DependentUpon>HostingPlan_ServiceDetails.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="ProductControls\HostingPlan_ServiceDetails.ascx.designer.cs">
+      <DependentUpon>HostingPlan_ServiceDetails.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ProvisioningSettingsEdit.ascx.cs">
+      <DependentUpon>ProvisioningSettingsEdit.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="ProvisioningSettingsEdit.ascx.designer.cs">
+      <DependentUpon>ProvisioningSettingsEdit.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="QuickSignup.ascx.cs">
+      <DependentUpon>QuickSignup.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="QuickSignup.ascx.designer.cs">
+      <DependentUpon>QuickSignup.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="OrderComplete.ascx.cs">
+      <DependentUpon>OrderComplete.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="OrderComplete.ascx.designer.cs">
+      <DependentUpon>OrderComplete.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="OrderCheckout.ascx.cs">
+      <DependentUpon>OrderCheckout.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="OrderCheckout.ascx.designer.cs">
+      <DependentUpon>OrderCheckout.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="SkinControls\App_LocalResources\CatalogBreadCrumb.ascx.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>CatalogBreadCrumb.ascx.resx</DependentUpon>
+    </Compile>
+    <Compile Include="SkinControls\CatalogBreadCrumb.ascx.cs">
+      <DependentUpon>CatalogBreadCrumb.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="SkinControls\CatalogBreadCrumb.ascx.designer.cs">
+      <DependentUpon>CatalogBreadCrumb.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="StorefrontMenu.ascx.cs">
+      <DependentUpon>StorefrontMenu.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="StorefrontMenu.ascx.designer.cs">
+      <DependentUpon>StorefrontMenu.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="StorefrontOrderProduct.ascx.cs">
+      <DependentUpon>StorefrontOrderProduct.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="StorefrontOrderProduct.ascx.designer.cs">
+      <DependentUpon>StorefrontOrderProduct.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="StorefrontViewCategory.ascx.cs">
+      <DependentUpon>StorefrontViewCategory.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="StorefrontViewCategory.ascx.designer.cs">
+      <DependentUpon>StorefrontViewCategory.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="StorefrontWelcome.ascx.cs">
+      <DependentUpon>StorefrontWelcome.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="StorefrontWelcome.ascx.designer.cs">
+      <DependentUpon>StorefrontWelcome.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="StorefrontWelcomeEdit.ascx.cs">
+      <DependentUpon>StorefrontWelcomeEdit.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="StorefrontWelcomeEdit.ascx.designer.cs">
+      <DependentUpon>StorefrontWelcomeEdit.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="SupportedPlugins\2Checkout_Settings.ascx.cs">
+      <DependentUpon>2Checkout_Settings.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="SupportedPlugins\2Checkout_Settings.ascx.designer.cs">
+      <DependentUpon>2Checkout_Settings.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="SupportedPlugins\AuthorizeNet_Settings.ascx.cs">
+      <DependentUpon>AuthorizeNet_Settings.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="SupportedPlugins\AuthorizeNet_Settings.ascx.designer.cs">
+      <DependentUpon>AuthorizeNet_Settings.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="SupportedPlugins\OfflinePayment_Settings.ascx.cs">
+      <DependentUpon>OfflinePayment_Settings.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="SupportedPlugins\OfflinePayment_Settings.ascx.designer.cs">
+      <DependentUpon>OfflinePayment_Settings.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="SupportedPlugins\PayPalPro_Settings.ascx.cs">
+      <DependentUpon>PayPalPro_Settings.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="SupportedPlugins\PayPalPro_Settings.ascx.designer.cs">
+      <DependentUpon>PayPalPro_Settings.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="SupportedPlugins\PayPalStandard_Settings.ascx.cs">
+      <DependentUpon>PayPalStandard_Settings.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="SupportedPlugins\PayPalStandard_Settings.ascx.designer.cs">
+      <DependentUpon>PayPalStandard_Settings.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="Taxations.ascx.cs">
+      <DependentUpon>Taxations.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Taxations.ascx.designer.cs">
+      <DependentUpon>Taxations.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="TaxationsAddTax.ascx.cs">
+      <DependentUpon>TaxationsAddTax.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="TaxationsAddTax.ascx.designer.cs">
+      <DependentUpon>TaxationsAddTax.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="TaxationsEditTax.ascx.cs">
+      <DependentUpon>TaxationsEditTax.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="TaxationsEditTax.ascx.designer.cs">
+      <DependentUpon>TaxationsEditTax.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="TermsAndConditions.ascx.cs">
+      <DependentUpon>TermsAndConditions.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="TermsAndConditions.ascx.designer.cs">
+      <DependentUpon>TermsAndConditions.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="TermsAndConditionsEdit.ascx.cs">
+      <DependentUpon>TermsAndConditionsEdit.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="TermsAndConditionsEdit.ascx.designer.cs">
+      <DependentUpon>TermsAndConditionsEdit.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\AddonProducts.ascx.cs">
+      <DependentUpon>AddonProducts.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="UserControls\AddonProducts.ascx.designer.cs">
+      <DependentUpon>AddonProducts.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\App_LocalResources\InvoiceCheckoutDetails.ascx.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>InvoiceCheckoutDetails.ascx.resx</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\App_LocalResources\PathBreadCrumb.ascx.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>PathBreadCrumb.ascx.resx</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\ChoosePaymentMethod.ascx.cs">
+      <DependentUpon>ChoosePaymentMethod.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="UserControls\ChoosePaymentMethod.ascx.designer.cs">
+      <DependentUpon>ChoosePaymentMethod.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\CreateUserAccount.ascx.cs">
+      <DependentUpon>CreateUserAccount.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="UserControls\CreateUserAccount.ascx.designer.cs">
+      <DependentUpon>CreateUserAccount.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\CustomerInvoiceTemplated.ascx.cs">
+      <DependentUpon>CustomerInvoiceTemplated.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="UserControls\CustomerInvoiceTemplated.ascx.designer.cs">
+      <DependentUpon>CustomerInvoiceTemplated.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\DomainNameBillingCycles.ascx.cs">
+      <DependentUpon>DomainNameBillingCycles.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="UserControls\DomainNameBillingCycles.ascx.designer.cs">
+      <DependentUpon>DomainNameBillingCycles.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\EmailNotificationEditor.ascx.cs">
+      <DependentUpon>EmailNotificationEditor.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="UserControls\EmailNotificationEditor.ascx.designer.cs">
+      <DependentUpon>EmailNotificationEditor.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\HostingAddonOneTimeFee.ascx.cs">
+      <DependentUpon>HostingAddonOneTimeFee.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="UserControls\HostingAddonOneTimeFee.ascx.designer.cs">
+      <DependentUpon>HostingAddonOneTimeFee.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\HostingPlanBillingCycles.ascx.cs">
+      <DependentUpon>HostingPlanBillingCycles.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="UserControls\HostingPlanBillingCycles.ascx.designer.cs">
+      <DependentUpon>HostingPlanBillingCycles.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\HostingPlanQuotas.ascx.cs">
+      <DependentUpon>HostingPlanQuotas.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="UserControls\HostingPlanQuotas.ascx.designer.cs">
+      <DependentUpon>HostingPlanQuotas.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\LoginUserAccount.ascx.cs">
+      <DependentUpon>LoginUserAccount.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="UserControls\LoginUserAccount.ascx.designer.cs">
+      <DependentUpon>LoginUserAccount.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\ManualPaymentAdd.ascx.cs">
+      <DependentUpon>ManualPaymentAdd.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="UserControls\ManualPaymentAdd.ascx.designer.cs">
+      <DependentUpon>ManualPaymentAdd.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\PlanDomainOption.ascx.cs">
+      <DependentUpon>PlanDomainOption.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="UserControls\PlanDomainOption.ascx.designer.cs">
+      <DependentUpon>PlanDomainOption.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\PlanHostingAddons.ascx.cs">
+      <DependentUpon>PlanHostingAddons.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="UserControls\PlanHostingAddons.ascx.designer.cs">
+      <DependentUpon>PlanHostingAddons.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\ProductHighlights.ascx.cs">
+      <DependentUpon>ProductHighlights.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="UserControls\ProductHighlights.ascx.designer.cs">
+      <DependentUpon>ProductHighlights.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\QuickHostingAddon.ascx.cs">
+      <DependentUpon>QuickHostingAddon.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="UserControls\QuickHostingAddon.ascx.designer.cs">
+      <DependentUpon>QuickHostingAddon.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\QuickHostingPlanCycles.ascx.cs">
+      <DependentUpon>QuickHostingPlanCycles.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="UserControls\QuickHostingPlanCycles.ascx.designer.cs">
+      <DependentUpon>QuickHostingPlanCycles.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\QuickHostingPlans.ascx.cs">
+      <DependentUpon>QuickHostingPlans.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="UserControls\QuickHostingPlans.ascx.designer.cs">
+      <DependentUpon>QuickHostingPlans.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\PathBreadCrumb.ascx.cs">
+      <DependentUpon>PathBreadCrumb.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="UserControls\PathBreadCrumb.ascx.designer.cs">
+      <DependentUpon>PathBreadCrumb.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\ProductCategories.ascx.cs">
+      <DependentUpon>ProductCategories.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="UserControls\ProductCategories.ascx.designer.cs">
+      <DependentUpon>ProductCategories.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\UserAccountDetails.ascx.cs">
+      <DependentUpon>UserAccountDetails.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="UserControls\UserAccountDetails.ascx.designer.cs">
+      <DependentUpon>UserAccountDetails.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="ViewProductDetails.ascx.cs">
+      <DependentUpon>ViewProductDetails.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="ViewProductDetails.ascx.designer.cs">
+      <DependentUpon>ViewProductDetails.ascx</DependentUpon>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="App_LocalResources\Categories.ascx.resx">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="UserControls\App_LocalResources\ProductAssignedCategories.ascx.resx">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="UserControls\App_LocalResources\ProductCategories.ascx.resx">
+      <SubType>Designer</SubType>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="App_LocalResources\CategoriesEditCategory.ascx.resx">
+      <SubType>Designer</SubType>
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>CategoriesEditCategory.ascx.Designer.cs</LastGenOutput>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="App_LocalResources\CategoriesAddCategory.ascx.resx">
+      <SubType>Designer</SubType>
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>CategoriesAddCategory.ascx.Designer.cs</LastGenOutput>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="UserControls\App_LocalResources\PathBreadCrumb.ascx.resx">
+      <SubType>Designer</SubType>
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>PathBreadCrumb.ascx.Designer.cs</LastGenOutput>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="OrderComplete.ascx" />
+    <Content Include="OrderCheckout.ascx" />
+    <Content Include="StorefrontOrderProduct.ascx" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="App_LocalResources\OrderComplete.ascx.resx">
+      <SubType>Designer</SubType>
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>OrderComplete.ascx.Designer.cs</LastGenOutput>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="App_LocalResources\OrderCheckout.ascx.resx">
+      <SubType>Designer</SubType>
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>OrderCheckout.ascx.Designer.cs</LastGenOutput>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="SkinControls\App_LocalResources\CatalogBreadCrumb.ascx.resx">
+      <SubType>Designer</SubType>
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>CatalogBreadCrumb.ascx.Designer.cs</LastGenOutput>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="UserControls\App_LocalResources\InvoiceCheckoutDetails.ascx.resx">
+      <SubType>Designer</SubType>
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>InvoiceCheckoutDetails.ascx.Designer.cs</LastGenOutput>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\WebsitePanel.WebPortal.csproj">
+      <Project>{C99EFB18-FFE7-45BB-8CA8-29336F3E8C68}</Project>
+      <Name>WebsitePanel.WebPortal</Name>
+      <Private>True</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\WebsitePanel\WebsitePanel.Portal.Modules.csproj">
+      <Project>{12232731-5C45-4ED6-98F8-D47ABE728280}</Project>
+      <Name>WebsitePanel.Portal.Modules</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="SkinControls\CatalogBreadCrumb.ascx" />
+    <Content Include="UserControls\App_LocalResources\ProductRichBlock.ascx.resx">
+      <SubType>Designer</SubType>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="App_LocalResources\BillingCycles.ascx.resx">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="App_LocalResources\BillingCyclesAddCycle.ascx.resx">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="App_LocalResources\BillingCyclesEditCycle.ascx.resx">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="App_LocalResources\CustomersInvoices.ascx.resx">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="App_LocalResources\CustomersInvoicesViewInvoice.ascx.resx">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="App_LocalResources\CustomersPayments.ascx.resx">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="App_LocalResources\CustomersServices.ascx.resx">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="App_LocalResources\CustomersServicesUpgradeService.ascx.resx">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="App_LocalResources\CustomersServicesViewService.ascx.resx">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="App_LocalResources\DomainNames.ascx.resx">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="App_LocalResources\DomainNamesAddDomain.ascx.resx">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="App_LocalResources\DomainNamesEditDomain.ascx.resx">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="App_LocalResources\DomainRegistrarDirecti.ascx.resx">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="App_LocalResources\DomainRegistrarEnom.ascx.resx">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="App_LocalResources\EcommerceSystemSettings.ascx.resx">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="App_LocalResources\HostingAddons.ascx.resx">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="App_LocalResources\HostingAddonsAddAddon.ascx.resx">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="App_LocalResources\HostingAddonsEditAddon.ascx.resx">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="App_LocalResources\HostingDomains.ascx.resx">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="App_LocalResources\HostingPlans.ascx.resx">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="App_LocalResources\HostingPlansAddPlan.ascx.resx">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="App_LocalResources\HostingPlansEditPlan.ascx.resx">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="App_LocalResources\NotificationNewInvoice.ascx.resx">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="App_LocalResources\NotificationPaymentReceived.ascx.resx">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="App_LocalResources\NotificationServiceActivated.ascx.resx">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="App_LocalResources\NotificationServiceCancelled.ascx.resx">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="App_LocalResources\NotificationServiceSuspended.ascx.resx">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="App_LocalResources\PaymentMethod2Checkout.ascx.resx">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="App_LocalResources\PaymentMethodCreditCard.ascx.resx">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="App_LocalResources\PaymentMethodOffline.ascx.resx">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="App_LocalResources\PaymentMethodPayPalAccount.ascx.resx">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="App_LocalResources\ProvisioningSettingsEdit.ascx.resx">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="App_LocalResources\QuickSignup.ascx.resx">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="App_LocalResources\StorefrontMenu.ascx.resx">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="App_LocalResources\StorefrontOrderProduct.ascx.resx">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="App_LocalResources\StorefrontViewCategory.ascx.resx">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="App_LocalResources\StorefrontWelcome.ascx.resx">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="App_LocalResources\StorefrontWelcomeEdit.ascx.resx">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="App_LocalResources\Taxations.ascx.resx">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="App_LocalResources\TaxationsAddTax.ascx.resx">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="App_LocalResources\TaxationsEditTax.ascx.resx">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="App_LocalResources\TermsAndConditionsEdit.ascx.resx">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="App_LocalResources\ViewProductDetails.ascx.resx">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="PaymentMethods\App_LocalResources\2CO_Payment.ascx.resx">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="PaymentMethods\App_LocalResources\CreditCard_Payment.ascx.resx">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="PaymentMethods\App_LocalResources\Offline_Payment.ascx.resx">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="PaymentMethods\App_LocalResources\PPAccount_Payment.ascx.resx">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="ProductControls\App_LocalResources\DomainName_ServiceDetails.ascx.resx">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="ProductControls\App_LocalResources\HostingAddon_ServiceDetails.ascx.resx">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="ProductControls\App_LocalResources\HostingPlan_Brief.ascx.resx">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="ProductControls\App_LocalResources\HostingPlan_Highlights.ascx.resx">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="ProductControls\App_LocalResources\HostingPlan_ServiceDetails.ascx.resx">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="App_LocalResources\CustomerPaymentProfile.ascx.resx">
+      <SubType>Designer</SubType>
+    </Content>
+    <EmbeddedResource Include="Scripts\EcommerceUtils.js" />
+    <Content Include="UserControls\App_LocalResources\ManualPaymentAdd.ascx.resx">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="UserControls\App_LocalResources\UserAccountDetails.ascx.resx">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="UserControls\App_LocalResources\QuickHostingAddon.ascx.resx">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="UserControls\App_LocalResources\QuickHostingPlanCycles.ascx.resx">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="UserControls\App_LocalResources\QuickHostingPlans.ascx.resx">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="UserControls\App_LocalResources\PlanDomainOption.ascx.resx">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="UserControls\App_LocalResources\ProductHighlights.ascx.resx">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="UserControls\App_LocalResources\LoginUserAccount.ascx.resx">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="UserControls\App_LocalResources\AddonProducts.ascx.resx">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="UserControls\App_LocalResources\ChoosePaymentMethod.ascx.resx">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="UserControls\App_LocalResources\CreateUserAccount.ascx.resx">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="UserControls\App_LocalResources\DomainNameBillingCycles.ascx.resx">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="UserControls\App_LocalResources\EmailNotificationEditor.ascx.resx">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="UserControls\App_LocalResources\HostingAddonOneTimeFee.ascx.resx">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="UserControls\App_LocalResources\HostingPlanBillingCycles.ascx.resx">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="UserControls\App_LocalResources\HostingPlanQuotas.ascx.resx">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="SupportedPlugins\App_LocalResources\2Checkout_Settings.ascx.resx">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="SupportedPlugins\App_LocalResources\AuthorizeNet_Settings.ascx.resx">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="SupportedPlugins\App_LocalResources\OfflinePayment_Settings.ascx.resx">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="SupportedPlugins\App_LocalResources\PayPalPro_Settings.ascx.resx">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="SupportedPlugins\App_LocalResources\PayPalStandard_Settings.ascx.resx">
+      <SubType>Designer</SubType>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="BillingCycles.ascx" />
+    <Content Include="BillingCyclesAddCycle.ascx" />
+    <Content Include="BillingCyclesEditCycle.ascx" />
+    <Content Include="CustomerPaymentProfile.ascx" />
+    <Content Include="CustomersInvoices.ascx" />
+    <Content Include="CustomersInvoicesViewInvoice.ascx" />
+    <Content Include="CustomersPayments.ascx" />
+    <Content Include="CustomersServices.ascx" />
+    <Content Include="CustomersServicesUpgradeService.ascx" />
+    <Content Include="CustomersServicesViewService.ascx" />
+    <Content Include="DomainNames.ascx" />
+    <Content Include="DomainNamesAddDomain.ascx" />
+    <Content Include="DomainNamesEditDomain.ascx" />
+    <Content Include="DomainRegistrarDirecti.ascx" />
+    <Content Include="DomainRegistrarEnom.ascx" />
+    <Content Include="EcommerceSystemSettings.ascx" />
+    <Content Include="HostingAddons.ascx" />
+    <Content Include="HostingAddonsAddAddon.ascx" />
+    <Content Include="HostingAddonsEditAddon.ascx" />
+    <Content Include="HostingPlans.ascx" />
+    <Content Include="HostingPlansAddPlan.ascx" />
+    <Content Include="HostingPlansEditPlan.ascx" />
+    <Content Include="NotificationNewInvoice.ascx" />
+    <Content Include="NotificationPaymentReceived.ascx" />
+    <Content Include="NotificationServiceActivated.ascx" />
+    <Content Include="NotificationServiceCancelled.ascx" />
+    <Content Include="NotificationServiceSuspended.ascx" />
+    <Content Include="OrderFailed.ascx" />
+    <Content Include="OrderPassback.aspx" />
+    <Content Include="PaymentMethod2Checkout.ascx" />
+    <Content Include="PaymentMethodCreditCard.ascx" />
+    <Content Include="PaymentMethodOffline.ascx" />
+    <Content Include="PaymentMethodPayPalAccount.ascx" />
+    <Content Include="PaymentMethods\2CO_Payment.ascx" />
+    <Content Include="PaymentMethods\CreditCard_Payment.ascx" />
+    <Content Include="PaymentMethods\Offline_Payment.ascx" />
+    <Content Include="PaymentMethods\PPAccount_Payment.ascx" />
+    <Content Include="PP_Routine.aspx" />
+    <Content Include="ProductControls\DomainName_ServiceDetails.ascx" />
+    <Content Include="ProductControls\HostingAddon_ServiceDetails.ascx" />
+    <Content Include="ProductControls\HostingPlan_Brief.ascx" />
+    <Content Include="ProductControls\HostingPlan_Highlights.ascx" />
+    <Content Include="ProductControls\HostingPlan_ServiceDetails.ascx" />
+    <Content Include="ProvisioningSettingsEdit.ascx" />
+    <Content Include="QuickSignup.ascx" />
+    <Content Include="StorefrontMenu.ascx" />
+    <Content Include="StorefrontViewCategory.ascx" />
+    <Content Include="StorefrontWelcome.ascx" />
+    <Content Include="StorefrontWelcomeEdit.ascx" />
+    <Content Include="SupportedPlugins\2Checkout_Settings.ascx" />
+    <Content Include="SupportedPlugins\AuthorizeNet_Settings.ascx" />
+    <Content Include="SupportedPlugins\OfflinePayment_Settings.ascx" />
+    <Content Include="SupportedPlugins\PayPalPro_Settings.ascx" />
+    <Content Include="SupportedPlugins\PayPalStandard_Settings.ascx" />
+    <Content Include="Taxations.ascx" />
+    <Content Include="TaxationsAddTax.ascx" />
+    <Content Include="TaxationsEditTax.ascx" />
+    <Content Include="TermsAndConditions.ascx" />
+    <Content Include="TermsAndConditionsEdit.ascx" />
+    <Content Include="UserControls\AddonProducts.ascx" />
+    <Content Include="UserControls\ChoosePaymentMethod.ascx" />
+    <Content Include="UserControls\CreateUserAccount.ascx" />
+    <Content Include="UserControls\CustomerInvoiceTemplated.ascx" />
+    <Content Include="UserControls\DomainNameBillingCycles.ascx" />
+    <Content Include="UserControls\EmailNotificationEditor.ascx" />
+    <Content Include="UserControls\HostingAddonOneTimeFee.ascx" />
+    <Content Include="UserControls\HostingPlanBillingCycles.ascx" />
+    <Content Include="UserControls\HostingPlanQuotas.ascx" />
+    <Content Include="UserControls\LoginUserAccount.ascx" />
+    <Content Include="UserControls\ManualPaymentAdd.ascx" />
+    <Content Include="UserControls\PlanDomainOption.ascx" />
+    <Content Include="UserControls\PlanHostingAddons.ascx" />
+    <Content Include="UserControls\ProductHighlights.ascx" />
+    <Content Include="UserControls\QuickHostingAddon.ascx" />
+    <Content Include="UserControls\QuickHostingPlanCycles.ascx" />
+    <Content Include="UserControls\QuickHostingPlans.ascx" />
+    <Content Include="UserControls\UserAccountDetails.ascx" />
+    <Content Include="ViewProductDetails.ascx" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Web.config" />
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+  <ProjectExtensions>
+    <VisualStudio>
+      <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
+        <WebProjectProperties>
+          <UseIIS>False</UseIIS>
+          <AutoAssignPort>True</AutoAssignPort>
+          <DevelopmentServerPort>3668</DevelopmentServerPort>
+          <DevelopmentServerVPath>/</DevelopmentServerVPath>
+          <IISUrl>http://localhost/WebPortal</IISUrl>
+          <OverrideIISAppRootUrl>True</OverrideIISAppRootUrl>
+          <IISAppRootUrl>http://localhost/WebPortal</IISAppRootUrl>
+          <NTLMAuthentication>False</NTLMAuthentication>
+          <UseCustomServer>False</UseCustomServer>
+          <CustomServerUrl>
+          </CustomServerUrl>
+          <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
+        </WebProjectProperties>
+      </FlavorProperties>
+    </VisualStudio>
+  </ProjectExtensions>
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" />
+</Project>

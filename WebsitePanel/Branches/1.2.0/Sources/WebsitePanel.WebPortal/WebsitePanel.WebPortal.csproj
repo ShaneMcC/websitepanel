@@ -1,0 +1,674 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>9.0.30729</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{C99EFB18-FFE7-45BB-8CA8-29336F3E8C68}</ProjectGuid>
+    <ProjectTypeGuids>{349c5851-65df-11da-9384-00065b846f21};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>WebsitePanel.WebPortal</RootNamespace>
+    <AssemblyName>WebsitePanel.WebPortal</AssemblyName>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+    <OldToolsVersion>3.5</OldToolsVersion>
+    <UpgradeBackupLocation>
+    </UpgradeBackupLocation>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+    <WarningsAsErrors>618</WarningsAsErrors>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>none</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+    <WarningsAsErrors>618</WarningsAsErrors>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="AjaxControlToolkit, Version=3.5.40412.0, Culture=neutral, PublicKeyToken=28f01b0e84b6d53e, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Lib\AjaxControlToolkit.dll</HintPath>
+    </Reference>
+    <Reference Include="AntiXssLibrary, Version=1.5.0.0, Culture=neutral, PublicKeyToken=5906d2bb3d8a12c4, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Lib\AntiXssLibrary.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.ReportViewer.Common, Version=8.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Lib\Microsoft.ReportViewer.Common.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.ReportViewer.ProcessingObjectModel, Version=8.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Lib\Microsoft.ReportViewer.ProcessingObjectModel.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.ReportViewer.WebForms, Version=8.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Lib\Microsoft.ReportViewer.WebForms.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.Web.Services3, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Lib\Microsoft.Web.Services3.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Web.ApplicationServices" />
+    <Reference Include="System.Web.DynamicData" />
+    <Reference Include="System.Web.Entity" />
+    <Reference Include="System.Web.Extensions" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Web.Services" />
+    <Reference Include="System.EnterpriseServices" />
+    <Reference Include="System.Web.Mobile" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="WebsitePanel.EnterpriseServer.Base, Version=1.0.1.0, Culture=neutral, PublicKeyToken=da8782a6fc4d0081, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Bin\WebsitePanel.EnterpriseServer.Base.dll</HintPath>
+    </Reference>
+    <Reference Include="WebsitePanel.EnterpriseServer.Client, Version=1.0.1.0, Culture=neutral, PublicKeyToken=da8782a6fc4d0081, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Bin\WebsitePanel.EnterpriseServer.Client.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="App_Themes\Default\Images\FileManager\vbhtml.png" />
+    <Content Include="App_Themes\Default\Images\FileManager\cshtml.png" />
+    <Content Include="App_Themes\Default\Images\shield.png" />
+    <Content Include="Error.htm" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="..\VersionInfo.cs">
+      <Link>Code\VersionInfo.cs</Link>
+    </Compile>
+    <Compile Include="Code\Adapters\ChangePasswordAdapter.cs" />
+    <Compile Include="Code\Adapters\CompositeDataBoundControlAdapter.cs" />
+    <Compile Include="Code\Adapters\CreateUserWizardAdapter.cs" />
+    <Compile Include="Code\Adapters\DataListAdapter.cs" />
+    <Compile Include="Code\Adapters\DetailsViewAdapter.cs" />
+    <Compile Include="Code\Adapters\FormViewAdapter.cs" />
+    <Compile Include="Code\Adapters\GridViewAdapter.cs" />
+    <Compile Include="Code\Adapters\ImageAdapter.cs" />
+    <Compile Include="Code\Adapters\LoginAdapter.cs" />
+    <Compile Include="Code\Adapters\LoginStatusAdapter.cs" />
+    <Compile Include="Code\Adapters\MenuAdapter.cs" />
+    <Compile Include="Code\Adapters\PasswordRecoveryAdapter.cs" />
+    <Compile Include="Code\Adapters\TreeViewAdapter.cs" />
+    <Compile Include="Code\Adapters\WebControlAdapterExtender.cs" />
+    <Compile Include="Code\ContentPane.cs" />
+    <Compile Include="Code\Controls\DesktopContextValidator.cs" />
+    <Compile Include="Code\PortalUtils.cs" />
+    <Compile Include="Code\WebPortalControlBase.cs">
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Code\WebsitePanelSiteMapProvider.cs" />
+    <Compile Include="Code\PageTitleProvider.cs" />
+    <Compile Include="Code\PortalThemeProvider.cs" />
+    <Compile Include="Code\ModuleControl.cs" />
+    <Compile Include="Code\ModuleDefinition.cs" />
+    <Compile Include="Code\ModuleControlType.cs" />
+    <Compile Include="Code\PageModule.cs" />
+    <Compile Include="Code\PortalConfiguration.cs" />
+    <Compile Include="Code\PortalControlBase.cs">
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Code\PortalPage.cs" />
+    <Compile Include="Code\SiteSettings.cs" />
+    <Compile Include="Code\SiteStructure.cs" />
+    <Compile Include="Default.aspx.cs">
+      <SubType>ASPXCodeBehind</SubType>
+      <DependentUpon>Default.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Default.aspx.designer.cs">
+      <DependentUpon>Default.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Global.asax.cs">
+      <DependentUpon>Global.asax</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Global.asax" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App_Data\SiteSettings.config">
+      <SubType>Designer</SubType>
+    </None>
+    <Content Include="App_Containers\Default\Browse.ascx" />
+    <Content Include="App_Containers\Default\Edit.ascx" />
+    <Content Include="Default.aspx" />
+    <Content Include="JavaScript\jquery.min.js" />
+    <Content Include="Web6.config" />
+    <Content Include="Web-v3.5.config" />
+    <Content Include="Web6-v3.5.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="App_Browsers\CSSFriendlyAdapters.browser" />
+    <Content Include="App_Data\ModulesData.config" />
+    <None Include="App_Data\SupportedThemes.config" />
+    <None Include="App_Data\Countries.config" />
+    <None Include="App_Data\CountryStates.config" />
+    <None Include="App_Data\WebsitePanel_Modules.config" />
+    <None Include="App_Data\WebsitePanel_Pages.config" />
+    <None Include="App_Data\Ecommerce_Modules.config" />
+    <None Include="App_Data\Ecommerce_Pages.config" />
+    <None Include="App_Data\SupportedLocales.config" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="Services\2Checkout.ashx" />
+    <Content Include="Services\PayPalIPN.ashx" />
+    <Content Include="App_Themes\Default\Images.skin" />
+    <Content Include="App_Themes\Default\Common.skin" />
+    <Content Include="App_Themes\Default\DataBoundControls.skin" />
+    <Content Include="App_Themes\Default\Icons.skin" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="App_Containers\Default\TopPane.ascx" />
+    <Content Include="App_GlobalResources\WebsitePanel_Modules.ascx.resx">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="App_GlobalResources\WebsitePanel_Pages.ascx.resx">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="App_Skins\Default\Browse2.ascx" />
+    <Content Include="App_Skins\Default\Login.ascx" />
+    <Content Include="App_Skins\Default\Edit.ascx" />
+    <Content Include="App_Themes\Default\Images\empty.gif" />
+    <Content Include="App_Themes\Default\Images\max.gif" />
+    <Content Include="App_Themes\Default\Images\min.gif" />
+    <Content Include="App_Themes\Default\Images\indicator_medium.gif" />
+    <Content Include="App_Themes\Default\Styles\Skin.css" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="App_Containers\Default\BrowseCollapsed.ascx" />
+    <Content Include="App_Containers\Default\Clear.ascx" />
+    <Content Include="App_Containers\Default\Login.ascx" />
+    <Content Include="App_Containers\Default\Right.ascx" />
+    <Content Include="App_GlobalResources\WebsitePanel_SharedResources.ascx.resx">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="App_Skins\Default\Browse1.ascx" />
+    <Content Include="App_Skins\Default\Browse3.ascx" />
+    <Content Include="App_Skins\Default\Storefront.ascx" />
+    <Content Include="App_Themes\Default\Buttons.skin" />
+    <Content Include="App_Themes\Default\Icons\accounting_mail_48.png" />
+    <Content Include="App_Themes\Default\Icons\admin_128.png" />
+    <Content Include="App_Themes\Default\Icons\admin_48.png" />
+    <Content Include="App_Themes\Default\Icons\admin_close_48.png" />
+    <Content Include="App_Themes\Default\Icons\admin_info_48.png" />
+    <Content Include="App_Themes\Default\Icons\admin_lock_48.png" />
+    <Content Include="App_Themes\Default\Icons\admin_write_48.png" />
+    <Content Include="App_Themes\Default\Icons\adress_48.png" />
+    <Content Include="App_Themes\Default\Icons\adress_add_48.png" />
+    <Content Include="App_Themes\Default\Icons\bacth_process_48.png" />
+    <Content Include="App_Themes\Default\Icons\barcode_48.png" />
+    <Content Include="App_Themes\Default\Icons\broadcast_48.png" />
+    <Content Include="App_Themes\Default\Icons\cabinet_48.png" />
+    <Content Include="App_Themes\Default\Icons\calendar_month_2_clock_48.png" />
+    <Content Include="App_Themes\Default\Icons\calendar_month_2_config_48.png" />
+    <Content Include="App_Themes\Default\Icons\calendar_month_2_ok_48.png" />
+    <Content Include="App_Themes\Default\Icons\CD_48.png" />
+    <Content Include="App_Themes\Default\Icons\cd_burn_48.png" />
+    <Content Include="App_Themes\Default\Icons\cd_burn_ok_48.png" />
+    <Content Include="App_Themes\Default\Icons\colors_48.png" />
+    <Content Include="App_Themes\Default\Icons\computer_48.png" />
+    <Content Include="App_Themes\Default\Icons\computer_add_48.png" />
+    <Content Include="App_Themes\Default\Icons\computer_config_48.png" />
+    <Content Include="App_Themes\Default\Icons\contacts_mail_48.png" />
+    <Content Include="App_Themes\Default\Icons\customers_32.png" />
+    <Content Include="App_Themes\Default\Icons\customers_48.png" />
+    <Content Include="App_Themes\Default\Icons\database2_48.png" />
+    <Content Include="App_Themes\Default\Icons\database2_reload_48.png" />
+    <Content Include="App_Themes\Default\Icons\database2_save_48.png" />
+    <Content Include="App_Themes\Default\Icons\db_user_48.png" />
+    <Content Include="App_Themes\Default\Icons\discussion_group_48.png" />
+    <Content Include="App_Themes\Default\Icons\download_save_48.png" />
+    <Content Include="App_Themes\Default\Icons\dvd_disc_48.png" />
+    <Content Include="App_Themes\Default\Icons\dvd_disc_add_48.png" />
+    <Content Include="App_Themes\Default\Icons\dvd_disc_ok_48.png" />
+    <Content Include="App_Themes\Default\Icons\executive_128.png" />
+    <Content Include="App_Themes\Default\Icons\export_db_back_48.png" />
+    <Content Include="App_Themes\Default\Icons\file_48.png" />
+    <Content Include="App_Themes\Default\Icons\file_add_48.png" />
+    <Content Include="App_Themes\Default\Icons\group_32.png" />
+    <Content Include="App_Themes\Default\Icons\group_48.png" />
+    <Content Include="App_Themes\Default\Icons\inventory_48.png" />
+    <Content Include="App_Themes\Default\Icons\inventory_add_48.png" />
+    <Content Include="App_Themes\Default\Icons\keys_48.png" />
+    <Content Include="App_Themes\Default\Icons\location_48.png" />
+    <Content Include="App_Themes\Default\Icons\location_add_48.png" />
+    <Content Include="App_Themes\Default\Icons\mail-box_48.png" />
+    <Content Include="App_Themes\Default\Icons\motion_blur_48.png" />
+    <Content Include="App_Themes\Default\Icons\mssql_48.png" />
+    <Content Include="App_Themes\Default\Icons\mysql_48.png" />
+    <Content Include="App_Themes\Default\Icons\network_48.png" />
+    <Content Include="App_Themes\Default\Icons\network_add_48.png" />
+    <Content Include="App_Themes\Default\Icons\network_config_48.png" />
+    <Content Include="App_Themes\Default\Icons\notes_32.png" />
+    <Content Include="App_Themes\Default\Icons\notes_48.png" />
+    <Content Include="App_Themes\Default\Icons\operator_128.png" />
+    <Content Include="App_Themes\Default\Icons\primary_key_48.png" />
+    <Content Include="App_Themes\Default\Icons\record_48.png" />
+    <Content Include="App_Themes\Default\Icons\safe-mail_next_48.png" />
+    <Content Include="App_Themes\Default\Icons\serial_number_48.png" />
+    <Content Include="App_Themes\Default\Icons\server_mail_48.png" />
+    <Content Include="App_Themes\Default\Icons\sphere_128.png" />
+    <Content Include="App_Themes\Default\Icons\sphere_32.png" />
+    <Content Include="App_Themes\Default\Icons\sphere_48.png" />
+    <Content Include="App_Themes\Default\Icons\sphere_add_48.png" />
+    <Content Include="App_Themes\Default\Icons\sphere_close_48.png" />
+    <Content Include="App_Themes\Default\Icons\sphere_down_48.png" />
+    <Content Include="App_Themes\Default\Icons\sphere_help_48.png" />
+    <Content Include="App_Themes\Default\Icons\sphere_info_48.png" />
+    <Content Include="App_Themes\Default\Icons\sphere_search_48.png" />
+    <Content Include="App_Themes\Default\Icons\sphere_write_48.png" />
+    <Content Include="App_Themes\Default\Icons\sphere_zoom_48.png" />
+    <Content Include="App_Themes\Default\Icons\stadistics_128.png" />
+    <Content Include="App_Themes\Default\Icons\stadistics_48.png" />
+    <Content Include="App_Themes\Default\Icons\switch_off_48.png" />
+    <Content Include="App_Themes\Default\Icons\table_48.png" />
+    <Content Include="App_Themes\Default\Icons\table_zoom_48.png" />
+    <Content Include="App_Themes\Default\Icons\user_128.png" />
+    <Content Include="App_Themes\Default\Icons\user_32.png" />
+    <Content Include="App_Themes\Default\Icons\user_48.png" />
+    <Content Include="App_Themes\Default\Icons\user_add_48.png" />
+    <Content Include="App_Themes\Default\Icons\user_search_48.png" />
+    <Content Include="App_Themes\Default\Icons\user_write_48.png" />
+    <Content Include="App_Themes\Default\Icons\user_zoom_32.png" />
+    <Content Include="App_Themes\Default\Icons\user_zoom_48.png" />
+    <Content Include="App_Themes\Default\Icons\video_tape_48.png" />
+    <Content Include="App_Themes\Default\Icons\web_mail_48.png" />
+    <Content Include="App_Themes\Default\Icons\windows_lock_48.png" />
+    <Content Include="App_Themes\Default\Icons\windows_window_48.png" />
+    <Content Include="App_Themes\Default\Icons\windows_window_config_48.png" />
+    <Content Include="App_Themes\Default\Icons\windows_window_lock_48.png" />
+    <Content Include="App_Themes\Default\Icons\windows_window_zoom_48.png" />
+    <Content Include="App_Themes\Default\Icons\world_48.png" />
+    <Content Include="App_Themes\Default\Icons\world_lock_48.png" />
+    <Content Include="App_Themes\Default\Icons\world_save_48.png" />
+    <Content Include="App_Themes\Default\Images\breadcrumb_bkg.png" />
+    <Content Include="App_Themes\Default\Images\breadcrumb_inv_bkg.png" />
+    <Content Include="App_Themes\Default\Images\buttons_bar2_bkg.gif" />
+    <Content Include="App_Themes\Default\Images\buttons_bar_bkg.gif" />
+    <Content Include="App_Themes\Default\Images\button_bkg.png" />
+    <Content Include="App_Themes\Default\Images\button_hover_bkg.png" />
+    <Content Include="App_Themes\Default\Images\button_hover_bkg2.png" />
+    <Content Include="App_Themes\Default\Images\content_bkg.gif" />
+    <Content Include="App_Themes\Default\Images\content_bkg.png" />
+    <Content Include="App_Themes\Default\Images\delete_small.gif" />
+    <Content Include="App_Themes\Default\Images\edit_doc.gif" />
+    <Content Include="App_Themes\Default\Images\empty_grey.gif" />
+    <Content Include="App_Themes\Default\Images\FileManager\OpenFolder.gif" />
+    <Content Include="App_Themes\Default\Images\FileOperations\access_24.png" />
+    <Content Include="App_Themes\Default\Images\FileOperations\compress_video_24.png" />
+    <Content Include="App_Themes\Default\Images\FileOperations\compress_video_add_24.png" />
+    <Content Include="App_Themes\Default\Images\FileOperations\copy_24.png" />
+    <Content Include="App_Themes\Default\Images\FileOperations\copy_next_24.png" />
+    <Content Include="App_Themes\Default\Images\FileOperations\document_add_24.png" />
+    <Content Include="App_Themes\Default\Images\FileOperations\document_close_24.png" />
+    <Content Include="App_Themes\Default\Images\FileOperations\document_up_24.png" />
+    <Content Include="App_Themes\Default\Images\FileOperations\folder_add_24.png" />
+    <Content Include="App_Themes\Default\Images\flashlight_24.png" />
+    <Content Include="App_Themes\Default\Images\folder_48.png" />
+    <Content Include="App_Themes\Default\Images\footer_bkg.png" />
+    <Content Include="App_Themes\Default\Images\forward_32.png" />
+    <Content Include="App_Themes\Default\Images\gauge_bkg.gif" />
+    <Content Include="App_Themes\Default\Images\gauge_green.gif" />
+    <Content Include="App_Themes\Default\Images\gauge_left.gif" />
+    <Content Include="App_Themes\Default\Images\gauge_red.gif" />
+    <Content Include="App_Themes\Default\Images\gauge_right.gif" />
+    <Content Include="App_Themes\Default\Images\gauge_yellow.gif" />
+    <Content Include="App_Themes\Default\Images\grid_footer_bkg.gif" />
+    <Content Include="App_Themes\Default\Images\grid_header.gif" />
+    <Content Include="App_Themes\Default\Images\grid_header_sort.gif" />
+    <Content Include="App_Themes\Default\Images\header_bkg.gif" />
+    <Content Include="App_Themes\Default\Images\header_sep.gif" />
+    <Content Include="App_Themes\Default\Images\indicator.gif" />
+    <Content Include="App_Themes\Default\Images\left_menu_footer.gif" />
+    <Content Include="App_Themes\Default\Images\left_menu_header.gif" />
+    <Content Include="App_Themes\Default\Images\left_menu_hover_bkg.bmp" />
+    <Content Include="App_Themes\Default\Images\left_menu_hover_bkg.gif" />
+    <Content Include="App_Themes\Default\Images\menu_popup.bmp" />
+    <Content Include="App_Themes\Default\Images\menu_popup.gif" />
+    <Content Include="App_Themes\Default\Images\menu_popup2.gif" />
+    <Content Include="App_Themes\Default\Images\menu_popup_right.bmp" />
+    <Content Include="App_Themes\Default\Images\menu_popup_right.gif" />
+    <Content Include="App_Themes\Default\Images\module_collapse.gif" />
+    <Content Include="App_Themes\Default\Images\module_expand.gif" />
+    <Content Include="App_Themes\Default\Images\module_header_bkg.gif" />
+    <Content Include="App_Themes\Default\Images\module_header_left.gif" />
+    <Content Include="App_Themes\Default\Images\module_header_right.gif" />
+    <Content Include="App_Themes\Default\Images\module_left_curve.gif" />
+    <Content Include="App_Themes\Default\Images\module_right_curve.gif" />
+    <Content Include="App_Themes\Default\Images\notes_16.png" />
+    <Content Include="App_Themes\Default\Images\notes_24.png" />
+    <Content Include="App_Themes\Default\Images\path_sep_white.bmp" />
+    <Content Include="App_Themes\Default\Images\path_sep_white.gif" />
+    <Content Include="App_Themes\Default\Images\pause_32.png" />
+    <Content Include="App_Themes\Default\Images\play_32.png" />
+    <Content Include="App_Themes\Default\Images\rename.gif" />
+    <Content Include="App_Themes\Default\Images\search_button.png" />
+    <Content Include="App_Themes\Default\Images\search_method_bkg.gif" />
+    <Content Include="App_Themes\Default\Images\search_method_border.gif" />
+    <Content Include="App_Themes\Default\Images\shevron_bkg.gif" />
+    <Content Include="App_Themes\Default\Images\shevron_collapse.gif" />
+    <Content Include="App_Themes\Default\Images\shevron_expand.gif" />
+    <Content Include="App_Themes\Default\Images\shevron_line.gif" />
+    <Content Include="App_Themes\Default\Images\side_module_left_curve.gif" />
+    <Content Include="App_Themes\Default\Images\side_module_right_curve.gif" />
+    <Content Include="App_Themes\Default\Images\stop_32.png" />
+    <Content Include="App_Themes\Default\Images\tabs_bkg.gif" />
+    <Content Include="App_Themes\Default\Images\top_menu_bkg.gif" />
+    <Content Include="App_Themes\Default\Images\top_menu_bkg.png" />
+    <Content Include="App_Themes\Default\Images\top_menu_hover_bkg.gif" />
+    <Content Include="App_Themes\Default\Images\top_menu_hover_bkg.png" />
+    <Content Include="App_Themes\Default\Styles\Containers.css" />
+    <Content Include="App_Themes\Default\Styles\Grids.css" />
+    <Content Include="App_Themes\Default\Styles\Menus.css" />
+    <Content Include="App_Themes\Default\Styles\SkinLayout.css" />
+    <Content Include="JavaScript\AdapterUtils.js" />
+    <Content Include="JavaScript\MenuAdapter.js" />
+    <Content Include="JavaScript\TreeViewAdapter.js" />
+    <Content Include="Styles\BrowserSpecific\IEMenu6.css" />
+    <Content Include="Styles\BrowserSpecific\IEMenu7.css" />
+    <Content Include="Styles\ChangePassword.css" />
+    <Content Include="Styles\CreateUserWizard.css" />
+    <Content Include="Styles\DataList.css" />
+    <Content Include="Styles\DetailsView.css" />
+    <Content Include="Styles\FormView.css" />
+    <Content Include="Styles\GridView.css" />
+    <Content Include="Styles\Import.css" />
+    <Content Include="Styles\Login.css" />
+    <Content Include="Styles\LoginStatus.css" />
+    <Content Include="Styles\Menu.css" />
+    <Content Include="Styles\PasswordRecovery.css" />
+    <Content Include="Styles\TreeView.css" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="App_Containers\Default\Exchange.ascx" />
+    <Content Include="App_Containers\Default\VPS.ascx" />
+    <Content Include="App_GlobalResources\Ecommerce_Modules.ascx.resx">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="App_GlobalResources\Ecommerce_Pages.ascx.resx">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="App_GlobalResources\Ecommerce_SharedResources.ascx.resx">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="App_Skins\Default\Exchange.ascx" />
+    <Content Include="App_Skins\Default\SimpleWhite.ascx" />
+    <Content Include="App_Skins\Default\VPS.ascx" />
+    <Content Include="App_Themes\Default\Icons\3d_info_48.png" />
+    <Content Include="App_Themes\Default\Icons\3d_level_48.png" />
+    <Content Include="App_Themes\Default\Icons\3d_reload_48.png" />
+    <Content Include="App_Themes\Default\Icons\enterprise.png" />
+    <Content Include="App_Themes\Default\Icons\folder_up_48.png" />
+    <Content Include="App_Themes\Default\Icons\mail_48.png" />
+    <Content Include="App_Themes\Default\Icons\world_add_48.png" />
+    <Content Include="App_Themes\Default\Images\bbuser48.png" />
+    <Content Include="App_Themes\Default\Images\blackberry16.png" />
+    <Content Include="App_Themes\Default\Images\blackberry48.png" />
+    <Content Include="App_Themes\Default\Images\colors_48.png" />
+    <Content Include="App_Themes\Default\Images\crm_48.png" />
+    <Content Include="App_Themes\Default\Images\file.png" />
+    <Content Include="App_Themes\Default\Images\FileManager\asa.png" />
+    <Content Include="App_Themes\Default\Images\FileManager\asax.png" />
+    <Content Include="App_Themes\Default\Images\FileManager\ascx.png" />
+    <Content Include="App_Themes\Default\Images\FileManager\ashx.png" />
+    <Content Include="App_Themes\Default\Images\FileManager\asmx.png" />
+    <Content Include="App_Themes\Default\Images\FileManager\aspx.png" />
+    <Content Include="App_Themes\Default\Images\FileManager\avi.png" />
+    <Content Include="App_Themes\Default\Images\FileManager\bat.png" />
+    <Content Include="App_Themes\Default\Images\FileManager\bmp.png" />
+    <Content Include="App_Themes\Default\Images\FileManager\cab.png" />
+    <Content Include="App_Themes\Default\Images\FileManager\cdrom.png" />
+    <Content Include="App_Themes\Default\Images\FileManager\config.png" />
+    <Content Include="App_Themes\Default\Images\FileManager\cs.png" />
+    <Content Include="App_Themes\Default\Images\FileManager\csproj.png" />
+    <Content Include="App_Themes\Default\Images\FileManager\css.png" />
+    <Content Include="App_Themes\Default\Images\FileManager\dll.png" />
+    <Content Include="App_Themes\Default\Images\FileManager\doc.png" />
+    <Content Include="App_Themes\Default\Images\FileManager\docx.png" />
+    <Content Include="App_Themes\Default\Images\FileManager\drive.png" />
+    <Content Include="App_Themes\Default\Images\FileManager\exe.png" />
+    <Content Include="App_Themes\Default\Images\FileManager\folder.png" />
+    <Content Include="App_Themes\Default\Images\FileManager\gif.png" />
+    <Content Include="App_Themes\Default\Images\FileManager\htm.png" />
+    <Content Include="App_Themes\Default\Images\FileManager\html.png" />
+    <Content Include="App_Themes\Default\Images\FileManager\ini.png" />
+    <Content Include="App_Themes\Default\Images\FileManager\jpg.png" />
+    <Content Include="App_Themes\Default\Images\FileManager\js.png" />
+    <Content Include="App_Themes\Default\Images\FileManager\master.png" />
+    <Content Include="App_Themes\Default\Images\FileManager\mdb.png" />
+    <Content Include="App_Themes\Default\Images\FileManager\mp3.png" />
+    <Content Include="App_Themes\Default\Images\FileManager\pdf.png" />
+    <Content Include="App_Themes\Default\Images\FileManager\png.png" />
+    <Content Include="App_Themes\Default\Images\FileManager\ppt.png" />
+    <Content Include="App_Themes\Default\Images\FileManager\pptx.png" />
+    <Content Include="App_Themes\Default\Images\FileManager\skin.png" />
+    <Content Include="App_Themes\Default\Images\FileManager\sln.png" />
+    <Content Include="App_Themes\Default\Images\FileManager\sql.png" />
+    <Content Include="App_Themes\Default\Images\FileManager\tiff.png" />
+    <Content Include="App_Themes\Default\Images\FileManager\txt.png" />
+    <Content Include="App_Themes\Default\Images\FileManager\unknown.png" />
+    <Content Include="App_Themes\Default\Images\FileManager\vb.png" />
+    <Content Include="App_Themes\Default\Images\FileManager\vbproj.png" />
+    <Content Include="App_Themes\Default\Images\FileManager\vsd.png" />
+    <Content Include="App_Themes\Default\Images\FileManager\xls.png" />
+    <Content Include="App_Themes\Default\Images\FileManager\xlsx.png" />
+    <Content Include="App_Themes\Default\Images\FileManager\xml.png" />
+    <Content Include="App_Themes\Default\Images\FileManager\zip.png" />
+    <Content Include="App_Themes\Default\Images\folder.png" />
+    <Content Include="App_Themes\Default\Images\logo.png" />
+    <Content Include="App_Themes\Default\Images\Exchange\accounting_mail_16.png" />
+    <Content Include="App_Themes\Default\Images\Exchange\activesync_config_48.png" />
+    <Content Include="App_Themes\Default\Icons\atm_48.png" />
+    <Content Include="App_Themes\Default\Icons\atm_add_48.png" />
+    <Content Include="App_Themes\Default\Icons\atm_config_48.png" />
+    <Content Include="App_Themes\Default\Icons\atm_write_48.png" />
+    <Content Include="App_Themes\Default\Icons\basket_128.png" />
+    <Content Include="App_Themes\Default\Icons\dimensions_48.png" />
+    <Content Include="App_Themes\Default\Icons\dimensions_add_48.png" />
+    <Content Include="App_Themes\Default\Icons\dimensions_write_48.png" />
+    <Content Include="App_Themes\Default\Icons\foreign_key_128.png" />
+    <Content Include="App_Themes\Default\Icons\foreign_key_48.png" />
+    <Content Include="App_Themes\Default\Icons\hourglass_48.png" />
+    <Content Include="App_Themes\Default\Icons\inventory_category_48.png" />
+    <Content Include="App_Themes\Default\Icons\inventory_category_add_48.png" />
+    <Content Include="App_Themes\Default\Icons\inventory_category_write_48.png" />
+    <Content Include="App_Themes\Default\Icons\inventory_write_48.png" />
+    <Content Include="App_Themes\Default\Icons\invoice_48.png" />
+    <Content Include="App_Themes\Default\Icons\invoice_close_48.png" />
+    <Content Include="App_Themes\Default\Icons\invoice_info_48.png" />
+    <Content Include="App_Themes\Default\Icons\invoice_next_48.png" />
+    <Content Include="App_Themes\Default\Icons\invoice_ok_48.png" />
+    <Content Include="App_Themes\Default\Icons\money_bag_48.png" />
+    <Content Include="App_Themes\Default\Icons\primary_key_128.png" />
+    <Content Include="App_Themes\Default\Icons\reward_48.png" />
+    <Content Include="App_Themes\Default\Icons\reward_info_48.png" />
+    <Content Include="App_Themes\Default\Icons\shopping_cart_128_hot.png" />
+    <Content Include="App_Themes\Default\Icons\sphere_config_48.png" />
+    <Content Include="App_Themes\Default\Icons\sphere_level_48.png" />
+    <Content Include="App_Themes\Default\Icons\sphere_star_48.png" />
+    <Content Include="App_Themes\Default\Icons\store_house_128.png" />
+    <Content Include="App_Themes\Default\Icons\store_house_config_48.png" />
+    <Content Include="App_Themes\Default\Icons\template_48.png" />
+    <Content Include="App_Themes\Default\Icons\template_mail_48.png" />
+    <Content Include="App_Themes\Default\Icons\tool_48.png" />
+    <Content Include="App_Themes\Default\Icons\user_config_48.png" />
+    <Content Include="App_Themes\Default\Icons\user_help_48.png" />
+    <Content Include="App_Themes\Default\Icons\user_info_48.png" />
+    <Content Include="App_Themes\Default\Icons\user_lock_48.png" />
+    <Content Include="App_Themes\Default\Icons\webcam_48.png" />
+    <Content Include="App_Themes\Default\Icons\webcam_add_48.png" />
+    <Content Include="App_Themes\Default\Icons\webcam_write_48.png" />
+    <Content Include="App_Themes\Default\Icons\world_level_48.png" />
+    <Content Include="App_Themes\Default\Images\admin_16.png" />
+    <Content Include="App_Themes\Default\Images\button_bkg2.png" />
+    <Content Include="App_Skins\Default\Storefront2.ascx" />
+    <Content Include="App_Themes\Default\Images\delete_16.png" />
+    <Content Include="App_Themes\Default\Images\Ecommerce\product_head_bg.gif" />
+    <Content Include="App_Themes\Default\Images\error_big.gif" />
+    <Content Include="App_Themes\Default\Images\error_icon_small.gif" />
+    <Content Include="App_Themes\Default\Images\Exchange\accounting_mail_48.png" />
+    <Content Include="App_Themes\Default\Images\Exchange\accounting_mail_add_48.png" />
+    <Content Include="App_Themes\Default\Images\Exchange\address_book.gif" />
+    <Content Include="App_Themes\Default\Images\Exchange\admin_16.png" />
+    <Content Include="App_Themes\Default\Images\Exchange\admin_48.png" />
+    <Content Include="App_Themes\Default\Images\Exchange\admin_add_48.png" />
+    <Content Include="App_Themes\Default\Images\Exchange\blackberry16.png" />
+    <Content Include="App_Themes\Default\Images\Exchange\bottom_bg.gif" />
+    <Content Include="App_Themes\Default\Images\Exchange\building.png" />
+    <Content Include="App_Themes\Default\Images\Exchange\bullet.gif" />
+    <Content Include="App_Themes\Default\Images\Exchange\bullet_hover.gif" />
+    <Content Include="App_Themes\Default\Images\Exchange\checkbox.png" />
+    <Content Include="App_Themes\Default\Images\Exchange\company24.png" />
+    <Content Include="App_Themes\Default\Images\Exchange\company__48.png" />
+    <Content Include="App_Themes\Default\Images\Exchange\company__add_48.png" />
+    <Content Include="App_Themes\Default\Images\Exchange\contacts_48.png" />
+    <Content Include="App_Themes\Default\Images\Exchange\contacts_add_48.png" />
+    <Content Include="App_Themes\Default\Images\Exchange\contact_16.gif" />
+    <Content Include="App_Themes\Default\Images\Exchange\crm_16.png" />
+    <Content Include="App_Themes\Default\Images\Exchange\delete.gif" />
+    <Content Include="App_Themes\Default\Images\Exchange\distribution_list_48.png" />
+    <Content Include="App_Themes\Default\Images\Exchange\distribution_list_add_48.png" />
+    <Content Include="App_Themes\Default\Images\Exchange\dlist_16.gif" />
+    <Content Include="App_Themes\Default\Images\Exchange\equipment_16.gif" />
+    <Content Include="App_Themes\Default\Images\Exchange\exchange24.png" />
+    <Content Include="App_Themes\Default\Images\Exchange\mailbox_16.gif" />
+    <Content Include="App_Themes\Default\Images\Exchange\mail_domain_48.png" />
+    <Content Include="App_Themes\Default\Images\Exchange\mail_domain_add_48.png" />
+    <Content Include="App_Themes\Default\Images\Exchange\main_bg.gif" />
+    <Content Include="App_Themes\Default\Images\Exchange\menu_item_bg.gif" />
+    <Content Include="App_Themes\Default\Images\Exchange\module_footer.gif" />
+    <Content Include="App_Themes\Default\Images\Exchange\module_header.gif" />
+    <Content Include="App_Themes\Default\Images\Exchange\ocs16.png" />
+    <Content Include="App_Themes\Default\Images\Exchange\publicfolder_48.png" />
+    <Content Include="App_Themes\Default\Images\Exchange\publicfolder_add_48.png" />
+    <Content Include="App_Themes\Default\Images\Exchange\room_16.gif" />
+    <Content Include="App_Themes\Default\Images\Exchange\server_mail_48.png" />
+    <Content Include="App_Themes\Default\Images\Exchange\server_mail_add_48.png" />
+    <Content Include="App_Themes\Default\Images\Exchange\setup_48.png" />
+    <Content Include="App_Themes\Default\Images\Exchange\sharepoint24.png" />
+    <Content Include="App_Themes\Default\Images\Exchange\storage_48.png" />
+    <Content Include="App_Themes\Default\Images\Exchange\storage_limits_48.png" />
+    <Content Include="App_Themes\Default\Images\FailureAudit_icon_small.gif" />
+    <Content Include="App_Themes\Default\Images\forward_16.png" />
+    <Content Include="App_Themes\Default\Images\forward_24.png" />
+    <Content Include="App_Themes\Default\Images\information_big.gif" />
+    <Content Include="App_Themes\Default\Images\information_icon_small.gif" />
+    <Content Include="App_Themes\Default\Images\last_16.png" />
+    <Content Include="App_Themes\Default\Images\last_24.png" />
+    <Content Include="App_Themes\Default\Images\left_news_menu_header.png" />
+    <Content Include="App_Themes\Default\Images\lock_16.gif" />
+    <Content Include="App_Themes\Default\Images\ocs48.png" />
+    <Content Include="App_Themes\Default\Images\operator_16.png" />
+    <Content Include="App_Themes\Default\Images\pause_16.png" />
+    <Content Include="App_Themes\Default\Images\pause_24.png" />
+    <Content Include="App_Themes\Default\Images\pencil_16.png" />
+    <Content Include="App_Themes\Default\Images\pencil_24.png" />
+    <Content Include="App_Themes\Default\Images\play_16.png" />
+    <Content Include="App_Themes\Default\Images\play_24.png" />
+    <Content Include="App_Themes\Default\Images\sphere_16.png" />
+    <Content Include="App_Themes\Default\Images\stop_16.png" />
+    <Content Include="App_Themes\Default\Images\stop_24.png" />
+    <Content Include="App_Themes\Default\Images\SuccessAudit_icon_small.gif" />
+    <Content Include="App_Themes\Default\Images\user_16.png" />
+    <Content Include="App_Themes\Default\Images\VPS\add_server_48.png" />
+    <Content Include="App_Themes\Default\Images\VPS\apply.png" />
+    <Content Include="App_Themes\Default\Images\VPS\apply1.png" />
+    <Content Include="App_Themes\Default\Images\VPS\apply2.png" />
+    <Content Include="App_Themes\Default\Images\VPS\delete.png" />
+    <Content Include="App_Themes\Default\Images\VPS\delete3.png" />
+    <Content Include="App_Themes\Default\Images\VPS\delete4.png" />
+    <Content Include="App_Themes\Default\Images\VPS\delete_server_48.png" />
+    <Content Include="App_Themes\Default\Images\VPS\dvd_drive_48.png" />
+    <Content Include="App_Themes\Default\Images\VPS\help_48.png" />
+    <Content Include="App_Themes\Default\Images\VPS\module_header.gif" />
+    <Content Include="App_Themes\Default\Images\VPS\network_48.png" />
+    <Content Include="App_Themes\Default\Images\VPS\pause.png" />
+    <Content Include="App_Themes\Default\Images\VPS\pause2.png" />
+    <Content Include="App_Themes\Default\Images\VPS\pause3.png" />
+    <Content Include="App_Themes\Default\Images\VPS\rdc16.png" />
+    <Content Include="App_Themes\Default\Images\VPS\reboot.png" />
+    <Content Include="App_Themes\Default\Images\VPS\record_48.png" />
+    <Content Include="App_Themes\Default\Images\VPS\refresh.png" />
+    <Content Include="App_Themes\Default\Images\VPS\rename.gif" />
+    <Content Include="App_Themes\Default\Images\VPS\reset.png" />
+    <Content Include="App_Themes\Default\Images\VPS\reset2.png" />
+    <Content Include="App_Themes\Default\Images\VPS\revert.png" />
+    <Content Include="App_Themes\Default\Images\VPS\save.png" />
+    <Content Include="App_Themes\Default\Images\VPS\server.png" />
+    <Content Include="App_Themes\Default\Images\VPS\servers_48.png" />
+    <Content Include="App_Themes\Default\Images\VPS\server_config_48.png" />
+    <Content Include="App_Themes\Default\Images\VPS\server_permission_48.png" />
+    <Content Include="App_Themes\Default\Images\VPS\server_setup_48.png" />
+    <Content Include="App_Themes\Default\Images\VPS\shutdown.png" />
+    <Content Include="App_Themes\Default\Images\VPS\snapshot.png" />
+    <Content Include="App_Themes\Default\Images\VPS\snapshot_48.png" />
+    <Content Include="App_Themes\Default\Images\VPS\start.png" />
+    <Content Include="App_Themes\Default\Images\VPS\start2.png" />
+    <Content Include="App_Themes\Default\Images\VPS\stop.png" />
+    <Content Include="App_Themes\Default\Images\VPS\stop2.png" />
+    <Content Include="App_Themes\Default\Images\VPS\tool_48.png" />
+    <Content Include="App_Themes\Default\Images\VPS\turnoff.png" />
+    <Content Include="App_Themes\Default\Images\warning_big.gif" />
+    <Content Include="App_Themes\Default\Images\warning_icon_small.gif" />
+    <EmbeddedResource Include="Code\Adapters\empty.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="DesktopModules\" />
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+  <ProjectExtensions>
+    <VisualStudio>
+      <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
+        <WebProjectProperties>
+          <UseIIS>False</UseIIS>
+          <AutoAssignPort>False</AutoAssignPort>
+          <DevelopmentServerPort>9001</DevelopmentServerPort>
+          <DevelopmentServerVPath>/</DevelopmentServerVPath>
+          <IISUrl>http://localhost/WebPortal</IISUrl>
+          <NTLMAuthentication>False</NTLMAuthentication>
+          <UseCustomServer>False</UseCustomServer>
+          <CustomServerUrl>
+          </CustomServerUrl>
+          <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
+        </WebProjectProperties>
+      </FlavorProperties>
+    </VisualStudio>
+  </ProjectExtensions>
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" />
+</Project>
