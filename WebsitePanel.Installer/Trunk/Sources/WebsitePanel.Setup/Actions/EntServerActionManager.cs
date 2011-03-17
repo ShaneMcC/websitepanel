@@ -383,6 +383,7 @@ namespace WebsitePanel.Setup.Actions
 			new SetNtfsPermissionsAction(),
 			new CreateWebApplicationPoolAction(),
 			new CreateWebSiteAction(),
+			new SwitchAppPoolAspNetVersion(),
 			new CreateDatabaseAction(),
 			new CreateDatabaseUserAction(),
 			new ExecuteInstallSqlAction(),

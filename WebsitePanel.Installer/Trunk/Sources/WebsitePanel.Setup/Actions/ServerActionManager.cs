@@ -32,8 +32,15 @@ using System.Text;
 using System.IO;
 using WebsitePanel.Setup.Web;
 using WebsitePanel.Setup.Windows;
+using Microsoft.Web.Management;
+using Microsoft.Web.Administration;
 using Ionic.Zip;
 using System.Xml;
+using System.Management;
+using Microsoft.Win32;
+using System.Linq;
+using System.Xml.Linq;
+using System.Xml.XPath;
 
 namespace WebsitePanel.Setup.Actions
 {
@@ -927,6 +934,336 @@ namespace WebsitePanel.Setup.Actions
 		}
 	}
 
+	public class SwitchAppPoolAspNetVersion : Action, IInstallAction
+	{
+		public const string Iis6_AspNet_v4 = "v4.0.30319";
+		public const string Iis7_AspNet_v4 = "v4.0";
+
+		void IInstallAction.Run(SetupVariables vars)
+		{
+			if (vars.IISVersion.Major == 7)
+			{
+				ChangeAspNetVersionOnIis7(vars);
+			}
+			else
+			{
+				ChangeAspNetVersionOnIis6(vars);
+			}
+		}
+
+		private void ChangeAspNetVersionOnIis7(SetupVariables vars)
+		{
+			using (var srvman = new ServerManager())
+			{
+				var appPool = srvman.ApplicationPools[vars.WebApplicationPoolName];
+				//
+				if (appPool == null)
+					throw new ArgumentNullException("appPool");
+				//
+				appPool.ManagedRuntimeVersion = Iis7_AspNet_v4;
+				//
+				srvman.CommitChanges();
+			}
+		}
+
+		private void ChangeAspNetVersionOnIis6(SetupVariables vars)
+		{
+			//
+			Utils.ExecAspNetRegistrationToolCommand(vars, String.Format("-norestart -s {0}", vars.WebSiteId));
+		}
+	}
+
+	public class RegisterAspNet40Action : Action, IInstallAction
+	{
+		void IInstallAction.Run(SetupVariables vars)
+		{
+			if (CheckAspNet40Registered(vars) == false)
+			{
+				RegisterAspNet40(vars);
+			}
+		}
+
+		private void RegisterAspNet40(Setup.SetupVariables setupVariables)
+		{
+			// Run ASP.NET Registration Tool command
+			Utils.ExecAspNetRegistrationToolCommand(setupVariables, arguments: (setupVariables.IISVersion.Major == 6) ? "-ir -enable" : "-ir");
+		}
+
+		private bool CheckAspNet40Registered(SetupVariables setupVariables)
+		{
+			//
+			var aspNet40Registered = false;
+			// Run ASP.NET Registration Tool command
+			var psOutput = Utils.ExecAspNetRegistrationToolCommand(setupVariables, "-lv");
+			// Split process output per lines
+			var strLines = psOutput.Split(new char[] { '\n' }, StringSplitOptions.RemoveEmptyEntries);
+			// Lookup for an evidence of ASP.NET 4.0
+			aspNet40Registered = strLines.Any((string s) => { return s.Contains("4.0.30319.0"); });
+			//
+			return aspNet40Registered;
+		}
+	}
+
+	public class EnableAspNetWebExtensionAction : Action, IInstallAction
+	{
+		void IInstallAction.Run(SetupVariables vars)
+		{
+			if (vars.IISVersion.Major > 6)
+				return;
+			// Enable ASP.NET 4.0 Web Server Extension if it is prohibited
+			if (Utils.GetAspNetWebExtensionStatus_Iis6(vars) == WebExtensionStatus.Prohibited)
+			{
+				Utils.EnableAspNetWebExtension_Iis6();
+			}
+		}
+	}
+
+	public class MigrateServerWebConfigAction : Action, IInstallAction
+	{
+		void IInstallAction.Run(SetupVariables vars)
+		{
+			//
+			DoMigration(vars);
+		}
+
+		private void DoMigration(SetupVariables vars)
+		{
+			var fileName = Path.Combine(vars.InstallationFolder, "web.config");
+			//
+			var xdoc = XDocument.Load(fileName);
+			// Modify <system.web /> node child elements
+			var swnode = xdoc.Root.Element("system.web");
+			{
+				//
+				if (swnode.Element("compilation") != null)
+					swnode.Element("compilation").Remove();
+			};
+			// Save all changes
+			xdoc.Save(fileName);
+		}
+	}
+
+	public class MigrateEntServerWebConfigAction : Action, IInstallAction
+	{
+		void IInstallAction.Run(SetupVariables vars)
+		{
+			//
+			DoMigration(vars);
+		}
+
+		private void DoMigration(SetupVariables vars)
+		{
+			var fileName = Path.Combine(vars.InstallationFolder, "web.config");
+			//
+			var xdoc = XDocument.Load(fileName);
+			// Modify <system.web /> node child elements
+			var swnode = xdoc.Root.Element("system.web");
+			{
+				//
+				if (swnode.Element("compilation") != null)
+					swnode.Element("compilation").Remove();
+			};
+			// Save all changes
+			xdoc.Save(fileName);
+		}
+	}
+
+	public class AdjustHttpRuntimeRequestLengthAction : Action, IInstallAction
+	{
+		void IInstallAction.Run(SetupVariables vars)
+		{
+			//
+			DoMigration(vars);
+		}
+
+		private void DoMigration(SetupVariables vars)
+		{
+			var fileName = Path.Combine(vars.InstallationFolder, "web.config");
+			//
+			var xdoc = XDocument.Load(fileName);
+			// Modify <system.web /> node child elements
+			var swnode = xdoc.Root.Element("system.web");
+			{
+				// Adjust httpRuntime maximum request length
+				if (swnode.Element("httpRuntime") != null)
+				{
+					var htnode = swnode.Element("httpRuntime");
+					//
+					htnode.SetAttributeValue("maxRequestLength", "16384");
+				}
+			};
+			// Save all changes
+			xdoc.Save(fileName);
+		}
+	}
+
+	public class MigrateWebPortalWebConfigAction : Action, IInstallAction
+	{
+		void IInstallAction.Run(SetupVariables vars)
+		{
+			//
+			if (vars.IISVersion.Major == 6)
+			{
+				DoMigrationOnIis6(vars);
+			}
+			else
+			{
+				DoMigrationOnIis7(vars);
+			}
+		}
+
+		private void DoMigrationOnIis7(SetupVariables vars)
+		{
+			var fileName = Path.Combine(vars.InstallationFolder, "web.config");
+			//
+			var xdoc = XDocument.Load(fileName);
+			// Remove <configSections /> node
+			if (xdoc.Root.Element("configSections") != null)
+				xdoc.Root.Element("configSections").Remove();
+			// Remove <system.web.extensions /> node
+			if (xdoc.Root.Element("system.web.extensions") != null)
+				xdoc.Root.Element("system.web.extensions").Remove();
+			// Modify <system.web /> node child elements
+			var swnode = xdoc.Root.Element("system.web");
+			{
+				// Modify <pages /> node
+				var pnode = swnode.Element("pages");
+				{
+					// Set rendering compatibility
+					pnode.SetAttributeValue("controlRenderingCompatibilityVersion", "3.5");
+					// Select all legacy controls definitions
+					var nodes = from node in pnode.Element("controls").Elements()
+								where (String)node.Attribute("tagPrefix") == "asp"
+								select node;
+					// Remove all nodes found
+					nodes.Remove();
+				};
+				// Set compatible request validation mode
+				swnode.Element("httpRuntime").SetAttributeValue("requestValidationMode", "2.0");
+				// Modify <httpHandlers /> node
+				var hhnode = swnode.Element("httpHandlers");
+				{
+					// Remove <remove /> node
+					if (hhnode.XPathSelectElement("remove[@path='*.asmx']") != null)
+						hhnode.XPathSelectElement("remove[@path='*.asmx']").Remove();
+					//
+					if (hhnode.XPathSelectElement("add[@path='*_AppService.axd']") != null)
+						hhnode.XPathSelectElement("add[@path='*_AppService.axd']").Remove();
+					//
+					if (hhnode.XPathSelectElement("add[@path='*.asmx']") != null)
+						hhnode.XPathSelectElement("add[@path='*.asmx']").Remove();
+					//
+					if (hhnode.XPathSelectElement("add[@path='ScriptResource.axd']") != null)
+						hhnode.XPathSelectElement("add[@path='ScriptResource.axd']").Remove();
+				};
+				// Remove <httpModules /> node
+				if (swnode.Element("httpModules") != null)
+					swnode.Element("httpModules").Remove();
+				//
+				if (swnode.Element("compilation") != null)
+					swnode.Element("compilation").Remove();
+			};
+			// Remove <system.codedom /> node
+			if (xdoc.Root.Element("system.codedom") != null)
+				xdoc.Root.Element("system.codedom").Remove();
+			//
+			var swrnode = xdoc.Root.Element("system.webServer");
+			{
+				// Remove <modules /> node
+				if (swrnode.Element("modules") != null)
+					swrnode.Element("modules").Remove();
+				// Remove <handlers /> node
+				if (swrnode.Element("handlers") != null)
+					swrnode.Element("handlers").Remove();
+			};
+			// Remove <runtime /> node
+			if (xdoc.Root.Element("runtime") != null)
+				xdoc.Root.Element("runtime").Remove();
+			// Save all changes
+			xdoc.Save(fileName);
+		}
+
+		private void DoMigrationOnIis6(SetupVariables vars)
+		{
+			var fileName = Path.Combine(vars.InstallationFolder, "web.config");
+			//
+			var xdoc = XDocument.Load(fileName);
+			// Remove <configSections /> node
+			if (xdoc.Root.Element("configSections") != null)
+				xdoc.Root.Element("configSections").Remove();
+			// Remove <system.web.extensions /> node
+			if (xdoc.Root.Element("system.web.extensions") != null)
+				xdoc.Root.Element("system.web.extensions").Remove();
+			// Modify <system.web /> node child elements
+			var swnode = xdoc.Root.Element("system.web");
+			{
+				// Modify <pages /> node
+				var pnode = swnode.Element("pages");
+				{
+					// Set rendering compatibility
+					pnode.SetAttributeValue("controlRenderingCompatibilityVersion", "3.5");
+					// Select all legacy controls definitions
+					var nodes = from node in pnode.Element("controls").Elements()
+								where (String)node.Attribute("tagPrefix") == "asp"
+								select node;
+					// Remove all nodes found
+					nodes.Remove();
+				};
+				// Set compatible request validation mode
+				swnode.Element("httpRuntime").SetAttributeValue("requestValidationMode", "2.0");
+				// Modify <httpHandlers /> node
+				var hhnode = swnode.Element("httpHandlers");
+				{
+					// Remove <remove /> node
+					if (hhnode.XPathSelectElement("remove[@path='*.asmx']") != null)
+						hhnode.XPathSelectElement("remove[@path='*.asmx']").Remove();
+					//
+					if (hhnode.XPathSelectElement("add[@path='*_AppService.axd']") != null)
+						hhnode.XPathSelectElement("add[@path='*_AppService.axd']").Remove();
+					//
+					if (hhnode.XPathSelectElement("add[@path='*.asmx']") != null)
+						hhnode.XPathSelectElement("add[@path='*.asmx']").Remove();
+					//
+					if (hhnode.XPathSelectElement("add[@path='ScriptResource.axd']") != null)
+						hhnode.XPathSelectElement("add[@path='ScriptResource.axd']").Remove();
+				};
+				// Remove <httpModules /> node
+				if (swnode.Element("httpModules") != null)
+					swnode.Element("httpModules").Remove();
+				// Remove <compilation /> node
+				if (swnode.Element("compilation") != null)
+					swnode.Element("compilation").Remove();
+			};
+			// Remove <system.codedom /> node
+			if (xdoc.Root.Element("system.codedom") != null)
+				xdoc.Root.Element("system.codedom").Remove();
+			// Remove <runtime /> node
+			if (xdoc.Root.Element("runtime") != null)
+				xdoc.Root.Element("runtime").Remove();
+			// Save all changes
+			xdoc.Save(fileName);
+		}
+	}
+
+	public class CleanupWebsitePanelModulesListAction : Action, IInstallAction
+	{
+		void IInstallAction.Run(SetupVariables vars)
+		{
+			var filePath = Path.Combine(vars.InstallationFolder, @"App_Data\WebsitePanel_Modules.config");
+			//
+			var xdoc = XDocument.Load(filePath);
+			//
+			if (xdoc.XPathSelectElement("//Control[@key='view_addon']") == null)
+			{
+				return;
+			}
+			//
+			xdoc.XPathSelectElement("//Control[@key='view_addon']").Remove();
+			//
+			xdoc.Save(filePath);
+		}
+	}
+
 	#endregion
 
 	public class RaiseExceptionAction : Action, IInstallAction
@@ -956,6 +1293,7 @@ namespace WebsitePanel.Setup.Actions
 			new SetNtfsPermissionsAction(),
 			new CreateWebApplicationPoolAction(),
 			new CreateWebSiteAction(),
+			new SwitchAppPoolAspNetVersion(),
 			new SaveComponentConfigSettingsAction()
 		};
 
@@ -982,5 +1320,5 @@ namespace WebsitePanel.Setup.Actions
 		{
 			CurrentScenario.AddRange(InstallScenario);
 		}
-	}	
+	}
 }

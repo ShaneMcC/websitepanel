@@ -2,16 +2,18 @@
 using System.Collections.Generic;
 using System.Text;
 using System.Windows.Forms;
+using WebsitePanel.Setup.Actions;
 
 namespace WebsitePanel.Setup
 {
 	/// <summary>
-	/// Release 1.1.1
+	/// Release 1.2.0
 	/// </summary>
-	public class EnterpriseServer111 : EnterpriseServer
+	public class EnterpriseServer120 : EnterpriseServer
 	{
 		public static new object Install(object obj)
 		{
+			//
 			return EnterpriseServer.InstallBase(obj, "1.1.0");
 		}
 
@@ -27,7 +29,7 @@ namespace WebsitePanel.Setup
 
 		public static new DialogResult Update(object obj)
 		{
-			return UpdateBase(obj, "1.1.0", "1.1.0", true);
+			return UpdateBase(obj, "1.2.0", "1.1.0", true, new InstallAction(ActionTypes.SwitchEntServer2AspNet40));
 		}
 	}
 

@@ -49,17 +49,24 @@ namespace WebsitePanel.Setup
 
 		
 
-        private const string AspNet11 = "v1.1.4322";
-        private const string AspNet20 = "v2.0.50727";
+        public const string AspNet11 = "v1.1.4322";
+        public const string AspNet20 = "v2.0.50727";
+		public const string AspNet40 = "v4.0.30319";
 
         public const string WEBSITEPANEL_POOL = "WebsitePanel Pool";
 		public const string WEBSITEPANEL_ADMIN_POOL = "WebsitePanel Admin Pool";
 
-        private static string[] aspNet11Maps = new string[] { ".asax", ".ascx", ".ashx",
+        internal static string[] aspNet11Maps = new string[] { ".asax", ".ascx", ".ashx",
         ".asmx", ".aspx", ".axd", ".config", ".cs", ".csproj", ".licx", ".rem", ".resources", ".resx",
         ".soap", ".vb", ".vbproj", ".vsdisco", ".webinfo"};
 
-        private static string[] aspNet20Maps = new string[] { ".ad", ".adprototype", ".asax", ".ascx", ".ashx",
+        internal static string[] aspNet20Maps = new string[] { ".ad", ".adprototype", ".asax", ".ascx", ".ashx",
+        ".asmx", ".aspx", ".axd", ".browser", ".cd", ".compiled", ".config", ".cs", ".csproj", ".dd",
+        ".exclude", ".java", ".jsl", ".ldb", ".ldd", ".lddprototype", ".ldf", ".licx", ".master",
+        ".mdb", ".mdf", ".msgx", ".refresh", ".rem", ".resources", ".resx", ".sd", ".sdm", ".sdmDocument",
+        ".sitemap", ".skin", ".soap", ".svc", ".vb", ".vbproj", ".vjsproj", ".vsdisco", ".webinfo"};
+
+		internal static string[] aspNet40Maps = new string[] { ".ad", ".adprototype", ".asax", ".ascx", ".ashx",
         ".asmx", ".aspx", ".axd", ".browser", ".cd", ".compiled", ".config", ".cs", ".csproj", ".dd",
         ".exclude", ".java", ".jsl", ".ldb", ".ldd", ".lddprototype", ".ldf", ".licx", ".master",
         ".mdb", ".mdf", ".msgx", ".refresh", ".rem", ".resources", ".resx", ".sd", ".sdm", ".sdmDocument",
@@ -241,7 +248,7 @@ namespace WebsitePanel.Setup
 			virtDir.HttpRedirect = (string)obj.Properties["HttpRedirect"].Value;
 		}
 
-		private static string GetVirtualDirectoryPath(string siteId, string directoryName)
+		internal static string GetVirtualDirectoryPath(string siteId, string directoryName)
 		{
 			string path = siteId + "/ROOT";
 			if(directoryName != null && directoryName != string.Empty)

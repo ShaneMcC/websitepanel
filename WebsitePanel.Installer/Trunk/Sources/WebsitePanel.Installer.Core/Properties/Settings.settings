@@ -2,7 +2,7 @@
 <SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="WebsitePanel.Installer.Core.Properties" GeneratedClassName="Settings">
   <Profiles />
   <Settings>
-    <Setting Name="WebsitePanel_Installer_Core_Services_InstallerService" Type="(Web Service URL)" Scope="Application">
+    <Setting Name="WebsitePanel_Installer_Core_InstallerService_InstallerService" Type="(Web Service URL)" Scope="Application">
       <Value Profile="(Default)">http://www.websitepanel.net/Services/InstallerService.asmx</Value>
     </Setting>
   </Settings>

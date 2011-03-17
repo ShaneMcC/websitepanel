@@ -15,7 +15,7 @@
     <OldToolsVersion>3.5</OldToolsVersion>
     <UpgradeBackupLocation>
     </UpgradeBackupLocation>
-    <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <PublishUrl>publish\</PublishUrl>
     <Install>true</Install>
     <InstallFrom>Disk</InstallFrom>
@@ -31,6 +31,7 @@
     <IsWebBootstrapper>false</IsWebBootstrapper>
     <UseApplicationTrust>false</UseApplicationTrust>
     <BootstrapperEnabled>true</BootstrapperEnabled>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -80,15 +81,16 @@
     <Reference Include="System.Web.Services" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
-    <Reference Include="WebsitePanel.EnterpriseServer.Base, Version=1.0.0.0, Culture=neutral, PublicKeyToken=da8782a6fc4d0081, processorArchitecture=MSIL">
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="WebsitePanel.EnterpriseServer.Base, Version=1.1.1.0, Culture=neutral, PublicKeyToken=da8782a6fc4d0081, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\WebsitePanel\Trunk\Bin\WebsitePanel.EnterpriseServer.Base.dll</HintPath>
     </Reference>
-    <Reference Include="WebsitePanel.EnterpriseServer.Client, Version=1.0.0.0, Culture=neutral, PublicKeyToken=da8782a6fc4d0081, processorArchitecture=MSIL">
+    <Reference Include="WebsitePanel.EnterpriseServer.Client, Version=1.1.1.0, Culture=neutral, PublicKeyToken=da8782a6fc4d0081, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\WebsitePanel\Trunk\Bin\WebsitePanel.EnterpriseServer.Client.dll</HintPath>
     </Reference>
-    <Reference Include="WebsitePanel.Providers.Base, Version=1.0.0.0, Culture=neutral, PublicKeyToken=da8782a6fc4d0081, processorArchitecture=MSIL">
+    <Reference Include="WebsitePanel.Providers.Base, Version=1.1.1.0, Culture=neutral, PublicKeyToken=da8782a6fc4d0081, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\WebsitePanel\Trunk\Bin\WebsitePanel.Providers.Base.dll</HintPath>
     </Reference>

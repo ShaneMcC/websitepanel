@@ -45,6 +45,8 @@ namespace WebsitePanel.Setup
 {
 	public partial class ConfigurationCheckPage : BannerWizardPage
 	{
+		public const string AspNet40HasBeenInstalledMessage = "ASP.NET 4.0 has been installed.";
+
 		private Thread thread;
 		private List<ConfigurationCheck> checks;
 
@@ -285,28 +287,31 @@ namespace WebsitePanel.Setup
 
 		private CheckStatuses CheckASPNET(out string details)
 		{
-			details = "ASP.NET 2.0 is installed.";
+			details = "ASP.NET 4.0 is installed.";
 			CheckStatuses ret = CheckStatuses.Success;
 			try
 			{
+				// IIS 6
 				if (SetupVariables.IISVersion.Major == 6)
 				{
-					//iis 6
-					WebExtensionStatus status = GetASPNETStatus();
-					switch (status)
+					//
+					if (Utils.CheckAspNet40Registered(SetupVariables) == false)
 					{
-						case WebExtensionStatus.NotInstalled:
-						case WebExtensionStatus.Prohibited:
-							InstallASPNET();
-							EnableASPNET();
-							ret = CheckStatuses.Warning;
-							details = "ASP.NET 2.0 has been installed.";
-							break;
+						// Register ASP.NET 4.0
+						Utils.RegisterAspNet40(SetupVariables);
+						//
+						ret = CheckStatuses.Warning;
+						details = AspNet40HasBeenInstalledMessage;
+					}
+					// Enable ASP.NET 4.0 Web Server Extension if it is prohibited
+					if (Utils.GetAspNetWebExtensionStatus_Iis6(SetupVariables) == WebExtensionStatus.Prohibited)
+					{
+						Utils.EnableAspNetWebExtension_Iis6();
 					}
 				}
+				// IIS 7 on Windows 2008 and higher
 				else
 				{
-					//IIS 7 on Windows 2008 and higher
 					if (!IsWebServerRoleInstalled())
 					{
 						details = "Web Server (IIS) role is not installed on your server. Run Server Manager to add Web Server (IIS) role.";
@@ -319,8 +324,19 @@ namespace WebsitePanel.Setup
 						Log.WriteInfo(string.Format("ASP.NET check: {0}", details));
 						return CheckStatuses.Error;
 					}
+					// Register ASP.NET 4.0
+					if (Utils.CheckAspNet40Registered(SetupVariables) == false)
+					{
+						// Register ASP.NET 4.0
+						Utils.RegisterAspNet40(SetupVariables);
+						//
+						ret = CheckStatuses.Warning;
+						details = AspNet40HasBeenInstalledMessage;
+					}
 				}
+				// Log details
 				Log.WriteInfo(string.Format("ASP.NET check: {0}", details));
+				//
 				return ret;
 			}
 			catch (Exception ex)
@@ -335,53 +351,6 @@ namespace WebsitePanel.Setup
 				return CheckStatuses.Error;
 #endif
 			}
-		}
-
-		private WebExtensionStatus GetASPNETStatus()
-		{
-			WebExtensionStatus status = WebExtensionStatus.Allowed;
-			if (SetupVariables.IISVersion.Major == 6)
-			{
-				status = WebExtensionStatus.NotInstalled;
-				string path;
-				if (Utils.IsWin64() && !Utils.IIS32Enabled())
-				{
-					//64-bit
-					path = Path.Combine(OS.GetWindowsDirectory(), @"Microsoft.NET\Framework64\v2.0.50727\aspnet_isapi.dll");
-				}
-				else
-				{
-					//32-bit
-					path = Path.Combine(OS.GetWindowsDirectory(), @"Microsoft.NET\Framework\v2.0.50727\aspnet_isapi.dll");
-				}
-				path = path.ToLower();
-				using (DirectoryEntry iis = new DirectoryEntry("IIS://LocalHost/W3SVC"))
-				{
-					PropertyValueCollection values = iis.Properties["WebSvcExtRestrictionList"];
-					for (int i = 0; i < values.Count; i++)
-					{
-						string val = values[i] as string;
-						if (!string.IsNullOrEmpty(val))
-						{
-							string strVal = val.ToString().ToLower();
-
-							if (strVal.Contains(path))
-							{
-								if (strVal[0] == '1')
-								{
-									status = WebExtensionStatus.Allowed;
-								}
-								else
-								{
-									status = WebExtensionStatus.Prohibited;
-								}
-								break;
-							}
-						}
-					}
-				}
-			}
-			return status;
 		}
 
 		private CheckStatuses CheckIIS32Mode(out string details)
@@ -602,8 +571,8 @@ namespace WebsitePanel.Setup
 		{
 			Log.WriteStart("Starting aspnet_regiis -i");
 			string util = (Utils.IsWin64() && !Utils.IIS32Enabled()) ?
-				@"Microsoft.NET\Framework64\v2.0.50727\aspnet_regiis.exe" :
-				@"Microsoft.NET\Framework\v2.0.50727\aspnet_regiis.exe";
+				@"Microsoft.NET\Framework64\v4.0.30319\aspnet_regiis.exe" :
+				@"Microsoft.NET\Framework\v4.0.30319\aspnet_regiis.exe";
 
 			string path = Path.Combine(OS.GetWindowsDirectory(), util);
 			ProcessStartInfo info = new ProcessStartInfo(path, "-i");
@@ -611,20 +580,6 @@ namespace WebsitePanel.Setup
 			Process process = Process.Start(info);
 			process.WaitForExit();
 			Log.WriteEnd("Finished aspnet_regiis -i");
-		}
-
-		private static void EnableASPNET()
-		{
-			Log.WriteStart("Enabling ASP.NET Web Service Extension");
-			string name = (Utils.IsWin64() && Utils.IIS32Enabled()) ?
-				"ASP.NET v2.0.50727 (32-bit)" :
-				"ASP.NET v2.0.50727";
-			using (DirectoryEntry iisService = new DirectoryEntry("IIS://LocalHost/W3SVC"))
-			{
-				iisService.Invoke("EnableWebServiceExtension", name);
-				iisService.CommitChanges();
-			}
-			Log.WriteEnd("Enabled ASP.NET Web Service Extension");
 		}
 
 		private static bool IsWebServerRoleInstalled()

@@ -148,13 +148,29 @@ namespace WebsitePanel.Setup
 					"Setup Wizard", MessageBoxButtons.OK, MessageBoxIcon.Warning);
 				return DialogResult.Cancel;
 			}
-			string componentId = Utils.GetStringSetupParameter(args, "ComponentId");
-
+			// Load application configuration
 			AppConfig.LoadConfiguration();
-
+			// 
+			var setupVariables = new SetupVariables
+			{
+				SetupAction = SetupActions.Update,
+				ComponentId = Utils.GetStringSetupParameter(args, "ComponentId"),
+				IISVersion = Global.IISVersion,
+			};
+			// Load setup variables from app.config
+			AppConfig.LoadComponentSettings(setupVariables);
+			//
 			InstallerForm form = new InstallerForm();
+			form.Wizard.SetupVariables = setupVariables;
 			Wizard wizard = form.Wizard;
-			LoadSetupVariablesFromConfig(wizard.SetupVariables, componentId);
+			// Initialize setup variables with the data received from update procedure
+			wizard.SetupVariables.BaseDirectory = Utils.GetStringSetupParameter(args, "BaseDirectory");
+			wizard.SetupVariables.UpdateVersion = Utils.GetStringSetupParameter(args, "UpdateVersion");
+			wizard.SetupVariables.InstallerFolder = Utils.GetStringSetupParameter(args, "InstallerFolder");
+			wizard.SetupVariables.Installer = Utils.GetStringSetupParameter(args, "Installer");
+			wizard.SetupVariables.InstallerType = Utils.GetStringSetupParameter(args, "InstallerType");
+			wizard.SetupVariables.InstallerPath = Utils.GetStringSetupParameter(args, "InstallerPath");
+			//
 			if (!VersionEquals(wizard.SetupVariables.Version, versionToUpgrade))
 			{
 				MessageBox.Show(
@@ -162,16 +178,7 @@ namespace WebsitePanel.Setup
 					"Setup Wizard", MessageBoxButtons.OK, MessageBoxIcon.Warning);
 				return DialogResult.Cancel;
 			}
-
-			wizard.SetupVariables.SetupAction = SetupActions.Update;
-			wizard.SetupVariables.BaseDirectory = Utils.GetStringSetupParameter(args, "BaseDirectory");
-			wizard.SetupVariables.UpdateVersion = Utils.GetStringSetupParameter(args, "UpdateVersion");
-			wizard.SetupVariables.InstallerFolder = Utils.GetStringSetupParameter(args, "InstallerFolder");
-			wizard.SetupVariables.Installer = Utils.GetStringSetupParameter(args, "Installer");
-			wizard.SetupVariables.InstallerType = Utils.GetStringSetupParameter(args, "InstallerType");
-			wizard.SetupVariables.InstallerPath = Utils.GetStringSetupParameter(args, "InstallerPath");
-			wizard.SetupVariables.IISVersion = Utils.GetVersionSetupParameter(args, "IISVersion");
-
+			//
 			IntroductionPage introPage = new IntroductionPage();
 			LicenseAgreementPage licPage = new LicenseAgreementPage();
 			ExpressInstallPage page2 = new ExpressInstallPage();

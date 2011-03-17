@@ -162,7 +162,7 @@ namespace WebsitePanel.Setup
 				string path = AppConfig.GetSettingStringValue("Log.FileName");
 				if (string.IsNullOrEmpty(path))
 				{
-					path = "Installer.log";
+					path = "WebsitePanel.Installer.log";
 				}
 
 				path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, path);

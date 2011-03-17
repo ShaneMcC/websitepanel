@@ -37,6 +37,7 @@ using System.Text.RegularExpressions;
 using System.Xml;
 using System.Threading;
 using System.Windows.Forms;
+using System.Linq;
 
 using WebsitePanel.Setup.Common;
 using WebsitePanel.Setup.Web;
@@ -50,6 +51,7 @@ using WebsitePanel.Providers.ResultObjects;
 using System.Reflection;
 using System.Collections.Specialized;
 using WebsitePanel.Setup.Actions;
+using System.Diagnostics;
 
 namespace WebsitePanel.Setup
 {
@@ -145,6 +147,15 @@ namespace WebsitePanel.Setup
 
 					switch (action.ActionType)
 					{
+						case ActionTypes.SwitchWebPortal2AspNet40:
+							SwitchWebPortal2AspNet40(action, Wizard.SetupVariables);
+							break;
+						case ActionTypes.SwitchEntServer2AspNet40:
+							SwitchEntServer2AspNet40(action, Wizard.SetupVariables);
+							break;
+						case ActionTypes.SwitchServer2AspNet40:
+							SwitchServer2AspNet40(action, Wizard.SetupVariables);
+							break;
 						case ActionTypes.CopyFiles:
 							CopyFiles(
 								Wizard.SetupVariables.InstallerFolder,
@@ -268,6 +279,71 @@ namespace WebsitePanel.Setup
 			//unattended setup
 			if (!string.IsNullOrEmpty(SetupVariables.SetupXml))
 				Wizard.GoNext();
+		}
+
+		private void SwitchWebPortal2AspNet40(InstallAction action, Setup.SetupVariables setupVariables)
+		{
+			var sam = new WebPortalActionManager(setupVariables);
+			sam.AddAction(new RegisterAspNet40Action());
+			sam.AddAction(new EnableAspNetWebExtensionAction());
+			sam.AddAction(new MigrateWebPortalWebConfigAction());
+			sam.AddAction(new SwitchAppPoolAspNetVersion());
+			sam.AddAction(new CleanupWebsitePanelModulesListAction());
+			//
+			sam.ActionError += new EventHandler<ActionErrorEventArgs>((object sender, ActionErrorEventArgs e) =>
+			{
+				throw e.OriginalException;
+			});
+			//
+			sam.Start();
+		}
+
+		private void SwitchEntServer2AspNet40(InstallAction action, Setup.SetupVariables setupVariables)
+		{
+			var sam = new EntServerActionManager(setupVariables);
+			sam.AddAction(new RegisterAspNet40Action());
+			sam.AddAction(new EnableAspNetWebExtensionAction());
+			sam.AddAction(new MigrateEntServerWebConfigAction());
+			sam.AddAction(new AdjustHttpRuntimeRequestLengthAction());
+			sam.AddAction(new SwitchAppPoolAspNetVersion());
+			//
+			sam.ActionError += new EventHandler<ActionErrorEventArgs>((object sender, ActionErrorEventArgs e) =>
+			{
+				throw e.OriginalException;
+			});
+			//
+			sam.Start();
+		}
+
+		private void SwitchServer2AspNet40(InstallAction action, Setup.SetupVariables setupVariables)
+		{
+			var sam = new ServerActionManager(setupVariables);
+			sam.AddAction(new RegisterAspNet40Action());
+			sam.AddAction(new EnableAspNetWebExtensionAction());
+			sam.AddAction(new MigrateServerWebConfigAction());
+			sam.AddAction(new AdjustHttpRuntimeRequestLengthAction());
+			sam.AddAction(new SwitchAppPoolAspNetVersion());
+			//
+			sam.ActionError += new EventHandler<ActionErrorEventArgs>((object sender, ActionErrorEventArgs e) =>
+			{
+				throw e.OriginalException;
+			});
+			//
+			sam.Start();
+		}
+
+		private void MigrateServerWebConfigFile(Setup.SetupVariables setupVariables)
+		{
+			// Migrate web.config
+			// IIS 6
+			if (setupVariables.IISVersion.Major == 6)
+			{
+			}
+			// IIS 7
+			else
+			{
+
+			}
 		}
 
 		private void UpdatePortal2811()
@@ -1749,12 +1825,12 @@ namespace WebsitePanel.Setup
 			{
 				Log.WriteStart("Copying web.config");
 				string configPath = Path.Combine(Wizard.SetupVariables.InstallationFolder, "web.config");
-				string config7Path = Path.Combine(Wizard.SetupVariables.InstallationFolder, "web7.config");
+				string config6Path = Path.Combine(Wizard.SetupVariables.InstallationFolder, "web6.config");
 
-				bool iis7 = (Wizard.SetupVariables.IISVersion.Major == 7);
-				if (!File.Exists(config7Path))
+				bool iis7 = (Wizard.SetupVariables.IISVersion.Major == 6);
+				if (!File.Exists(config6Path))
 				{
-					Log.WriteInfo(string.Format("File {0} not found", config7Path));
+					Log.WriteInfo(string.Format("File {0} not found", config6Path));
 					return;
 				}
 
@@ -1767,11 +1843,11 @@ namespace WebsitePanel.Setup
 					}
 
 					FileUtils.DeleteFile(configPath);
-					File.Move(config7Path, configPath);
+					File.Move(config6Path, configPath);
 				}
 				else
 				{
-					FileUtils.DeleteFile(config7Path);
+					FileUtils.DeleteFile(config6Path);
 				}
 				Log.WriteEnd("Copied web.config");
 			}

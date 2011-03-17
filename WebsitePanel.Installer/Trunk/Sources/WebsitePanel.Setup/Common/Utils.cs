@@ -38,6 +38,8 @@ using System.Text.RegularExpressions;
 using System.Xml;
 using System.ServiceProcess;
 using System.DirectoryServices;
+using System.Linq;
+using WebsitePanel.Setup.Web;
 
 namespace WebsitePanel.Setup
 {
@@ -46,6 +48,9 @@ namespace WebsitePanel.Setup
 	/// </summary>
 	public sealed class Utils
 	{
+		public const string AspNet40RegistrationToolx64 = @"Microsoft.NET\Framework64\v4.0.30319\aspnet_regiis.exe";
+		public const string AspNet40RegistrationToolx86 = @"Microsoft.NET\Framework\v4.0.30319\aspnet_regiis.exe";
+
 		/// <summary>
 		/// Initializes a new instance of the class.
 		/// </summary>
@@ -63,7 +68,7 @@ namespace WebsitePanel.Setup
 		public static Stream GetResourceStream(string resourceName)
 		{
 			Assembly asm = typeof(Utils).Assembly;
-			Stream ret = asm.GetManifestResourceStream(resourceName); 
+			Stream ret = asm.GetManifestResourceStream(resourceName);
 			return ret;
 		}
 		#endregion
@@ -86,24 +91,24 @@ namespace WebsitePanel.Setup
 			return Convert.ToBase64String(hashBytes);
 		}
 
-        public static string CreateCryptoKey(int len)
-        {
-            byte[] bytes = new byte[len];
-            new RNGCryptoServiceProvider().GetBytes(bytes);
+		public static string CreateCryptoKey(int len)
+		{
+			byte[] bytes = new byte[len];
+			new RNGCryptoServiceProvider().GetBytes(bytes);
 
-            StringBuilder sb = new StringBuilder();
-            for (int i = 0; i < bytes.Length; i++)
-            {
-                sb.Append(string.Format("{0:X2}", bytes[i]));
-            }
+			StringBuilder sb = new StringBuilder();
+			for (int i = 0; i < bytes.Length; i++)
+			{
+				sb.Append(string.Format("{0:X2}", bytes[i]));
+			}
 
-            return sb.ToString();
-        }
+			return sb.ToString();
+		}
 
-        public static string Encrypt(string key, string str)
-        {
-            if (str == null)
-                return str;
+		public static string Encrypt(string key, string str)
+		{
+			if (str == null)
+				return str;
 
 			// We are now going to create an instance of the 
 			// Rihndael class.
@@ -113,8 +118,8 @@ namespace WebsitePanel.Setup
 			PasswordDeriveBytes secretKey = new PasswordDeriveBytes(key, salt);
 			ICryptoTransform encryptor = RijndaelCipher.CreateEncryptor(secretKey.GetBytes(32), secretKey.GetBytes(16));
 
-            // encode
- 			MemoryStream memoryStream = new MemoryStream(); 
+			// encode
+			MemoryStream memoryStream = new MemoryStream();
 			CryptoStream cryptoStream = new CryptoStream(memoryStream, encryptor, CryptoStreamMode.Write);
 			cryptoStream.Write(plainText, 0, plainText.Length);
 			cryptoStream.FlushFinalBlock();
@@ -124,7 +129,7 @@ namespace WebsitePanel.Setup
 			memoryStream.Close();
 			cryptoStream.Close();
 
-            // Return encrypted string
+			// Return encrypted string
 			return Convert.ToBase64String(cipherBytes);
 		}
 
@@ -154,7 +159,7 @@ namespace WebsitePanel.Setup
 
 		#endregion
 
-		#region Setup 
+		#region Setup
 
 		public static Hashtable GetSetupParameters(object obj)
 		{
@@ -492,21 +497,203 @@ namespace WebsitePanel.Setup
 		{
 			return Path.GetPathRoot(Environment.SystemDirectory);
 		}
-		#endregion 
+		#endregion
 
-        public static bool IsWin64()
-        {
-            return (IntPtr.Size == 8);
-        }
+		public static bool IsWin64()
+		{
+			return (IntPtr.Size == 8);
+		}
 
 		public static void ShowConsoleErrorMessage(string format, params object[] args)
 		{
 			Console.WriteLine(String.Format(format, args));
 		}
 
-        public static bool IIS32Enabled()
-        {
-            bool enabled = false;
+		public static string ResolveAspNet40RegistrationToolPath_Iis6(SetupVariables setupVariables)
+		{
+			// By default we fallback to the corresponding tool version based on the platform bitness
+			var util = Environment.Is64BitOperatingSystem ? AspNet40RegistrationToolx64 : AspNet40RegistrationToolx86;
+			// Choose appropriate tool version for IIS 6
+			if (setupVariables.IISVersion.Major == 6)
+			{
+				// Change to x86 tool version on x64 w/ "Enable32bitAppOnWin64" flag enabled
+				if (Environment.Is64BitOperatingSystem == true && Utils.IIS32Enabled())
+				{
+					util = AspNet40RegistrationToolx86;
+				}
+			}
+			// Build path to the tool
+			return Path.Combine(Environment.GetEnvironmentVariable("WINDIR"), util);
+		}
+
+		/// <summary>
+		/// Beware: Web site component-dependent logic
+		/// </summary>
+		/// <param name="setupVariables"></param>
+		/// <returns></returns>
+		public static string ResolveAspNet40RegistrationToolPath_Iis7(SetupVariables setupVariables)
+		{
+			// By default we fallback to the corresponding tool version based on the platform bitness
+			var util = Environment.Is64BitOperatingSystem ? AspNet40RegistrationToolx64 : AspNet40RegistrationToolx86;
+			// Choose appropriate tool version for IIS 7
+			if (setupVariables.IISVersion.Major == 7 && setupVariables.SetupAction == SetupActions.Update)
+			{
+				// Evaluate app pool settings on x64 platform only when update is running
+				if (Environment.Is64BitOperatingSystem == true)
+				{
+					// Change to x86 tool version if the component's app pool is in WOW64 mode
+					using (var srvman = new Microsoft.Web.Administration.ServerManager())
+					{
+						// Retrieve the component's app pool
+						var appPoolObj = srvman.ApplicationPools[setupVariables.WebApplicationPoolName];
+						// We are 
+						if (appPoolObj == null)
+						{
+							throw new ArgumentException(String.Format("Could not find '{0}' web application pool", setupVariables.WebApplicationPoolName), "appPoolObj");
+						}
+						// Check app pool mode
+						else if (appPoolObj.Enable32BitAppOnWin64 == true)
+						{
+							util = AspNet40RegistrationToolx86;
+						}
+					}
+				}
+			}
+			// Build path to the tool
+			return Path.Combine(Environment.GetEnvironmentVariable("WINDIR"), util);
+		}
+
+		public static bool CheckAspNet40Registered(SetupVariables setupVariables)
+		{
+			//
+			var aspNet40Registered = false;
+			// Run ASP.NET Registration Tool command
+			var psOutput = ExecAspNetRegistrationToolCommand(setupVariables, "-lv");
+			// Split process output per lines
+			var strLines = psOutput.Split(new char[] { '\n' }, StringSplitOptions.RemoveEmptyEntries);
+			// Lookup for an evidence of ASP.NET 4.0
+			aspNet40Registered = strLines.Any((string s) => { return s.Contains("4.0.30319.0"); });
+			//
+			return aspNet40Registered;
+		}
+
+		public static string ExecAspNetRegistrationToolCommand(SetupVariables setupVariables, string arguments)
+		{
+			//
+			var util = (setupVariables.IISVersion.Major == 6) ? Utils.ResolveAspNet40RegistrationToolPath_Iis6(setupVariables) : Utils.ResolveAspNet40RegistrationToolPath_Iis7(setupVariables);
+			//
+			// Create a specific process start info set to redirect its standard output for further processing
+			ProcessStartInfo info = new ProcessStartInfo(util)
+			{
+				WindowStyle = ProcessWindowStyle.Hidden,
+				UseShellExecute = false,
+				RedirectStandardOutput = true,
+				Arguments = arguments
+			};
+			//
+			Log.WriteInfo(String.Format("Starting aspnet_regiis.exe {0}", info.Arguments));
+			//
+			var process = default(Process);
+			//
+			var psOutput = String.Empty;
+			//
+			try
+			{
+				// Start the process
+				process = Process.Start(info);
+				// Read the output
+				psOutput = process.StandardOutput.ReadToEnd();
+				// Wait for the completion
+				process.WaitForExit();
+			}
+			catch (Exception ex)
+			{
+				Log.WriteError("Could not execute ASP.NET Registration Tool command", ex);
+			}
+			finally
+			{
+				if (process != null)
+					process.Close();
+			}
+			// Trace output data for troubleshooting purposes
+			Log.WriteInfo(psOutput);
+			//
+			Log.WriteInfo(String.Format("Finished aspnet_regiis.exe {0}", info.Arguments));
+			//
+			return psOutput;
+		}
+
+		public static void RegisterAspNet40(Setup.SetupVariables setupVariables)
+		{
+			// Run ASP.NET Registration Tool command
+			ExecAspNetRegistrationToolCommand(setupVariables, arguments: (setupVariables.IISVersion.Major == 6) ? "-ir -enable" : "-ir");
+		}
+
+		public static WebExtensionStatus GetAspNetWebExtensionStatus_Iis6(SetupVariables setupVariables)
+		{
+			WebExtensionStatus status = WebExtensionStatus.Allowed;
+			if (setupVariables.IISVersion.Major == 6)
+			{
+				status = WebExtensionStatus.NotInstalled;
+				string path;
+				if (Utils.IsWin64() && !Utils.IIS32Enabled())
+				{
+					//64-bit
+					path = Path.Combine(OS.GetWindowsDirectory(), @"Microsoft.NET\Framework64\v4.0.30319\aspnet_isapi.dll");
+				}
+				else
+				{
+					//32-bit
+					path = Path.Combine(OS.GetWindowsDirectory(), @"Microsoft.NET\Framework\v4.0.30319\aspnet_isapi.dll");
+				}
+				path = path.ToLower();
+				using (DirectoryEntry iis = new DirectoryEntry("IIS://LocalHost/W3SVC"))
+				{
+					PropertyValueCollection values = iis.Properties["WebSvcExtRestrictionList"];
+					for (int i = 0; i < values.Count; i++)
+					{
+						string val = values[i] as string;
+						if (!string.IsNullOrEmpty(val))
+						{
+							string strVal = val.ToString().ToLower();
+
+							if (strVal.Contains(path))
+							{
+								if (strVal[0] == '1')
+								{
+									status = WebExtensionStatus.Allowed;
+								}
+								else
+								{
+									status = WebExtensionStatus.Prohibited;
+								}
+								break;
+							}
+						}
+					}
+				}
+			}
+			return status;
+		}
+
+		public static void EnableAspNetWebExtension_Iis6()
+		{
+			Log.WriteStart("Enabling ASP.NET Web Service Extension");
+			//
+			var webExtensionName = (Utils.IsWin64() && Utils.IIS32Enabled()) ? "ASP.NET v4.0.30319 (32-bit)" : "ASP.NET v4.0.30319";
+			//
+			using (DirectoryEntry iisService = new DirectoryEntry("IIS://LocalHost/W3SVC"))
+			{
+				iisService.Invoke("EnableWebServiceExtension", webExtensionName);
+				iisService.CommitChanges();
+			}
+			//
+			Log.WriteEnd("Enabled ASP.NET Web Service Extension");
+		}
+
+		public static bool IIS32Enabled()
+		{
+			bool enabled = false;
 			using (DirectoryEntry obj = new DirectoryEntry("IIS://LocalHost/W3SVC/AppPools"))
 			{
 				object objProperty = GetObjectProperty(obj, "Enable32bitAppOnWin64");
@@ -515,31 +702,31 @@ namespace WebsitePanel.Setup
 					enabled = (bool)objProperty;
 				}
 			}
-            return enabled;
-        }
-        
-        public  static void SetObjectProperty(DirectoryEntry oDE, string name, object value)
-        {
-            if (value != null)
-            {
-                if (oDE.Properties.Contains(name))
-                {
-                    oDE.Properties[name][0] = value;
-                }
-                else
-                {
-                    oDE.Properties[name].Add(value);
-                }
-            }
-        }
+			return enabled;
+		}
 
-        public static object GetObjectProperty(DirectoryEntry entry, string name)
-        {
-            if (entry.Properties.Contains(name))
-                return entry.Properties[name][0];
-            else
-                return null;
-        }
+		public static void SetObjectProperty(DirectoryEntry oDE, string name, object value)
+		{
+			if (value != null)
+			{
+				if (oDE.Properties.Contains(name))
+				{
+					oDE.Properties[name][0] = value;
+				}
+				else
+				{
+					oDE.Properties[name].Add(value);
+				}
+			}
+		}
+
+		public static object GetObjectProperty(DirectoryEntry entry, string name)
+		{
+			if (entry.Properties.Contains(name))
+				return entry.Properties[name][0];
+			else
+				return null;
+		}
 
 		public static void OpenFirewallPort(string name, string port, Version iisVersion)
 		{

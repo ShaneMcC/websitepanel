@@ -49,6 +49,7 @@ namespace WebsitePanel.Setup.Actions
 	public class ActionErrorEventArgs : EventArgs
 	{
 		public string ErrorMessage { get; set; }
+		public Exception OriginalException { get; set; }
 	}
 
 	public abstract class Action
@@ -286,7 +287,7 @@ namespace WebsitePanel.Setup.Actions
 			}
 		}
 
-		private void OnActionError()
+		private void OnActionError(Exception ex)
 		{
 			//
 			if (ActionError == null)
@@ -297,7 +298,8 @@ namespace WebsitePanel.Setup.Actions
 				ErrorMessage = "An unexpected error has occurred. We apologize for this inconvenience.\n" +
 				"Please contact Technical Support at support@websitepanel.net.\n\n" +
 				"Make sure you include a copy of the Installer.log file from the\n" +
-				"WebsitePanel Installer home directory."
+				"WebsitePanel Installer home directory.",
+				OriginalException = ex,
 			};
 			//
 			ActionError(this, args);
@@ -343,7 +345,7 @@ namespace WebsitePanel.Setup.Actions
 						if (Utils.IsThreadAbortException(ex))
 							return;
 						// Notify external clients
-						OnActionError();
+						OnActionError(ex);
 						//
 						Rollback();
 						//
@@ -456,7 +458,7 @@ namespace WebsitePanel.Setup.Actions
 				if (Utils.IsThreadAbortException(ex))
 					return;
 				// Notify external clients
-				OnActionError();
+				OnActionError(ex);
 				//
 				return;
 			}
@@ -505,7 +507,7 @@ namespace WebsitePanel.Setup.Actions
 				if (Utils.IsThreadAbortException(ex))
 					return;
 				// Notify external clients
-				OnActionError();
+				OnActionError(ex);
 				//
 				return;
 			}

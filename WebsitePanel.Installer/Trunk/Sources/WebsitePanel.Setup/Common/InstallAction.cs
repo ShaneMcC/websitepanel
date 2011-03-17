@@ -69,7 +69,7 @@ namespace WebsitePanel.Setup
 		DeleteShortcuts,
 		UpdateServers,
 		CopyWebConfig,
-        UpdateWebConfigNamespaces,
+		UpdateWebConfigNamespaces,
 		StopApplicationPool,
 		StartApplicationPool,
 		RegisterWindowsService,
@@ -84,7 +84,10 @@ namespace WebsitePanel.Setup
 		ConfigureStandaloneServerData,
 		CreateWPServerLogin,
 		FolderPermissions,
-        AddCustomErrorsPage
+		AddCustomErrorsPage,
+		SwitchServer2AspNet40,
+		SwitchEntServer2AspNet40,
+		SwitchWebPortal2AspNet40,
 	}
 	
 	public class InstallAction

@@ -2,16 +2,18 @@
 using System.Collections.Generic;
 using System.Text;
 using System.Windows.Forms;
+using WebsitePanel.Setup.Actions;
 
 namespace WebsitePanel.Setup
 {
 	/// <summary>
-	/// Release 1.1.1
+	/// Release 1.2.0
 	/// </summary>
-	public class Server111 : Server
+	public class Server120 : Server
 	{
 		public static new object Install(object obj)
 		{
+			//
 			return Server.InstallBase(obj, "1.1.0");
 		}
 
@@ -27,9 +29,10 @@ namespace WebsitePanel.Setup
 
 		public static new object Update(object obj)
 		{
-			return UpdateBase(obj, "1.1.0", "1.1.0", false);
+			return Server.UpdateBase(obj, "1.2.0", "1.1.0", false, new InstallAction(ActionTypes.SwitchServer2AspNet40));
 		}
 	}
+
 	/// <summary>
 	/// Release 1.1.0
 	/// </summary>

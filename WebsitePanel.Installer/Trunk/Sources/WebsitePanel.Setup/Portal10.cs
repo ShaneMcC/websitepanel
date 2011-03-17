@@ -2,16 +2,18 @@
 using System.Collections.Generic;
 using System.Text;
 using System.Windows.Forms;
+using WebsitePanel.Setup.Actions;
 
 namespace WebsitePanel.Setup
 {
 	/// <summary>
-	/// Release 1.1.1
+	/// Release 1.2.0
 	/// </summary>
-	public class Portal111 : Portal
+	public class Portal120 : Portal
 	{
 		public static new object Install(object obj)
 		{
+			//
 			return Portal.InstallBase(obj, "1.1.0");
 		}
 
@@ -27,7 +29,7 @@ namespace WebsitePanel.Setup
 
 		public static new DialogResult Update(object obj)
 		{
-			return UpdateBase(obj, "1.1.0", "1.1.0", false);
+			return UpdateBase(obj, "1.2.0", "1.1.0", false, new InstallAction(ActionTypes.SwitchWebPortal2AspNet40));
 		}
 	}
 

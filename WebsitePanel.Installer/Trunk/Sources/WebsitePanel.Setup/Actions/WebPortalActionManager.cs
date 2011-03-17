@@ -199,16 +199,16 @@ namespace WebsitePanel.Setup.Actions
 			{
 				Log.WriteStart("Copying web.config");
 				string configPath = Path.Combine(vars.InstallationFolder, "web.config");
-				string config7Path = Path.Combine(vars.InstallationFolder, "web7.config");
+				string config6Path = Path.Combine(vars.InstallationFolder, "web6.config");
 
-				bool iis7 = (vars.IISVersion.Major == 7);
-				if (!File.Exists(config7Path))
+				bool iis6 = (vars.IISVersion.Major == 6);
+				if (!File.Exists(config6Path))
 				{
-					Log.WriteInfo(string.Format("File {0} not found", config7Path));
+					Log.WriteInfo(string.Format("File {0} not found", config6Path));
 					return;
 				}
 
-				if (iis7)
+				if (iis6)
 				{
 					if (!File.Exists(configPath))
 					{
@@ -217,11 +217,11 @@ namespace WebsitePanel.Setup.Actions
 					}
 
 					FileUtils.DeleteFile(configPath);
-					File.Move(config7Path, configPath);
+					File.Move(config6Path, configPath);
 				}
 				else
 				{
-					FileUtils.DeleteFile(config7Path);
+					FileUtils.DeleteFile(config6Path);
 				}
 				Log.WriteEnd("Copied web.config");
 			}
@@ -251,6 +251,7 @@ namespace WebsitePanel.Setup.Actions
 			new SetNtfsPermissionsAction(),
 			new CreateWebApplicationPoolAction(),
 			new CreateWebSiteAction(),
+			new SwitchAppPoolAspNetVersion(),
 			new UpdateEnterpriseServerUrlAction(),
 			new SaveComponentConfigSettingsAction(),
 			new CreateDesktopShortcutsAction()
