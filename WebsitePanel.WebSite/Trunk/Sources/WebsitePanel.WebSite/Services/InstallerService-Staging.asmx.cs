@@ -30,16 +30,24 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
-using System.Web.UI;
-using System.Web.UI.WebControls;
+using System.Web.Services;
+using System.Data;
 
-namespace WebsitePanel.WebSite
+namespace WebsitePanel.WebSite.Services
 {
-    public partial class Site : System.Web.UI.MasterPage
+    /// <summary>
+    /// Summary description for InstallerService_Beta
+    /// </summary>
+    [WebService(Namespace = "http://websitepanel.net/services")]
+    [WebServiceBinding(ConformsTo = WsiProfiles.BasicProfile1_1)]
+    [System.ComponentModel.ToolboxItem(false)]
+    // To allow this Web Service to be called from script, using ASP.NET AJAX, uncomment the following line. 
+    // [System.Web.Script.Services.ScriptService]
+    public class InstallerService_Staging : InstallerServiceBase
     {
-        protected void Page_Load(object sender, EventArgs e)
-        {
-
-        }
+		public InstallerService_Staging()
+		{
+			RELEASES_FEED_PATH = "~/Data/ProductReleasesFeed.Staging.xml";
+		}
     }
 }

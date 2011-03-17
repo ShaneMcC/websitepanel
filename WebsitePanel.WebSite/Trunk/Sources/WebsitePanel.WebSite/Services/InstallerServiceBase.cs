@@ -1,4 +1,4 @@
-﻿/* Copyright (c) 2010, SMB SAAS Systems Inc. All rights reserved.
+﻿/* Copyright (c) 2011, SMB SAAS Systems Inc. All rights reserved.
 
 Redistribution and use in source and binary forms, with or without modification,
 are permitted provided that the following conditions are met:
@@ -40,7 +40,83 @@ namespace WebsitePanel.WebSite.Services
 {
     public class InstallerServiceBase
     {
-        public const string RELEASES_FEED_PATH = "~/Data/ProductReleasesFeed.xml";
+        protected string RELEASES_FEED_PATH = "~/Data/ProductReleasesFeed.xml";
+
+		#region WebMethods
+
+		[WebMethod]
+		public DataSet GetReleaseFileInfo(string componentCode, string version)
+		{
+			// get XML doc
+			XDocument xml = GetReleasesFeed();
+
+			// get current release
+			var release = (from r in xml.Descendants("release")
+						   where r.Parent.Parent.Attribute("code").Value == componentCode
+						   && r.Attribute("version").Value == version
+						   select r).FirstOrDefault();
+
+			if (release == null)
+				return null; // requested release was not found
+
+			DataSet ds = new DataSet();
+			DataTable dt = ds.Tables.Add();
+			dt.Columns.Add("ReleaseFileID", typeof(int));
+			dt.Columns.Add("FullFilePath", typeof(string));
+			dt.Columns.Add("UpgradeFilePath", typeof(string));
+			dt.Columns.Add("InstallerPath", typeof(string));
+			dt.Columns.Add("InstallerType", typeof(string));
+
+			dt.Rows.Add(
+				Int32.Parse(release.Element("releaseFileID").Value),
+				release.Element("fullFilePath").Value,
+				release.Element("upgradeFilePath").Value,
+				release.Element("installerPath").Value,
+				release.Element("installerType").Value);
+
+			ds.AcceptChanges(); // save
+			return ds;
+		}
+
+		[WebMethod]
+		public byte[] GetFileChunk(string fileName, int offset, int size)
+		{
+			string path = HttpContext.Current.Server.MapPath(fileName);
+			return GetFileBinaryContent(path, offset, size);
+		}
+
+		[WebMethod]
+		public long GetFileSize(string fileName)
+		{
+			string path = HttpContext.Current.Server.MapPath(fileName);
+			long ret = 0;
+			if (File.Exists(path))
+			{
+				FileInfo fi = new FileInfo(path);
+				ret = fi.Length;
+			}
+			return ret;
+		}
+
+		[WebMethod]
+		public DataSet GetAvailableComponents()
+		{
+			return GetAvailableComponents(false);
+		}
+
+		[WebMethod]
+		public DataSet GetLatestComponentUpdate(string componentCode)
+		{
+			return GetLatestComponentUpdate(componentCode, false);
+		}
+
+		[WebMethod]
+		public DataSet GetComponentUpdate(string componentCode, string release)
+		{
+			return GetComponentUpdate(componentCode, release, false);
+		}
+
+		#endregion
 
         public DataSet GetLatestComponentUpdate(string componentCode, bool includeBeta)
         {
@@ -52,7 +128,10 @@ namespace WebsitePanel.WebSite.Services
                            where release.Parent.Parent.Attribute("code").Value == componentCode
                            && release.Element("upgradeFilePath") != null
                            && release.Element("upgradeFilePath").Value != ""
-                           && Boolean.Parse(release.Attribute("available").Value)
+						   // This line has been commented because the function is used only by WebsitePanel Installer
+						   // itself. However, it may cause an incovenience if used inappropriately.
+						   // The Installer's releases are hidden (not available) and should not be displayed in the list of available components.	
+                           //&& Boolean.Parse(release.Attribute("available").Value)
                            && (includeBeta || !includeBeta && !Boolean.Parse(release.Attribute("beta").Value))
                            select release;
 
@@ -65,8 +144,9 @@ namespace WebsitePanel.WebSite.Services
             dt.Columns.Add("UpgradeFilePath", typeof(string));
             dt.Columns.Add("InstallerPath", typeof(string));
             dt.Columns.Add("InstallerType", typeof(string));
-
+			//
             var r = releases.FirstOrDefault();
+			//
             if (r != null)
             {
                 dt.Rows.Add(
@@ -184,60 +264,6 @@ namespace WebsitePanel.WebSite.Services
 
             ds.AcceptChanges(); // save
             return ds;
-        }
-
-        [WebMethod]
-        public DataSet GetReleaseFileInfo(string componentCode, string version)
-        {
-            // get XML doc
-            XDocument xml = GetReleasesFeed();
-
-            // get current release
-            var release = (from r in xml.Descendants("release")
-                                  where r.Parent.Parent.Attribute("code").Value == componentCode
-                                  && r.Attribute("version").Value == version
-                                  select r).FirstOrDefault();
-
-            if (release == null)
-                return null; // requested release was not found
-
-            DataSet ds = new DataSet();
-            DataTable dt = ds.Tables.Add();
-            dt.Columns.Add("ReleaseFileID", typeof(int));
-            dt.Columns.Add("FullFilePath", typeof(string));
-            dt.Columns.Add("UpgradeFilePath", typeof(string));
-            dt.Columns.Add("InstallerPath", typeof(string));
-            dt.Columns.Add("InstallerType", typeof(string));
-
-            dt.Rows.Add(
-                Int32.Parse(release.Element("releaseFileID").Value),
-                release.Element("fullFilePath").Value,
-                release.Element("upgradeFilePath").Value,
-                release.Element("installerPath").Value,
-                release.Element("installerType").Value);
-
-            ds.AcceptChanges(); // save
-            return ds;
-        }
-
-        [WebMethod]
-        public byte[] GetFileChunk(string fileName, int offset, int size)
-        {
-            string path = HttpContext.Current.Server.MapPath(fileName);
-            return GetFileBinaryContent(path, offset, size);
-        }
-
-        [WebMethod]
-        public long GetFileSize(string fileName)
-        {
-            string path = HttpContext.Current.Server.MapPath(fileName);
-            long ret = 0;
-            if (File.Exists(path))
-            {
-                FileInfo fi = new FileInfo(path);
-                ret = fi.Length;
-            }
-            return ret;
         }
 
         private byte[] GetFileBinaryContent(string path)

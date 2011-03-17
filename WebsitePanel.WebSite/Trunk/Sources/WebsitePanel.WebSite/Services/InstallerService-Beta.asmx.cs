@@ -1,4 +1,4 @@
-﻿/* Copyright (c) 2010, SMB SAAS Systems Inc. All rights reserved.
+﻿/* Copyright (c) 2011, SMB SAAS Systems Inc. All rights reserved.
 
 Redistribution and use in source and binary forms, with or without modification,
 are permitted provided that the following conditions are met:
@@ -45,22 +45,9 @@ namespace WebsitePanel.WebSite.Services
     // [System.Web.Script.Services.ScriptService]
     public class InstallerService_Beta : InstallerServiceBase
     {
-        [WebMethod]
-        public DataSet GetAvailableComponents()
-        {
-            return GetAvailableComponents(true);
-        }
-
-        [WebMethod]
-        public DataSet GetLatestComponentUpdate(string componentCode)
-        {
-            return GetLatestComponentUpdate(componentCode, true);
-        }
-
-        [WebMethod]
-        public DataSet GetComponentUpdate(string componentCode, string release)
-        {
-            return GetComponentUpdate(componentCode, release, true);
-        }
+		public InstallerService_Beta()
+		{
+			RELEASES_FEED_PATH = "~/Data/ProductReleasesFeed.Beta.xml";
+		}
     }
 }

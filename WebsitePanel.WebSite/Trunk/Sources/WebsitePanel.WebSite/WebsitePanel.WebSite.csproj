@@ -61,8 +61,20 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\Images\zip-icon.png" />
-    <Content Include="Data\ProductReleasesFeed-dev.xml" />
+    <Content Include="Data\ProductReleasesFeed.Beta.xml">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="Data\ProductReleasesFeed.Staging.xml">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="Data\ProductReleasesFeed.xml">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="Error.htm" />
+    <Content Include="Services\InstallerService-Staging.asmx" />
+    <Content Include="WebPI\2.0\WebsitePanelFeed.xml">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="Services\InstallerService-Beta.asmx" />
     <Content Include="Services\InstallerService.asmx" />
     <Content Include="Web.config" />
@@ -111,6 +123,9 @@
       <DependentUpon>License.aspx</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Services\InstallerService-Staging.asmx.cs">
+      <DependentUpon>InstallerService-Staging.asmx</DependentUpon>
+    </Compile>
     <Compile Include="Services\InstallerService-Beta.asmx.cs">
       <DependentUpon>InstallerService-Beta.asmx</DependentUpon>
     </Compile>
@@ -147,6 +162,9 @@
     <Content Include="Downloads.aspx" />
     <Content Include="License.aspx" />
     <Content Include="Site.Master" />
+    <Content Include="WebPI\3.0\WebsitePanelFeed.xml">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="WorksWith.aspx" />
   </ItemGroup>
   <ItemGroup>

@@ -1,0 +1,101 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<components>
+	<!-- WebsitePanel Standalone -->
+	<component application="WebsitePanel" name="Standalone Server Setup" code="standalone">
+		<description>Express setup for standalone server configuration. It installs all components on the same server and configures WebsitePanel using recommended settings.</description>
+		<releases>
+			<release version="1.1.1" date="12/9/2010" available="true" beta="false">
+				<releaseFileID>105</releaseFileID>
+				<fullFilePath>~/Files/Beta/WebsitePanel-StandaloneServerSetup-1.1.1.1.zip</fullFilePath>
+				<upgradeFilePath></upgradeFilePath>
+				<installerPath>setup\setup.dll</installerPath>
+				<installerType>WebsitePanel.Setup.StandaloneServerSetup111</installerType>
+			</release>
+		</releases>
+	</component>
+
+	<!-- WebsitePanel Portal -->
+	<component application="WebsitePanel" name="Portal" code="portal">
+		<description>WebsitePanel Portal is a user interface to the control panel which allows managing user accounts, hosting spaces, web sites, FTP accounts, files, etc.</description>
+		<releases>
+			<release version="1.1.1" date="12/9/2010" available="true" beta="false">
+				<releaseFileID>205</releaseFileID>
+				<fullFilePath>~/Files/Beta/WebsitePanel-Portal-1.1.1.1.zip</fullFilePath>
+				<upgradeFilePath>~/Files/Beta/WebsitePanel-Portal-1.1.1.1-Update.zip</upgradeFilePath>
+				<installerPath>setup\setup.dll</installerPath>
+				<installerType>WebsitePanel.Setup.Portal111</installerType>
+			</release>
+			<release version="1.1.0" date="1/6/2011" available="true" beta="false">
+				<releaseFileID>206</releaseFileID>
+				<fullFilePath>~/Files/1.1.0/release/WebsitePanel-Portal-1.1.0.10.zip</fullFilePath>
+				<upgradeFilePath>~/Files/1.1.0/release/WebsitePanel-Portal-1.1.0.10-Update.zip</upgradeFilePath>
+				<installerPath>setup\setup.dll</installerPath>
+				<installerType>WebsitePanel.Setup.Portal110</installerType>
+			</release>
+		</releases>
+	</component>
+
+	<!-- WebsitePanel Enterprise Server-->
+	<component application="WebsitePanel" name="Enterprise Server" code="enterprise server">
+		<description>Enterprise Server is the core of WebsitePanel system. It includes all business logic of the application. Enterprise Server should have access to Server and be accessible from Portal applications.</description>
+		<releases>
+			<release version="1.1.1" date="12/9/2010" available="true" beta="false">
+				<releaseFileID>305</releaseFileID>
+				<fullFilePath>~/Files/Beta/WebsitePanel-EnterpriseServer-1.1.1.1.zip</fullFilePath>
+				<upgradeFilePath>~/Files/Beta/WebsitePanel-EnterpriseServer-1.1.1.1-Update.zip</upgradeFilePath>
+				<installerPath>setup\setup.dll</installerPath>
+				<installerType>WebsitePanel.Setup.EnterpriseServer111</installerType>
+			</release>
+			<release version="1.1.0" date="1/6/2011" available="true" beta="false">
+				<releaseFileID>306</releaseFileID>
+				<fullFilePath>~/Files/1.1.0/release/WebsitePanel-EnterpriseServer-1.1.0.10.zip</fullFilePath>
+				<upgradeFilePath>~/Files/1.1.0/release/WebsitePanel-EnterpriseServer-1.1.0.10-Update.zip</upgradeFilePath>
+				<installerPath>setup\setup.dll</installerPath>
+				<installerType>WebsitePanel.Setup.EnterpriseServer110</installerType>
+			</release>
+		</releases>
+	</component>
+
+	<!-- WebsitePanel Server -->
+	<component application="WebsitePanel" name="Server" code="server">
+		<description>WebsitePanel Server is a set of services running on the remote server to be controlled. Server application should be reachable from Enterprise Server one.</description>
+		<releases>
+			<release version="1.1.1" date="12/9/2010" available="true" beta="false">
+				<releaseFileID>405</releaseFileID>
+				<fullFilePath>~/Files/Beta/WebsitePanel-Server-1.1.1.1.zip</fullFilePath>
+				<upgradeFilePath>~/Files/Beta/WebsitePanel-Server-1.1.1.1-Update.zip</upgradeFilePath>
+				<installerPath>setup\setup.dll</installerPath>
+				<installerType>WebsitePanel.Setup.Server111</installerType>
+			</release>
+			<release version="1.1.0" date="1/6/2011" available="true" beta="false">
+				<releaseFileID>406</releaseFileID>
+				<fullFilePath>~/Files/1.1.0/release/WebsitePanel-Server-1.1.0.10.zip</fullFilePath>
+				<upgradeFilePath>~/Files/1.1.0/release/WebsitePanel-Server-1.1.0.10-Update.zip</upgradeFilePath>
+				<installerPath>setup\setup.dll</installerPath>
+				<installerType>WebsitePanel.Setup.Server110</installerType>
+			</release>
+		</releases>
+	</component>
+
+	<!-- WebsitePanel Installer -->
+	<component application="WebsitePanel Installer" name="Installer Core Files" code="cfg core">
+		<description>Installer Core Files</description>
+		<releases>
+			<!--release version="1.1" date="1/6/2011" available="false" beta="false">
+				<releaseFileID>502</releaseFileID>
+				<fullFilePath></fullFilePath>
+				<upgradeFilePath>~/Files/1.1.0/debug/WebsitePanel-Installer-1.1.0-Update.zip</upgradeFilePath>
+				<installerPath></installerPath>
+				<installerType></installerType>
+			</release-->
+			<release version="1.0" date="04/16/2010" available="false" beta="true">
+				<releaseFileID>501</releaseFileID>
+				<fullFilePath></fullFilePath>
+				<upgradeFilePath></upgradeFilePath>
+				<installerPath></installerPath>
+				<installerType></installerType>
+			</release>
+		</releases>
+	</component>
+
+</components>
