@@ -107,6 +107,16 @@
         <li>OrderBoxCoreLib.dll</li>
         <li>OrderBoxDomainsLib.dll</li>
     </ul>
+	
+	<h3>Set the Reference Paths to 3rd-Party Libraries</h3>
+	<p>After placing the required 3rd-Party Libraries into &quot;Lib&quot; folder 
+	   of WebsitePanel project, open WebsitePanel.Server solution (WebsitePanel.Server.sln) 
+	   and set ReferencePath of &quot;WebsitePanel.Providers.Database.MySQL&quot; and &quot;WebsitePanel.Providers.DNS.SimpleDNS50&quot; projects 
+	   to the absolute path of the &quot;Lib&quot; folder. See &quot;Reference Path Is Incorrect&quot; paragraph of 
+	   <a href="http://msdn.microsoft.com/en-us/library/ayds71se%28v=VS.100%29.aspx" target="_blank">Troubleshooting Broken References</a> 
+	   article for help.<br />
+	   Do the same for &quot;WebsitePanel.Plugins.Directi&quot; project of WebsitePanel.EnterpriseServer solution (WebsitePanel.EnterpriseServer.sln).</p>
+	
     <h3>
                 Building Solutions</h3>
     <p>
