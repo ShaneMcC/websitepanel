@@ -68,6 +68,11 @@ namespace WebsitePanel.Portal
             get { return GetCachedProxy<esVirtualizationServer>(); }
         }
 
+        public esVirtualizationServerForPrivateCloud VPSPC
+        {
+            get { return GetCachedProxy<esVirtualizationServerForPrivateCloud>(); }
+        }
+
         public esBlackBerry BlackBerry
         {
             get { return GetCachedProxy<esBlackBerry>(); }

@@ -27,6 +27,9 @@
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Xml.Linq;
 
 namespace WebsitePanel.EnterpriseServer
 {
@@ -69,7 +72,7 @@ namespace WebsitePanel.EnterpriseServer
 		/// Creates a new instance of UserInfo class.
 		/// </summary>
 		public UserInfo()
-		{
+		{            
 		}
 
 		/// <summary>
@@ -266,6 +269,50 @@ namespace WebsitePanel.EnterpriseServer
 		{
 			get { return this.ecommerceEnabled; }
 			set { this.ecommerceEnabled = value; }
-		}	    
+		}
+
+        public string AdditionalParams { get; set; }
+
+        public List<UserVlan> Vlans
+        {
+            get
+            {
+                List<UserVlan> result = new List<UserVlan>();
+                try
+                {
+
+                    if (AdditionalParams != null)
+                    {
+                        XDocument doc = XDocument.Parse(AdditionalParams);
+                        if (doc != null && doc.Root != null)
+                        {
+                            XElement vLansElement = doc.Root.Element("VLans");
+                            if (vLansElement != null)
+                            {
+                                foreach(var item in vLansElement.Elements("VLan"))
+                                    result.Add(new UserVlan
+                                    {
+                                        VLanID =  item.Attribute("VLanID") != null ? ushort.Parse(item.Attribute("VLanID").Value) : (ushort) 0,
+                                        Comment = item.Attribute("Comment") != null ? item.Attribute("Comment").Value : null
+                                    });
+                            }
+                        }
+                        return result;
+                    }
+                }
+                catch { }
+                return result;
+            }
+        }
 	}
+
+    /// <summary>
+    /// User's VLans
+    /// </summary>
+    [Serializable]
+    public class UserVlan
+    {
+        public ushort VLanID { get; set; }
+        public string Comment { get; set; }
+    }
 }

@@ -38,6 +38,7 @@ using Microsoft.Web.Services3;
 using WebsitePanel.Providers;
 using WebsitePanel.Providers.Mail;
 using WebsitePanel.Server.Utils;
+using Microsoft.Web.Services3.Messaging;
 
 namespace WebsitePanel.Server
 {

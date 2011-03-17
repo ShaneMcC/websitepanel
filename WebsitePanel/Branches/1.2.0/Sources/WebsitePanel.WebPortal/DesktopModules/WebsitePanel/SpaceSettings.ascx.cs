@@ -63,6 +63,8 @@ namespace WebsitePanel.Portal
                 "edit_settings", "SettingsName=ExchangeHostedEdition", "SpaceID=" + PanelSecurity.PackageId.ToString());
             lnkVps.NavigateUrl = EditUrl("SettingsControl", "SpaceSettingsVPS",
                 "edit_settings", "SettingsName=VirtualPrivateServers", "SpaceID=" + PanelSecurity.PackageId.ToString());
+            lnkVpsForPC.NavigateUrl = EditUrl("SettingsControl", "SpaceSettingsVPSForPC",
+                "edit_settings", "SettingsName=VirtualPrivateServersForPrivateCloud", "SpaceID=" + PanelSecurity.PackageId.ToString());
 
             lnkDnsRecords.NavigateUrl = EditUrl("SpaceID", PanelSecurity.PackageId.ToString(), "edit_globaldns");
 

@@ -641,7 +641,13 @@ namespace WebsitePanel.Providers.Web.Iis.WebObjects
 
 			using (var srvman = GetServerManager())
 			{
-				return (srvman.Sites[siteId].Applications[directoryName] != null);
+				var vdir = new WebVirtualDirectory
+				{
+					Name = directoryName,
+					ParentSiteName = siteId
+				};
+				//
+				return (srvman.Sites[siteId].Applications[vdir.VirtualPath] != null);
 			}
 		}
 

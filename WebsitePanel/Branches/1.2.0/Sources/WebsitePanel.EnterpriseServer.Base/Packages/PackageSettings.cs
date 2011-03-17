@@ -46,6 +46,7 @@ namespace WebsitePanel.EnterpriseServer
         public const string HOSTED_SOLLUTION = "HostedSollution";
         public const string VIRTUAL_PRIVATE_SERVERS = "VirtualPrivateServers";
 
+        public const string VIRTUAL_PRIVATE_SERVERS_FOR_PRIVATE_CLOUD = "VirtualPrivateServersForPrivateCloud";
         public int PackageId;
         public string SettingsName;
 

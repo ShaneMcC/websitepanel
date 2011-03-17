@@ -29,34 +29,42 @@
 using System;
 
 namespace WebsitePanel.Providers.Mail
-{ 
-	[Serializable] 
+{
+	[Serializable]
 	public class MailAccount : ServiceProviderItem
-	{ 
-		private bool enabled; 
-		private string password; 
+	{
+		private bool enabled;
+		private string password;
 		private string replyTo;
 		private bool responderEnabled;
 		private string responderSubject;
 		private string responderMessage;
-        private string firstName; // SM
-        private string lastName; // SM
-        private bool deleteOnForward;
-        private string[] forwardingAddresses;
-        private string signature;
-        private bool passwordLocked;
-        private int maxMailboxSize;
-	    private bool changePassword;
-	    private bool isDomainAdmin;
-	    private bool isDomainAdminEnabled;
-	    private bool retainLocalCopy; 
-        private bool signatureEnabled;
-        private string signatureHTML;
+		private string firstName; // SM
+		private string lastName; // SM
+		private bool deleteOnForward;
+		private string[] forwardingAddresses;
+		private string signature;
+		private bool passwordLocked;
+		private int maxMailboxSize;
+		private bool changePassword;
+		private bool isDomainAdmin;
+		private bool isDomainAdminEnabled;
+		private bool retainLocalCopy;
+		private bool signatureEnabled;
+		private string signatureHTML;
 
+		/// <summary>
+		/// 
+		/// </summary>
+		public bool UnlimitedSize
+		{
+			get
+			{
+				return (maxMailboxSize < 0);
+			}
+		}
 
-	   
-
-	    public string ReplyTo
+		public string ReplyTo
 		{
 			get { return this.replyTo; }
 			set { this.replyTo = value; }
@@ -131,19 +139,19 @@ namespace WebsitePanel.Providers.Mail
 			set { signature = value; }
 		}
 
-        public bool IsDomainAdminEnabled
-        {
-            get { return isDomainAdminEnabled; }
-            set { isDomainAdminEnabled = value; }
-        }
+		public bool IsDomainAdminEnabled
+		{
+			get { return isDomainAdminEnabled; }
+			set { isDomainAdminEnabled = value; }
+		}
 
-	    public bool IsDomainAdmin
-	    {
-	        get { return isDomainAdmin; }
-	        set { isDomainAdmin = value; }
-	    }
+		public bool IsDomainAdmin
+		{
+			get { return isDomainAdmin; }
+			set { isDomainAdmin = value; }
+		}
 
-	    public bool PasswordLocked
+		public bool PasswordLocked
 		{
 			get { return passwordLocked; }
 			set { passwordLocked = value; }
@@ -155,40 +163,40 @@ namespace WebsitePanel.Providers.Mail
 			set { maxMailboxSize = value; }
 		}
 
-        public bool ChangePassword
-        {
-            get { return changePassword; }
-            set { changePassword = value; }
-        }
+		public bool ChangePassword
+		{
+			get { return changePassword; }
+			set { changePassword = value; }
+		}
 
 
-        
 
-        #endregion
 
-        #region MDaemon
+		#endregion
 
-	    public bool RetainLocalCopy
-	    {
-	        get { return retainLocalCopy; }
-	        set { retainLocalCopy = value; }
-	    }
+		#region MDaemon
 
-	    #endregion
+		public bool RetainLocalCopy
+		{
+			get { return retainLocalCopy; }
+			set { retainLocalCopy = value; }
+		}
 
-        #region hMail
-        public bool SignatureEnabled
-        {
-            get { return signatureEnabled; }
-            set { signatureEnabled = value; }
-        }
+		#endregion
 
-        public string SignatureHTML
-        {
-            get { return signatureHTML; }
-            set { signatureHTML = value; }
-        }
+		#region hMail
+		public bool SignatureEnabled
+		{
+			get { return signatureEnabled; }
+			set { signatureEnabled = value; }
+		}
 
-        #endregion 
-    }
+		public string SignatureHTML
+		{
+			get { return signatureHTML; }
+			set { signatureHTML = value; }
+		}
+
+		#endregion
+	}
 }

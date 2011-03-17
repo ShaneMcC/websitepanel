@@ -65,6 +65,7 @@
     <Reference Include="System.Drawing" />
     <Reference Include="System.Web" />
     <Reference Include="System.Web.ApplicationServices" />
+    <Reference Include="System.Web.DataVisualization" />
     <Reference Include="System.Web.DynamicData" />
     <Reference Include="System.Web.Entity" />
     <Reference Include="System.Web.Extensions" />
@@ -160,6 +161,7 @@
     <Compile Include="Code\Framework\Utils.cs" />
     <Compile Include="Code\Helpers\AuditLogHelper.cs" />
     <Compile Include="Code\Helpers\BlackBerryHelper.cs" />
+    <Compile Include="Code\Helpers\VirtualMachinesForPCHelper.cs" />
     <Compile Include="Code\Helpers\CRMHelper.cs" />
     <Compile Include="Code\Helpers\ExchangeHelper.cs" />
     <Compile Include="Code\Helpers\Extensions.cs" />
@@ -201,8 +203,287 @@
       <DependentUpon>NotifyOverusedDatabases.ascx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
+    <Compile Include="VPSForPC\MonitoringPage.aspx.cs">
+      <DependentUpon>MonitoringPage.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="VPSForPC\MonitoringPage.aspx.designer.cs">
+      <DependentUpon>MonitoringPage.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="VPSForPC\VdcAccountVLanAdd.ascx.cs">
+      <DependentUpon>VdcAccountVLanAdd.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="VPSForPC\VdcAccountVLanAdd.ascx.designer.cs">
+      <DependentUpon>VdcAccountVLanAdd.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="VPSForPC\VdcAccountVLanNetwork.ascx.cs">
+      <DependentUpon>VdcAccountVLanNetwork.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="VPSForPC\VdcAccountVLanNetwork.ascx.designer.cs">
+      <DependentUpon>VdcAccountVLanNetwork.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="VPSForPC\VdcFastCreateServer.ascx.cs">
+      <DependentUpon>VdcFastCreateServer.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="VPSForPC\VdcFastCreateServer.ascx.designer.cs">
+      <DependentUpon>VdcFastCreateServer.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="VPSForPC\VpsAlertsLog.ascx.cs">
+      <DependentUpon>VpsAlertsLog.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="VPSForPC\VpsAlertsLog.ascx.designer.cs">
+      <DependentUpon>VpsAlertsLog.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="VPSForPC\VpsCheckPoints.ascx.cs">
+      <DependentUpon>VpsCheckPoints.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="VPSForPC\VpsCheckPoints.ascx.designer.cs">
+      <DependentUpon>VpsCheckPoints.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="VPSForPC\VpsMonitoring.ascx.cs">
+      <DependentUpon>VpsMonitoring.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="VPSForPC\VpsMonitoring.ascx.designer.cs">
+      <DependentUpon>VpsMonitoring.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="VPSForPC\RemoteDesktop\Connect.aspx.cs">
+      <DependentUpon>Connect.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="VPSForPC\RemoteDesktop\Connect.aspx.designer.cs">
+      <DependentUpon>Connect.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="VPSForPC\TestVirtualMachineTemplate.aspx.cs">
+      <DependentUpon>TestVirtualMachineTemplate.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="VPSForPC\TestVirtualMachineTemplate.aspx.designer.cs">
+      <DependentUpon>TestVirtualMachineTemplate.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="VPSForPC\UserControls\Breadcrumb.ascx.cs">
+      <DependentUpon>Breadcrumb.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="VPSForPC\UserControls\Breadcrumb.ascx.designer.cs">
+      <DependentUpon>Breadcrumb.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="VPSForPC\UserControls\FormTitle.ascx.cs">
+      <DependentUpon>FormTitle.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="VPSForPC\UserControls\FormTitle.ascx.designer.cs">
+      <DependentUpon>FormTitle.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="VPSForPC\UserControls\Menu.ascx.cs">
+      <DependentUpon>Menu.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="VPSForPC\UserControls\Menu.ascx.designer.cs">
+      <DependentUpon>Menu.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="VPSForPC\UserControls\ServerTabs.ascx.cs">
+      <DependentUpon>ServerTabs.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="VPSForPC\UserControls\ServerTabs.ascx.designer.cs">
+      <DependentUpon>ServerTabs.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="VPSForPC\VdcAddExternalAddress.ascx.cs">
+      <DependentUpon>VdcAddExternalAddress.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="VPSForPC\VdcAddExternalAddress.ascx.designer.cs">
+      <DependentUpon>VdcAddExternalAddress.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="VPSForPC\VdcAuditLog.ascx.cs">
+      <DependentUpon>VdcAuditLog.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="VPSForPC\VdcAuditLog.ascx.designer.cs">
+      <DependentUpon>VdcAuditLog.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="VPSForPC\VdcCreateServer.ascx.cs">
+      <DependentUpon>VdcCreateServer.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="VPSForPC\VdcCreateServer.ascx.designer.cs">
+      <DependentUpon>VdcCreateServer.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="VPSForPC\VdcExternalNetwork.ascx.cs">
+      <DependentUpon>VdcExternalNetwork.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="VPSForPC\VdcExternalNetwork.ascx.designer.cs">
+      <DependentUpon>VdcExternalNetwork.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="VPSForPC\VdcHome.ascx.cs">
+      <DependentUpon>VdcHome.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="VPSForPC\VdcHome.ascx.designer.cs">
+      <DependentUpon>VdcHome.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="VPSForPC\VdcImportServer.ascx.cs">
+      <DependentUpon>VdcImportServer.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="VPSForPC\VdcImportServer.ascx.designer.cs">
+      <DependentUpon>VdcImportServer.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="VPSForPC\VdcManagementNetwork.ascx.cs">
+      <DependentUpon>VdcManagementNetwork.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="VPSForPC\VdcManagementNetwork.ascx.designer.cs">
+      <DependentUpon>VdcManagementNetwork.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="VPSForPC\VdcPermissions.ascx.cs">
+      <DependentUpon>VdcPermissions.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="VPSForPC\VdcPermissions.ascx.designer.cs">
+      <DependentUpon>VdcPermissions.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="VPSForPC\VdcPrivateNetwork.ascx.cs">
+      <DependentUpon>VdcPrivateNetwork.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="VPSForPC\VdcPrivateNetwork.ascx.designer.cs">
+      <DependentUpon>VdcPrivateNetwork.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="VPSForPC\VirtualMachineImage.ashx.cs">
+      <DependentUpon>VirtualMachineImage.ashx</DependentUpon>
+    </Compile>
+    <Compile Include="VPSForPC\VirtualMachineSnapshotImage.ashx.cs">
+      <DependentUpon>VirtualMachineSnapshotImage.ashx</DependentUpon>
+    </Compile>
+    <Compile Include="VPSForPC\VpsDetailsAddExternalAddress.ascx.cs">
+      <DependentUpon>VpsDetailsAddExternalAddress.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="VPSForPC\VpsDetailsAddExternalAddress.ascx.designer.cs">
+      <DependentUpon>VpsDetailsAddExternalAddress.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="VPSForPC\VpsDetailsAddPrivateAddress.ascx.cs">
+      <DependentUpon>VpsDetailsAddPrivateAddress.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="VPSForPC\VpsDetailsAddPrivateAddress.ascx.designer.cs">
+      <DependentUpon>VpsDetailsAddPrivateAddress.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="VPSForPC\VpsDetailsAuditLog.ascx.cs">
+      <DependentUpon>VpsDetailsAuditLog.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="VPSForPC\VpsDetailsAuditLog.ascx.designer.cs">
+      <DependentUpon>VpsDetailsAuditLog.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="VPSForPC\VpsDetailsConfiguration.ascx.cs">
+      <DependentUpon>VpsDetailsConfiguration.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="VPSForPC\VpsDetailsConfiguration.ascx.designer.cs">
+      <DependentUpon>VpsDetailsConfiguration.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="VPSForPC\VpsDetailsDvd.ascx.cs">
+      <DependentUpon>VpsDetailsDvd.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="VPSForPC\VpsDetailsDvd.ascx.designer.cs">
+      <DependentUpon>VpsDetailsDvd.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="VPSForPC\VpsDetailsEditConfiguration.ascx.cs">
+      <DependentUpon>VpsDetailsEditConfiguration.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="VPSForPC\VpsDetailsEditConfiguration.ascx.designer.cs">
+      <DependentUpon>VpsDetailsEditConfiguration.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="VPSForPC\VpsDetailsGeneral.ascx.cs">
+      <DependentUpon>VpsDetailsGeneral.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="VPSForPC\VpsDetailsGeneral.ascx.designer.cs">
+      <DependentUpon>VpsDetailsGeneral.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="VPSForPC\VpsDetailsHelp.ascx.cs">
+      <DependentUpon>VpsDetailsHelp.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="VPSForPC\VpsDetailsHelp.ascx.designer.cs">
+      <DependentUpon>VpsDetailsHelp.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="VPSForPC\VpsDetailsInsertDvd.ascx.cs">
+      <DependentUpon>VpsDetailsInsertDvd.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
     <Compile Include="ScheduleTaskControls\NotifyOverusedDatabases.ascx.designer.cs">
       <DependentUpon>NotifyOverusedDatabases.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="VPSForPC\VpsDetailsInsertDvd.ascx.designer.cs">
+      <DependentUpon>VpsDetailsInsertDvd.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="VPSForPC\VpsDetailsNetwork.ascx.cs">
+      <DependentUpon>VpsDetailsNetwork.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="VPSForPC\VpsDetailsNetwork.ascx.designer.cs">
+      <DependentUpon>VpsDetailsNetwork.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="VPSForPC\VpsDetailsPermissions.ascx.cs">
+      <DependentUpon>VpsDetailsPermissions.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="VPSForPC\VpsDetailsPermissions.ascx.designer.cs">
+      <DependentUpon>VpsDetailsPermissions.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="VPSForPC\VpsDetailsSnapshots.ascx.cs">
+      <DependentUpon>VpsDetailsSnapshots.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="VPSForPC\VpsDetailsSnapshots.ascx.designer.cs">
+      <DependentUpon>VpsDetailsSnapshots.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="VPSForPC\VpsDetailsTools.ascx.cs">
+      <DependentUpon>VpsDetailsTools.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="VPSForPC\VpsDetailsTools.ascx.designer.cs">
+      <DependentUpon>VpsDetailsTools.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="VPSForPC\VpsMoveServer.ascx.cs">
+      <DependentUpon>VpsMoveServer.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="VPSForPC\VpsMoveServer.ascx.designer.cs">
+      <DependentUpon>VpsMoveServer.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="VPSForPC\VpsToolsDeleteServer.ascx.cs">
+      <DependentUpon>VpsToolsDeleteServer.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="VPSForPC\VpsToolsDeleteServer.ascx.designer.cs">
+      <DependentUpon>VpsToolsDeleteServer.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="VPSForPC\VpsToolsReinstallServer.ascx.cs">
+      <DependentUpon>VpsToolsReinstallServer.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="VPSForPC\VpsToolsReinstallServer.ascx.designer.cs">
+      <DependentUpon>VpsToolsReinstallServer.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="ProviderControls\HyperVForPrivateCloud_Settings.ascx.cs">
+      <DependentUpon>HyperVForPrivateCloud_Settings.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="ProviderControls\HyperVForPrivateCloud_Settings.ascx.designer.cs">
+      <DependentUpon>HyperVForPrivateCloud_Settings.ascx</DependentUpon>
     </Compile>
     <Compile Include="SettingsExchangeHostedEditionOrganizationSummary.ascx.cs">
       <DependentUpon>SettingsExchangeHostedEditionOrganizationSummary.ascx</DependentUpon>
@@ -2991,6 +3272,13 @@
     <Compile Include="VirtualServersEditServer.ascx.designer.cs">
       <DependentUpon>VirtualServersEditServer.ascx</DependentUpon>
     </Compile>
+    <Compile Include="VPSForPC\VpsEventsLog.ascx.cs">
+      <DependentUpon>VpsEventsLog.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="VPSForPC\VpsEventsLog.ascx.designer.cs">
+      <DependentUpon>VpsEventsLog.ascx</DependentUpon>
+    </Compile>
     <Compile Include="VPS\VpsMoveServer.ascx.cs">
       <DependentUpon>VpsMoveServer.ascx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -3420,6 +3708,46 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="ScheduleTaskControls\NotifyOverusedDatabases.ascx" />
+    <Content Include="VPSForPC\MonitoringPage.aspx" />
+    <Content Include="VPSForPC\VdcAccountVLanAdd.ascx" />
+    <Content Include="VPSForPC\VdcAccountVLanNetwork.ascx" />
+    <Content Include="VPSForPC\VdcFastCreateServer.ascx" />
+    <Content Include="VPSForPC\VpsAlertsLog.ascx" />
+    <Content Include="VPSForPC\VpsCheckPoints.ascx" />
+    <Content Include="VPSForPC\VpsMonitoring.ascx" />
+    <Content Include="VPSForPC\RemoteDesktop\Connect.aspx" />
+    <Content Include="VPSForPC\RemoteDesktop\msrdp.cab" />
+    <Content Include="VPSForPC\TestVirtualMachineTemplate.aspx" />
+    <Content Include="VPSForPC\UserControls\Breadcrumb.ascx" />
+    <Content Include="VPSForPC\UserControls\FormTitle.ascx" />
+    <Content Include="VPSForPC\UserControls\Menu.ascx" />
+    <Content Include="VPSForPC\UserControls\ServerTabs.ascx" />
+    <Content Include="VPSForPC\VdcAddExternalAddress.ascx" />
+    <Content Include="VPSForPC\VdcAuditLog.ascx" />
+    <Content Include="VPSForPC\VdcCreateServer.ascx" />
+    <Content Include="VPSForPC\VdcExternalNetwork.ascx" />
+    <Content Include="VPSForPC\VdcHome.ascx" />
+    <Content Include="VPSForPC\VdcImportServer.ascx" />
+    <Content Include="VPSForPC\VdcManagementNetwork.ascx" />
+    <Content Include="VPSForPC\VdcPermissions.ascx" />
+    <Content Include="VPSForPC\VdcPrivateNetwork.ascx" />
+    <Content Include="VPSForPC\VpsDetailsAddExternalAddress.ascx" />
+    <Content Include="VPSForPC\VpsDetailsAddPrivateAddress.ascx" />
+    <Content Include="VPSForPC\VpsDetailsAuditLog.ascx" />
+    <Content Include="VPSForPC\VpsDetailsConfiguration.ascx" />
+    <Content Include="VPSForPC\VpsDetailsDvd.ascx" />
+    <Content Include="VPSForPC\VpsDetailsEditConfiguration.ascx" />
+    <Content Include="VPSForPC\VpsDetailsGeneral.ascx" />
+    <Content Include="VPSForPC\VpsDetailsHelp.ascx" />
+    <Content Include="VPSForPC\VpsDetailsInsertDvd.ascx" />
+    <Content Include="VPSForPC\VpsDetailsNetwork.ascx" />
+    <Content Include="VPSForPC\VpsDetailsPermissions.ascx" />
+    <Content Include="VPSForPC\VpsDetailsSnapshots.ascx" />
+    <Content Include="VPSForPC\VpsDetailsTools.ascx" />
+    <Content Include="VPSForPC\VpsMoveServer.ascx" />
+    <Content Include="VPSForPC\VpsToolsDeleteServer.ascx" />
+    <Content Include="VPSForPC\VpsToolsReinstallServer.ascx" />
+    <Content Include="ProviderControls\HyperVForPrivateCloud_Settings.ascx" />
     <Content Include="SettingsExchangeHostedEditionOrganizationSummary.ascx" />
     <Content Include="SetupControlPanelAccounts.ascx" />
     <Content Include="SpaceSettingsExchangeHostedEdition.ascx" />
@@ -3885,6 +4213,7 @@
     <Content Include="VirtualServersAddServer.ascx" />
     <Content Include="VirtualServersAddServices.ascx" />
     <Content Include="VirtualServersEditServer.ascx" />
+    <Content Include="VPSForPC\VpsEventsLog.ascx" />
     <Content Include="WebApplicationGalleryParamControl.ascx" />
     <Content Include="WebSites.ascx" />
     <Content Include="WebSitesAddPointer.ascx" />
@@ -4413,11 +4742,78 @@
     <Content Include="App_LocalResources\SettingsExchangeHostedEditionOrganizationSummary.ascx.resx">
       <SubType>Designer</SubType>
     </Content>
+    <Content Include="ProviderControls\App_LocalResources\HyperVForPrivateCloud_Settings.ascx.resx" />
+    <Content Include="VPSForPC\App_LocalResources\VdcAddExternalAddress.ascx.resx">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="VPSForPC\App_LocalResources\VdcAuditLog.ascx.resx">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="VPSForPC\App_LocalResources\VdcCreateServer.ascx.resx">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="VPSForPC\App_LocalResources\VdcExternalNetwork.ascx.resx">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="VPSForPC\App_LocalResources\VdcHome.ascx.resx">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="VPSForPC\App_LocalResources\VdcImportServer.ascx.resx">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="VPSForPC\App_LocalResources\VdcManagementNetwork.ascx.resx">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="VPSForPC\App_LocalResources\VdcPermissions.ascx.resx">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="VPSForPC\App_LocalResources\VdcPrivateNetwork.ascx.resx">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="VPSForPC\App_LocalResources\VpsDetailsAddExternalAddress.ascx.resx">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="VPSForPC\App_LocalResources\VpsDetailsAddPrivateAddress.ascx.resx">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="VPSForPC\App_LocalResources\VpsDetailsAuditLog.ascx.resx">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="VPSForPC\App_LocalResources\VpsDetailsConfiguration.ascx.resx">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="VPSForPC\App_LocalResources\VpsDetailsDvd.ascx.resx">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="VPSForPC\App_LocalResources\VpsDetailsEditConfiguration.ascx.resx">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="App_LocalResources\WebSitesHeliconApeControl.ascx.resx">
       <SubType>Designer</SubType>
     </Content>
+    <Content Include="VPSForPC\App_LocalResources\VpsDetailsGeneral.ascx.resx">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="App_LocalResources\WebsitesSSL.ascx.resx" />
+    <Content Include="VPSForPC\App_LocalResources\VpsDetailsHelp.ascx.resx">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="VPSForPC\App_LocalResources\VpsDetailsInsertDvd.ascx.resx">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="VPSForPC\App_LocalResources\VpsDetailsNetwork.ascx.resx">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="VPSForPC\App_LocalResources\VpsDetailsPermissions.ascx.resx">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="VPSForPC\App_LocalResources\VpsDetailsSnapshots.ascx.resx">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="App_LocalResources\SetupControlPanelAccounts.ascx.resx">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="VPSForPC\App_LocalResources\VpsDetailsTools.ascx.resx">
       <SubType>Designer</SubType>
     </Content>
     <Content Include="ScheduleTaskControls\App_LocalResources\NotifyOverusedDatabases.ascx.resx" />
@@ -4425,9 +4821,39 @@
     <Content Include="App_LocalResources\WebSitesEditHeliconApeFolderAuth.ascx.resx" />
     <Content Include="App_LocalResources\WebSitesEditHeliconApeGroup.ascx.resx" />
     <Content Include="App_LocalResources\WebSitesEditHeliconApeUser.ascx.resx" />
+    <Content Include="VPSForPC\App_LocalResources\VpsMoveServer.ascx.resx">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="VPSForPC\App_LocalResources\VpsToolsDeleteServer.ascx.resx">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="VPSForPC\App_LocalResources\VpsToolsReinstallServer.ascx.resx">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="VPSForPC\RemoteDesktop\App_LocalResources\Connect.aspx.resx">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="VPSForPC\UserControls\App_LocalResources\Breadcrumb.ascx.resx">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="VPSForPC\UserControls\App_LocalResources\Menu.ascx.resx">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="VPSForPC\UserControls\App_LocalResources\ServerTabs.ascx.resx">
+      <SubType>Designer</SubType>
+    </Content>
     <EmbeddedResource Include="UserControls\App_LocalResources\EditDomainsList.ascx.resx">
       <SubType>Designer</SubType>
     </EmbeddedResource>
+    <Content Include="VPSForPC\App_LocalResources\VpsEventsLog.ascx.resx" />
+    <Content Include="VPSForPC\App_LocalResources\VdcFastCreateServer.ascx.resx">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="VPSForPC\App_LocalResources\VpsMonitoring.ascx.resx" />
+    <Content Include="VPSForPC\App_LocalResources\VpsAlertsLog.ascx.resx" />
+    <Content Include="VPSForPC\App_LocalResources\VdcAccountVLanNetwork.ascx.resx" />
+    <Content Include="VPSForPC\App_LocalResources\VdcAccountVLanAdd.ascx.resx" />
+    <Content Include="VPSForPC\App_LocalResources\VpsCheckPoints.ascx.resx" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="ApplicationInstallerControls\beer_house.gif" />
@@ -5371,6 +5797,8 @@
     <Content Include="WebSitesColdFusionControl.ascx" />
     <Content Include="WebSitesIPAddresses.ascx" />
     <Content Include="ResizeImage.ashx" />
+    <Content Include="VPSForPC\VirtualMachineImage.ashx" />
+    <Content Include="VPSForPC\VirtualMachineSnapshotImage.ashx" />
     <None Include="Web.config">
       <SubType>Designer</SubType>
     </None>

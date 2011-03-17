@@ -1400,7 +1400,18 @@ namespace WebsitePanel.EnterpriseServer
 
         private static string GetIPAddressesQuotaByResourceGroup(string groupName)
         {
-            return (String.Compare(groupName, ResourceGroups.VPS, true) == 0) ? Quotas.VPS_EXTERNAL_IP_ADDRESSES_NUMBER : Quotas.WEB_IP_ADDRESSES;
+			if (String.Compare(groupName, ResourceGroups.VPS, true) == 0)
+			{
+				return Quotas.VPS_EXTERNAL_IP_ADDRESSES_NUMBER;
+			}
+			else if (String.Compare(groupName, ResourceGroups.VPSForPC, true) == 0)
+			{
+				return Quotas.VPSForPC_EXTERNAL_IP_ADDRESSES_NUMBER;
+			}
+			else
+			{
+				return Quotas.WEB_IP_ADDRESSES;
+			}
         }
         #endregion
 

@@ -215,6 +215,16 @@ namespace WebsitePanel.Portal
             return ES.Services.Users.AddUser(user, sendLetter);
         }
 
+        public static void AddUserVLan(int userId, UserVlan vLan)
+        {
+            ES.Services.Users.AddUserVLan(userId, vLan);
+        }
+
+        public static void DeleteUserVlan(int userId, ushort vLanId)
+        {
+            ES.Services.Users.DeleteUserVLan(userId, vLanId);
+        }
+
         public static int DeleteUser(int portalId, int userId)
         {
             // delete WebsitePanel user

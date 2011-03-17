@@ -35,6 +35,7 @@ namespace WebsitePanel.Providers.Virtualization
     public class VirtualMachineSnapshot
     {
         public string Id { get; set; }
+        public string CheckPointId { get; set; }
         public string Name { get; set; }
         public string ParentId { get; set; }
         public DateTime Created { get; set; }

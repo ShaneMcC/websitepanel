@@ -112,10 +112,10 @@
     <value>2.0</value>
   </resheader>
   <resheader name="reader">
-    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <resheader name="writer">
-    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="chkVpsFolderIncludesUsername.Text" xml:space="preserve">
     <value>User name</value>
@@ -367,5 +367,38 @@ The following substitution variables can be used in the pattern:&lt;br/&gt;
   </data>
   <data name="chkAssignIPAutomatically.Text" xml:space="preserve">
     <value>Automatically assign IP addresses to the space on creation</value>
+  </data>
+  <data name="lblCoreSvcEndpoint.Text" xml:space="preserve">
+    <value>Core Svc Endpoint</value>
+  </data>
+  <data name="lblSCCMEndPoint.Text" xml:space="preserve">
+    <value>SCCM Endpoint</value>
+  </data>
+  <data name="lblSCCMServer.Text" xml:space="preserve">
+    <value>SCCM Server</value>
+  </data>
+  <data name="lblSCDPMEndPoint.Text" xml:space="preserve">
+    <value>SCDPM Endpoint</value>
+  </data>
+  <data name="lblSCDPMServer.Text" xml:space="preserve">
+    <value>SCDPM Server</value>
+  </data>
+  <data name="lblSCOMEndPoint.Text" xml:space="preserve">
+    <value>SCOM Endpoint</value>
+  </data>
+  <data name="lblSCOMServer.Text" xml:space="preserve">
+    <value>SCOM Server</value>
+  </data>
+  <data name="lblSCVMMEndPoint.Text" xml:space="preserve">
+    <value>SCVMM Endpoint</value>
+  </data>
+  <data name="lblSCVMMServer.Text" xml:space="preserve">
+    <value>SCVMM Server</value>
+  </data>
+  <data name="lblStorageEndPoint.Text" xml:space="preserve">
+    <value>Storage Endpoint</value>
+  </data>
+  <data name="locHyperVCloud.Text" xml:space="preserve">
+    <value>Hyper-V Cloud</value>
   </data>
 </root>

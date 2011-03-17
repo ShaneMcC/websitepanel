@@ -1,8 +1,8 @@
 <Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
 	<Import Project="C:\Program Files (x86)\MSBuild\MSBuildCommunityTasks\MSBuild.Community.Tasks.Targets"/>
 	<PropertyGroup>
-		<Version>1.2.0.13</Version>
-		<ReleaseDate>2011-02-18</ReleaseDate>
+		<Version>1.2.0.20</Version>
+		<ReleaseDate>2011-03-15</ReleaseDate>
 		<BuildConfiguration>Release</BuildConfiguration>
 		<SourcesPath>https://websitepanel.svn.sourceforge.net/svnroot/websitepanel/WebsitePanel/Trunk</SourcesPath>
 		<RootFolder>C:\Projects\Sourceforge\WebsitePanel</RootFolder>
@@ -90,6 +90,7 @@
 			<ServerBuildExclude Include="$(ServerSrc)\bin\Microsoft.Web.Administration.*"/>
 			<ServerBuildExclude Include="$(ServerSrc)\bin\Microsoft.Web.Management.*"/>
 			<ServerBuildExclude Include="$(ServerSrc)\bin\Microsoft.Exchange.*"/>
+			<ServerBuildExclude Include="$(ServerSrc)\bin\Microsoft.Crm.*"/>
 			<ServerBuildExclude Include="$(ServerSrc)\bin\Microsoft.SqlServer.BatchParser.dll"/>
 			<ServerBuildFiles Include="$(ServerSrc)\**\*.*" Exclude="@(ServerBuildExclude)"/>
 		</ItemGroup>
@@ -233,6 +234,7 @@
 		<RemoveDir Directories="$(PortalInstall)"/>
 		<MakeDir Directories="$(PortalInstall)"/>
 		<Copy SourceFiles="@(PortalDeployFiles)" DestinationFolder="$(PortalInstall)\%(RecursiveDir)" />
+		<XmlUpdate XmlFileName="$(PortalInstall)\App_Data\SiteSettings.config" Xpath="//SiteSettings/EnterpriseServer" Value="http://localhost:9002"  />
 	</Target>
 
 	<Target Name="CreateImportCsvInstall" DependsOnTargets="CreatePortalInstall">

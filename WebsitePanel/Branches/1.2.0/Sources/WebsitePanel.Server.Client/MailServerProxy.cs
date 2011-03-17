@@ -47,6 +47,7 @@ namespace WebsitePanel.Providers.Mail
     using System.Web.Services.Protocols;
     using System;
     using System.Xml.Serialization;
+	using System.Net;
 
 
     /// <remarks/>

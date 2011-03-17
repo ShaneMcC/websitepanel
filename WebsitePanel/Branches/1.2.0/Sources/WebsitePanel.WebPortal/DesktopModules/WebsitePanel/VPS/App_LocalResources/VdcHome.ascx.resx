@@ -112,13 +112,13 @@
     <value>2.0</value>
   </resheader>
   <resheader name="reader">
-    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <resheader name="writer">
-    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="btnCreate.Text" xml:space="preserve">
-    <value>Create VPS</value>
+    <value>Create VM</value>
   </data>
   <data name="FormComments.Text" xml:space="preserve">
     <value>&lt;p&gt;The form displays the list of Virtual Private Servers created in the hosting space.&lt;/p&gt;&lt;p&gt;In terms of WebsitePanel VPS module hosting space could be compared to the Virtual Dedicated Center (VDC). You can see VPS bindings to external and private IP addresses as well as search VPS by these fields.&lt;/p&gt;&lt;p&gt;Quotas in the bottom of the forms show the total amount of computer resources available for VPS.&lt;/p&gt;</value>
@@ -182,5 +182,8 @@
   </data>
   <data name="cmdMove.Text" xml:space="preserve">
     <value>Move</value>
+  </data>
+  <data name="btnFastCreate.Text" xml:space="preserve">
+    <value>Fast Create VM</value>
   </data>
 </root>

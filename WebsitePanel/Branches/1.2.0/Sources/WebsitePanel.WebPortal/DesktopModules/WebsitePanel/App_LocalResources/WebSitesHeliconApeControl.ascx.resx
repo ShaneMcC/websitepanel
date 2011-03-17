@@ -145,8 +145,7 @@
     <value>Helicon Ape is not installed on the server.&lt;br /&gt;&lt;br /&gt;
     Helicon Ape product provides support for .htaccess and .htpasswd files for IIS 7+ and includes following Apache modules: 
     mod_rewrite, mod_proxy, mod_auth, mod_gzip, mod_headers, mod_cache, mod_expires, mod_replace and others.&lt;br /&gt;&lt;br /&gt;
-    You can download and install fully functional 45-day trial version of Helicon Ape on this web site by clicking on the button below.
-    You may also need to obtain a trial registration key &lt;a href="http://www.helicontech.com/ape/trialkey/" target="_blank"&gt;here&lt;/a&gt;.</value>
+    Please &lt;a href="http://www.helicontech.com/ape/doc/wsp_manual_install.htm" target="_blank"&gt;read this instruction&lt;/a&gt; on how to download and install Helicon Ape to unlock .htaccess support for this web site.</value>
   </data>
   <data name="ApeProductNotes.Text" xml:space="preserve">
     <value>Helicon Ape product provides support for .htaccess and .htpasswd files for IIS 7+ and includes following Apache modules: 

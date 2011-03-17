@@ -237,7 +237,7 @@ namespace WebsitePanel.EnterpriseServer
             bool isPeer, string comments, string firstName, string lastName, string email, string secondaryEmail,
             string address, string city, string country, string state, string zip,
             string primaryPhone, string secondaryPhone, string fax, string instantMessenger, bool htmlMail,
-			string companyName, bool ecommerceEnabled)
+            string companyName, bool ecommerceEnabled, string additionalParams)
         {
             // update user
             SqlHelper.ExecuteNonQuery(ConnectionString, CommandType.StoredProcedure,
@@ -264,7 +264,8 @@ namespace WebsitePanel.EnterpriseServer
                 new SqlParameter("@instantMessenger", instantMessenger),
                 new SqlParameter("@htmlMail", htmlMail),
 				new SqlParameter("@CompanyName", companyName),
-				new SqlParameter("@EcommerceEnabled", ecommerceEnabled));
+				new SqlParameter("@EcommerceEnabled", ecommerceEnabled),
+                new SqlParameter("@AdditionalParams", additionalParams));
         }
 
         public static void DeleteUser(int actorId, int userId)
@@ -2539,6 +2540,23 @@ namespace WebsitePanel.EnterpriseServer
             return reader;
         }
         #endregion
+
+       public static IDataReader GetVirtualMachinesForPCPaged(int actorId, int packageId, string filterColumn, string filterValue,
+           string sortColumn, int startRow, int maximumRows, bool recursive)
+        {
+            IDataReader reader = SqlHelper.ExecuteReader(ConnectionString, CommandType.StoredProcedure,
+                                     "GetVirtualMachinesPagedForPC",
+                                        new SqlParameter("@ActorID", actorId),
+                                        new SqlParameter("@PackageID", packageId),
+                                        new SqlParameter("@FilterColumn", VerifyColumnName(filterColumn)),
+                                        new SqlParameter("@FilterValue", VerifyColumnValue(filterValue)),
+                                        new SqlParameter("@SortColumn", VerifyColumnName(sortColumn)),
+                                        new SqlParameter("@StartRow", startRow),
+                                        new SqlParameter("@MaximumRows", maximumRows),
+                                        new SqlParameter("@Recursive", recursive));
+            return reader;
+        }
+
 
         #region VPS - External Network
 

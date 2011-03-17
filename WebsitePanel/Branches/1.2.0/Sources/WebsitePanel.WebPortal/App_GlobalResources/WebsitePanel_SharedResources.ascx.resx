@@ -112,10 +112,10 @@
 		<value>2.0</value>
 	</resheader>
 	<resheader name="reader">
-		<value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+		<value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
 	</resheader>
 	<resheader name="writer">
-		<value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+		<value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
 	</resheader>
 	<data name="YesNo.False" xml:space="preserve">
     <value>No</value>
@@ -4962,5 +4962,89 @@
   </data>
 	<data name="Success.WEB_SSL_EXPORT" xml:space="preserve">
     <value>Certificate successfully imported from the website</value>
+  </data>
+	<data name="ResourceGroup.Cloud" xml:space="preserve">
+    <value>System Center Server Addresses</value>
+  </data>
+	<data name="ResourceGroup.VPSForPC" xml:space="preserve">
+    <value>Virtual Private Servers for Private Cloud</value>
+  </data>
+	<data name="AuditLogSource.VPSForPC" xml:space="preserve">
+    <value>Virtual Private Servers for Private Cloud</value>
+  </data>
+	<data name="Quota.VPSForPC.Bandwidth" xml:space="preserve">
+    <value>Monthly bandwidth, GB</value>
+  </data>
+	<data name="Quota.VPSForPC.BootCdAllowed" xml:space="preserve">
+    <value>Boot from CD allowed</value>
+  </data>
+	<data name="Quota.VPSForPC.BootCdEnabled" xml:space="preserve">
+    <value>Boot from CD</value>
+  </data>
+	<data name="Quota.VPSForPC.CpuNumber" xml:space="preserve">
+    <value>Number of CPU cores</value>
+  </data>
+	<data name="Quota.VPSForPC.DvdEnabled" xml:space="preserve">
+    <value>DVD drive</value>
+  </data>
+	<data name="Quota.VPSForPC.ExternalIPAddressesNumber" xml:space="preserve">
+    <value>Number of External IP addresses</value>
+  </data>
+	<data name="Quota.VPSForPC.ExternalNetworkEnabled" xml:space="preserve">
+    <value>External Network</value>
+  </data>
+	<data name="Quota.VPSForPC.Hdd" xml:space="preserve">
+    <value>Hard Drive size, GB</value>
+  </data>
+	<data name="Quota.VPSForPC.ManagingAllowed" xml:space="preserve">
+    <value>Allow user to create, delete VPS</value>
+  </data>
+	<data name="Quota.VPSForPC.NumLockEnabled" xml:space="preserve">
+    <value>"Num Lock" by default</value>
+  </data>
+	<data name="Quota.VPSForPC.PauseResumeAllowed" xml:space="preserve">
+    <value>Allow user to Pause, Resume VPS</value>
+  </data>
+	<data name="Quota.VPSForPC.PrivateIPAddressesNumber" xml:space="preserve">
+    <value>Number of Private IP addresses per VPS</value>
+  </data>
+	<data name="Quota.VPSForPC.PrivateNetworkEnabled" xml:space="preserve">
+    <value>Private Network</value>
+  </data>
+	<data name="Quota.VPSForPC.Ram" xml:space="preserve">
+    <value>RAM size, MB</value>
+  </data>
+	<data name="Quota.VPSForPC.RebootAllowed" xml:space="preserve">
+    <value>Allow user to Reboot VPS</value>
+  </data>
+	<data name="Quota.VPSForPC.ReinstallAllowed" xml:space="preserve">
+    <value>Allow user to Re-install VPS</value>
+  </data>
+	<data name="Quota.VPSForPC.ResetAlowed" xml:space="preserve">
+    <value>Allow user to Reset VPS</value>
+  </data>
+	<data name="Quota.VPSForPC.ServersNumber" xml:space="preserve">
+    <value>Number of VPS</value>
+  </data>
+	<data name="Quota.VPSForPC.SnapshotsNumber" xml:space="preserve">
+    <value>Number of Snaphots</value>
+  </data>
+	<data name="Quota.VPSForPC.StartShutdownAllowed" xml:space="preserve">
+    <value>Allow user to Start, Turn off VPS</value>
+  </data>
+	<data name="Error.CreateCheckPointError" xml:space="preserve">
+    <value>Error creating CheckPoint</value>
+  </data>
+	<data name="Error.RestoreSheckPointError" xml:space="preserve">
+    <value>VM restored error from CheckPoint</value>
+  </data>
+	<data name="Error.RestoreSnapshotNotSelNode" xml:space="preserve">
+    <value>Node not selected</value>
+  </data>
+	<data name="Success.CreateCheckPointSuccess" xml:space="preserve">
+    <value>CheckPoint created.</value>
+  </data>
+	<data name="Success.RestoreSnapshotSuccess" xml:space="preserve">
+    <value>VM restored from CheckPoint</value>
   </data>
 </root>

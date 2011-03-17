@@ -4,6 +4,6 @@ using System.Reflection;
 [assembly: AssemblyCopyright("Copyright © 2011 SMB SAAS Systems Inc.")]
 
 [assembly: AssemblyVersion("1.2.0.0")]
-[assembly: AssemblyFileVersion("1.2.0.13")]
+[assembly: AssemblyFileVersion("1.2.0.20")]
 
-[assembly: AssemblyInformationalVersion("1.2.0")]
+[assembly: AssemblyInformationalVersion("1.2.0 Beta")]

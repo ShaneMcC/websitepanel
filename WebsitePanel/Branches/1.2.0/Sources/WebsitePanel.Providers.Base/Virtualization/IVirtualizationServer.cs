@@ -98,5 +98,6 @@ namespace WebsitePanel.Providers.Virtualization
 
         // Configuration
         int GetProcessorCoresNumber();
+
     }
 }

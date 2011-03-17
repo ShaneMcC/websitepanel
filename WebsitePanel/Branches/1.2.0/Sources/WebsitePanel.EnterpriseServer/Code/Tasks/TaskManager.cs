@@ -618,6 +618,14 @@ namespace WebsitePanel.EnterpriseServer
             CompleteResultTask(null);
         }
 
+        public static T StartResultTask<T>(string source, string taskName, Guid taskId) where T : ResultObject, new()
+        {
+            StartTask(taskId.ToString(), source, taskName, null);
+            T res = new T();
+            res.IsSuccess = true;
+            return res;
+        }
+
         public static T StartResultTask<T>(string source, string taskName) where T : ResultObject, new()
         {
             StartTask(source, taskName);
@@ -626,6 +634,7 @@ namespace WebsitePanel.EnterpriseServer
             return res;
         }
         
+
         #endregion 
     }
 }

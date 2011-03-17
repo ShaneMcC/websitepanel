@@ -167,6 +167,26 @@ order by rg.groupOrder
         public const string VPS_REINSTALL_ALLOWED = "VPS.ReinstallAllowed";		// Allow user to Re-install VPS
         public const string VPS_BANDWIDTH = "VPS.Bandwidth";		// Monthly bandwidth, GB
 
+		public const string VPSForPC_SERVERS_NUMBER = "VPSForPC.ServersNumber";		// Number of VPS
+		public const string VPSForPC_MANAGING_ALLOWED = "VPSForPC.ManagingAllowed";		// Allow user to create VPS
+		public const string VPSForPC_CPU_NUMBER = "VPSForPC.CpuNumber";		// Number of CPU cores
+		public const string VPSForPC_BOOT_CD_ALLOWED = "VPSForPC.BootCdAllowed";		// Boot from CD allowed
+		public const string VPSForPC_BOOT_CD_ENABLED = "VPSForPC.BootCdEnabled";		// Boot from CD
+		public const string VPSForPC_RAM = "VPSForPC.Ram";		// RAM size, MB
+		public const string VPSForPC_HDD = "VPSForPC.Hdd";		// Hard Drive size, GB
+		public const string VPSForPC_DVD_ENABLED = "VPSForPC.DvdEnabled";		// DVD drive
+		public const string VPSForPC_EXTERNAL_NETWORK_ENABLED = "VPSForPC.ExternalNetworkEnabled";		// External Network
+		public const string VPSForPC_EXTERNAL_IP_ADDRESSES_NUMBER = "VPSForPC.ExternalIPAddressesNumber";		// Number of External IP addresses
+		public const string VPSForPC_PRIVATE_NETWORK_ENABLED = "VPSForPC.PrivateNetworkEnabled";		// Private Network
+		public const string VPSForPC_PRIVATE_IP_ADDRESSES_NUMBER = "VPSForPC.PrivateIPAddressesNumber";		// Number of Private IP addresses per VPS
+		public const string VPSForPC_SNAPSHOTS_NUMBER = "VPSForPC.SnapshotsNumber";		// Number of Snaphots
+		public const string VPSForPC_START_SHUTDOWN_ALLOWED = "VPSForPC.StartShutdownAllowed";		// Allow user to Start, Turn off and Shutdown VPS
+		public const string VPSForPC_PAUSE_RESUME_ALLOWED = "VPSForPC.PauseResumeAllowed";		// Allow user to Pause, Resume VPS
+		public const string VPSForPC_REBOOT_ALLOWED = "VPSForPC.RebootAllowed";		// Allow user to Reboot VPS
+		public const string VPSForPC_RESET_ALOWED = "VPSForPC.ResetAlowed";		// Allow user to Reset VPS
+		public const string VPSForPC_REINSTALL_ALLOWED = "VPSForPC.ReinstallAllowed";		// Allow user to Re-install VPS
+		public const string VPSForPC_BANDWIDTH = "VPSForPC.Bandwidth";		// Monthly bandwidth, GB
+
         public const string BLACKBERRY_USERS = "BlackBerry.Users";
 
         public const string OCS_USERS = "OCS.Users";

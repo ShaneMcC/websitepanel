@@ -88,7 +88,7 @@ namespace WebsitePanel.Portal
 			if (!String.IsNullOrEmpty(usr) && !String.IsNullOrEmpty(psw))
 			{
 				// perform login
-				LoginUser(usr, psw, false, String.Empty, String.Empty);
+				LoginUser(usr, psw, chkRemember.Checked, String.Empty, String.Empty);
 			}
 		}
 
@@ -193,6 +193,27 @@ namespace WebsitePanel.Portal
                                 "ctl=", "moduleDefId=VPS"));
                         }
                     }
+
+
+                    if (cntx.Groups.ContainsKey(ResourceGroups.VPSForPC))
+                    {
+                        // VPS resource found
+                        // check created VPS
+                        VirtualMachineMetaItemsPaged vms = ES.Services.VPSPC.GetVirtualMachines(packageId, "", "", "", 0, Int32.MaxValue, false);
+                        if (vms.Items.Length == 1)
+                        {
+                            // one VPS - redirect to its properties screen
+                            Response.Redirect(PortalUtils.NavigatePageURL("SpaceVPSForPC", "SpaceID", packageId.ToString(),
+                                "ItemID=" + vms.Items[0].ItemID.ToString(), "ctl=vps_general", "moduleDefId=VPSForPC"));
+                        }
+                        else
+                        {
+                            // several VPS - redirect to VPS list page
+                            Response.Redirect(PortalUtils.NavigatePageURL("SpaceVPSForPC", "SpaceID", packageId.ToString(),
+                                "ctl=", "moduleDefId=VPSForPC"));
+                        }
+                    }
+
                 }
 
                 // no VPS resources found

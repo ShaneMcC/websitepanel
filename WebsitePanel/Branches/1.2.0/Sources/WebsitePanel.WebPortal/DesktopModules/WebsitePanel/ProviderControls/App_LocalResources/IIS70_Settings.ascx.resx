@@ -202,7 +202,7 @@
     <value>.htaccess</value>
   </data>
   <data name="lclHeliconApeInstallNote.Text" xml:space="preserve">
-    <value>Helicon Ape product provides .htaccess and .htpasswd files support on IIS 7+ and includes all major Apache modules. Note that Helicon Ape is not yet installed on the server. To install fully functional 45-day trial version of Helicon Ape click the button below.&lt;br/&gt;&lt;br/&gt;Please visit &lt;a href="http://www.helicontech.com/ape/" target="_blank"&gt;Helicon Ape homepage&lt;/a&gt; for more options and information.</value>
+    <value>Helicon Ape product provides .htaccess and .htpasswd files support on IIS 7+ and includes all major Apache modules. Note that Helicon Ape is not yet installed on the server. &lt;br/&gt;&lt;br/&gt;Please &lt;a href="http://www.helicontech.com/ape/doc/wsp_install.htm" target="_blank"&gt;download and install&lt;/a&gt; Helicon Ape to activate this feature.</value>
   </data>
   <data name="lblHtaccessAssembly.Text" xml:space="preserve">
     <value>Module Assembly:</value>

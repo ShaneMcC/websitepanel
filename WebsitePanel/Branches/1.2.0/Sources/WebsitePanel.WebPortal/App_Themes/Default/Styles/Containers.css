@@ -535,6 +535,14 @@
 	
 }
 
+/* VPSForPC */
+.VpsForPCBody
+{
+	float: left;
+	background: transparent url(../images/VPSForPC/private_cloud_module_header_vps.gif) left top no-repeat;
+	clear: both;
+}
+
 /* POPUP */
 .Popup
 {

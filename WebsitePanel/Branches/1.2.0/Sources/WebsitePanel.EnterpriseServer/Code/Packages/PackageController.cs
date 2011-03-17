@@ -680,6 +680,13 @@ namespace WebsitePanel.EnterpriseServer
                 if (Utils.ParseBool(vpsSettings["AutoAssignExternalIP"], true))
                     ServerController.AllocateMaximumPackageIPAddresses(packageId, ResourceGroups.VPS, IPAddressPool.VpsExternalNetwork);
 
+
+                // allocate "VPSForPC" IP addresses
+                int vpsfcpServiceId = PackageController.GetPackageServiceId(packageId, ResourceGroups.VPSForPC);
+                StringDictionary vpfcpsSettings = ServerController.GetServiceSettings(vpsfcpServiceId);
+                if (Utils.ParseBool(vpfcpsSettings["AutoAssignExternalIP"], true))
+                    ServerController.AllocateMaximumPackageIPAddresses(packageId, ResourceGroups.VPSForPC, IPAddressPool.VpsExternalNetwork);
+
                 // load hosting plan
                 HostingPlanInfo plan = GetHostingPlan(planId);
 
@@ -1532,6 +1539,17 @@ namespace WebsitePanel.EnterpriseServer
                 {
                     // load Exchange service settings
                     int vpsServiceId = GetPackageServiceId(packageId, ResourceGroups.VPS);
+                    if (vpsServiceId > 0)
+                    {
+                        StringDictionary vpsSettings = ServerController.GetServiceSettings(vpsServiceId);
+                        settings["HostnamePattern"] = vpsSettings["HostnamePattern"];
+                    }
+                }
+
+                //vpforCP
+                else if (String.Compare(PackageSettings.VIRTUAL_PRIVATE_SERVERS_FOR_PRIVATE_CLOUD, settingsName, true) == 0)
+                {
+                    int vpsServiceId = GetPackageServiceId(packageId, ResourceGroups.VPSForPC);
                     if (vpsServiceId > 0)
                     {
                         StringDictionary vpsSettings = ServerController.GetServiceSettings(vpsServiceId);

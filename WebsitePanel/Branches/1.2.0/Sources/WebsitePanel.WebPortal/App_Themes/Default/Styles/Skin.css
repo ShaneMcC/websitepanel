@@ -1339,16 +1339,39 @@ UL.ActionButtons LI
 	line-height: 16px;
 	font-family: Consolas, Monospace;
 }
+.pnlControl 
+{
+    height:20px;
+    margin:5px 5px;
+    text-align:left;
+}
+
+.pnlControl span 
+{
+    display:inline-block;
+    width:100px;
+}
 
 table#toolbar
 {
 	width: 100%;
 	display: none;
 }
+.pnlControl input.NormalTextBox
+{
+    width: 300px;
+}
 
 .toolbar-space
 {
 	width: 80%;
+}
+.disabled
+{
+    width:20px;
+    height:20px;
+	background: transparent url(../Icons/block.png) left center no-repeat;
+	border:medium none;
 }
 
 .toolbar-button
@@ -1357,3 +1380,12 @@ table#toolbar
 	cursor: pointer;
 	white-space: nowrap;
 }
+.enabled
+{
+    width:20px;
+    height:20px;
+	background: transparent url(../Icons/ok.png) left center no-repeat;
+	border:medium none;
+}
+
+p.warningText {font-size:14px; color:Red; text-align:center;}

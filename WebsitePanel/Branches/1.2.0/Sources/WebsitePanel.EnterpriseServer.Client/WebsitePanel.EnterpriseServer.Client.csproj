@@ -84,6 +84,7 @@
     <Compile Include="CommentsProxy.cs" />
     <Compile Include="Common\EnterpriseServerProxyConfigurator.cs" />
     <Compile Include="Common\UsernameAssertion.cs" />
+    <Compile Include="VirtualizationServerProxyForPrivateCloud.cs" />
     <Compile Include="CRMProxy.cs" />
     <Compile Include="DatabaseServersProxy.cs" />
     <Compile Include="ecServiceHandlerProxy.cs" />

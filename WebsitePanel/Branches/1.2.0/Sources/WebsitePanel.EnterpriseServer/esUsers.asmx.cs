@@ -73,6 +73,18 @@ namespace WebsitePanel.EnterpriseServer
         }
 
         [WebMethod]
+        public void AddUserVLan(int userId, UserVlan vLan)
+        {
+            UserController.AddUserVLan(userId, vLan);
+        }
+
+        [WebMethod]
+        public void DeleteUserVLan(int userId, ushort vLanId)
+        {
+            UserController.DeleteUserVLan(userId, vLanId);
+        }
+
+        [WebMethod]
         public DataSet GetRawUsers(int ownerId, bool recursive)
         {
             return UserController.GetRawUsers(ownerId, recursive);

@@ -86,6 +86,7 @@
     <Content Include="SharePointServer.asmx" />
     <Content Include="StatisticsServer.asmx" />
     <Content Include="VirtualizationServer.asmx" />
+    <Content Include="VirtualizationServerForPrivateCloud.asmx" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
@@ -183,6 +184,10 @@
       <DependentUpon>VirtualizationServer.asmx</DependentUpon>
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="VirtualizationServerForPrivateCloud.asmx.cs">
+      <DependentUpon>VirtualizationServerForPrivateCloud.asmx</DependentUpon>
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="WebServer.asmx.cs">
       <DependentUpon>WebServer.asmx</DependentUpon>
       <SubType>Component</SubType>
@@ -207,9 +212,6 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Web-2.0.config">
-      <SubType>Designer</SubType>
-    </Content>
     <None Include="WsePolicyCache.Config" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />

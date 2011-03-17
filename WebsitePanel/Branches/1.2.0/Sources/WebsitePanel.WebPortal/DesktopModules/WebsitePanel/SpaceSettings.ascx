@@ -30,5 +30,8 @@
         <div class="ToolLink">
             <asp:HyperLink ID="lnkVps" runat="server" meta:resourcekey="lnkVps" Text="Virtual Private Servers"></asp:HyperLink>
         </div>
+        <div class="ToolLink">
+            <asp:HyperLink ID="lnkVpsForPC" runat="server" meta:resourcekey="lnkVpsForPC" Text="Virtual Private Servers for Private Cloud"></asp:HyperLink>
+        </div>
     </div>
 </asp:Panel>

@@ -84,10 +84,8 @@ namespace WebsitePanel.Portal
         public void LoadProviderControl(int packageId, string groupName, PlaceHolder container, string controlName)
         {
             string ctrlPath = null;
-            //try
-            //{
-            // load provider
-            ProviderInfo provider = ES.Services.Servers.GetPackageServiceProvider(packageId, groupName);
+           //
+			ProviderInfo provider = ES.Services.Servers.GetPackageServiceProvider(packageId, groupName);
 
             // try to locate suitable control
             string currPath = this.AppRelativeVirtualPath;
@@ -99,14 +97,6 @@ namespace WebsitePanel.Portal
 
             // add control to the placeholder
             container.Controls.Add(ctrl);
-            //}
-            //catch (Exception ex)
-            //{
-            /*container.Controls.Add(new LiteralControl(
-                String.Format("'{0}' control is not found or provided control class doesn't implement required interface: {1}",
-                ctrlPath, ex.ToString())));
-             * */
-            //}
         }
 
         public void HideServiceColumns(GridView gv)

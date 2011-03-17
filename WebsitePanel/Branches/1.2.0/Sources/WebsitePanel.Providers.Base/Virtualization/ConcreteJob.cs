@@ -45,5 +45,6 @@ namespace WebsitePanel.Providers.Virtualization
         public int ErrorCode { get; set; }
         public string ErrorDescription { get; set; }
         public int PercentComplete { get; set; }
+        public  VMComputerSystemStateInfo TargetState { get; set; }
     }
 }

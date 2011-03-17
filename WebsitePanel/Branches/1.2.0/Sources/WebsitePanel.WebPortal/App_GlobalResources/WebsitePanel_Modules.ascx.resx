@@ -112,10 +112,10 @@
     <value>2.0</value>
   </resheader>
   <resheader name="reader">
-    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <resheader name="writer">
-    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="ModuleTitle.User" xml:space="preserve">
     <value>User</value>
@@ -752,6 +752,12 @@
   </data>
   <data name="ModuleTitle.HostedExchangeUpdateOrganizationServicePlan" xml:space="preserve">
     <value>Update Organization Service Plan</value>
+  </data>
+  <data name="ModuleTitle.SystemCenterServerAddresses" xml:space="preserve">
+    <value>System Center Server Addresses</value>
+  </data>
+	<data name="ModuleTitle.UserAccountVLanCreate" xml:space="preserve">
+    <value>Add VLan to user</value>
   </data>
   <data name="ModuleTitle.SetupControlPanelAccounts" xml:space="preserve">
     <value>Setup WebsitePanel Accounts</value>

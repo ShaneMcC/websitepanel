@@ -72,8 +72,8 @@ namespace WebsitePanel.Portal
                     rowDemo.Visible = !editAdminAccount;
 
                     // account info
-                    txtFirstName.Text = user.FirstName;
-                    txtLastName.Text = user.LastName;
+                    txtFirstName.Text = Server.HtmlDecode(user.FirstName);
+                    txtLastName.Text = Server.HtmlDecode(user.LastName);
                     txtEmail.Text = user.Email;
                     txtSecondaryEmail.Text = user.SecondaryEmail;
                     ddlMailFormat.SelectedIndex = user.HtmlMail ? 1 : 0;

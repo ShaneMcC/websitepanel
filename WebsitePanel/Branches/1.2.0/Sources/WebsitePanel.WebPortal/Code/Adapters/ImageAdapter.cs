@@ -44,9 +44,12 @@ namespace CSSFriendly
 		protected override void Render(HtmlTextWriter writer)
 		{
 			Image img = Control as Image;
-			if (img != null)
+			//
+			if (img != null && Page != null)
 			{
+				//
 				HttpBrowserCapabilities browser = Page.Request.Browser;
+				//
 				if (browser.Browser == "IE" &&
 					(browser.Version == "5.0" || browser.Version == "5.5" || browser.Version == "6.0")
 					&& !String.IsNullOrEmpty(img.ImageUrl) && img.ImageUrl.ToLower().EndsWith(".png"))
@@ -58,17 +61,13 @@ namespace CSSFriendly
 					img.ImageUrl = Page.ClientScript.GetWebResourceUrl(this.GetType(), "WebsitePanel.WebPortal.Code.Adapters.empty.gif");
 
 					imageUrl = img.ResolveClientUrl(imageUrl);
-					img.Attributes["style"] = 
+					img.Attributes["style"] =
 						String.Format("filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src='{0}', sizingMethod='scale');",
 						imageUrl);
 				}
-
-				base.Render(writer);
 			}
-			else
-			{
-				base.Render(writer);
-			}
+			//
+			base.Render(writer);
 		}
 	}
 }

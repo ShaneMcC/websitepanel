@@ -80,3 +80,8 @@ Default skin template. The following skins are provided as examples only.
 <asp:Image SkinID="ServerConfig48" runat="server" ImageUrl="images/VPS/server_config_48.png" ImageAlign="AbsMiddle" Width="48" Height="48"></asp:Image>
 <asp:Image SkinID="AddServer48" runat="server" ImageUrl="images/VPS/add_server_48.png" ImageAlign="AbsMiddle" Width="48" Height="48"></asp:Image>
 <asp:Image SkinID="DeleteServer48" runat="server" ImageUrl="images/VPS/delete_server_48.png" ImageAlign="AbsMiddle" Width="48" Height="48"></asp:Image>
+<asp:Image SkinID="EventLog48" runat="server" ImageUrl="images/VPS/event_log_icon.png" ImageAlign="AbsMiddle" Width="48" Height="48"></asp:Image>
+<asp:Image SkinID="AlertLog48" runat="server" ImageUrl="images/VPS/alert_icon.png" ImageAlign="AbsMiddle" Width="48" Height="48"></asp:Image>
+<asp:Image SkinID="Monitoring48" runat="server" ImageUrl="images/VPS/monitoring_icon.png" ImageAlign="AbsMiddle" Width="48" Height="48"></asp:Image>
+<asp:Image SkinID="PCServers48" runat="server" ImageUrl="images/VPS/icon-home-botbar-cloud.png" ImageAlign="AbsMiddle" Width="48" Height="48"></asp:Image>
+<asp:Image SkinID="VLanNetwork" runat="server" ImageUrl="images/VPSForPC/vlan_icon.png" ImageAlign="AbsMiddle" Width="48" Height="48"></asp:Image>

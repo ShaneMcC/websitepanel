@@ -58,6 +58,10 @@ namespace WebsitePanel.Portal.SkinControls
                     object[] attrs = Assembly.GetExecutingAssembly().GetCustomAttributes(typeof(AssemblyInformationalVersionAttribute), true);
                     if (attrs.Length > 0)
                         litVersion.Text = ((AssemblyInformationalVersionAttribute)attrs[0]).InformationalVersion;
+#if DEBUG
+					var fileVersionAttr = ((AssemblyFileVersionAttribute)Assembly.GetExecutingAssembly().GetCustomAttributes(typeof(AssemblyFileVersionAttribute), true)[0]);
+					litVersion.Text = String.Format("{0} ({1})", litVersion.Text, fileVersionAttr.Version);
+#endif
                 }
             }
             catch { /* skip */ }

@@ -29,6 +29,8 @@
     <WarningLevel>4</WarningLevel>
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
     <WarningsAsErrors>618</WarningsAsErrors>
+    <PackageAsSingleFile>false</PackageAsSingleFile>
+    <FilesToIncludeForPublish>AllFilesInTheProject</FilesToIncludeForPublish>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>none</DebugType>
@@ -95,10 +97,45 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="App_Containers\Default\VPSForPC.ascx" />
+    <Content Include="App_Themes\Default\Icons\block.png" />
+    <Content Include="App_Themes\Default\Icons\configureVLan.png" />
+    <Content Include="App_Themes\Default\Icons\OK.png" />
     <Content Include="App_Themes\Default\Images\FileManager\vbhtml.png" />
+    <Content Include="App_Themes\Default\Images\VPSForPC\vlan_icon.png" />
+    <Content Include="App_Themes\Default\Images\VPSForPC\private_cloud_module_header_vps.gif" />
     <Content Include="App_Themes\Default\Images\FileManager\cshtml.png" />
+    <Content Include="App_Themes\Default\Images\VPS\alert_icon.png" />
+    <Content Include="App_Themes\Default\Images\VPS\event_log_icon.png" />
+    <Content Include="App_Themes\Default\Images\VPS\icon-home-botbar-cloud.png" />
+    <Content Include="App_Themes\Default\Images\VPS\monitoring_icon.png" />
+    <Content Include="App_Themes\Default\Styles\images\buttons.gif" />
+    <Content Include="App_Themes\Default\Styles\images\header_bg.gif" />
     <Content Include="App_Themes\Default\Images\shield.png" />
+    <Content Include="App_Themes\Default\Styles\images\loading.gif" />
+    <Content Include="App_Themes\Default\Styles\images\ui-bg_diagonals-thick_18_b81900_40x40.png" />
+    <Content Include="App_Themes\Default\Styles\images\ui-bg_diagonals-thick_20_666666_40x40.png" />
+    <Content Include="App_Themes\Default\Styles\images\ui-bg_flat_10_000000_40x100.png" />
+    <Content Include="App_Themes\Default\Styles\images\ui-bg_glass_100_f6f6f6_1x400.png" />
+    <Content Include="App_Themes\Default\Styles\images\ui-bg_glass_100_fdf5ce_1x400.png" />
+    <Content Include="App_Themes\Default\Styles\images\ui-bg_glass_65_ffffff_1x400.png" />
+    <Content Include="App_Themes\Default\Styles\images\ui-bg_gloss-wave_35_f6a828_500x100.png" />
+    <Content Include="App_Themes\Default\Styles\images\ui-bg_highlight-soft_100_eeeeee_1x100.png" />
+    <Content Include="App_Themes\Default\Styles\images\ui-bg_highlight-soft_75_ffe45c_1x100.png" />
+    <Content Include="App_Themes\Default\Styles\images\ui-icons_222222_256x240.png" />
+    <Content Include="App_Themes\Default\Styles\images\ui-icons_228ef1_256x240.png" />
+    <Content Include="App_Themes\Default\Styles\images\ui-icons_ef8c08_256x240.png" />
+    <Content Include="App_Themes\Default\Styles\images\ui-icons_ffd27a_256x240.png" />
+    <Content Include="App_Themes\Default\Styles\images\ui-icons_ffffff_256x240.png" />
+    <Content Include="App_Themes\Default\Styles\jquery-ui-1.8.9.css" />
+    <Content Include="App_Themes\Default\Styles\jquery.window.css" />
     <Content Include="Error.htm" />
+    <Content Include="JavaScript\jquery-1.4.4.min.js" />
+    <Content Include="JavaScript\jquery-ui-1.8.9.min.js" />
+    <Content Include="JavaScript\jquery.window.js" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="..\VersionInfo.cs">

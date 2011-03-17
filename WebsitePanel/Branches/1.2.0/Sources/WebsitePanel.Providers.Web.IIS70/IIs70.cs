@@ -48,7 +48,6 @@ using WebsitePanel.Providers.Web.Iis.WebObjects;
 using WebsitePanel.Providers.Web.Iis.Extensions;
 using WebsitePanel.Providers.Web.MimeTypes;
 using WebsitePanel.Providers.Web.Iis.Utility;
-using WebsitePanel.Server.Utils;
 using Microsoft.Web.Administration;
 using Microsoft.Web.Management.Server;
 
@@ -59,6 +58,8 @@ using System.Collections.Specialized;
 using WebsitePanel.Providers.Web.WebObjects;
 using WebsitePanel.Providers.Web.Iis.Common;
 using WebsitePanel.Providers.Web.Iis;
+using Ionic.Zip;
+using WebsitePanel.Server.Utils;
 
 namespace WebsitePanel.Providers.Web
 {
@@ -98,7 +99,7 @@ namespace WebsitePanel.Providers.Web
 
         public const string HeliconApeModule = "Helicon Ape";
         public const string HeliconApeHandlerPath = "*.apehandler";
-
+        
 		public const string IsapiModule = "IsapiModule";
 		public const string FastCgiModule = "FastCgiModule";
 		public const string CgiModule = "CgiModule";
@@ -361,7 +362,7 @@ namespace WebsitePanel.Providers.Web
 		public const string FRONTPAGE_PORT_REGLOC_x86 = @"SOFTWARE\Microsoft\Shared Tools\Web Server Extensions\Ports\";
 		public const string FRONTPAGE_PORT_REGLOC_x64 = @"SOFTWARE\Wow6432Node\Microsoft\Shared Tools\Web Server Extensions\Ports\";
 
-		private string[] INSTALL_SECTIONS_ALLOWED = new string[] {
+	    private string[] INSTALL_SECTIONS_ALLOWED = new string[] {
 			Constants.CachingSection,
 			Constants.DefaultDocumentsSection,
 			Constants.DirectoryBrowseSection,
@@ -1711,9 +1712,9 @@ namespace WebsitePanel.Providers.Web
 
 		#endregion
 
-        #region Helicon Ape
+		#region Helicon Ape
 
-        public override HeliconApeStatus GetHeliconApeStatus(string siteId)
+		public override HeliconApeStatus GetHeliconApeStatus(string siteId)
         {
             string installDir = GetHeliconApeInstallDir(siteId);
             string registrationInfo = GetRegistrationInfo(siteId, installDir);
@@ -1726,41 +1727,6 @@ namespace WebsitePanel.Providers.Web
                 IsRegistered = IsHeliconApeRegistered(siteId, registrationInfo),
                 RegistrationInfo = registrationInfo
             };
-        }
-
-        void DownloadFile(string url, string fullPath)
-        {
-            System.Net.HttpWebRequest httpWebRequest = (System.Net.HttpWebRequest)System.Net.WebRequest.Create(url);
-            httpWebRequest.Referer = "http://www.websitepanel.net/";
-            System.Net.WebResponse response = httpWebRequest.GetResponse();
-
-            // Save the stream to file
-            Stream responseStream = response.GetResponseStream();
-            StreamReader reader = new StreamReader(responseStream, Encoding.Default);
-
-            Stream fileStream = File.OpenWrite(fullPath);
-			//
-            using (StreamWriter sw = new StreamWriter(fileStream, Encoding.Default))
-            {
-                sw.Write(reader.ReadToEnd());
-                sw.Flush();
-                sw.Close();
-            }
-        }
-
-        public override void InstallHeliconApe(string ServiceId)
-        {
-            //Download
-            string fullpath = Environment.ExpandEnvironmentVariables("%TEMP%\\helicon_ape.msi");
-
-            DownloadFile("http://www.helicontech.com/download/ape/Helicon_Ape.msi", fullpath);
-
-            //Install
-            System.Diagnostics.Process pocess = System.Diagnostics.Process.Start("msiexec", String.Format("/i \"{0}\" /qn AcceptEULA=Yes REGISTER_APE=0", fullpath));
-            pocess.WaitForExit(1000 * 60 * 5); // 5 minutes will be enough
-
-            // Delete temporary copy
-            File.Delete(fullpath);
         }
 
         private bool IsHeliconApeEnabled(string siteId)
@@ -1836,7 +1802,7 @@ namespace WebsitePanel.Providers.Web
             }
         }
 
-        private string FindRegistrationInfo(string path)
+        private string FindregistrationInfo(string path)
         {
             System.Text.RegularExpressions.Regex reRegistrationName = new System.Text.RegularExpressions.Regex("^\\s*RegistrationName\\s*=\\s*([^#=]+)\\s*(?:#.*)?", System.Text.RegularExpressions.RegexOptions.IgnoreCase | System.Text.RegularExpressions.RegexOptions.CultureInvariant | System.Text.RegularExpressions.RegexOptions.Compiled);
 
@@ -1881,13 +1847,13 @@ namespace WebsitePanel.Providers.Web
 
             
 
-            string registrationInfo = FindRegistrationInfo(Path.Combine(installDir, "licenses.conf"));
+            string registrationInfo = FindregistrationInfo(Path.Combine(installDir, "licenses.conf"));
             if (!string.IsNullOrEmpty(registrationInfo))
                 return registrationInfo;
 
 
 
-            registrationInfo = FindRegistrationInfo(Path.Combine(installDir, "httpd.conf"));
+            registrationInfo = FindregistrationInfo(Path.Combine(installDir, "httpd.conf"));
             if (!string.IsNullOrEmpty(registrationInfo))
                 return registrationInfo;
 
@@ -1933,12 +1899,14 @@ namespace WebsitePanel.Providers.Web
 
             // Helicon.Ape.ApeModule works for apps working in Integrated Pipeline mode
             #region Switch automatically to the app pool with Integrated Pipeline enabled
-			var webSite = GetSite(siteId);
+            var webSite = webObjectsSvc.GetWebSiteFromIIS(siteId);
             //
             if (webSite == null)
                 throw new ApplicationException(String.Format("Could not find a web site with the following identifier: {0}.", siteId));
             //
             var aphl = new WebAppPoolHelper(ProviderSettings);
+            // Fill ASP.NET settings
+            FillAspNetSettingsFromIISObject(webSite);
             //
             var currentPool = aphl.match_webapp_pool(webSite);
             var dotNetVersion = aphl.dotNetVersion(currentPool.Mode);
@@ -1955,33 +1923,55 @@ namespace WebsitePanel.Providers.Web
                         && aphl.pipeline(x.Mode) == SiteAppPoolMode.Integrated);
                 //
                 webSite.AspNetInstalled = oppositePool.AspNetInstalled;
+                //
+                SetWebSiteApplicationPool(webSite, false);
+                //
+                using (var srvman = webObjectsSvc.GetServerManager())
+                {
+                    var iisSiteObject = srvman.Sites[siteId];
+                    iisSiteObject.Applications["/"].ApplicationPoolName = webSite.ApplicationPool;
+                    //
+                    srvman.CommitChanges();
+                }
             }
             #endregion
 
             #region Disable automatically Integrated Windows Authentication
-			
-			if (webSite.EnableWindowsAuthentication == true)
-				webSite.EnableWindowsAuthentication = false;
+            PropertyBag winAuthBag = winAuthSvc.GetAuthenticationSettings(siteId);
+            //
+            if ((bool)winAuthBag[AuthenticationGlobals.Enabled])
+            {
+                //
+                using (var srvman = webObjectsSvc.GetServerManager())
+                {
+                    Configuration config = srvman.GetApplicationHostConfiguration();
 
+                    ConfigurationSection windowsAuthenticationSection = config.GetSection(
+                        "system.webServer/security/authentication/windowsAuthentication",
+                        siteId);
+                    //
+                    windowsAuthenticationSection["enabled"] = false;
+                    //
+                    srvman.CommitChanges();
+                }
+            }
             #endregion
 
             #region Disable automatically Secured Folders
-
-			if (webSite.SecuredFoldersInstalled == true)
-				webSite.SecuredFoldersInstalled = false;
-
+            if (IsSecuredFoldersInstalled(siteId))
+            {
+                UninstallSecuredFolders(siteId);
+            }
             #endregion
 
-			// Make the changes above effective
-			UpdateSite(webSite);
 
-            // 
+            //
             using (var srvman = webObjectsSvc.GetServerManager())
             {
                 //
                 Configuration appConfig = srvman.GetApplicationHostConfiguration();
                 
-                // Add Helicon.Ape module
+                // add Helicon.Ape module
                 ConfigurationSection modulesSection = appConfig.GetSection(Constants.ModulesSection, siteId);
                 ConfigurationElementCollection modulesCollection = modulesSection.GetCollection();
                 ConfigurationElement moduleAdd = modulesCollection.CreateElement("add");
@@ -1990,7 +1980,7 @@ namespace WebsitePanel.Providers.Web
                 //
                 modulesCollection.Add(moduleAdd);
 
-                // Add Helicon.Ape handler
+                // add Helicon.Ape handler
                 ConfigurationSection handlersSection = appConfig.GetSection(Constants.HandlersSection, siteId);
                 ConfigurationElementCollection handlersCollection = handlersSection.GetCollection();
                 ConfigurationElement handlerAdd = handlersCollection.CreateElement("add");
@@ -2046,6 +2036,7 @@ namespace WebsitePanel.Providers.Web
                         break;
                     }
                 }
+				//
                 if (htaccessHandlerEntry != null)
                 {
                     handlersCollection.Remove(htaccessHandlerEntry);
@@ -2074,9 +2065,9 @@ namespace WebsitePanel.Providers.Web
 
             // walk through the filesystem
             HtaccessFolder.GetDirectoriesWithHtaccess(siteRootPath, "", siteRootPath, siteRootPath, folders);
-			// Sort directories in alphabet order
-			folders.Sort();
-			//
+
+            folders.Sort();
+
             return folders;
         }
 
@@ -2175,7 +2166,7 @@ namespace WebsitePanel.Providers.Web
 	        return string.Format("{0}:{1}", user.Realm, PasswdHelper.DigestEncode(user.Name, user.Password, user.Realm));
 	    }
 
-	    public new List<HtaccessUser> GetHeliconApeUsers(string siteId)
+	    public List<HtaccessUser> GetHeliconApeUsers(string siteId)
         {
             string rootPath = GetSiteContentPath(siteId);
             List<HtaccessUser> users = new List<HtaccessUser>();
@@ -2204,7 +2195,7 @@ namespace WebsitePanel.Providers.Web
             return users;
         }
 
-        public new HtaccessUser GetHeliconApeUser(string siteId, string userName)
+        public HtaccessUser GetHeliconApeUser(string siteId, string userName)
         {
             // load users file
             string rootPath = GetSiteContentPath(siteId);
@@ -2268,7 +2259,7 @@ namespace WebsitePanel.Providers.Web
             return user;
         }
 
-        public new void UpdateHeliconApeUser(string siteId, HtaccessUser user)
+        public void UpdateHeliconApeUser(string siteId, HtaccessUser user)
         {
             UpdateHeliconApeUser(siteId, user, false);
         }
@@ -2382,7 +2373,7 @@ namespace WebsitePanel.Providers.Web
             HtaccessFolder.WriteLinesFile(groupsPath, groupLines);
         }
 
-	    public new void DeleteHeliconApeUser(string siteId, string userName)
+	    public void DeleteHeliconApeUser(string siteId, string userName)
         {
             string rootPath = GetSiteContentPath(siteId);
             HtaccessUser user = new HtaccessUser();
@@ -2397,7 +2388,7 @@ namespace WebsitePanel.Providers.Web
         #endregion
 
         #region Secured Helicon Ape Groups
-        public new List<WebGroup> GetHeliconApeGroups(string siteId)
+        public List<WebGroup> GetHeliconApeGroups(string siteId)
         {
             string rootPath = GetSiteContentPath(siteId);
             List<WebGroup> groups = new List<WebGroup>();
@@ -2422,7 +2413,7 @@ namespace WebsitePanel.Providers.Web
             return groups;
         }
 
-        public new WebGroup GetHeliconApeGroup(string siteId, string groupName)
+        public WebGroup GetHeliconApeGroup(string siteId, string groupName)
         {
             string rootPath = GetSiteContentPath(siteId);
             // open groups file
@@ -2451,7 +2442,7 @@ namespace WebsitePanel.Providers.Web
             return group;
         }
 
-        public new void UpdateHeliconApeGroup(string siteId, WebGroup group)
+        public void UpdateHeliconApeGroup(string siteId, WebGroup group)
         {
             UpdateHeliconApeGroup(siteId, group, false);
         }
@@ -2501,7 +2492,7 @@ namespace WebsitePanel.Providers.Web
             HtaccessFolder.WriteLinesFile(groupsPath, updatedGroups);
         }
 
-        public new void DeleteHeliconApeGroup(string siteId, string groupName)
+        public void DeleteHeliconApeGroup(string siteId, string groupName)
         {
             string rootPath = GetSiteContentPath(siteId);
 

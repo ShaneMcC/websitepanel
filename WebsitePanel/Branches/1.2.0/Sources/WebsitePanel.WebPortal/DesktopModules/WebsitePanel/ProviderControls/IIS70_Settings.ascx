@@ -372,12 +372,6 @@
 		    </td>
             <td class="Normal" valign="top">
                 <asp:Localize ID="Localize1" runat="server" meta:resourcekey="lclHeliconApeInstallNote" />
-                <br/><br/>
-                <asp:Button ID="DownladAndIstallApeLinkButton" runat="server" Text="Download and install" class="Button2" 
-                onclick="DownladAndIstallApeLinkButton_Click" 
-                OnClientClick="ShowProgressDialog('Installing Helicon Ape.<br /><br /><small>It may take several minutes...</small>');" 
-                />
-
             </td>
 		</tr>
     </table>

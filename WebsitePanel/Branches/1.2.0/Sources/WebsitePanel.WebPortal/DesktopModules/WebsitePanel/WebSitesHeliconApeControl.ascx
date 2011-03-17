@@ -9,7 +9,7 @@
 	</asp:Panel>
 	<asp:Panel runat="server" ID="panelHeliconApeIsNotEnabledMessage" Visible="false">
 		<p>
-			<asp:Localize runat="server" meta:resourcekey="ApeProductsNotes" /></p>
+			<asp:Localize runat="server" meta:resourcekey="ApeProductNotes" /></p>
 	</asp:Panel>
 	<asp:Button ID="btnToggleHeliconApe" runat="server" meta:resourcekey="btnToggleHeliconApe"
 		Text="Enable Helicon Ape" CssClass="Button2" CausesValidation="false" OnClick="btnToggleHeliconApe_Click" />

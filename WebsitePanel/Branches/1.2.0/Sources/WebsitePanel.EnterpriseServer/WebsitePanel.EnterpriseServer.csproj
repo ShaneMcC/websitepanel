@@ -77,6 +77,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="esVirtualizationServerForPrivateCloud.asmx" />
     <Content Include="Default.aspx" />
     <Content Include="ecStorefront.asmx" />
     <Content Include="ecStorehouse.asmx" />
@@ -106,7 +107,9 @@
     <Content Include="esUsers.asmx" />
     <Content Include="esWebServers.asmx" />
     <Content Include="Global.asax" />
-    <Content Include="Web.config" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="..\VersionInfo.cs">
@@ -127,6 +130,9 @@
     <Compile Include="Code\Common\ServiceUsernameTokenManager.cs" />
     <Compile Include="Code\Common\UsernameAssertion.cs" />
     <Compile Include="Code\Common\Utils.cs" />
+    <Compile Include="Code\VirtualizationForPrivateCloud\CreateAsyncVMfromVM.cs" />
+    <Compile Include="Code\VirtualizationForPrivateCloud\CreateServerAsyncWorkerForPrivateCloud.cs" />
+    <Compile Include="Code\VirtualizationForPrivateCloud\VirtualizationServerControllerForPrivateCloud.cs" />
     <Compile Include="Code\DatabaseServers\DatabaseServerController.cs" />
     <Compile Include="Code\Data\DataProvider.cs" />
     <Compile Include="Code\Data\EcommerceProvider.cs" />
@@ -225,13 +231,15 @@
     <Compile Include="Code\Users\UserAsyncWorker.cs" />
     <Compile Include="Code\Users\UserController.cs" />
     <Compile Include="Code\Virtualization\CreateServerAsyncWorker.cs" />
-    <Compile Include="Code\Virtualization\VirtualizationServerController.cs">
-      <SubType>Code</SubType>
-    </Compile>
+    <Compile Include="Code\Virtualization\VirtualizationServerController.cs" />
     <Compile Include="Code\WebAppGallery\WebAppGalleryController.cs" />
     <Compile Include="Code\WebServers\WebServerController.cs" />
     <Compile Include="Code\Wizards\UserCreationWizard.cs" />
     <Compile Include="Code\Wizards\WebApplicationsInstaller.cs" />
+    <Compile Include="esVirtualizationServerForPrivateCloud.asmx.cs">
+      <DependentUpon>esVirtualizationServerForPrivateCloud.asmx</DependentUpon>
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="Default.aspx.cs">
       <SubType>ASPXCodeBehind</SubType>
       <DependentUpon>Default.aspx</DependentUpon>
@@ -398,7 +406,6 @@
     <Content Include="esWebApplicationGallery.asmx" />
     <EmbeddedResource Include="Images\logo.png" />
     <Content Include="SystemEventHandlers.config" />
-    <Content Include="Web-v2.0.config" />
     <None Include="TaskEventHandlers.config" />
     <None Include="WsePolicyCache.Config" />
   </ItemGroup>

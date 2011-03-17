@@ -45,5 +45,7 @@ namespace WebsitePanel.Providers.Virtualization
         public bool ProvisionAdministratorPassword { get; set; }
         public bool ProvisionComputerName { get; set; }
         public bool ProvisionNetworkAdapters { get; set; }
+
+        public VirtualNetworkInfo[] Networks { get; set; }
     }
 }

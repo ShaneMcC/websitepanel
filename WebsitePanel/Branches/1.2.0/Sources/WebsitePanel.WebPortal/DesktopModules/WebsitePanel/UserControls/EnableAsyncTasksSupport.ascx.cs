@@ -71,6 +71,15 @@ namespace WebsitePanel.Portal
 
 				asyncScript = "ShowProgressDialogAsync('" + asyncTaskID + "', '" + taskTitle + "');";
             }
+            else
+            {
+                string url = (string)Context.Items["RedirectUrl"];
+
+                if (!String.IsNullOrWhiteSpace(url))
+                {
+                    Response.Redirect(url);
+                }
+            }
 
             Page.ClientScript.RegisterStartupScript(this.GetType(), "Atlas", @"<script>
         function pageLoad()

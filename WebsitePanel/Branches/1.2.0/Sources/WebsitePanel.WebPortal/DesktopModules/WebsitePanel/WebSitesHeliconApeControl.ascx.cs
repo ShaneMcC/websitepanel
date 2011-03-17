@@ -64,7 +64,7 @@ namespace WebsitePanel.Portal
 
         protected void Page_Load(object sender, EventArgs e)
         {
-            if (IsSecuredFoldersInstalled)
+            if (IsHeliconApeInstalled)
             {
                 WebSite site = null;
                 try
@@ -116,7 +116,7 @@ namespace WebsitePanel.Portal
                 btnToggleHeliconApe.Text = GetLocalizedString(
                     IsHeliconApeEnabled ? "DisableHeliconApe.Text" : "EnableHeliconApe.Text");
 
-                // show hide panel
+                // toggle panels
                 HeliconApeFoldersPanel.Visible = IsHeliconApeEnabled;
                 panelHeliconApeIsNotEnabledMessage.Visible = !IsHeliconApeEnabled;
 
@@ -130,11 +130,8 @@ namespace WebsitePanel.Portal
             }
             else
             {
-				// Display the module not installed message for informational purposes to administrators only.
-				if (PanelSecurity.LoggedUser.Role == EnterpriseServer.UserRole.Administrator)
-				{
-					panelHeliconApeIsNotInstalledMessage.Visible = true;
-				}
+				// Display the module not installed message for informational purposes.
+    			panelHeliconApeIsNotInstalledMessage.Visible = true;
 				//
                 btnToggleHeliconApe.Visible = false;
                 HeliconApeFoldersPanel.Visible = false;

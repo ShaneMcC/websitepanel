@@ -91,6 +91,7 @@
     <Compile Include="ServiceProviderProxy.cs" />
     <Compile Include="SharePointServerProxy.cs" />
     <Compile Include="StatisticsServerProxy.cs" />
+    <Compile Include="VirtualizationServerForPrivateCloudProxy.cs" />
     <Compile Include="VirtualizationServerProxy.cs">
       <SubType>code</SubType>
     </Compile>

@@ -133,7 +133,6 @@ namespace WebsitePanel.Providers.Virtualization
 
             VirtualMachine vm = CreateVirtualMachineFromWmiObject(objVm);
 
-
             // load summary information
             ManagementBaseObject objSummary = GetVirtualMachineSummaryInformation(vmId,
                 SummaryInformationRequest.Heartbeat,
@@ -2493,5 +2492,12 @@ exit", Convert.ToInt32(objDisk["Index"])));
             return sysPath;
         }
         #endregion
+
+        #region Hyper-V Cloud
+        public bool CheckServerState(string connString)
+        {
+            return !String.IsNullOrWhiteSpace(connString);
+        }
+        #endregion Hyper-V Cloud
     }
 }

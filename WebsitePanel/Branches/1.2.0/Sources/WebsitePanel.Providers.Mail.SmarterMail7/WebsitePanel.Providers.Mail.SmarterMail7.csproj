@@ -43,6 +43,7 @@
     <Compile Include="..\VersionInfo.cs">
       <Link>VersionInfo.cs</Link>
     </Compile>
+    <Compile Include="Extensions.cs" />
     <Compile Include="SmarterMail7.cs" />
     <Compile Include="SmarterMail7Proxies.cs" />
   </ItemGroup>

@@ -32,7 +32,7 @@
 				</asp:hyperlink>
 			</ItemTemplate>
 		</asp:TemplateField>
-		<asp:BoundField DataField="FullName" SortExpression="FullName" HeaderText="gvUsersName">
+		<asp:BoundField DataField="FullName" HtmlEncode="false" SortExpression="FullName" HeaderText="gvUsersName">
 		    <HeaderStyle Wrap="false" />
         </asp:BoundField>
 		<asp:BoundField DataField="Email" SortExpression="Email" HeaderText="gvUsersEmail"></asp:BoundField>
