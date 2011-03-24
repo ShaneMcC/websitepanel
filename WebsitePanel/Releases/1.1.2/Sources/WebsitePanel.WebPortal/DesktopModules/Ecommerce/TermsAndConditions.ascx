@@ -1,0 +1,2 @@
+<%@ Control Language="C#" AutoEventWireup="true" CodeBehind="TermsAndConditions.ascx.cs" Inherits="WebsitePanel.Ecommerce.Portal.TermsAndConditions" %>
+<div class="FormBody" runat="server" id="pnlTermsAndConds"></div>
