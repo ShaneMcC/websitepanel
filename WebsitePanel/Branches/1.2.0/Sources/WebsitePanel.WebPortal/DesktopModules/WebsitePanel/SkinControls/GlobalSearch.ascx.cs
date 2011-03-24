@@ -97,10 +97,18 @@ namespace WebsitePanel.Portal.SkinControls
         {
             // bind item types
             DataTable dtItemTypes = ES.Services.Packages.GetSearchableServiceItemTypes().Tables[0];
-            foreach (DataRow dr in dtItemTypes.Rows)
-                ddlItemType.Items.Add(new ListItem(
-                    PortalUtils.GetSharedLocalizedString(Utils.ModuleName, "ServiceItemType." + dr["DisplayName"].ToString()),
-                    dr["ItemTypeID"].ToString()));
+			foreach (DataRow dr in dtItemTypes.Rows)
+			{
+				// Trying a well-known workaround to distinguish different service item types with the same name
+				var localizedStr = PortalUtils.GetSharedLocalizedString(Utils.ModuleName, "ServiceItemType." + dr["DisplayName"].ToString() + "_" + dr["ItemTypeID"].ToString());
+				// Looking for localized text
+				if (String.IsNullOrWhiteSpace(localizedStr))
+				{
+					localizedStr = PortalUtils.GetSharedLocalizedString(Utils.ModuleName, "ServiceItemType." + dr["DisplayName"].ToString());
+				}
+				//
+				ddlItemType.Items.Add(new ListItem(localizedStr, dr["ItemTypeID"].ToString()));
+			}
         }
 
         protected void dlTabs_SelectedIndexChanged(object sender, EventArgs e)

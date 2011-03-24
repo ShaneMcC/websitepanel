@@ -913,6 +913,7 @@ namespace WebsitePanel.Providers.VirtualizationForPC
 
 				VirtualMachineInfo vmi = client.GetVirtualMachineByName(vm.Name);
 
+				#region This code is intended to update a VM settings only in Host mode but it does not support Cluster mode
 				// get VM object
 				ManagementObject objVM = GetVirtualMachineObject(vmId);
 
@@ -966,58 +967,11 @@ namespace WebsitePanel.Providers.VirtualizationForPC
 				{
 					// add private adapter
 					//AddNetworkAdapter(objVM, vm.PrivateSwitchId, vm.Name, vm.PrivateNicMacAddress, PRIVATE_NETWORK_ADAPTER_NAME, vm.LegacyNetworkAdapter);
-				}
+				} 
+				#endregion
 			}
 
 			return vm;
-		}
-
-		private void UpdateVirtualMachineGeneralSettings(string vmId, ManagementObject objVM, int cpuCores, int ramMB, bool bootFromCD, bool numLockEnabled)
-		{
-			// request management service
-			ManagementObject objVmsvc = GetVirtualSystemManagementService();
-
-			// VM resources
-			List<string> vmConfig = new List<string>();
-
-			// get system settings
-			ManagementObject objSettings = GetVirtualMachineSettingsObject(vmId);
-
-			// BIOS (num lock)
-			objSettings["BIOSNumLock"] = numLockEnabled;
-
-			// BIOS (boot order)
-			// BootOrder = 0 - Boot from floppy, 1 - Boot from CD, 2 - Boot from disk, 3 - PXE Boot 
-			objSettings["BootOrder"] = bootFromCD ? new int[] { 1, 2, 3, 0 } : new int[] { 2, 1, 3, 0 };
-
-			// modify machine settings
-			ManagementBaseObject inParams = objVmsvc.GetMethodParameters("ModifyVirtualSystem");
-			inParams["ComputerSystem"] = objVM;
-			inParams["SystemSettingData"] = objSettings.GetText(TextFormat.CimDtd20);
-			ManagementBaseObject outParams = objVmsvc.InvokeMethod("ModifyVirtualSystem", inParams, null);
-			JobResult job = CreateJobResultFromWmiMethodResults(outParams);
-
-			// setup CPU
-			ManagementObject objCpu = wmi.GetWmiObject("Msvm_ProcessorSettingData", "InstanceID Like 'Microsoft:{0}%'", vmId);
-			objCpu["VirtualQuantity"] = cpuCores;
-			objCpu["Limit"] = Convert.ToInt64(CpuLimitSettings * 1000);
-			objCpu["Reservation"] = Convert.ToInt64(CpuReserveSettings * 1000);
-			objCpu["Weight"] = CpuWeightSettings;
-			vmConfig.Add(objCpu.GetText(TextFormat.CimDtd20));
-
-			// setup RAM
-			ManagementObject objRam = wmi.GetWmiObject("Msvm_MemorySettingData", "InstanceID Like 'Microsoft:{0}%'", vmId);
-			objRam["VirtualQuantity"] = ramMB.ToString();
-			objRam["Reservation"] = ramMB.ToString();
-			objRam["Limit"] = ramMB.ToString();
-			vmConfig.Add(objRam.GetText(TextFormat.CimDtd20));
-
-			// modify machine resources
-			inParams = objVmsvc.GetMethodParameters("ModifyVirtualSystemResources");
-			inParams["ComputerSystem"] = objVM;
-			inParams["ResourceSettingData"] = vmConfig.ToArray();
-			outParams = objVmsvc.InvokeMethod("ModifyVirtualSystemResources", inParams, null);
-			job = CreateJobResultFromWmiMethodResults(outParams);
 		}
 
 		private void AddVirtualMachineDvdDrive(string vmId, ManagementObject objVM)
@@ -1289,39 +1243,39 @@ namespace WebsitePanel.Providers.VirtualizationForPC
 					switch (newState)
 					{
 						case VirtualMachineRequestedState.Start:
-							{
-								client.StartVirtualMachine(vm.Id);
-								ret.Job.TargetState = Virtualization.VMComputerSystemStateInfo.Running;
-								break;
-							}
+						{
+							client.StartVirtualMachine(vm.Id);
+							ret.Job.TargetState = Virtualization.VMComputerSystemStateInfo.Running;
+							break;
+						}
 						case VirtualMachineRequestedState.Resume:
-							{
-								client.ResumeVirtualMachine(vm.Id);
-								ret.Job.TargetState = Virtualization.VMComputerSystemStateInfo.Running;
-								break;
-							}
+						{
+							client.ResumeVirtualMachine(vm.Id);
+							ret.Job.TargetState = Virtualization.VMComputerSystemStateInfo.Running;
+							break;
+						}
 						case VirtualMachineRequestedState.Pause:
-							{
-								client.PauseVirtualMachine(vm.Id);
-								ret.Job.TargetState = Virtualization.VMComputerSystemStateInfo.Paused;
-								break;
-							}
+						{
+							client.PauseVirtualMachine(vm.Id);
+							ret.Job.TargetState = Virtualization.VMComputerSystemStateInfo.Paused;
+							break;
+						}
 						case VirtualMachineRequestedState.ShutDown:
-							{
-								client.ShutdownVirtualMachine(vm.Id);
-								ret.Job.TargetState = Virtualization.VMComputerSystemStateInfo.Stored;
-								break;
-							}
+						{
+							client.ShutdownVirtualMachine(vm.Id);
+							ret.Job.TargetState = Virtualization.VMComputerSystemStateInfo.Stored;
+							break;
+						}
 						case VirtualMachineRequestedState.TurnOff:
-							{
-								client.StopVirtualMachine(vm.Id);
-								ret.Job.TargetState = Virtualization.VMComputerSystemStateInfo.PowerOff;
-								break;
-							}
+						{
+							client.StopVirtualMachine(vm.Id);
+							ret.Job.TargetState = Virtualization.VMComputerSystemStateInfo.PowerOff;
+							break;
+						}
 						default:
-							{
-								break;
-							}
+						{
+							break;
+						}
 					}
 
 					ret.Job.JobState = ConcreteJobState.Running;
@@ -1331,6 +1285,8 @@ namespace WebsitePanel.Providers.VirtualizationForPC
 			}
 			catch (Exception ex)
 			{
+				Log.WriteError("Could not change virtual machine state", ex);
+				//
 				ret.Job.JobState = ConcreteJobState.Exception;
 				ret.Job.Caption = newState.ToString();
 				ret.ReturnValue = ReturnCode.Failed;
@@ -1356,6 +1312,8 @@ namespace WebsitePanel.Providers.VirtualizationForPC
 			}
 			catch (Exception ex)
 			{
+				Log.WriteError("Could not shut down virtual machine", ex);
+				//
 				ret = ReturnCode.Failed;
 			}
 
@@ -3357,6 +3315,7 @@ exit", Convert.ToInt32(objDisk["Index"])));
 		#endregion
 
 		#region Hyper-V Cloud
+
 		public bool CheckServerState(VMForPCSettingsName control, string connString, string connName)
 		{
 			bool ret = false;
@@ -3366,49 +3325,54 @@ exit", Convert.ToInt32(objDisk["Index"])));
 				switch (control)
 				{
 					case VMForPCSettingsName.SCVMMServer:
+					{
+						if (!String.IsNullOrWhiteSpace(connString)
+							&& !String.IsNullOrWhiteSpace(connName))
 						{
-							if (!String.IsNullOrWhiteSpace(connString)
-								&& !String.IsNullOrWhiteSpace(connName))
+							EndpointAddress endPointAddress = new EndpointAddress(new Uri(connString)
+												, EndpointIdentity.CreateUpnIdentity(connName));
+
+							using (VirtualMachineManagementServiceClient check = new VirtualMachineManagementServiceClient(new WSHttpBinding("WSHttpBinding_IVirtualMachineManagementService"), endPointAddress))
 							{
-								EndpointAddress endPointAddress = new EndpointAddress(new Uri(connString)
-												 , EndpointIdentity.CreateUpnIdentity(connName));
+								check.Open();
+								ret = true;
+								check.Close();
 
-								using (VirtualMachineManagementServiceClient check = new VirtualMachineManagementServiceClient(new WSHttpBinding("WSHttpBinding_IVirtualMachineManagementService"), endPointAddress))
-								{
-									check.Open();
-									ret = true;
-									check.Close();
-
-								}
 							}
-							break;
 						}
+						break;
+					}
 					case VMForPCSettingsName.SCOMServer:
+					{
+						if (!String.IsNullOrWhiteSpace(connString)
+							&& !String.IsNullOrWhiteSpace(connName))
 						{
-							if (!String.IsNullOrWhiteSpace(connString)
-								&& !String.IsNullOrWhiteSpace(connName))
-							{
-								EndpointAddress endPointAddress = new EndpointAddress(new Uri(connString)
-												 , EndpointIdentity.CreateUpnIdentity(connName));
+							EndpointAddress endPointAddress = new EndpointAddress(new Uri(connString)
+												, EndpointIdentity.CreateUpnIdentity(connName));
 
-								using (MonitoringServiceClient checkMonitoring = new MonitoringServiceClient(new WSHttpBinding("WSHttpBinding_IMonitoringService"), endPointAddress))
-								{
-									checkMonitoring.Open();
-									ret = true;
-									checkMonitoring.Close();
-								}
+							using (MonitoringServiceClient checkMonitoring = new MonitoringServiceClient(new WSHttpBinding("WSHttpBinding_IMonitoringService"), endPointAddress))
+							{
+								checkMonitoring.Open();
+								ret = true;
+								checkMonitoring.Close();
 							}
-							break;
 						}
+						break;
+					}
 				}
 			}
 			catch (Exception ex)
 			{
+				//
+				Log.WriteError("Could not check server state", ex);
+				//
 				ret = false;
+				//
 				throw;
 			}
 			return ret;
 		}
+
 		#endregion Hyper-V Cloud
 
 		#region Monitoring

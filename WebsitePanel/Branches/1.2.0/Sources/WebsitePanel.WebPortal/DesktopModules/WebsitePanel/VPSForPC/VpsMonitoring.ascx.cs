@@ -11,12 +11,11 @@ namespace WebsitePanel.Portal.VPSForPC
 {
     public partial class VpsMonitoring : WebsitePanelModuleBase
     {
+		public const string ShowASPanelScript = "ShowASPanelScript";
+
         protected void Page_Load(object sender, EventArgs e)
         {
-            if (!IsPostBack)
-            {
-                hItemId.Value = PanelRequest.ItemID.ToString();
-            }
+			RegisterClientSideScripts();
 
             DateTime StartP = DateTime.Now.AddDays(-1);
             DateTime EndP = DateTime.Now;
@@ -59,13 +58,27 @@ namespace WebsitePanel.Portal.VPSForPC
             ChartMemory.Series["series"].ChartType = SeriesChartType.SplineArea;
             ChartMemory.Series["series"]["ShowMarkerLines"] = "True";
             ChartMemory.ChartAreas["chartArea"].AxisX.IsMarginVisible = true;
-
-            //ChartDisc.Titles.Add("Disk I/O");
-            //ChartDisc.Series["series"].ChartType = SeriesChartType.Line;
-            //ChartDisc.Series["series"].IsValueShownAsLabel = true;
-            //ChartDisc.Series["series"]["ShowMarkerLines"] = "True";
-            //ChartDisc.ChartAreas["chartArea"].AxisX.IsMarginVisible = true;
-
         }
+
+		private void RegisterClientSideScripts()
+		{
+			if (Page.ClientScript.IsClientScriptBlockRegistered(ShowASPanelScript) == false)
+			{
+				Page.ClientScript.RegisterClientScriptBlock(GetType(), ShowASPanelScript, @"<script type='text/javascript'>
+					function ShowASPanel(chartType) {
+						var sUrl = '/DesktopModules/WebsitePanel/VPSForPC/MonitoringPage.aspx?ItemID=" + PanelRequest.ItemID + @"&chartType=' + chartType;
+						var win = $.window({
+							title: 'Performance Counter: ' + chartType,
+							url: sUrl,
+							width: '590px'
+						});
+
+						win.getFrame().height(500);
+						win.resize(600, 500);
+						return false;
+					};
+				</script>");
+			}
+		}
     }
 }

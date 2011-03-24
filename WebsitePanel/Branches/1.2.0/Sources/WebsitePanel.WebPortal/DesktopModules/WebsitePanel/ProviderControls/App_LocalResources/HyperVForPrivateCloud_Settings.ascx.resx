@@ -384,10 +384,10 @@ The following substitution variables can be used in the pattern:&lt;br/&gt;
     <value>SCDPM Server</value>
   </data>
   <data name="lblSCOMServer.Text" xml:space="preserve">
-    <value>Server URL</value>
+    <value>Server URL:</value>
   </data>
   <data name="lblSCVMMServer.Text" xml:space="preserve">
-    <value>Server URL</value>
+    <value>Server URL:</value>
   </data>
   <data name="lblStorageEndPoint.Text" xml:space="preserve">
     <value>Storage Endpoint</value>
@@ -414,10 +414,10 @@ The following substitution variables can be used in the pattern:&lt;br/&gt;
     <value>Please choice the private virtual network name</value>
   </data>
   <data name="lblSCOMPrincipalName.Text" xml:space="preserve">
-    <value>Principal name</value>
+    <value>Principal Name:</value>
   </data>
   <data name="lblSCVMMPrincipalName.Text" xml:space="preserve">
-    <value>Pribcipal name</value>
+    <value>Principal Name:</value>
   </data>
   <data name="lblVPServer.Text" xml:space="preserve">
     <value>Server URL</value>

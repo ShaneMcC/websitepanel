@@ -31,24 +31,6 @@ namespace WebsitePanel.Portal.VPSForPC {
         protected global::System.Web.UI.Timer operationTimer;
         
         /// <summary>
-        /// divWrapper control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlGenericControl divWrapper;
-        
-        /// <summary>
-        /// hItemId control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.HiddenField hItemId;
-        
-        /// <summary>
         /// breadcrumb control.
         /// </summary>
         /// <remarks>

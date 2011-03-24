@@ -133,9 +133,6 @@
     <Content Include="JavaScript\jquery-1.4.4.min.js" />
     <Content Include="JavaScript\jquery-ui-1.8.9.min.js" />
     <Content Include="JavaScript\jquery.window.js" />
-    <Content Include="Web.config">
-      <SubType>Designer</SubType>
-    </Content>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="..\VersionInfo.cs">
@@ -198,9 +195,12 @@
     <Content Include="App_Containers\Default\Edit.ascx" />
     <Content Include="Default.aspx" />
     <Content Include="JavaScript\jquery.min.js" />
-    <Content Include="Web6.config" />
-    <Content Include="Web-v3.5.config" />
-    <Content Include="Web6-v3.5.config" />
+    <Content Include="Web6.config">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <Content Include="App_Browsers\CSSFriendlyAdapters.browser" />
@@ -213,9 +213,6 @@
     <None Include="App_Data\Ecommerce_Modules.config" />
     <None Include="App_Data\Ecommerce_Pages.config" />
     <None Include="App_Data\SupportedLocales.config" />
-    <Content Include="Web.config">
-      <SubType>Designer</SubType>
-    </Content>
     <Content Include="Services\2Checkout.ashx" />
     <Content Include="Services\PayPalIPN.ashx" />
     <Content Include="App_Themes\Default\Images.skin" />
