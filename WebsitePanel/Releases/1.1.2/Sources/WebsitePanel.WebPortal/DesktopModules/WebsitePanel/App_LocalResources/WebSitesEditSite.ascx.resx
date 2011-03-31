@@ -384,4 +384,55 @@ To connect to web site management service please use username and password provi
   <data name="btnWmSvcSiteEnable.OnClientClick" xml:space="preserve">
     <value>ShowProgressDialog('Enabling Remote Management...')</value>
   </data>
+  <data name="Tab.WebDeployPublishing" xml:space="preserve">
+    <value>Web Publishing</value>
+  </data>
+  <data name="WDeploySitePublishingDisabled.Text" xml:space="preserve">
+    <value>Web Deploy Publishing is Disabled.</value>
+  </data>
+  <data name="WDeploySitePublishingEnabled.Text" xml:space="preserve">
+    <value>Web Deploy Publishing is Enabled.</value>
+  </data>
+  <data name="WDeploySitePublishingEnablementHint.Text" xml:space="preserve">
+    <value>To enable Web Publishing for this web site specify account user name and password and then click "Enable" button.</value>
+  </data>
+  <data name="PubProfileMsSqlLocalize.Text" xml:space="preserve">
+    <value>Please choose a Microsoft SQL database:</value>
+  </data>
+  <data name="WDeployBuildPublishingProfileWizard.Text" xml:space="preserve">
+    <value>Build Publising Profile Wizard</value>
+  </data>
+  <data name="WDeployBuildSitePublishingProfileHint.Text" xml:space="preserve">
+    <value>Please use the link below to build a publishing profile that makes it easy to configure publishing settings for your convenience.</value>
+  </data>
+  <data name="WDeployChangePublishingPasswButton.Text" xml:space="preserve">
+    <value>Change Password</value>
+  </data>
+  <data name="WDeployDisablePublishingButton.Text" xml:space="preserve">
+    <value>Disable</value>
+  </data>
+  <data name="WDeployEnabePublishingButton.Text" xml:space="preserve">
+    <value>Enable</value>
+  </data>
+  <data name="WDeployPublishingAccountLocalize.Text" xml:space="preserve">
+    <value>Username:</value>
+  </data>
+  <data name="WDeployPublishingConfirmPasswordLocalize.Text" xml:space="preserve">
+    <value>Confim password:</value>
+  </data>
+  <data name="WDeployPublishingPasswordLocalize.Text" xml:space="preserve">
+    <value>Password:</value>
+  </data>
+  <data name="WDeployPublishingProfileUsageNotes.Text" xml:space="preserve">
+    <value>Now you can publish content to this site easily via either Web Matrix or Visual Studio .NET 2010. Please use the link below to download publishing profile that makes it easy to publish the content online for your convenience. You also have an option to re-build publishing profile if you decide to change or update your publishing settings.</value>
+  </data>
+  <data name="WebPublishing.ChooseDatabasePrompt" xml:space="preserve">
+    <value>Choose database...</value>
+  </data>
+  <data name="WebPublishing.ChooseDatabaseUserPrompt" xml:space="preserve">
+    <value>Choose database user...</value>
+  </data>
+  <data name="WebPublishing.ChooseFtpAccountPrompt" xml:space="preserve">
+    <value>Choose FTP account...</value>
+  </data>
 </root>

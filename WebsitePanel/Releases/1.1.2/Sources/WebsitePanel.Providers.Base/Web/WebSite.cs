@@ -47,7 +47,6 @@ namespace WebsitePanel.Providers.Web
         private string siteId;
 		private string siteIPAddress;
         private int siteIPAddressId;
-		private string logsPath;
         private string dataPath;
 		private ServerBinding[] bindings;
         private bool frontPageAvailable;
@@ -84,11 +83,11 @@ namespace WebsitePanel.Providers.Web
             set { siteIPAddressId = value; }
         }
 
-		public string LogsPath
-		{
-			get { return logsPath; }
-            set { logsPath = value; }
-		}
+		/// <summary>
+		/// Gets or sets logs path for the web site
+		/// </summary>
+		[Persistent]
+		public string LogsPath { get; set; }
 
         [Persistent]
         public string DataPath

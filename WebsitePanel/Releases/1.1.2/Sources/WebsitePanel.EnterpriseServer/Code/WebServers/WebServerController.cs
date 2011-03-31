@@ -42,6 +42,13 @@ using WebsitePanel.Providers.DNS;
 using OS = WebsitePanel.Providers.OS;
 using WebsitePanel.Providers.Common;
 using WebsitePanel.Providers.ResultObjects;
+using System.Resources;
+using System.Threading;
+using System.Reflection;
+using WebsitePanel.Templates;
+using WebsitePanel.Providers.Database;
+using WebsitePanel.Providers.FTP;
+using System.Collections;
 
 namespace WebsitePanel.EnterpriseServer
 {
@@ -136,6 +143,15 @@ namespace WebsitePanel.EnterpriseServer
             site.FrontPageAccount = siteItem.FrontPageAccount;
             if (String.IsNullOrEmpty(site.FrontPageAccount))
                 site.FrontPageAccount = GetFrontPageUsername(site.Name);
+
+			#region Restore Web Deploy publishing persistent properties
+			// Set Web Deploy publishing account
+			site.WebDeployPublishingAccount = siteItem.WebDeployPublishingAccount;
+			// Set Web Deploy site publishing enabled
+			site.WebDeploySitePublishingEnabled = siteItem.WebDeploySitePublishingEnabled;
+			// Set Web Deploy site publishing profile
+			site.WebDeploySitePublishingProfile = siteItem.WebDeploySitePublishingProfile;
+			#endregion
 
             return site;
         }
@@ -450,6 +466,13 @@ namespace WebsitePanel.EnterpriseServer
                 WebServer web = new WebServer();
                 ServiceProviderProxy.Init(web, siteItem.ServiceId);
                 web.UpdateSite(site);
+				// Restore settings back
+				#region Web Deploy Settings
+				site.WebDeployPublishingAccount = siteItem.WebDeployPublishingAccount;
+				site.WebDeployPublishingPassword = siteItem.WebDeployPublishingPassword;
+				site.WebDeploySitePublishingEnabled = siteItem.WebDeploySitePublishingEnabled;
+				site.WebDeploySitePublishingProfile = siteItem.WebDeploySitePublishingProfile;
+				#endregion
 
                 // update service item
                 PackageController.UpdatePackageItem(site);
@@ -1782,6 +1805,458 @@ namespace WebsitePanel.EnterpriseServer
         }
         #endregion
 
+		#region Web Deploy Publishing Access
+
+		public static ResultObject SaveWebDeployPublishingProfile(int siteItemId, int[] serviceItemIds)
+		{
+			ResultObject result = new ResultObject { IsSuccess = true };
+
+			try
+			{
+				TaskManager.StartTask(LOG_SOURCE_WEB, "SaveWebDeployPublishingProfile");
+				TaskManager.WriteParameter("SiteItemId", siteItemId);
+
+				// load site item
+				var item = (WebSite)PackageController.GetPackageItem(siteItemId);
+
+				//
+				if (item == null)
+				{
+					TaskManager.WriteError("Web site not found");
+					//
+					result.AddError("WEBSITE_NOT_FOUND", null);
+					result.IsSuccess = false;
+					return result;
+				}
+
+				//
+				int accountCheck = SecurityContext.CheckAccount(DemandAccount.NotDemo | DemandAccount.IsActive);
+				if (accountCheck < 0)
+				{
+					TaskManager.WriteWarning("Current user is either demo or inactive");
+					//
+					result.AddError("DEMO_USER", null);
+					result.IsSuccess = false;
+					return result;
+				}
+
+				// check package
+				int packageCheck = SecurityContext.CheckPackage(item.PackageId, DemandPackage.IsActive);
+				if (packageCheck < 0)
+				{
+					TaskManager.WriteWarning("Current user is either not allowed to access the package or the package inactive");
+					//
+					result.AddError("NOT_ALLOWED", null);
+					result.IsSuccess = false;
+					return result;
+				}
+
+				// Ensure all service items specified are within the same hosting space
+				// This is a logcally correct and secure statement than the other one
+				// TO-DO: Uncomment this line before demo!
+				//var profileIntegritySucceeded = false;
+
+				var profileIntegritySucceeded = true;
+				//
+				foreach (int itemId in serviceItemIds)
+				{
+					try
+					{
+						//
+						PackageController.GetPackageItem(itemId);
+						//
+						profileIntegritySucceeded = true;
+					}
+					catch (Exception ex)
+					{
+						TaskManager.WriteError(ex);
+						//
+						profileIntegritySucceeded = false;
+						// Exit from the loop
+						break;
+					}
+				}
+
+				//
+				if (profileIntegritySucceeded == true)
+				{
+					// Build service items list
+					item.WebDeploySitePublishingProfile = String.Join(",", Array.ConvertAll<int, string>(serviceItemIds, (int x) => { return x.ToString(); }));
+					// Put changes in effect
+					PackageController.UpdatePackageItem(item);
+				}
+			}
+			catch (Exception ex)
+			{
+				TaskManager.WriteError(ex);
+				//
+				result.IsSuccess = false;
+			}
+			finally
+			{
+				TaskManager.CompleteTask();
+			}
+			//
+			return result;
+		}
+
+		public static ResultObject GrantWebDeployPublishingAccess(int siteItemId, string accountName, string accountPassword)
+		{
+			ResultObject result = new ResultObject { IsSuccess = true };
+
+			try
+			{
+				TaskManager.StartTask(LOG_SOURCE_WEB, "GrantWeDeployPublishingAccess");
+				TaskManager.WriteParameter("SiteItemId", siteItemId);
+
+				// load site item
+				var item = (WebSite)PackageController.GetPackageItem(siteItemId);
+
+				//
+				if (item == null)
+				{
+					TaskManager.WriteError("Web site not found");
+					//
+					result.AddError("WEBSITE_NOT_FOUND", null);
+					result.IsSuccess = false;
+					return result;
+				}
+
+				//
+				int accountCheck = SecurityContext.CheckAccount(DemandAccount.NotDemo | DemandAccount.IsActive);
+				if (accountCheck < 0)
+				{
+					TaskManager.WriteWarning("Current user is either demo or inactive");
+					//
+					result.AddError("DEMO_USER", null);
+					result.IsSuccess = false;
+					return result;
+				}
+
+				// check package
+				int packageCheck = SecurityContext.CheckPackage(item.PackageId, DemandPackage.IsActive);
+				if (packageCheck < 0)
+				{
+					TaskManager.WriteWarning("Current user is either not allowed to access the package or the package inactive");
+					//
+					result.AddError("NOT_ALLOWED", null);
+					result.IsSuccess = false;
+					return result;
+				}
+
+				//
+				WebServer server = GetWebServer(item.ServiceId);
+
+				// Most part of the functionality used to enable Web Deploy publishing correspond to those created for Web Management purposes,
+				// so we can re-use the existing functionality to deliver seamless development experience.
+				if (server.CheckWebManagementAccountExists(accountName))
+				{
+					TaskManager.WriteWarning("Account name specified already exists");
+					//
+					result.AddError("ACCOUNTNAME_PROHIBITED", null);
+					result.IsSuccess = false;
+					return result;
+				}
+
+				// Most part of the functionality used to enable Web Deploy publishing correspond to those created for Web Management purposes,
+				// so we can re-use the existing functionality to deliver seamless development experience.
+				ResultObject passwResult = server.CheckWebManagementPasswordComplexity(accountPassword);
+				if (!passwResult.IsSuccess)
+				{
+					TaskManager.WriteWarning("Account password does not meet complexity requirements");
+					//
+					result.ErrorCodes.AddRange(passwResult.ErrorCodes);
+					result.IsSuccess = false;
+					//
+					return result;
+				}
+
+				// Execute a call to remote server to enable Web Deploy publishing access for the specified user account
+				server.GrantWebDeployPublishingAccess(item.SiteId, accountName, accountPassword);
+				// Enable Web Deploy flag for the web site
+				item.WebDeploySitePublishingEnabled = true;
+				// Remember Web Deploy publishing account
+				item.WebDeployPublishingAccount = accountName;
+				// Remember Web Deploy publishing password
+				item.WebDeployPublishingPassword = CryptoUtils.Encrypt(accountPassword);
+				// Put changes in effect
+				PackageController.UpdatePackageItem(item);
+			}
+			catch (Exception ex)
+			{
+				TaskManager.WriteError(ex);
+				//
+				result.IsSuccess = false;
+			}
+			finally
+			{
+				TaskManager.CompleteTask();
+			}
+			//
+			return result;
+		}
+
+		public static void RevokeWebDeployPublishingAccess(int siteItemId)
+		{
+			try
+			{
+				TaskManager.StartTask(LOG_SOURCE_WEB, "RevokeWebDeployPublishingAccess");
+				TaskManager.WriteParameter("SiteItemId", siteItemId);
+
+				// load site item
+				var item = (WebSite)PackageController.GetPackageItem(siteItemId);
+
+				//
+				if (item == null)
+				{
+					TaskManager.WriteWarning("Web site not found");
+					return;
+				}
+
+				//
+				int accountCheck = SecurityContext.CheckAccount(DemandAccount.NotDemo | DemandAccount.IsActive);
+				if (accountCheck < 0)
+				{
+					TaskManager.WriteWarning("Current user is either demo or inactive");
+					return;
+				}
+
+				// check package
+				int packageCheck = SecurityContext.CheckPackage(item.PackageId, DemandPackage.IsActive);
+				if (packageCheck < 0)
+				{
+					TaskManager.WriteWarning("Current user is either not allowed to access the package or the package inactive");
+					return;
+				}
+
+				//
+				string accountName = item.WebDeployPublishingAccount;
+				//
+				if (String.IsNullOrEmpty(accountName))
+				{
+					TaskManager.WriteWarning("Web Deploy Publishing Access account name is either not set or empty");
+					return;
+				}
+
+				//
+				WebServer server = GetWebServer(item.ServiceId);
+				// Revoke 
+				server.RevokeWebManagementAccess(item.SiteId, accountName);
+				// Cleanup web site properties
+				item.WebDeployPublishingAccount = String.Empty;
+				item.WebDeploySitePublishingEnabled = false;
+				item.WebDeploySitePublishingProfile = String.Empty;
+				item.WebDeployPublishingPassword = String.Empty;
+				// Put changes into effect
+				PackageController.UpdatePackageItem(item);
+			}
+			catch (Exception ex)
+			{
+				TaskManager.WriteError(ex);
+			}
+			finally
+			{
+				TaskManager.CompleteTask();
+			}
+		}
+
+		public static ResultObject ChangeWebDeployPublishingPassword(int siteItemId, string newAccountPassword)
+		{
+			ResultObject result = new ResultObject { IsSuccess = true };
+			try
+			{
+				TaskManager.StartTask(LOG_SOURCE_WEB, "ChangeWebDeployPublishingPassword");
+				TaskManager.WriteParameter("SiteItemId", siteItemId);
+
+				//
+				var item = (WebSite)PackageController.GetPackageItem(siteItemId);
+
+				//
+				if (item == null)
+				{
+					TaskManager.WriteWarning("Web site not found");
+
+					//
+					result.AddError("WEBSITE_NOT_FOUND", null);
+					result.IsSuccess = false;
+
+					return result;
+				}
+
+				//
+				int accountCheck = SecurityContext.CheckAccount(DemandAccount.NotDemo | DemandAccount.IsActive);
+				if (accountCheck < 0)
+				{
+					TaskManager.WriteWarning("Current user is either demo or inactive");
+
+					result.AddError("DEMO_USER", null);
+					result.IsSuccess = false;
+
+					return result;
+				}
+
+				// check package
+				int packageCheck = SecurityContext.CheckPackage(item.PackageId, DemandPackage.IsActive);
+				if (packageCheck < 0)
+				{
+					TaskManager.WriteWarning("Current user is either not allowed to access the package or the package inactive");
+
+					//
+					result.AddError("NOT_ALLOWED", null);
+					result.IsSuccess = false;
+
+					return result;
+				}
+
+				// Revoke access first
+				RevokeWebDeployPublishingAccess(siteItemId);
+				//
+				result = GrantWebDeployPublishingAccess(siteItemId, item.WebDeployPublishingAccount, newAccountPassword);
+			}
+			catch (Exception ex)
+			{
+				TaskManager.WriteError(ex);
+			}
+			finally
+			{
+				TaskManager.CompleteTask();
+			}
+			//
+			return result;
+		}
+
+		public static BytesResult GetWebDeployPublishingProfile(int siteItemId)
+		{
+			var result = new BytesResult();
+			try
+			{
+				TaskManager.StartTask(LOG_SOURCE_WEB, "GetWebDeployPublishingProfile");
+				TaskManager.WriteParameter("SiteItemId", siteItemId);
+
+				// load site item
+				WebSite item = (WebSite)PackageController.GetPackageItem(siteItemId);
+				//
+				var siteItem = GetWebSite(siteItemId);
+
+				//
+				if (item == null)
+				{
+					TaskManager.WriteWarning("Web site not found");
+					return result;
+				}
+
+				//
+				int accountCheck = SecurityContext.CheckAccount(DemandAccount.NotDemo | DemandAccount.IsActive);
+				if (accountCheck < 0)
+				{
+					TaskManager.WriteWarning("Current user is either demo or inactive");
+					return result;
+				}
+
+				// check package
+				int packageCheck = SecurityContext.CheckPackage(item.PackageId, DemandPackage.IsActive);
+				if (packageCheck < 0)
+				{
+					TaskManager.WriteWarning("Current user is either not allowed to access the package or the package inactive");
+					return result;
+				}
+
+				//
+				string accountName = item.WebDeployPublishingAccount;
+				//
+				if (String.IsNullOrEmpty(accountName))
+				{
+					TaskManager.WriteWarning("Web Deploy Publishing Access account name is either not set or empty");
+					return result;
+				}
+				//
+				var packageInfo = PackageController.GetPackage(item.PackageId);
+				//
+				var userInfo = UserController.GetUser(packageInfo.UserId);
+				//
+				var items = new Hashtable()
+				{
+					{ "WebSite", siteItem },
+					{ "User",  userInfo },
+				};
+
+				// Retrieve service item ids from the profile
+				var serviceItemIds = Array.ConvertAll<string, int>(
+					item.WebDeploySitePublishingProfile.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries),
+					(string x) => { return Convert.ToInt32(x.Trim()); });
+
+				//
+				foreach (var serviceItemId in serviceItemIds)
+				{
+					var packageItem = PackageController.GetPackageItem(serviceItemId);
+					// Handle SQL databases
+					if (packageItem is SqlDatabase)
+					{
+						var dbItemKey = packageItem.GroupName.StartsWith("MsSQL") ? "MsSqlDatabase" : "MySqlDatabase";
+						var dbServerKeyExt = packageItem.GroupName.StartsWith("MsSQL") ? "MsSqlServerExternalAddress" : "MySqlServerExternalAddress";
+						var dbServerKeyInt = packageItem.GroupName.StartsWith("MsSQL") ? "MsSqlServerInternalAddress" : "MySqlServerInternalAddress";
+						//
+						items.Add(dbItemKey, DatabaseServerController.GetSqlDatabase(serviceItemId));
+						// Retrieve settings
+						var sqlSettings = ServerController.GetServiceSettings(packageItem.ServiceId);
+						items[dbServerKeyExt] = sqlSettings["ExternalAddress"];
+						items[dbServerKeyInt] = sqlSettings["InternalAddress"]; 
+					}
+					else if (packageItem is SqlUser)
+					{
+						var itemKey = packageItem.GroupName.StartsWith("MsSQL") ? "MsSqlUser" : "MySqlUser";
+						//
+						items.Add(itemKey, DatabaseServerController.GetSqlUser(serviceItemId));
+					}
+					else if (packageItem is FtpAccount)
+					{
+						//
+						items.Add("FtpAccount", FtpServerController.GetFtpAccount(serviceItemId));
+						// Get FTP DNS records
+						List<GlobalDnsRecord> ftpRecords = ServerController.GetDnsRecordsByService(packageItem.ServiceId);
+						if (ftpRecords.Count > 0)
+						{
+							GlobalDnsRecord ftpRecord = ftpRecords[0];
+							string ftpIp = ftpRecord.ExternalIP;
+							if (String.IsNullOrEmpty(ftpIp))
+								ftpIp = ftpRecord.RecordData;
+							// Assign FTP service address variable
+							items["FtpServiceAddress"] = ftpIp;
+						}
+					}
+				}
+
+				// Decrypt publishing password & copy related settings
+				siteItem.WebDeployPublishingPassword = CryptoUtils.Decrypt(item.WebDeployPublishingPassword);
+				siteItem.WebDeployPublishingAccount = item.WebDeployPublishingAccount;
+				siteItem.WebDeploySitePublishingEnabled = item.WebDeploySitePublishingEnabled;
+				siteItem.WebDeploySitePublishingProfile = item.WebDeploySitePublishingProfile;
+				
+				// Retrieve publishing profile template from the Web Policy settings
+				var webPolicy = UserController.GetUserSettings(packageInfo.UserId, UserSettings.WEB_POLICY);
+				// Instantiate template, it's content and related items and then evaluate it
+				var template = new Template(webPolicy["PublishingProfile"]);
+				// Receive bytes for the evaluated template
+				result.Value = Encoding.UTF8.GetBytes(template.Evaluate(items));
+				//
+				result.IsSuccess = true;
+			}
+			catch (Exception ex)
+			{
+				TaskManager.WriteError(ex);
+				//
+				result.IsSuccess = false;
+			}
+			finally
+			{
+				TaskManager.CompleteTask();
+			}
+			//
+			return result;
+		}
+
+		#endregion
+
 		#region WebManagement Access
 
 		public static ResultObject GrantWebManagementAccess(int siteItemId, string accountName, string accountPassword)
@@ -2409,5 +2884,5 @@ Please ensure the space has been allocated {0} IP address as a dedicated one and
         }
 
         #endregion
-    }
+	}
 }

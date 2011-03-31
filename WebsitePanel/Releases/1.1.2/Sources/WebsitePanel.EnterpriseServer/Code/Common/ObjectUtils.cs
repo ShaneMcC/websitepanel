@@ -416,6 +416,49 @@ namespace WebsitePanel.EnterpriseServer
             return obj;
         }
 
+		public static void CopyPersistentPropertiesFromSource<T>(T source, T target)
+			where T : ServiceProviderItem
+		{
+			//
+			var typeSource = source.GetType();
+			var typeTarget = target.GetType();
+			// get all property infos
+			Hashtable props = null;
+			if (propertiesCache[typeSource.Name] != null)
+			{
+				// load properties from cache
+				props = (Hashtable)propertiesCache[typeSource.Name];
+			}
+			else
+			{
+				// create properties cache
+				props = new Hashtable();
+				//
+				PropertyInfo[] objProps = typeSource.GetProperties(BindingFlags.Instance
+					//| BindingFlags.DeclaredOnly
+					| BindingFlags.Public);
+				foreach (PropertyInfo prop in objProps)
+				{
+					// check for persistent attribute
+					object[] attrs = prop.GetCustomAttributes(typeof(PersistentAttribute), false);
+					// Persistent only
+					if (attrs.Length > 0)
+					{
+						// add property to hash
+						props.Add(prop.Name, prop);
+					}
+				}
+				// add to cache
+				propertiesCache.Add(typeSource.Name, props);
+			}
+			
+			// Copy the data
+			foreach (PropertyInfo propertyInfo in props.Values)
+			{
+				propertyInfo.SetValue(target, propertyInfo.GetValue(source, null), null);
+			}
+		}
+
         public static void CreateObjectFromHash(object obj, Hashtable propValues, bool persistentOnly)
         {
             Type type = obj.GetType();

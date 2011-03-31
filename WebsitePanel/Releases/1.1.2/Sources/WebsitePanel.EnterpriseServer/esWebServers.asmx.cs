@@ -40,6 +40,7 @@ using Microsoft.Web.Services3;
 using WebsitePanel.Providers;
 using WebsitePanel.Providers.Web;
 using WebsitePanel.Providers.Common;
+using WebsitePanel.Providers.ResultObjects;
 
 namespace WebsitePanel.EnterpriseServer
 {
@@ -303,6 +304,40 @@ namespace WebsitePanel.EnterpriseServer
             return WebServerController.DeleteGroup(siteItemId, groupName);
         }
         #endregion
+
+		#region Web Deploy Publishing Access
+
+		[WebMethod]
+		public ResultObject GrantWebDeployPublishingAccess(int siteItemId, string accountName, string accountPassword)
+		{
+			return WebServerController.GrantWebDeployPublishingAccess(siteItemId, accountName, accountPassword);
+		}
+
+		[WebMethod]
+		public ResultObject SaveWebDeployPublishingProfile(int siteItemId, int[] serviceItemIds)
+		{
+			return WebServerController.SaveWebDeployPublishingProfile(siteItemId, serviceItemIds);
+		}
+
+		[WebMethod]
+		public void RevokeWebDeployPublishingAccess(int siteItemId)
+		{
+			WebServerController.RevokeWebDeployPublishingAccess(siteItemId);
+		}
+
+		[WebMethod]
+		public BytesResult GetWebDeployPublishingProfile(int siteItemId)
+		{
+			return WebServerController.GetWebDeployPublishingProfile(siteItemId);
+		}
+
+		[WebMethod]
+		public ResultObject ChangeWebDeployPublishingPassword(int siteItemId, string newAccountPassword)
+		{
+			return WebServerController.ChangeWebDeployPublishingPassword(siteItemId, newAccountPassword);
+		}
+
+		#endregion
 
 		#region WebManagement Access
 

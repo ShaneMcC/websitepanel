@@ -4903,4 +4903,28 @@
   <data name="Warning.725" xml:space="preserve">
     <value>Maximum mailbox account size should be a positive number</value>
   </data>
+  <data name="Error.WEB_PUB_DISABLE" xml:space="preserve">
+    <value>Could not disable access to Web Publishing feature for the account specified</value>
+  </data>
+  <data name="Error.WEB_PUB_ENABLE" xml:space="preserve">
+    <value>Could not grant access to Web Publishing feature for the account specified</value>
+  </data>
+  <data name="Error.WPUB_PASSW_CHANGE" xml:space="preserve">
+    <value>Could not change Web Publishing password for the account specified</value>
+  </data>
+  <data name="Error.WPUB_PROFILE_SAVE" xml:space="preserve">
+    <value>Could not save Web Publishing profile for this web site</value>
+  </data>
+  <data name="Success.WEB_PUB_DISABLE" xml:space="preserve">
+    <value>Access to Web Publishing feature has been disabled for the account specified</value>
+  </data>
+  <data name="Success.WEB_PUB_ENABLE" xml:space="preserve">
+    <value>Access to Web Publishing feature has been granted for the account specified</value>
+  </data>
+  <data name="Success.WPUB_PASSW_CHANGE" xml:space="preserve">
+    <value>Web Publishing password has been changed for the account specified</value>
+  </data>
+  <data name="Success.WPUB_PROFILE_SAVE" xml:space="preserve">
+    <value>Web Publishing profile for this web site has been successfully saved</value>
+  </data>
 </root>

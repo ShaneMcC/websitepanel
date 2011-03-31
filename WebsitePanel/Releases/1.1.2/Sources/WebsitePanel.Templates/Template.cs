@@ -31,6 +31,7 @@ using System.IO;
 using System.Collections.Generic;
 using System.Text;
 using WebsitePanel.Templates.AST;
+using System.Collections;
 
 namespace WebsitePanel.Templates
 {
@@ -101,6 +102,22 @@ namespace WebsitePanel.Templates
             // return result
             return writer.ToString();
         }
+
+		/// <summary>
+		/// Evaluates template and returns the result as a string.
+		/// </summary>
+		/// <returns>String containing evaluated template.</returns>
+		public string Evaluate(Hashtable items)
+		{
+			// copy items from hashtable
+			foreach (string keyName in items.Keys)
+			{
+				this[keyName] = items[keyName];
+			}
+
+			// evaluate
+			return Evaluate();
+		}
 
         /// <summary>
         /// Evaluates template to the StringWriter.

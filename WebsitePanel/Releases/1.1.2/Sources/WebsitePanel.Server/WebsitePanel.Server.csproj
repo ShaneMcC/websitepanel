@@ -27,6 +27,9 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+    <DeployIisAppPath>WebsitePanel Server</DeployIisAppPath>
+    <PackageAsSingleFile>false</PackageAsSingleFile>
+    <FilesToIncludeForPublish>OnlyFilesToRunTheApp</FilesToIncludeForPublish>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>none</DebugType>
@@ -77,9 +80,6 @@
     <Content Include="SharePointServer.asmx" />
     <Content Include="StatisticsServer.asmx" />
     <Content Include="VirtualizationServer.asmx" />
-    <Content Include="Web.config">
-      <SubType>Designer</SubType>
-    </Content>
     <Content Include="WebServer.asmx" />
     <Content Include="WindowsServer.asmx" />
   </ItemGroup>
@@ -198,7 +198,8 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <None Include="WsePolicyCache.Config" />
+    <Content Include="Web.config" />
+    <Content Include="WsePolicyCache.Config" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
@@ -213,8 +214,8 @@
       <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
         <WebProjectProperties>
           <UseIIS>False</UseIIS>
-          <AutoAssignPort>True</AutoAssignPort>
-          <DevelopmentServerPort>1920</DevelopmentServerPort>
+          <AutoAssignPort>False</AutoAssignPort>
+          <DevelopmentServerPort>9003</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
           <IISUrl>
           </IISUrl>

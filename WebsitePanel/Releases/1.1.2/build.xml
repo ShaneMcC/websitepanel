@@ -1,11 +1,12 @@
 <Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
 	<Import Project="C:\Program Files (x86)\MSBuild\MSBuildCommunityTasks\MSBuild.Community.Tasks.Targets"/>
 	<PropertyGroup>
-		<Version>1.1.0.10</Version>
+		<Version>1.1.2.3</Version>
+		<ReleaseDate>2011-03-28</ReleaseDate>
 		<BuildConfiguration>Release</BuildConfiguration>
-		<SourcesPath>https://websitepanel.svn.sourceforge.net/svnroot/websitepanel/WebsitePanel/Trunk</SourcesPath>
-		<RootFolder>C:\Projects\Sourceforge\WebsitePanel\Releases\1.1.0</RootFolder>
-		<TrunkFolder>$(RootFolder)</TrunkFolder>
+		<SourcesPath>https://websitepanel.svn.sourceforge.net/svnroot/websitepanel/WebsitePanel/Releases/1.1.2</SourcesPath>
+		<RootFolder>C:\Projects\Sourceforge\WebsitePanel</RootFolder>
+		<TrunkFolder>$(RootFolder)\Releases\1.1.2</TrunkFolder>
 
 		<SetupTrunkFolder>C:\Projects\Sourceforge\WebsitePanel.Installer\Branches\2.0</SetupTrunkFolder>
 		<SetupBuildFolder>$(SetupTrunkFolder)\Build\$(BuildConfiguration)</SetupBuildFolder>
@@ -13,7 +14,7 @@
 		<BuildFolder>$(TrunkFolder)\Build\$(BuildConfiguration)</BuildFolder>
 		<DeployFolder>$(TrunkFolder)\Deploy\$(BuildConfiguration)</DeployFolder>
 
-		<PreviousBuildFolder>C:\Projects\Sourceforge\WebsitePanel\Releases\1.0.2\Build</PreviousBuildFolder>
+		<PreviousBuildFolder>C:\Projects\Sourceforge\WebsitePanel\Releases\1.1.0\Build</PreviousBuildFolder>
 
 
 		<DiffCmd>$(TrunkFolder)\Tools\Diff.exe</DiffCmd>
@@ -23,8 +24,6 @@
 
 		<DataBaseName>WebsitePanel_build</DataBaseName>
 		<MSDeployConnectionString>server=(local)\SQLEXPRESS;database=$(DataBaseName);Integrated Security=true;</MSDeployConnectionString>
-
-		<!--ScriptBuildFolder>c:\builds\$(BuildFolder)</ScriptBuildFolder  Condition="$(BuildConfiguration) == 'Debug'"  -->
 
 		<PortalSrc>$(TrunkFolder)\Sources\WebsitePanel.WebPortal</PortalSrc>
 		<ServerSrc>$(TrunkFolder)\Sources\WebsitePanel.Server</ServerSrc>
@@ -88,7 +87,10 @@
 			<ServerBuildExclude Include="$(ServerSrc)\**\*.csproj" />
 			<ServerBuildExclude Include="$(ServerSrc)\**\*.vb" />
 			<ServerBuildExclude Include="$(ServerSrc)\**\*.vbproj" />
+			<ServerBuildExclude Include="$(ServerSrc)\bin\Microsoft.Web.Administration.*"/>
+			<ServerBuildExclude Include="$(ServerSrc)\bin\Microsoft.Web.Management.*"/>
 			<ServerBuildExclude Include="$(ServerSrc)\bin\Microsoft.Exchange.*"/>
+			<ServerBuildExclude Include="$(ServerSrc)\bin\Microsoft.Crm.*"/>
 			<ServerBuildExclude Include="$(ServerSrc)\bin\Microsoft.SqlServer.BatchParser.dll"/>
 			<ServerBuildFiles Include="$(ServerSrc)\**\*.*" Exclude="@(ServerBuildExclude)"/>
 		</ItemGroup>
@@ -232,6 +234,7 @@
 		<RemoveDir Directories="$(PortalInstall)"/>
 		<MakeDir Directories="$(PortalInstall)"/>
 		<Copy SourceFiles="@(PortalDeployFiles)" DestinationFolder="$(PortalInstall)\%(RecursiveDir)" />
+		<XmlUpdate XmlFileName="$(PortalInstall)\App_Data\SiteSettings.config" Xpath="//SiteSettings/EnterpriseServer" Value="http://localhost:9002"  />
 	</Target>
 
 	<Target Name="CreateImportCsvInstall" DependsOnTargets="CreatePortalInstall">
@@ -293,6 +296,9 @@
 	<Target Name="CreateEnterpriseServerUpdate" DependsOnTargets="CreateServerUpdate" >
 		<Exec Command="$(DiffCmd) %22$(PreviousBuildFolder)\EnterpriseServer%22 %22$(EnterpriseServerInstall)%22  %22$(EnterpriseServerUpdate)%22 /ex:web.config"/>
 		<Copy SourceFiles="$(TrunkFolder)\Database\update_db.sql" DestinationFolder="$(EnterpriseServerUpdate)\Setup" />
+		<!-- Update variables in the file -->
+		<FileUpdate Files="$(EnterpriseServerUpdate)\Setup\update_db.sql" Regex="\${release.version}" ReplacementText="$(Version)" />
+		<FileUpdate Files="$(EnterpriseServerUpdate)\Setup\update_db.sql" Regex="\${release.date}" ReplacementText="$(ReleaseDate)" />
 	</Target>
 
 	<Target Name="CreatePortalUpdate" DependsOnTargets="CreateEnterpriseServerUpdate" >
@@ -313,12 +319,14 @@
 		<Copy SourceFiles="$(TrunkFolder)\Database\install_db.sql" DestinationFolder="$(DatabaseFolder)" />
 		<Copy SourceFiles="$(TrunkFolder)\Database\update_db.sql" DestinationFolder="$(DatabaseFolder)" />
 
-		<FileUpdate Files="$(DatabaseFolder)\install_db.sql"  Regex="\${install.database}"  ReplacementText="$(DataBaseName)" />
-		<FileUpdate Files="$(DatabaseFolder)\update_db.sql"  Regex="\${install.database}"  ReplacementText="$(DataBaseName)" />
+		<!-- Update variables in files -->
+		<FileUpdate Files="$(DatabaseFolder)\install_db.sql" Regex="\${install.database}" ReplacementText="$(DataBaseName)" />
+		<FileUpdate Files="$(DatabaseFolder)\update_db.sql" Regex="\${install.database}" ReplacementText="$(DataBaseName)" />
+		<FileUpdate Files="$(DatabaseFolder)\update_db.sql" Regex="\${release.version}" ReplacementText="$(Version)" />
+		<FileUpdate Files="$(DatabaseFolder)\update_db.sql" Regex="\${release.date}" ReplacementText="$(ReleaseDate)" />
 
 		<Exec Command="$(SqlCmd) -i $(DatabaseFolder)\install_db.sql" />
 		<Exec Command="$(SqlCmd) -i $(DatabaseFolder)\update_db.sql" />
-		<!--Exec Command="$(SqlCmd) -Q &quot;USE $(DataBaseName) INSERT INTO [Versions] ([DatabaseVersion], [BuildDate]) VALUES (N'$(Version)', GetDate())&quot;" /-->
 		
 		<Delete Files="$(DatabaseFolder)\install_db.sql" />
 		<Delete Files="$(DatabaseFolder)\update_db.sql" />

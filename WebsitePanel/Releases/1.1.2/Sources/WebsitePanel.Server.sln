@@ -11,6 +11,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		..\..\LICENSE.txt = ..\..\LICENSE.txt
 		..\..\Readme.htm = ..\..\Readme.htm
 		..\..\ReleaseNotes.htm = ..\..\ReleaseNotes.htm
+		VersionInfo.cs = VersionInfo.cs
+		VersionInfo.vb = VersionInfo.vb
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebsitePanel.Server", "WebsitePanel.Server\WebsitePanel.Server.csproj", "{38C6047C-E447-4CC2-891F-ABE54D4659F3}"

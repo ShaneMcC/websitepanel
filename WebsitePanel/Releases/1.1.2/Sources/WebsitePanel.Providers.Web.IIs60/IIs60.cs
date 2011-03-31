@@ -3526,6 +3526,11 @@ namespace WebsitePanel.Providers.Web
 			throw new NotSupportedException();
 		}
 
+		public void GrantWebDeployPublishingAccess(string siteName, string accountName, string accountPassword)
+		{
+			throw new NotSupportedException();
+		}
+
 		public void RevokeWebManagementAccess(string siteName, string accountName)
 		{
 			throw new NotSupportedException();

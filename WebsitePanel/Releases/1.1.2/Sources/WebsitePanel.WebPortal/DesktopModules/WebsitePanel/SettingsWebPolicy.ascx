@@ -24,6 +24,21 @@
     </table>
 </asp:Panel>
 
+<wsp:CollapsiblePanel runat="server" ID="WebPublishingProfile" 
+	meta:resourcekey="WebPublishingProfile" Text="Web Publishing Profile" TargetControlID="WebPublishingProfilePanel" />
+<asp:Panel runat="server" ID="WebPublishingProfilePanel" Height="0" style="overflow:hidden;">
+	<table width="100%">
+		<tr>
+			<td colspan="2">&nbsp;</td>
+		</tr>
+        <tr>
+            <td class="SubHead" valign=top style="width:150px;"><asp:Label ID="PublishingProfileLabel" runat="server" meta:resourcekey="PublishingProfileLabel" Text="Publishing Profile:"></asp:Label></td>
+            <td class="Normal" valign=top>
+                <asp:TextBox ID="PublishingProfileTextBox" runat="server" Rows="10" TextMode="MultiLine" Width="100%" CssClass="NormalTextBox" Wrap="False"></asp:TextBox></td>
+        </tr>
+    </table>
+</asp:Panel>
+
 <wsp:CollapsiblePanel id="secDefaultDocs" runat="server"
     TargetControlID="DefaultDocsPanel" meta:resourcekey="secDefaultDocs" Text="Default Documents"/>
 <asp:Panel ID="DefaultDocsPanel" runat="server" Height="0" style="overflow:hidden;">
@@ -88,7 +103,6 @@
         </tr>
     </table>
 </asp:Panel>
-
 
 <wsp:CollapsiblePanel id="secExtensions" runat="server"
     TargetControlID="ExtensionsPanel" meta:resourcekey="secExtensions" Text="Extensions"/>

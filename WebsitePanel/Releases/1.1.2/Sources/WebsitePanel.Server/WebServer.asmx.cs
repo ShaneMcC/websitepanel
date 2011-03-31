@@ -921,6 +921,22 @@ namespace WebsitePanel.Server
 		}
 
 		[WebMethod, SoapHeader("settings")]
+		public void GrantWebDeployPublishingAccess(string siteId, string accountName, string accountPassword)
+		{
+			try
+			{
+				Log.WriteStart("'{0}' GrantWebDeployPublishingAccess", ProviderSettings.ProviderName);
+				WebProvider.GrantWebDeployPublishingAccess(siteId, accountName, accountPassword);
+				Log.WriteEnd("'{0}' GrantWebDeployPublishingAccess", ProviderSettings.ProviderName);
+			}
+			catch (Exception ex)
+			{
+				Log.WriteError(String.Format("'{0}' GrantWebDeployPublishingAccess", ProviderSettings.ProviderName), ex);
+				throw;
+			}
+		}
+
+		[WebMethod, SoapHeader("settings")]
 		public void RevokeWebManagementAccess(string siteId, string accountName)
 		{
 			try

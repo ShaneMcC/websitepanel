@@ -104,11 +104,13 @@ namespace WebsitePanel.Providers.Web
 		DeploymentParametersResult GetGalleryApplicationParameters(string id);
 		StringResultObject InstallGalleryApplication(string id, List<DeploymentParameter> updatedValues);
 
-		//
+		// Remote Management Access
 		void GrantWebManagementAccess(string siteId, string accountName, string accountPassword);
 		void RevokeWebManagementAccess(string siteId, string accountName);
 		void ChangeWebManagementAccessPassword(string accountName, string accountPassword);
 		bool CheckWebManagementAccountExists(string accountName);
 		ResultObject CheckWebManagementPasswordComplexity(string accountPassword);
+		// Web Deploy Publishing Access
+		void GrantWebDeployPublishingAccess(string siteId, string accountName, string accountPassword);
 	}
 }

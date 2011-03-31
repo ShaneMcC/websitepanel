@@ -47,209 +47,95 @@ namespace WebsitePanel.Providers.Web
 
 		#endregion
 
-        private string anonymousUsername;
-        private string anonymousUserPassword;
-        private string contentPath;
-        private bool enableWritePermissions;
-        private bool enableParentPaths;
-        private bool enableDirectoryBrowsing;
-        private bool enableAnonymousAccess;
-        private bool enableWindowsAuthentication;
-        private bool enableBasicAuthentication;
-        private string defaultDocs;
-        private string httpRedirect;
-        private HttpError[] httpErrors;
-        private MimeMap[] mimeMaps; 
-        private HttpHeader[] httpHeaders;
-        private bool aspInstalled;
-        private string aspNetInstalled;
-        private string phpInstalled;
-        private bool perlInstalled;
-        private bool pythonInstalled;
-        private bool coldfusionInstalled;
-        private bool cgiBinInstalled;
-        private string applicationPool;
-        private bool dedicatedApplicationPool;
-        private string parentSiteName;
-        private bool redirectExactUrl;
-        private bool redirectDirectoryBelow;
-        private bool redirectPermanent;
-        private bool sharePointInstalled;
-        private bool iis7;
+		public string AnonymousUsername { get; set; }
 
-        public string AnonymousUsername
-        {
-            get { return anonymousUsername; }
-            set { anonymousUsername = value; }
-        }
+		public string AnonymousUserPassword { get; set; }
 
-        public string AnonymousUserPassword
-        {
-            get { return anonymousUserPassword; }
-            set { anonymousUserPassword = value; }
-        }
+		public string ContentPath { get; set; }
 
-        public string ContentPath
-        {
-            get { return contentPath; }
-            set { contentPath = value; }
-        }
+		public string HttpRedirect { get; set; }
 
-        public string HttpRedirect
-        {
-            get { return httpRedirect; }
-            set { httpRedirect = value; }
-        }
+		public string DefaultDocs { get; set; }
 
-        public string DefaultDocs
-        {
-            get { return defaultDocs; }
-            set { defaultDocs = value; }
-        }
+		public MimeMap[] MimeMaps { get; set; }
 
-        public MimeMap[] MimeMaps
-        {
-            get { return mimeMaps; }
-            set { mimeMaps = value; }
-        }
+		public HttpError[] HttpErrors { get; set; }
 
-        public HttpError[] HttpErrors
-        {
-            get { return httpErrors; }
-            set { httpErrors = value; }
-        }
+		public string ApplicationPool { get; set; }
 
-        public string ApplicationPool
-        {
-            get { return this.applicationPool; }
-            set { this.applicationPool = value; }
-        }
+		public bool EnableParentPaths { get; set; }
 
-        public bool EnableParentPaths
-        {
-            get { return this.enableParentPaths; }
-            set { this.enableParentPaths = value; }
-        }
+		public HttpHeader[] HttpHeaders { get; set; }
 
-        public HttpHeader[] HttpHeaders
-        {
-            get { return this.httpHeaders; }
-            set { this.httpHeaders = value; }
-        }
+		public bool EnableWritePermissions { get; set; }
 
-        public bool EnableWritePermissions
-        {
-            get { return this.enableWritePermissions; }
-            set { this.enableWritePermissions = value; }
-        }
+		public bool EnableDirectoryBrowsing { get; set; }
 
-        public bool EnableDirectoryBrowsing
-        {
-            get { return this.enableDirectoryBrowsing; }
-            set { this.enableDirectoryBrowsing = value; }
-        }
+		public bool EnableAnonymousAccess { get; set; }
 
-        public bool EnableAnonymousAccess
-        {
-            get { return this.enableAnonymousAccess; }
-            set { this.enableAnonymousAccess = value; }
-        }
+		public bool EnableWindowsAuthentication { get; set; }
 
-        public bool EnableWindowsAuthentication
-        {
-            get { return this.enableWindowsAuthentication; }
-            set { this.enableWindowsAuthentication = value; }
-        }
+		public bool EnableBasicAuthentication { get; set; }
 
-        public bool EnableBasicAuthentication
-        {
-            get { return this.enableBasicAuthentication; }
-            set { this.enableBasicAuthentication = value; }
-        }
+		public bool AspInstalled { get; set; }
 
-        public bool AspInstalled
-        {
-            get { return this.aspInstalled; }
-            set { this.aspInstalled = value; }
-        }
+		public string AspNetInstalled { get; set; }
 
-        public string AspNetInstalled
-        {
-            get { return this.aspNetInstalled; }
-            set { this.aspNetInstalled = value; }
-        }
+		public string PhpInstalled { get; set; }
 
-        public string PhpInstalled
-        {
-            get { return this.phpInstalled; }
-            set { this.phpInstalled = value; }
-        }
+		public bool PerlInstalled { get; set; }
 
-        public bool PerlInstalled
-        {
-            get { return this.perlInstalled; }
-            set { this.perlInstalled = value; }
-        }
+		public bool PythonInstalled { get; set; }
 
-        public bool PythonInstalled
-        {
-            get { return this.pythonInstalled; }
-            set { this.pythonInstalled = value; }
-        }
+		public bool ColdFusionInstalled { get; set; }
 
-        public bool ColdFusionInstalled
-        {
-            get { return this.coldfusionInstalled; }
-            set { this.coldfusionInstalled = value; }
-        }
+		public bool DedicatedApplicationPool { get; set; }
 
-        public bool DedicatedApplicationPool
-        {
-            get { return this.dedicatedApplicationPool; }
-            set { this.dedicatedApplicationPool = value; }
-        }
+		public string ParentSiteName { get; set; }
 
-        public string ParentSiteName
-        {
-            get { return this.parentSiteName; }
-            set { this.parentSiteName = value; }
-        }
+		public bool RedirectExactUrl { get; set; }
 
-        public bool RedirectExactUrl
-        {
-            get { return this.redirectExactUrl; }
-            set { this.redirectExactUrl = value; }
-        }
+		public bool RedirectDirectoryBelow { get; set; }
 
-        public bool RedirectDirectoryBelow
-        {
-            get { return this.redirectDirectoryBelow; }
-            set { this.redirectDirectoryBelow = value; }
-        }
+		public bool RedirectPermanent { get; set; }
 
-        public bool RedirectPermanent
-        {
-            get { return this.redirectPermanent; }
-            set { this.redirectPermanent = value; }
-        }
+		public bool CgiBinInstalled { get; set; }
 
-        public bool CgiBinInstalled
-        {
-            get { return this.cgiBinInstalled; }
-            set { this.cgiBinInstalled = value; }
-        }
+		public bool SharePointInstalled { get; set; }
 
-        public bool SharePointInstalled
-        {
-            get { return this.sharePointInstalled; }
-            set { this.sharePointInstalled = value; }
-        }
+		public bool IIs7 { get; set; }
 
-        public bool IIs7
-        {
-            get { return this.iis7; }
-            set { this.iis7 = value; }
-        }
+		#region Web Deploy Publishing Properties
+		/// <summary>
+		/// Gets or sets Web Deploy publishing account name
+		/// </summary>
+		[Persistent]
+		public string WebDeployPublishingAccount { get; set; }
+
+		/// <summary>
+		/// Gets or sets Web Deploy publishing password
+		/// </summary>
+		[Persistent]
+		public string WebDeployPublishingPassword { get; set; }
+
+		/// <summary>
+		/// Gets or sets whether Web Deploy publishing is enabled on the server
+		/// </summary>
+		public bool WebDeployPublishingAvailable { get; set; }
+
+		/// <summary>
+		/// Gets or sets whether Web Deploy publishing is enabled for this particular web site
+		/// </summary>
+		[Persistent]
+		public bool WebDeploySitePublishingEnabled { get; set; }
+
+		/// <summary>
+		/// Gets or sets Web Deploy publishing profile data for this particular web site
+		/// </summary>
+		[Persistent]
+		public string WebDeploySitePublishingProfile { get; set; }
+
+		#endregion
 
 		/// <summary>
 		/// Gets fully qualified name which consists of parent website name if present and virtual directory name.
