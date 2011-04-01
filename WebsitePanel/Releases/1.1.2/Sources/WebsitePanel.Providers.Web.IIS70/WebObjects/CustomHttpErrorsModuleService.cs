@@ -30,23 +30,24 @@ using Microsoft.Web.Administration;
 
 namespace WebsitePanel.Providers.Web.Iis.WebObjects
 {
-    using Common;
-    using Microsoft.Web.Administration;
-    using Microsoft.Web.Management.Server;
-    using System;
-    using System.Text;
+	using Common;
+	using Microsoft.Web.Administration;
+	using Microsoft.Web.Management.Server;
+	using System;
+	using System.Text;
 	using System.Collections.Generic;
 	using System.Collections;
 	using WebsitePanel.Providers.Web.Iis.Utility;
 	using System.IO;
 	using WebsitePanel.Providers.Utils;
 
-    internal sealed class CustomHttpErrorsModuleService : ConfigurationModuleService
-    {
+	internal sealed class CustomHttpErrorsModuleService : ConfigurationModuleService
+	{
 		public const string StatusCodeAttribute = "statusCode";
 		public const string SubStatusCodeAttribute = "subStatusCode";
 		public const string PathAttribute = "path";
 		public const string ResponseModeAttribute = "responseMode";
+		public const string PrefixLanguageFilePath = "prefixLanguageFilePath";
 
 		public void GetCustomErrors(WebVirtualDirectory virtualDir)
 		{
@@ -87,7 +88,7 @@ namespace WebsitePanel.Providers.Web.Iis.WebObjects
 				section.RevertToParent();
 				//
 				srvman.CommitChanges();
-			} 
+			}
 			#endregion
 
 			// Http errors list is either empty or not set so defaults to the parent
@@ -102,8 +103,6 @@ namespace WebsitePanel.Providers.Web.Iis.WebObjects
 				var section = config.GetSection(Constants.HttpErrorsSection);
 				//
 				var errorsCollection = section.GetCollection();
-				//
-				errorsCollection.Clear();
 				//
 				foreach (var item in virtualDir.HttpErrors)
 				{
@@ -127,7 +126,7 @@ namespace WebsitePanel.Providers.Web.Iis.WebObjects
 				}
 				//
 				srvman.CommitChanges();
-			} 
+			}
 			#endregion
 		}
 
@@ -141,10 +140,10 @@ namespace WebsitePanel.Providers.Web.Iis.WebObjects
 			//
 			var error = new HttpError
 			{
-				ErrorCode		= Convert.ToString(element.GetAttributeValue(StatusCodeAttribute)),
-				ErrorSubcode	= Convert.ToString(element.GetAttributeValue(SubStatusCodeAttribute)),
-				ErrorContent	= Convert.ToString(element.GetAttributeValue(PathAttribute)),
-				HandlerType		= Enum.GetName(typeof(HttpErrorResponseMode), element.GetAttributeValue(ResponseModeAttribute))
+				ErrorCode = Convert.ToString(element.GetAttributeValue(StatusCodeAttribute)),
+				ErrorSubcode = Convert.ToString(element.GetAttributeValue(SubStatusCodeAttribute)),
+				ErrorContent = Convert.ToString(element.GetAttributeValue(PathAttribute)),
+				HandlerType = Enum.GetName(typeof(HttpErrorResponseMode), element.GetAttributeValue(ResponseModeAttribute))
 			};
 
 			// Make error path relative to the virtual directory's root folder
@@ -162,10 +161,10 @@ namespace WebsitePanel.Providers.Web.Iis.WebObjects
 			// Skip elements either empty or with empty data
 			if (error == null || String.IsNullOrEmpty(error.ErrorContent))
 				return null;
-			
+
 			// Create new custom error
 			ConfigurationElement error2Add = collection.CreateElement("error");
-			
+
 			if (!FillConfigurationElementWithData(error2Add, error, virtualDir))
 				return null;
 			//
@@ -188,19 +187,21 @@ namespace WebsitePanel.Providers.Web.Iis.WebObjects
 			if (subStatusCode == 0)
 				subStatusCode = -1;
 
-            // correct error content
-            string errorContent = error.ErrorContent;
-            if (error.HandlerType.Equals("File"))
-            {
-                if(error.ErrorContent.Length > virtualDir.ContentPath.Length)
-                    errorContent = errorContent.Substring(virtualDir.ContentPath.Length);
+			// correct error content
+			string errorContent = error.ErrorContent;
+			if (error.HandlerType.Equals("File"))
+			{
+				if (error.ErrorContent.Length > virtualDir.ContentPath.Length)
+					errorContent = errorContent.Substring(virtualDir.ContentPath.Length);
 
-                errorContent = FileUtils.CorrectRelativePath(errorContent);
-            }
+				errorContent = FileUtils.CorrectRelativePath(errorContent);
+			}
 
 			item2Fill.SetAttributeValue(StatusCodeAttribute, statusCode);
 			item2Fill.SetAttributeValue(SubStatusCodeAttribute, subStatusCode);
-            item2Fill.SetAttributeValue(PathAttribute, errorContent);
+			item2Fill.SetAttributeValue(PathAttribute, errorContent);
+			// Cleanup prefix language file path attribute.
+			item2Fill.SetAttributeValue(PrefixLanguageFilePath, String.Empty);
 
 			//
 			item2Fill.SetAttributeValue(ResponseModeAttribute, error.HandlerType);
@@ -223,5 +224,5 @@ namespace WebsitePanel.Providers.Web.Iis.WebObjects
 			//
 			return -1;
 		}
-    }
+	}
 }
