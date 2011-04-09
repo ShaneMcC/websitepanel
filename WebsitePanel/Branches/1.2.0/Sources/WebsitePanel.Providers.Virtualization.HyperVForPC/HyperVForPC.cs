@@ -998,6 +998,9 @@ namespace WebsitePanel.Providers.VirtualizationForPC
 			using (VirtualMachineManagementServiceClient client = GetVMMSClient())
 			{
 				VirtualMachineInfo vm = client.GetVirtualMachineByName(vmInfo.Name);
+				// Shut down a VM before configuring network adapters...
+				if (vm.Status != SVMMService.VMComputerSystemStateInfo.PowerOff)
+					client.ShutdownVirtualMachine(vmInfo.VmGuid);
 				// Remove exists Network adapters
 				VirtualNetworkAdapterInfo[] existsNetworkAdapters = vm.VirtualNetworkAdapters;
 				foreach (VirtualNetworkAdapterInfo adapter in existsNetworkAdapters)
@@ -1037,6 +1040,8 @@ namespace WebsitePanel.Providers.VirtualizationForPC
 						new Guid(vmInfo.CurrentTaskId)
 						);
 				}
+				// Start VM after the changes have been completed
+				client.StartVirtualMachine(vmInfo.VmGuid);
 			}
 		}
 
