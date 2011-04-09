@@ -8,6 +8,131 @@ namespace WebsitePanel.Providers.Web.Delegation
 {
 	internal sealed class DelegationRulesModuleService : ConfigurationModuleService
 	{
+		public void RestrictRuleToUser(string providers, string path, string accountName)
+		{
+			var rulePredicate = new Predicate<ConfigurationElement>(x => { return x.Attributes["providers"].Value.Equals(providers) && x.Attributes["path"].Value.Equals(path); });
+			//
+			var userPredicate = new Predicate<ConfigurationElement>(x => { return x.Attributes["name"].Value.Equals(accountName); });
+			//
+			using (var srvman = new ServerManager())
+			{
+				var adminConfig = srvman.GetAdministrationConfiguration();
+				//
+				var delegationSection = adminConfig.GetSection("system.webServer/management/delegation");
+				//
+				var rulesCollection = delegationSection.GetCollection();
+				// Update rule if exists
+				foreach (var rule in rulesCollection)
+				{
+					if (rulePredicate.Invoke(rule) == true)
+					{
+						var permissions = rule.GetCollection("permissions");
+						//
+						var user = default(ConfigurationElement);
+						//
+						foreach (var item in permissions)
+						{
+							if (userPredicate.Invoke(item))
+							{
+								user = item;
+								//
+								break;
+							}
+						}
+						//
+						if (user == null)
+						{
+							user = permissions.CreateElement("user");
+							//
+							user.SetAttributeValue("name", accountName);
+							user.SetAttributeValue("isRole", false);
+							//
+							permissions.Add(user);
+						}
+						//
+						if (user != null)
+						{
+							user.SetAttributeValue("accessType", "Deny");
+							//
+							srvman.CommitChanges();
+						}
+					}
+				}
+			}
+		}
+
+		public void AllowRuleToUser(string providers, string path, string accountName)
+		{
+			RemoveUserFromRule(providers, path, accountName);
+		}
+
+		public void RemoveUserFromRule(string providers, string path, string accountName)
+		{
+			var rulePredicate = new Predicate<ConfigurationElement>(x => { return x.Attributes["providers"].Value.Equals(providers) && x.Attributes["path"].Value.Equals(path); });
+			//
+			var userPredicate = new Predicate<ConfigurationElement>(x => { return x.Attributes["name"].Value.Equals(accountName); });
+			//
+			using (var srvman = new ServerManager())
+			{
+				var adminConfig = srvman.GetAdministrationConfiguration();
+				//
+				var delegationSection = adminConfig.GetSection("system.webServer/management/delegation");
+				//
+				var rulesCollection = delegationSection.GetCollection();
+				// Update rule if exists
+				foreach (var rule in rulesCollection)
+				{
+					if (rulePredicate.Invoke(rule) == true)
+					{
+						var permissions = rule.GetCollection("permissions");
+						//
+						foreach (var user in permissions)
+						{
+							if (userPredicate.Invoke(user))
+							{
+								permissions.Remove(user);
+								//
+								srvman.CommitChanges();
+								//
+								break;
+							}
+						}
+					}
+				}
+			}
+		}
+
+		public bool DelegationRuleExists(string providers, string path)
+		{
+			var exists = false;
+			//
+			var predicate = new Predicate<ConfigurationElement>(x =>
+			{
+				return x.Attributes["providers"].Value.Equals(providers) && x.Attributes["path"].Value.Equals(path);
+			});
+			//
+			using (var srvman = new ServerManager())
+			{
+				var adminConfig = srvman.GetAdministrationConfiguration();
+				//
+				var delegationSection = adminConfig.GetSection("system.webServer/management/delegation");
+				//
+				var rulesCollection = delegationSection.GetCollection();
+				// Update rule if exists
+				foreach (var rule in rulesCollection)
+				{
+					if (predicate.Invoke(rule) == true)
+					{
+						exists = true;
+						//
+						break;
+					}
+				}
+			}
+			//
+			return exists;
+		}
+
 		public void AddDelegationRule(string providers, string path, string pathType, string identityType, string userName, string userPassword)
 		{
 			var predicate = new Predicate<ConfigurationElement>(x => { 

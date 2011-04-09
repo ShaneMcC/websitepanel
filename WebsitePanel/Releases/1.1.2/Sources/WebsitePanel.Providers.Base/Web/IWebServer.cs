@@ -112,5 +112,6 @@ namespace WebsitePanel.Providers.Web
 		ResultObject CheckWebManagementPasswordComplexity(string accountPassword);
 		// Web Deploy Publishing Access
 		void GrantWebDeployPublishingAccess(string siteId, string accountName, string accountPassword);
+		void RevokeWebDeployPublishingAccess(string siteId, string accountName);
 	}
 }

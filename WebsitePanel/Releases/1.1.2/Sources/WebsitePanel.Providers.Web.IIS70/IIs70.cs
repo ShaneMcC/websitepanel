@@ -1291,6 +1291,11 @@ namespace WebsitePanel.Providers.Web
 					// update iisDirObject
 					UpdateVirtualDirectory(site.SiteId, vdir);
 				}
+				// Enforce Web Deploy publishing settings if enabled to ensure we use correct settings all the time
+				if (site.WebDeploySitePublishingEnabled == true)
+				{
+					EnforceDelegationRulesRestrictions(site.Name, site.WebDeployPublishingAccount);
+				}
 			}
 
 			#region ColdFusion Virtual Directories
@@ -1349,6 +1354,12 @@ namespace WebsitePanel.Providers.Web
 				RevokeWebManagementAccess(siteId, site[WebSite.WmSvcAccountName]);
 			}
 			#endregion
+
+			// Disable Web Deploy publishing functionality and revoke access permissions if any
+			if (IsWebDeployInstalled() && site.WebDeploySitePublishingEnabled)
+			{
+				RevokeWebDeployPublishingAccess(site.SiteId, site.WebDeployPublishingAccount);
+			}
 
 			// Get non-qualified account name
 			string anonymousAccount = GetNonQualifiedAccountName(site.AnonymousUsername);
@@ -2094,6 +2105,7 @@ namespace WebsitePanel.Providers.Web
 		}
 
 		public const string WDeployEnabled = "WDeployEnabled";
+		public const string WDeployRepair = "WDeployRepair";
 		public const string WDeployAppHostConfigWriter = "WDeployAppHostConfigWriter";
 		public const string WDeployAppPoolConfigEditor = "WDeployAppPoolConfigEditor";
 
@@ -2104,6 +2116,7 @@ namespace WebsitePanel.Providers.Web
 				return;
 			//
 			var enableFeature = Convert.ToBoolean(ProviderSettings[WDeployEnabled]);
+			var repairFeature = Convert.ToBoolean(ProviderSettings[WDeployRepair]);
 			//
 			var appHostConfigWriter = "WDeployConfigWriter";
 			var appHostConfigWriterPassword = Guid.NewGuid().ToString();
@@ -2112,9 +2125,32 @@ namespace WebsitePanel.Providers.Web
 			var appPoolConfigEditorPassword = Guid.NewGuid().ToString();
 			//
 			var appHostConfigFilePath = FileUtils.EvaluateSystemVariables(@"%WINDIR%\system32\inetsrv\config\applicationHost.config");
+			//
+			#region Repair feature
+			if (repairFeature == true && enableFeature == true)
+			{
+				// Cleanup NTFS permissions
+				SecurityUtils.RemoveNtfsPermissions(appHostConfigFilePath, appHostConfigWriter, ServerSettings, UsersOU, GroupsOU);
+				// Remove applicationHost.config writer account
+				SecurityUtils.DeleteUser(appHostConfigWriter, ServerSettings, UsersOU);
+				// Remove local admin user to recycle app pools
+				SecurityUtils.DeleteUser(appPoolConfigEditor, ServerSettings, UsersOU);
+				// Remove delegation rules if any
+				var moduleService = new DelegationRulesModuleService();
+				//
+				moduleService.RemoveDelegationRule("contentPath,iisApp", "{userScope}");
+				moduleService.RemoveDelegationRule("dbFullSql", "Data Source=");
+				moduleService.RemoveDelegationRule("dbMySql", "Server=");
+				moduleService.RemoveDelegationRule("createApp", "{userScope}");
+				moduleService.RemoveDelegationRule("setAcl", "{userScope}");
+				moduleService.RemoveDelegationRule("recycleApp", "{userScope}");
+				moduleService.RemoveDelegationRule("appPoolPipeline,appPoolNetFx", "{userScope}");
+			} 
+			#endregion
+
 			// Create applicationHost.config writer account
 			#region appHostConfigWriter account provisioning
-			if (enableFeature)
+			if (enableFeature == true)
 			{
 				//
 				if (SecurityUtils.UserExists(appHostConfigWriter, ServerSettings, UsersOU) == false)
@@ -2234,13 +2270,40 @@ namespace WebsitePanel.Providers.Web
 			{
 				var moduleService = new DelegationRulesModuleService();
 				//
-				moduleService.AddDelegationRule("contentPath,iisApp", "{userScope}", "PathPrefix", "CurrentUser", String.Empty, String.Empty);
-				moduleService.AddDelegationRule("dbFullSql", "Data Source=", "ConnectionString", "CurrentUser", String.Empty, String.Empty);
-				moduleService.AddDelegationRule("dbMySql", "Server=", "ConnectionString", "CurrentUser", String.Empty, String.Empty);
-				moduleService.AddDelegationRule("createApp", "{userScope}", "PathPrefix", "SpecificUser", appHostConfigWriter, appHostConfigWriterPassword);
-				moduleService.AddDelegationRule("setAcl", "{userScope}", "PathPrefix", "CurrentUser", String.Empty, String.Empty);
-				moduleService.AddDelegationRule("recycleApp", "{userScope}", "PathPrefix", "SpecificUser", appPoolConfigEditor, appPoolConfigEditorPassword);
-				moduleService.AddDelegationRule("appPoolPipeline,appPoolNetFx", "{userScope}", "PathPrefix", "SpecificUser", appHostConfigWriter, appHostConfigWriterPassword);
+				if (moduleService.DelegationRuleExists("contentPath,iisApp", "{userScope}") == false)
+				{
+					moduleService.AddDelegationRule("contentPath,iisApp", "{userScope}", "PathPrefix", "CurrentUser", String.Empty, String.Empty);
+				}
+				//
+				if (moduleService.DelegationRuleExists("dbFullSql", "Data Source=") == false)
+				{
+					moduleService.AddDelegationRule("dbFullSql", "Data Source=", "ConnectionString", "CurrentUser", String.Empty, String.Empty);
+				}
+				//
+				if (moduleService.DelegationRuleExists("dbMySql", "Server=") == false)
+				{
+					moduleService.AddDelegationRule("dbMySql", "Server=", "ConnectionString", "CurrentUser", String.Empty, String.Empty);
+				}
+				//
+				if (moduleService.DelegationRuleExists("createApp", "{userScope}") == false)
+				{
+					moduleService.AddDelegationRule("createApp", "{userScope}", "PathPrefix", "SpecificUser", appHostConfigWriter, appHostConfigWriterPassword);
+				}
+				//
+				if (moduleService.DelegationRuleExists("setAcl", "{userScope}") == false)
+				{
+					moduleService.AddDelegationRule("setAcl", "{userScope}", "PathPrefix", "CurrentUser", String.Empty, String.Empty);
+				}
+				//
+				if (moduleService.DelegationRuleExists("recycleApp", "{userScope}") == false)
+				{
+					moduleService.AddDelegationRule("recycleApp", "{userScope}", "PathPrefix", "SpecificUser", appPoolConfigEditor, appPoolConfigEditorPassword);
+				}
+				//
+				if (moduleService.DelegationRuleExists("appPoolPipeline,appPoolNetFx", "{userScope}") == false)
+				{
+					moduleService.AddDelegationRule("appPoolPipeline,appPoolNetFx", "{userScope}", "PathPrefix", "SpecificUser", appHostConfigWriter, appHostConfigWriterPassword);
+				}
 			}
 			else
 			{
@@ -2425,6 +2488,67 @@ namespace WebsitePanel.Providers.Web
 		{
 			// Web Publishing Access feature requires FullControl permissions on the web site's wwwroot folder
 			GrantWebManagementAccessInternally(siteName, accountName, accountPassword, NTFSPermission.FullControl);
+			//
+			EnforceDelegationRulesRestrictions(siteName, accountName);
+		}
+
+		/// <summary>
+		/// Creates the specified account and grants it Web Publishing Access permissions
+		/// </summary>
+		/// <param name="siteName">Web site name to enable Web Publishing Access at</param>
+		/// <param name="accountName">User name to grant the access for</param>
+		/// <param name="accountPassword">User password</param>
+		public new void RevokeWebDeployPublishingAccess(string siteName, string accountName)
+		{
+			// Web Publishing Access feature requires FullControl permissions on the web site's wwwroot folder
+			RevokeWebManagementAccess(siteName, accountName);
+			//
+			RemoveDelegationRulesRestrictions(siteName, accountName);
+		}
+
+		private void RemoveDelegationRulesRestrictions(string siteName, string accountName)
+		{
+			var moduleService = new DelegationRulesModuleService();
+			// Adjust web publishing permissions to the user accordingly to deny some rules for shared app pools
+			var webSite = webObjectsSvc.GetWebSiteFromIIS(siteName);
+			//
+			var fqUsername = GetFullQualifiedAccountName(accountName);
+			// Instantiate application pool helper to retrieve the app pool mode web site is running in
+			WebAppPoolHelper aphl = new WebAppPoolHelper(ProviderSettings);
+			//
+			// Shared app pool is a subject restrictions to change ASP.NET version and recycle the pool,
+			// so we need to remove these restrictions
+			if (aphl.is_shared_pool(webSite.ApplicationPool) == true)
+			{
+				//
+				moduleService.RemoveUserFromRule("recycleApp", "{userScope}", fqUsername);
+				moduleService.RemoveUserFromRule("appPoolPipeline,appPoolNetFx", "{userScope}", fqUsername);
+			}
+		}
+
+		public void EnforceDelegationRulesRestrictions(string siteName, string accountName)
+		{
+			var moduleService = new DelegationRulesModuleService();
+			// Adjust web publishing permissions to the user accordingly to deny some rules for shared app pools
+			var webSite = webObjectsSvc.GetWebSiteFromIIS(siteName);
+			//
+			var fqUsername = GetFullQualifiedAccountName(accountName);
+			// Instantiate application pool helper to retrieve the app pool mode web site is running in
+			WebAppPoolHelper aphl = new WebAppPoolHelper(ProviderSettings);
+			// Shared app pool is a subject restrictions to change ASP.NET version and recycle the pool
+			if (aphl.is_shared_pool(webSite.ApplicationPool) == true)
+			{
+				//
+				moduleService.RestrictRuleToUser("recycleApp", "{userScope}", fqUsername);
+				moduleService.RestrictRuleToUser("appPoolPipeline,appPoolNetFx", "{userScope}", fqUsername);
+			}
+			// Dedicated app pool is not a subject for any restrictions
+			else
+			{
+				//
+				moduleService.AllowRuleToUser("recycleApp", "{userScope}", fqUsername);
+				moduleService.AllowRuleToUser("appPoolPipeline,appPoolNetFx", "{userScope}", fqUsername);
+			}
 		}
 
 		public new void GrantWebManagementAccess(string siteName, string accountName, string accountPassword)

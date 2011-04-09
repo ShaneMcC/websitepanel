@@ -937,6 +937,22 @@ namespace WebsitePanel.Server
 		}
 
 		[WebMethod, SoapHeader("settings")]
+		public void RevokeWebDeployPublishingAccess(string siteId, string accountName)
+		{
+			try
+			{
+				Log.WriteStart("'{0}' RevokeWebDeployPublishingAccess", ProviderSettings.ProviderName);
+				WebProvider.RevokeWebDeployPublishingAccess(siteId, accountName);
+				Log.WriteEnd("'{0}' RevokeWebDeployPublishingAccess", ProviderSettings.ProviderName);
+			}
+			catch (Exception ex)
+			{
+				Log.WriteError(String.Format("'{0}' RevokeWebDeployPublishingAccess", ProviderSettings.ProviderName), ex);
+				throw;
+			}
+		}
+
+		[WebMethod, SoapHeader("settings")]
 		public void RevokeWebManagementAccess(string siteId, string accountName)
 		{
 			try

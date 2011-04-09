@@ -117,9 +117,10 @@ namespace WebsitePanel.Portal
                 tabsList.Add(new Tab(5, "errors", GetLocalizedString("Tab.CustomErrors")));
             if (PackagesHelper.CheckGroupQuotaEnabled(PackageId, ResourceGroups.Web, Quotas.WEB_HEADERS))
                 tabsList.Add(new Tab(6, "headers", GetLocalizedString("Tab.CustomHeaders")));
-			// Web Publishing is available either if Web Remote Management is enabled or FTP quota is enabled
-			if (PackagesHelper.CheckGroupQuotaEnabled(PackageId, ResourceGroups.Web, Quotas.WEB_REMOTEMANAGEMENT)
-				|| PackagesHelper.IsQuotaEnabled(PackageId, ResourceGroups.Ftp))
+			// Web Publishing is available either if Web Remote Management is enabled or FTP quota is enabled and the plan has dedicated app pools
+			if ((PackagesHelper.CheckGroupQuotaEnabled(PackageId, ResourceGroups.Web, Quotas.WEB_REMOTEMANAGEMENT)
+				|| PackagesHelper.IsQuotaEnabled(PackageId, ResourceGroups.Ftp)) 
+				&& PackagesHelper.CheckGroupQuotaEnabled(PackageId, ResourceGroups.Web, Quotas.WEB_APPPOOLS))
 			{
 				tabsList.Add(new Tab(7, "wdeploypub", GetLocalizedString("Tab.WebDeployPublishing")));
 			}

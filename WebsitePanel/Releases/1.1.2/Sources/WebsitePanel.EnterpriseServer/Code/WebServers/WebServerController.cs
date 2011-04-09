@@ -2041,7 +2041,7 @@ namespace WebsitePanel.EnterpriseServer
 				//
 				WebServer server = GetWebServer(item.ServiceId);
 				// Revoke 
-				server.RevokeWebManagementAccess(item.SiteId, accountName);
+				server.RevokeWebDeployPublishingAccess(item.SiteId, accountName);
 				// Cleanup web site properties
 				item.WebDeployPublishingAccount = String.Empty;
 				item.WebDeploySitePublishingEnabled = false;
