@@ -351,6 +351,12 @@ namespace WebsitePanel.Setup.Actions
 							settings["phppath"] = @"%SYSTEMDRIVE%\Program Files (x86)\PHP\php-cgi.exe";
 						}
 
+						// Ensure Web Deploy is installed and then enable it
+						if (Utils.IsWebDeployInstalled())
+						{
+							settings["WDeployEnabled"] = Boolean.TrueString;
+						}
+
 						UpdateServiceSettings(serviceId, settings);
 					}
 					InstallService(serviceId);
@@ -759,6 +765,7 @@ namespace WebsitePanel.Setup.Actions
 					HostingPlanGroupInfo group = new HostingPlanGroupInfo();
 					group.GroupId = groupId;
 					group.Enabled = true;
+					group.GroupName = Convert.ToString(groupRow["GroupName"]);
 					group.CalculateDiskSpace = (bool)groupRow["CalculateDiskSpace"];
 					group.CalculateBandwidth = (bool)groupRow["CalculateBandwidth"];
 					groups.Add(group);
@@ -766,11 +773,21 @@ namespace WebsitePanel.Setup.Actions
 					DataView dvQuotas = new DataView(ds.Tables[1], "GroupID=" + group.GroupId.ToString(), "", DataViewRowState.CurrentRows);
 					List<HostingPlanQuotaInfo> groupQuotas = GetGroupQuotas(groupId, dvQuotas);
 					quotas.AddRange(groupQuotas);
-
 				}
 
 				plan.Groups = groups.ToArray();
 				plan.Quotas = quotas.ToArray();
+
+				// Add Web Deploy publishing support if enabled by default
+				if (Utils.IsWebDeployInstalled())
+				{
+					var resGroupWeb = Array.Find(plan.Groups, x => x.GroupName.Equals(ResourceGroups.Web, StringComparison.OrdinalIgnoreCase));
+					//
+					if (resGroupWeb != null)
+					{
+						EnableRemoteManagementQuota(quotas, new DataView(ds.Tables[1], String.Format("GroupID = {0}", resGroupWeb.GroupId), "", DataViewRowState.CurrentRows));
+					}
+				}
 
 				int planId = ES.Services.Packages.AddHostingPlan(plan);
 				if (planId > 0)
@@ -789,6 +806,26 @@ namespace WebsitePanel.Setup.Actions
 					Log.WriteError("Hosting plan configuration error", ex);
 				return -1;
 			}
+		}
+
+		private void EnableRemoteManagementQuota(List<HostingPlanQuotaInfo> quotas, DataView dataView)
+		{
+			// Sort by quota name
+			dataView.Sort = "QuotaName";
+			// Try to find out the quota we are looking for...
+			var indexOf = dataView.Find(Quotas.WEB_REMOTEMANAGEMENT);
+			// Exit if nothing has been found
+			if (indexOf == -1)
+				return;
+			// Retrieve QuotaID value from the row we have found
+			var quotaId = Convert.ToInt32(dataView[indexOf]["QuotaID"]);
+			// Look for the quota in quotas list
+			var quotaInfo = quotas.Find(x => x.QuotaId.Equals(quotaId));
+			// Exit if nothing has been found
+			if (quotaInfo == default(HostingPlanQuotaInfo))
+				return;
+			// Enable quota if found
+			quotaInfo.QuotaValue = 1;
 		}
 
 		private int AddPackage(string name, int userId, int planId)

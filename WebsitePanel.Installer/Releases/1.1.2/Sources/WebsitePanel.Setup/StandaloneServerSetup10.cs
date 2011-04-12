@@ -17,6 +17,17 @@ namespace WebsitePanel.Setup
 	}
 
 	/// <summary>
+	/// Release 1.1.2
+	/// </summary>
+	public class StandaloneServerSetup112 : StandaloneServerSetup
+	{
+		public static new object Install(object obj)
+		{
+			return StandaloneServerSetup.InstallBase(obj, "1.1.0");
+		}
+	}
+
+	/// <summary>
 	/// Release 1.1.0
 	/// </summary>
 	public class StandaloneServerSetup110 : StandaloneServerSetup

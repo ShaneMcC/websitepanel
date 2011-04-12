@@ -15,18 +15,6 @@
     {
         "Entry"
         {
-        "MsmKey" = "8:_01A6A82D399BA257DF7667A4FD632CE1"
-        "OwnerKey" = "8:_05F59A142DD147798C90054A203C0EE9"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_01A6A82D399BA257DF7667A4FD632CE1"
-        "OwnerKey" = "8:_1239E87E938248B1BAF9BF75C32D3EDC"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
         "MsmKey" = "8:_05F59A142DD147798C90054A203C0EE9"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
@@ -41,24 +29,6 @@
         {
         "MsmKey" = "8:_1CA10FC92E834493BE17E8858ACF5608"
         "OwnerKey" = "8:_UNDEFINED"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_3303791A694C9FBA2D61B6421EA29DEB"
-        "OwnerKey" = "8:_05F59A142DD147798C90054A203C0EE9"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_3303791A694C9FBA2D61B6421EA29DEB"
-        "OwnerKey" = "8:_01A6A82D399BA257DF7667A4FD632CE1"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_3303791A694C9FBA2D61B6421EA29DEB"
-        "OwnerKey" = "8:_1239E87E938248B1BAF9BF75C32D3EDC"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -81,6 +51,36 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_C52CDF605FF0558485633BD711869166"
+        "OwnerKey" = "8:_05F59A142DD147798C90054A203C0EE9"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_C52CDF605FF0558485633BD711869166"
+        "OwnerKey" = "8:_FDA22C67579CE93EED44001B855DC206"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_C52CDF605FF0558485633BD711869166"
+        "OwnerKey" = "8:_1239E87E938248B1BAF9BF75C32D3EDC"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_FDA22C67579CE93EED44001B855DC206"
+        "OwnerKey" = "8:_05F59A142DD147798C90054A203C0EE9"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_FDA22C67579CE93EED44001B855DC206"
+        "OwnerKey" = "8:_1239E87E938248B1BAF9BF75C32D3EDC"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_UNDEFINED"
         "OwnerKey" = "8:_1239E87E938248B1BAF9BF75C32D3EDC"
         "MsmSig" = "8:_UNDEFINED"
@@ -88,7 +88,7 @@
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_01A6A82D399BA257DF7667A4FD632CE1"
+        "OwnerKey" = "8:_FDA22C67579CE93EED44001B855DC206"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -100,7 +100,7 @@
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_3303791A694C9FBA2D61B6421EA29DEB"
+        "OwnerKey" = "8:_C52CDF605FF0558485633BD711869166"
         "MsmSig" = "8:_UNDEFINED"
         }
     }
@@ -111,7 +111,7 @@
         "DisplayName" = "8:Debug"
         "IsDebugOnly" = "11:TRUE"
         "IsReleaseOnly" = "11:FALSE"
-        "OutputFilename" = "8:..\\..\\Build\\debug\\WebsitePanelInstaller11.msi"
+        "OutputFilename" = "8:..\\..\\Build\\debug\\WebsitePanelInstaller112.msi"
         "PackageFilesAs" = "3:2"
         "PackageFileSize" = "3:-2147483648"
         "CabType" = "3:1"
@@ -143,7 +143,7 @@
         "DisplayName" = "8:Release"
         "IsDebugOnly" = "11:FALSE"
         "IsReleaseOnly" = "11:TRUE"
-        "OutputFilename" = "8:..\\..\\Build\\release\\WebsitePanelInstaller11.msi"
+        "OutputFilename" = "8:..\\..\\Build\\release\\WebsitePanelInstaller112.msi"
         "PackageFilesAs" = "3:2"
         "PackageFileSize" = "3:-2147483648"
         "CabType" = "3:1"
@@ -162,6 +162,16 @@
             "ComponentsUrl" = "8:"
                 "Items"
                 {
+                    "{EDC2488A-8267-493A-A98E-7D9C3B36CDF3}:Microsoft.Windows.Installer.3.1"
+                    {
+                    "Name" = "8:Windows Installer 3.1"
+                    "ProductCode" = "8:Microsoft.Windows.Installer.3.1"
+                    }
+                    "{EDC2488A-8267-493A-A98E-7D9C3B36CDF3}:Microsoft.Windows.Installer.4.5"
+                    {
+                    "Name" = "8:Windows Installer 4.5"
+                    "ProductCode" = "8:Microsoft.Windows.Installer.4.5"
+                    }
                 }
             }
         }
@@ -185,7 +195,7 @@
                 {
                 "Name" = "8:.NET Framework"
                 "Message" = "8:[VSDNETMSG]"
-                "FrameworkVersion" = "8:2.0.50727   "
+                "FrameworkVersion" = "8:.NETFramework,Version=v2.0"
                 "AllowLaterVersions" = "11:FALSE"
                 "InstallUrl" = "8:http://go.microsoft.com/fwlink/?LinkId=9832"
                 }
@@ -193,32 +203,6 @@
         }
         "File"
         {
-            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_01A6A82D399BA257DF7667A4FD632CE1"
-            {
-            "AssemblyRegister" = "3:1"
-            "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:WebsitePanel.Installer.Core, Version=1.1.0.0, Culture=neutral, processorArchitecture=MSIL"
-                "ScatterAssemblies"
-                {
-                }
-            "SourcePath" = "8:WebsitePanel.Installer.Core.dll"
-            "TargetName" = "8:"
-            "Tag" = "8:"
-            "Folder" = "8:_E742E59BFE4D43C59AA65A07792B89FB"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:TRUE"
-            "IsolateTo" = "8:"
-            }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_1CA10FC92E834493BE17E8858ACF5608"
             {
             "SourcePath" = "8:Installer.ico"
@@ -237,37 +221,6 @@
             "Register" = "3:1"
             "Exclude" = "11:TRUE"
             "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            }
-            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_3303791A694C9FBA2D61B6421EA29DEB"
-            {
-            "AssemblyRegister" = "3:1"
-            "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:Ionic.Zip.Reduced, Version=1.8.4.28, Culture=neutral, PublicKeyToken=edbe51ad942a3f5c, processorArchitecture=MSIL"
-                "ScatterAssemblies"
-                {
-                    "_3303791A694C9FBA2D61B6421EA29DEB"
-                    {
-                    "Name" = "8:Ionic.Zip.Reduced.dll"
-                    "Attributes" = "3:512"
-                    }
-                }
-            "SourcePath" = "8:Ionic.Zip.Reduced.dll"
-            "TargetName" = "8:"
-            "Tag" = "8:"
-            "Folder" = "8:_E742E59BFE4D43C59AA65A07792B89FB"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
             }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_4BD2D475F25A409B9E2F96A9C0AD9283"
@@ -328,6 +281,63 @@
             "Register" = "3:1"
             "Exclude" = "11:TRUE"
             "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_C52CDF605FF0558485633BD711869166"
+            {
+            "AssemblyRegister" = "3:1"
+            "AssemblyIsInGAC" = "11:FALSE"
+            "AssemblyAsmDisplayName" = "8:Ionic.Zip.Reduced, Version=1.8.4.28, Culture=neutral, PublicKeyToken=edbe51ad942a3f5c, processorArchitecture=MSIL"
+                "ScatterAssemblies"
+                {
+                    "_C52CDF605FF0558485633BD711869166"
+                    {
+                    "Name" = "8:Ionic.Zip.Reduced.dll"
+                    "Attributes" = "3:512"
+                    }
+                }
+            "SourcePath" = "8:Ionic.Zip.Reduced.dll"
+            "TargetName" = "8:"
+            "Tag" = "8:"
+            "Folder" = "8:_E742E59BFE4D43C59AA65A07792B89FB"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:TRUE"
+            "IsolateTo" = "8:"
+            }
+            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_FDA22C67579CE93EED44001B855DC206"
+            {
+            "AssemblyRegister" = "3:1"
+            "AssemblyIsInGAC" = "11:FALSE"
+            "AssemblyAsmDisplayName" = "8:WebsitePanel.Installer.Core, Version=1.1.2.0, Culture=neutral, processorArchitecture=MSIL"
+                "ScatterAssemblies"
+                {
+                }
+            "SourcePath" = "8:WebsitePanel.Installer.Core.dll"
+            "TargetName" = "8:"
+            "Tag" = "8:"
+            "Folder" = "8:_E742E59BFE4D43C59AA65A07792B89FB"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
             }
         }
@@ -398,7 +408,7 @@
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:WebsitePanel Installer"
         "ProductCode" = "8:{2EA2F83F-3BC7-487C-9413-79870594EEEE}"
-        "PackageCode" = "8:{565E3D38-FAD9-424C-8B8D-190F33DABAA6}"
+        "PackageCode" = "8:{4FFEC6DE-3665-48BA-A108-9DC00C0B6542}"
         "UpgradeCode" = "8:{2950A907-11E7-436C-86CE-049C414AFD08}"
         "AspNetVersion" = "8:4.0.30319.0"
         "RestartWWWService" = "11:FALSE"
@@ -957,7 +967,7 @@
         {
             "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_05F59A142DD147798C90054A203C0EE9"
             {
-            "SourcePath" = "8:..\\WebsitePanel.Installer\\obj\\Debug\\WebsitePanel.Installer.exe"
+            "SourcePath" = "8:..\\WebsitePanel.Installer\\obj\\Release\\WebsitePanel.Installer.exe"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_E742E59BFE4D43C59AA65A07792B89FB"
@@ -985,7 +995,7 @@
             }
             "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_1239E87E938248B1BAF9BF75C32D3EDC"
             {
-            "SourcePath" = "8:..\\WebsitePanel.SilentInstaller\\obj\\x86\\Debug\\WebsitePanel.SilentInstaller.exe"
+            "SourcePath" = "8:..\\WebsitePanel.SilentInstaller\\obj\\x86\\Release\\WebsitePanel.SilentInstaller.exe"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_E742E59BFE4D43C59AA65A07792B89FB"

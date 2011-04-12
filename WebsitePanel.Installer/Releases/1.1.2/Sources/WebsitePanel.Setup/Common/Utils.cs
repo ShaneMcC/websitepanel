@@ -38,6 +38,7 @@ using System.Text.RegularExpressions;
 using System.Xml;
 using System.ServiceProcess;
 using System.DirectoryServices;
+using Microsoft.Win32;
 
 namespace WebsitePanel.Setup
 {
@@ -493,6 +494,30 @@ namespace WebsitePanel.Setup
 			return Path.GetPathRoot(Environment.SystemDirectory);
 		}
 		#endregion 
+
+		public static bool IsWebDeployInstalled()
+		{
+			// TO-DO: Implement Web Deploy detection (x64/x86)
+			var isInstalled = false;
+			//
+			try
+			{
+				var msdeployRegKey = Registry.LocalMachine.OpenSubKey(@"SOFTWARE\Microsoft\IIS Extensions\MSDeploy\2");
+				//
+				var keyValue = msdeployRegKey.GetValue("Install");
+				// We have found the required key in the registry hive
+				if (keyValue != null && keyValue.Equals(1))
+				{
+					isInstalled = true;
+				}
+			}
+			catch (Exception ex)
+			{
+				Log.WriteError("Could not retrieve Web Deploy key from the registry", ex);
+			}
+			//
+			return isInstalled;
+		}
 
         public static bool IsWin64()
         {
