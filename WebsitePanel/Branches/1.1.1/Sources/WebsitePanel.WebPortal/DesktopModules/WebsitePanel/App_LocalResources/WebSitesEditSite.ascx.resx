@@ -1,0 +1,390 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="btnAddFolder.Text" xml:space="preserve">
+    <value>Add Folder</value>
+  </data>
+  <data name="btnAddGroup.Text" xml:space="preserve">
+    <value>Add Group</value>
+  </data>
+  <data name="btnAddPointer.Text" xml:space="preserve">
+    <value>Add Web Site Pointer</value>
+  </data>
+  <data name="btnAddUser.Text" xml:space="preserve">
+    <value>Add User</value>
+  </data>
+  <data name="btnAddVirtualDirectory.Text" xml:space="preserve">
+    <value>Create Directory</value>
+  </data>
+  <data name="btnCancel.Text" xml:space="preserve">
+    <value>Cancel</value>
+  </data>
+  <data name="btnChangeFrontPagePassword.Text" xml:space="preserve">
+    <value>Change Password</value>
+  </data>
+  <data name="btnDelete.OnClientClick" xml:space="preserve">
+    <value>return confirmationSITE();</value>
+  </data>
+  <data name="btnDelete.Text" xml:space="preserve">
+    <value>Delete</value>
+  </data>
+  <data name="btnInstallFrontPage.Text" xml:space="preserve">
+    <value>Install</value>
+  </data>
+  <data name="btnUninstallFrontPage.Text" xml:space="preserve">
+    <value>Uninstall</value>
+  </data>
+  <data name="btnUpdate.OnClientClick" xml:space="preserve">
+    <value>ShowProgressDialog('Updating web site...');</value>
+  </data>
+  <data name="btnUpdate.Text" xml:space="preserve">
+    <value>Update</value>
+  </data>
+  <data name="cmdContinue.AlternateText" xml:space="preserve">
+    <value>Continue Web Site</value>
+  </data>
+  <data name="cmdDeleteFolder.AlternateText" xml:space="preserve">
+    <value>Delete Folder</value>
+  </data>
+  <data name="cmdDeleteFolder.OnClientClick" xml:space="preserve">
+    <value>return confirm('Are you sure you want to delete Folder?');</value>
+  </data>
+  <data name="cmdDeleteGroup.AlternateText" xml:space="preserve">
+    <value>Delete Group</value>
+  </data>
+  <data name="cmdDeleteGroup.OnClientClick" xml:space="preserve">
+    <value>return confirm('Are you sure you want to delete Group?');</value>
+  </data>
+  <data name="cmdDeletePointer.AlternateText" xml:space="preserve">
+    <value>Remove Pointer</value>
+  </data>
+  <data name="cmdDeletePointer.OnClientClick" xml:space="preserve">
+    <value>return confirm('Are you sure you want to remove Pointer?');</value>
+  </data>
+  <data name="cmdDeleteUser.AlternateText" xml:space="preserve">
+    <value>Delete User</value>
+  </data>
+  <data name="cmdDeleteUser.OnClientClick" xml:space="preserve">
+    <value>return confirm('Are you sure you want to delete User?');</value>
+  </data>
+  <data name="cmdPause.AlternateText" xml:space="preserve">
+    <value>Pause Web Site</value>
+  </data>
+  <data name="cmdStart.AlternateText" xml:space="preserve">
+    <value>Start Web Site</value>
+  </data>
+  <data name="cmdStop.AlternateText" xml:space="preserve">
+    <value>Stop Web Site</value>
+  </data>
+  <data name="DisableFolders.Text" xml:space="preserve">
+    <value>Disable Secured Folders</value>
+  </data>
+  <data name="EnableFolders.Text" xml:space="preserve">
+    <value>Enable Secured Folders</value>
+  </data>
+  <data name="gvErrorPages.Empty" xml:space="preserve">
+    <value>No custom error handlers defined</value>
+  </data>
+  <data name="gvErrorPagesCode.Header" xml:space="preserve">
+    <value>Code</value>
+  </data>
+  <data name="gvErrorPagesErrorContent.Header" xml:space="preserve">
+    <value>Error Content</value>
+  </data>
+  <data name="gvErrorPagesHandlerType.Header" xml:space="preserve">
+    <value>Handler Type</value>
+  </data>
+  <data name="gvErrorPagesSubcode.Header" xml:space="preserve">
+    <value>Sub Code</value>
+  </data>
+  <data name="gvFolders.Empty" xml:space="preserve">
+    <value>Click "Add Folder" button to add secured folder</value>
+  </data>
+  <data name="gvFoldersName.Header" xml:space="preserve">
+    <value>Secured Folders</value>
+  </data>
+  <data name="gvGroups.Empty" xml:space="preserve">
+    <value>Click "Add Group" button to add new group</value>
+  </data>
+  <data name="gvGroupsName.Header" xml:space="preserve">
+    <value>Groups</value>
+  </data>
+  <data name="gvMimeTypes.Empty" xml:space="preserve">
+    <value>Custom MIME types are not defined</value>
+  </data>
+  <data name="gvMimeTypesExtension.Header" xml:space="preserve">
+    <value>Extension</value>
+  </data>
+  <data name="gvMimeTypesMIMEtype.Header" xml:space="preserve">
+    <value>MIME-Type</value>
+  </data>
+  <data name="gvPointers.Empty" xml:space="preserve">
+    <value>No Web Site Pointers</value>
+  </data>
+  <data name="gvPointersName.Header" xml:space="preserve">
+    <value>Name</value>
+  </data>
+  <data name="gvUsers.Empty" xml:space="preserve">
+    <value>Click "Add User" button to add new user</value>
+  </data>
+  <data name="gvUsersName.Header" xml:space="preserve">
+    <value>Users</value>
+  </data>
+  <data name="gvVirtualDirectories.Empty" xml:space="preserve">
+    <value>No Virtual Directories.</value>
+  </data>
+  <data name="gvVirtualDirectoriesName.Header" xml:space="preserve">
+    <value>Directory Name</value>
+  </data>
+  <data name="gvVirtualDirectoriesPath.Header" xml:space="preserve">
+    <value>Path</value>
+  </data>
+  <data name="lblFPAccount.Text" xml:space="preserve">
+    <value>FrontPage Account:</value>
+  </data>
+  <data name="lblFPPassword.Text" xml:space="preserve">
+    <value>FrontPage Password:</value>
+  </data>
+  <data name="lblFPStatus.Text" xml:space="preserve">
+    <value>FrontPage Status:</value>
+  </data>
+  <data name="lblSharePoint.Text" xml:space="preserve">
+    <value>This web site has SharePoint Services installed and can't be extended with FrontPage Extensions.</value>
+  </data>
+  <data name="SiteState.Continuing" xml:space="preserve">
+    <value>Continuing</value>
+  </data>
+  <data name="SiteState.Paused" xml:space="preserve">
+    <value>Paused</value>
+  </data>
+  <data name="SiteState.Started" xml:space="preserve">
+    <value>Started</value>
+  </data>
+  <data name="SiteState.Stopped" xml:space="preserve">
+    <value>Stopped</value>
+  </data>
+  <data name="Tab.CustomErrors" xml:space="preserve">
+    <value>Custom Errors</value>
+  </data>
+  <data name="Tab.CustomHeaders" xml:space="preserve">
+    <value>Headers</value>
+  </data>
+  <data name="Tab.Extensions" xml:space="preserve">
+    <value>Extensions</value>
+  </data>
+  <data name="Tab.FrontPage" xml:space="preserve">
+    <value>FrontPage</value>
+  </data>
+  <data name="Tab.HomeFolder" xml:space="preserve">
+    <value>Home Folder</value>
+  </data>
+  <data name="Tab.MIMETypes" xml:space="preserve">
+    <value>MIME Types</value>
+  </data>
+  <data name="Tab.SecuredFolders" xml:space="preserve">
+    <value>Secured Folders</value>
+  </data>
+  <data name="Tab.VirtualDirs" xml:space="preserve">
+    <value>Virtual Dirs</value>
+  </data>
+  <data name="Text.FPSE_INSTALLED" xml:space="preserve">
+    <value>Installed</value>
+  </data>
+  <data name="Text.FPSE_NOT_INSTALLED" xml:space="preserve">
+    <value>Not Installed</value>
+  </data>
+  <data name="Text.FPSE_UNAVAILABLE" xml:space="preserve">
+    <value>FrontPage Server Extensions are not installed on your web server</value>
+  </data>
+  <data name="Text.SharePointInstalled" xml:space="preserve">
+    <value>SharePoint Services Installed</value>
+  </data>
+  <data name="Tab.ColdFusion" xml:space="preserve">
+    <value>ColdFusion</value>
+  </data>
+  <data name="Text.CF_UNAVAILABLE" xml:space="preserve">
+    <value>ColdFusion is not installed on web server</value>
+  </data>
+  <data name="Text.CF_WARNING" xml:space="preserve">
+    <value>* Enabling of ColdFusion scripting automatically restarts IIS</value>
+  </data>
+  <data name="Text.COLDFUSION_UNAVAILABLE" xml:space="preserve">
+    <value>Adobe ColdFusion is not installed on your web server</value>
+  </data>
+  <data name="Tab.WebManagement" xml:space="preserve">
+    <value>Management</value>
+  </data>
+  <data name="btnWmSvcChangePassw.Text" xml:space="preserve">
+    <value>Change Password</value>
+  </data>
+  <data name="btnWmSvcSiteDisable.Text" xml:space="preserve">
+    <value>Disable</value>
+  </data>
+  <data name="btnWmSvcSiteEnable.Text" xml:space="preserve">
+    <value>Enable</value>
+  </data>
+  <data name="cvPasswordComparer.ErrorMessage" xml:space="preserve">
+    <value>* Password confirmation does not match the password specified</value>
+  </data>
+  <data name="lclEnablementHint.Text" xml:space="preserve">
+    <value>To enable Remote Management for this web site specify account user name and password and then click "Enable" button.</value>
+  </data>
+  <data name="lclWmSvcAccountName.Text" xml:space="preserve">
+    <value>Username:</value>
+  </data>
+  <data name="lclWmSvcAccountPassword.Text" xml:space="preserve">
+    <value>Password:</value>
+  </data>
+  <data name="lclWmSvcAccountPasswordC.Text" xml:space="preserve">
+    <value>Confirm Password:</value>
+  </data>
+  <data name="lclWmSvcConnectionHint.Text" xml:space="preserve">
+    <value>The site can be managed remotely from &lt;a href="http://www.iis.net/extensions/IISManager" target="_blank"&gt;IIS Manager for Remote Administration&lt;/a&gt;.
+&lt;p&gt;&lt;table cellpadding="4" border="0"&gt;
+&lt;tr&gt;
+	&lt;td class="NormalBold" colspan="2"&gt;Connection details:&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+	&lt;td class="Normal"&gt;Server name: &lt;/td&gt;&lt;td&gt;{0}&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+	&lt;td class="Normal"&gt;Site name: &lt;/td&gt;&lt;td&gt;{1}&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/table&gt;&lt;/p&gt;&lt;p&gt;
+To connect to web site management service please use username and password provided below.&lt;/p&gt;</value>
+  </data>
+  <data name="lclWmSvcNotInstalled.Text" xml:space="preserve">
+    <value>Management Service is not installed on the web server. Please contact your system administrator.</value>
+  </data>
+  <data name="lclWmSvcSiteDisabled.Text" xml:space="preserve">
+    <value>Remote Management is Disabled.</value>
+  </data>
+  <data name="lclWmSvcSiteEnabled.Text" xml:space="preserve">
+    <value>Remote Management is Enabled.</value>
+  </data>
+  <data name="btnWmSvcChangePassw.OnClientClick" xml:space="preserve">
+    <value>ShowProgressDialog('Changing access password...')</value>
+  </data>
+  <data name="btnWmSvcSiteEnable.OnClientClick" xml:space="preserve">
+    <value>ShowProgressDialog('Enabling Remote Management...')</value>
+  </data>
+  <data name="Tab.SSL" xml:space="preserve">
+    <value>SSL</value>
+  </data>
+</root>
