@@ -162,6 +162,7 @@ END
 
 
 
+
 GO
 SET ANSI_NULLS ON
 GO
@@ -249,6 +250,7 @@ BEGIN
 END
 
 RETURN
+
 
 
 
@@ -465,6 +467,7 @@ END
 
 
 
+
 GO
 SET ANSI_NULLS ON
 GO
@@ -516,6 +519,7 @@ RETURN 1
 
 RETURN 0
 END
+
 
 
 
@@ -646,6 +650,7 @@ END
 
 
 
+
 GO
 SET ANSI_NULLS ON
 GO
@@ -714,6 +719,7 @@ VALUES
 
 SET @DomainID = SCOPE_IDENTITY()
 RETURN
+
 
 
 
@@ -853,6 +859,7 @@ RETURN
 
 
 
+
 GO
 SET ANSI_NULLS ON
 GO
@@ -949,6 +956,7 @@ RETURN
 
 
 
+
 GO
 SET ANSI_NULLS ON
 GO
@@ -990,6 +998,7 @@ DELETE FROM
 WHERE
 	AccountID = @AccountID AND LOWER(EmailAddress) <> LOWER(@PrimaryEmailAddress)
 END
+
 
 
 
@@ -1094,6 +1103,7 @@ RETURN
 
 
 
+
 GO
 SET ANSI_NULLS ON
 GO
@@ -1148,6 +1158,7 @@ VALUES
 	getdate()
 )		
 END
+
 
 
 
@@ -1234,6 +1245,7 @@ RETURN
 
 
 
+
 GO
 SET ANSI_NULLS ON
 GO
@@ -1283,6 +1295,7 @@ DELETE FROM ExchangeAccounts
 WHERE ItemID = @ItemID AND AccountID = @AccountID
 
 RETURN
+
 
 
 
@@ -1399,6 +1412,7 @@ RETURN
 
 
 
+
 GO
 SET ANSI_NULLS ON
 GO
@@ -1448,6 +1462,7 @@ END
 
 
 
+
 GO
 SET ANSI_NULLS ON
 GO
@@ -1478,6 +1493,7 @@ WHERE
 	AccountID = @AccountID
 
 RETURN 
+
 
 
 
@@ -1585,6 +1601,7 @@ END
 
 
 
+
 GO
 SET ANSI_NULLS ON
 GO
@@ -1621,6 +1638,7 @@ BEGIN
 		PIP.PackageAddressID = @PackageAddressID
 		AND dbo.CheckActorPackageRights(@ActorID, PIP.PackageID) = 1
 END
+
 
 
 
@@ -2154,6 +2172,7 @@ END
 
 
 
+
 GO
 SET ANSI_NULLS ON
 GO
@@ -2226,6 +2245,7 @@ END
 
 
 
+
 GO
 SET ANSI_NULLS ON
 GO
@@ -2282,6 +2302,7 @@ END -- if 'root' package
 
 RETURN
 END
+
 
 
 
@@ -2381,6 +2402,7 @@ END
 
 COMMIT TRAN
 RETURN
+
 
 
 
@@ -2548,6 +2570,7 @@ RETURN
 
 
 
+
 GO
 SET ANSI_NULLS ON
 GO
@@ -2616,6 +2639,7 @@ SET
 WHERE
 	DomainID = @DomainID
 	RETURN
+
 
 
 
@@ -2766,6 +2790,7 @@ exec sp_executesql @sql, N'@PackageID int, @StartRow int, @MaximumRows int, @Rec
 @PackageID, @StartRow, @MaximumRows, @Recursive
 
 RETURN 
+
 
 
 
@@ -2943,6 +2968,7 @@ RETURN
 
 
 
+
 GO
 SET ANSI_NULLS ON
 GO
@@ -3075,6 +3101,7 @@ exec sp_executesql @sql, N'@ActorID int, @UserID int, @PackageID int, @StartRow 
 @ActorID, @UserID, @PackageID, @StartRow, @MaximumRows
 
 RETURN 
+
 
 
 
@@ -3270,6 +3297,7 @@ RETURN
 
 
 
+
 GO
 SET ANSI_NULLS ON
 GO
@@ -3332,6 +3360,7 @@ FROM PackageAddons AS PA
 INNER JOIN HostingPlans AS HP ON PA.PlanID = HP.PlanID
 WHERE PA.PackageID = @PackageID
 RETURN
+
 
 
 
@@ -3429,6 +3458,7 @@ SELECT
 FROM PackageAddons AS PA
 WHERE PA.PackageAddonID = @PackageAddonID
 RETURN
+
 
 
 
@@ -3642,6 +3672,7 @@ RETURN
 
 
 
+
 GO
 SET ANSI_NULLS ON
 GO
@@ -3686,6 +3717,7 @@ UPDATE Packages SET BandwidthUpdated = @UpdateDate
 WHERE PackageID = @PackageID
 
 RETURN 
+
 
 
 
@@ -3836,6 +3868,7 @@ RETURN
 
 
 
+
 GO
 SET ANSI_NULLS ON
 GO
@@ -3908,6 +3941,7 @@ RETURN
 
 
 
+
 GO
 SET ANSI_NULLS ON
 GO
@@ -3937,6 +3971,7 @@ BEGIN
 		dbo.BlackBerryUsers
 	WHERE AccountID = @AccountID
 END
+
 
 
 
@@ -4045,6 +4080,7 @@ RETURN
 
 
 
+
 GO
 SET ANSI_NULLS ON
 GO
@@ -4093,6 +4129,7 @@ BEGIN
 	END
 
 END
+
 
 
 
@@ -4198,6 +4235,7 @@ END
 
 
 
+
 GO
 SET ANSI_NULLS ON
 GO
@@ -4254,6 +4292,7 @@ END
 
 
 
+
 GO
 SET ANSI_NULLS ON
 GO
@@ -4284,6 +4323,7 @@ BEGIN
 	SET NOCOUNT ON
 DELETE FROM dbo.CRMUsers WHERE AccountID IN (SELECT AccountID FROM dbo.ExchangeAccounts WHERE ItemID = @ItemID)
 END
+
 
 
 
@@ -4395,6 +4435,7 @@ RETURN
 
 
 
+
 GO
 SET ANSI_NULLS ON
 GO
@@ -4447,6 +4488,7 @@ BEGIN
 	WHERE SI.PackageID = @PackageID
 
 END
+
 
 
 
@@ -4562,6 +4604,7 @@ WHERE PT.ParentPackageID = @PackageID
 
 RETURN @Diskspace
 END
+
 
 
 
@@ -4708,6 +4751,7 @@ END
 
 
 
+
 GO
 SET ANSI_NULLS OFF
 GO
@@ -4776,6 +4820,7 @@ BEGIN
 
 RETURN
 END
+
 
 
 
@@ -4958,6 +5003,7 @@ RETURN
 
 
 
+
 GO
 SET ANSI_NULLS ON
 GO
@@ -5027,6 +5073,7 @@ END
 	
 RETURN
 END
+
 
 
 
@@ -5155,6 +5202,7 @@ RETURN
 
 
 
+
 GO
 SET ANSI_NULLS ON
 GO
@@ -5216,6 +5264,7 @@ IF (@@ERROR <> 0 )
 	END
 COMMIT TRAN
 RETURN
+
 
 
 
@@ -5303,6 +5352,7 @@ RETURN
 
 
 
+
 GO
 SET ANSI_NULLS ON
 GO
@@ -5340,6 +5390,7 @@ ON
 	CU.AccountID = EA.AccountID
 WHERE EA.ItemID = @ItemID
 END
+
 
 
 
@@ -5420,6 +5471,7 @@ END
 
 
 
+
 GO
 SET ANSI_NULLS ON
 GO
@@ -5473,6 +5525,7 @@ WHERE
 	(AccountType = @AccountType OR @AccountType IS NULL) 
 ORDER BY DisplayName
 RETURN
+
 
 
 
@@ -5579,6 +5632,7 @@ RETURN
 
 
 
+
 GO
 SET ANSI_NULLS ON
 GO
@@ -5631,6 +5685,7 @@ ON
 	ea.AccountID = cu.AccountID
 WHERE 
 	ea.ItemID = @ItemID AND ea.DisplayName LIKE @Name AND ea.PrimaryEmailAddress LIKE @Email	
+
 
 
 
@@ -5802,6 +5857,7 @@ DROP TABLE #TempCRMUsers
 
 
 
+
 GO
 SET ANSI_NULLS ON
 GO
@@ -5844,6 +5900,7 @@ BEGIN
 	WHERE 
 		ea.ItemID = @ItemID
 END
+
 
 
 
@@ -5910,6 +5967,7 @@ ON
 	ea.AccountID = bu.AccountID
 WHERE 
 	ea.ItemID = @ItemID AND ea.DisplayName LIKE @Name AND ea.PrimaryEmailAddress LIKE @Email	
+
 
 
 
@@ -6000,6 +6058,7 @@ RETURN
 
 
 
+
 GO
 SET ANSI_NULLS ON
 GO
@@ -6050,6 +6109,7 @@ END
 END
 
 RETURN
+
 
 
 
@@ -6174,6 +6234,7 @@ END
 
 
 
+
 GO
 SET ANSI_NULLS ON
 GO
@@ -6215,6 +6276,7 @@ AS
 DELETE FROM ExchangeOrganizations
 WHERE ItemID = @ItemID
 RETURN
+
 
 
 
@@ -6324,6 +6386,7 @@ RETURN
 
 
 
+
 GO
 SET ANSI_NULLS ON
 GO
@@ -6400,6 +6463,7 @@ RETURN
 
 
 
+
 GO
 SET ANSI_NULLS ON
 GO
@@ -6440,6 +6504,7 @@ SELECT
 	(SELECT COUNT(*) FROM ExchangeAccounts WHERE (AccountType = 7 OR AccountType = 1 OR AccountType = 6 OR AccountType = 5)  AND ItemID = @ItemID) AS CreatedUsers,
 	(SELECT COUNT(*) FROM ExchangeOrganizationDomains WHERE ItemID = @ItemID) AS CreatedDomains
 RETURN
+
 
 
 
@@ -6538,6 +6603,7 @@ RETURN
 
 
 
+
 GO
 SET ANSI_NULLS ON
 GO
@@ -6585,6 +6651,7 @@ FROM
 INNER JOIN Domains AS D ON ED.DomainID = D.DomainID
 WHERE ED.ItemID = @ItemID
 RETURN
+
 
 
 
@@ -6690,6 +6757,7 @@ RETURN
 
 
 
+
 GO
 SET ANSI_NULLS ON
 GO
@@ -6762,6 +6830,7 @@ RETURN
 
 
 
+
 GO
 SET ANSI_NULLS ON
 GO
@@ -6797,6 +6866,7 @@ BEGIN
 	WHERE PIP.ItemID = @ItemID
 	AND dbo.CheckActorPackageRights(@ActorID, SI.PackageID) = 1
 END
+
 
 
 
@@ -6894,6 +6964,7 @@ exec sp_executesql @sql, N'@ItemID int, @IncludeMailboxes bit',
 @ItemID, @IncludeMailboxes
 
 RETURN 
+
 
 
 
@@ -7039,6 +7110,7 @@ RETURN
 
 
 
+
 GO
 SET ANSI_NULLS ON
 GO
@@ -7140,6 +7212,7 @@ RETURN
 
 
 
+
 GO
 SET ANSI_NULLS ON
 GO
@@ -7188,6 +7261,7 @@ BEGIN
 END
 
 RETURN
+
 
 
 
@@ -7402,6 +7476,7 @@ RETURN
 
 
 
+
 GO
 SET ANSI_NULLS ON
 GO
@@ -7541,6 +7616,7 @@ DROP TABLE #TempBlackBerryUsers
 
 
 
+
 GO
 SET ANSI_NULLS ON
 GO
@@ -7579,6 +7655,7 @@ AND dbo.CheckActorPackageRights(@ActorID, SI.PackageID) = 1
 ORDER BY PIP.IsPrimary DESC
 
 RETURN
+
 
 
 
@@ -7663,6 +7740,7 @@ exec sp_executesql @sql, N'@ItemID int, @StartRow int, @MaximumRows int',
 @ItemID, @StartRow, @MaximumRows
 
 RETURN 
+
 
 
 
@@ -7793,6 +7871,7 @@ RETURN
 
 
 
+
 GO
 SET ANSI_NULLS ON
 GO
@@ -7841,6 +7920,7 @@ LEFT OUTER JOIN ServiceItems AS WS ON D.WebSiteID = WS.ItemID
 LEFT OUTER JOIN ServiceItems AS MD ON D.MailDomainID = MD.ItemID
 LEFT OUTER JOIN ServiceItems AS Z ON D.ZoneItemID = Z.ItemID
 RETURN
+
 
 
 
@@ -7911,6 +7991,7 @@ WHERE ScheduleID = @ScheduleID
 COMMIT TRAN
 
 RETURN
+
 
 
 
@@ -8032,6 +8113,7 @@ RETURN
 
 
 
+
 GO
 SET ANSI_NULLS ON
 GO
@@ -8065,6 +8147,7 @@ BEGIN
 	WHERE PIP.ItemID = @ItemID
 	AND dbo.CheckActorPackageRights(@ActorID, SI.PackageID) = 1
 END
+
 
 
 
@@ -8102,6 +8185,7 @@ BEGIN
 	WHERE PIP.PrivateAddressID = @PrivateAddressID
 	AND dbo.CheckActorPackageRights(@ActorID, SI.PackageID) = 1
 END
+
 
 
 
@@ -8168,6 +8252,7 @@ END
 
 
 
+
 GO
 SET ANSI_NULLS ON
 GO
@@ -8204,6 +8289,7 @@ BEGIN
 		PIP.PackageAddressID = @PackageAddressID
 		AND dbo.CheckActorPackageRights(@ActorID, PIP.PackageID) = 1
 END
+
 
 
 
@@ -8256,6 +8342,7 @@ WHERE ItemID = @ItemID
 COMMIT TRAN
 
 RETURN 
+
 
 
 
@@ -8354,6 +8441,7 @@ exec sp_xml_removedocument @idoc
 COMMIT TRAN
 
 RETURN 
+
 
 
 
@@ -8532,6 +8620,7 @@ RETURN
 
 
 
+
 GO
 SET ANSI_NULLS ON
 GO
@@ -8631,6 +8720,7 @@ RETURN
 
 
 
+
 GO
 SET ANSI_NULLS ON
 GO
@@ -8673,6 +8763,7 @@ AS
 	SELECT @UpdateDate = BandwidthUpdated FROM Packages
 	WHERE PackageID = @PackageID
 RETURN 
+
 
 
 
@@ -8804,6 +8895,7 @@ RETURN
 
 
 
+
 GO
 SET ANSI_NULLS ON
 GO
@@ -8858,6 +8950,7 @@ GROUP BY StatusID
 ORDER BY StatusID
 
 RETURN
+
 
 
 
@@ -8944,6 +9037,7 @@ RETURN
 
 
 
+
 GO
 SET ANSI_NULLS ON
 GO
@@ -8990,6 +9084,7 @@ WHERE
 	D.DomainID = @DomainID
 	AND dbo.CheckActorPackageRights(@ActorID, P.PackageID) = 1
 RETURN
+
 
 
 
@@ -9060,6 +9155,7 @@ ON
 	ea.AccountID = ou.AccountID
 WHERE 
 	ea.ItemID = @ItemID AND ea.DisplayName LIKE @Name AND ea.PrimaryEmailAddress LIKE @Email	
+
 
 
 
@@ -9192,6 +9288,7 @@ END
 
 
 DROP TABLE #TempOCSUsers
+
 
 
 
@@ -9984,6 +10081,7 @@ FROM         dbo.Users AS U LEFT OUTER JOIN
 
 
 
+
 GO
 SET ANSI_NULLS ON
 GO
@@ -10048,6 +10146,7 @@ WHERE
 	PackageID = @PackageID
 
 RETURN
+
 
 
 
@@ -10195,6 +10294,7 @@ FROM Schedule AS S
 INNER JOIN ScheduleTasks AS ST ON S.TaskID = ST.TaskID
 WHERE ScheduleID = @ScheduleID
 RETURN
+
 
 
 
@@ -10384,6 +10484,7 @@ RETURN
 
 
 
+
 GO
 SET ANSI_NULLS ON
 GO
@@ -10480,6 +10581,7 @@ BEGIN
 END
 
 RETURN 
+
 
 
 
@@ -10631,6 +10733,7 @@ exec sp_executesql @sql, N'@StartRow int, @MaximumRows int, @UserID int, @Filter
 
 
 RETURN
+
 
 
 
@@ -10830,6 +10933,7 @@ RETURN
 
 
 
+
 GO
 SET ANSI_NULLS ON
 GO
@@ -10884,6 +10988,7 @@ SET @IP = @IP + ' (' + @InternalIP + ')'
 
 RETURN @IP
 END
+
 
 
 
@@ -11072,6 +11177,7 @@ RETURN
 
 
 
+
 GO
 SET ANSI_NULLS ON
 GO
@@ -11149,6 +11255,7 @@ WHERE GB.BytesTotal > 0
 ORDER BY RG.GroupOrder
 
 RETURN 
+
 
 
 
@@ -11336,6 +11443,7 @@ RETURN
 
 
 
+
 GO
 SET ANSI_NULLS ON
 GO
@@ -11356,6 +11464,10 @@ GO
 INSERT [dbo].[Versions] ([DatabaseVersion], [BuildDate]) VALUES (N'1.0.1.0', CAST(0x00009DB500D453BD AS DateTime))
 GO
 INSERT [dbo].[Versions] ([DatabaseVersion], [BuildDate]) VALUES (N'1.0.2.0', CAST(0x00009DE600000000 AS DateTime))
+GO
+INSERT [dbo].[Versions] ([DatabaseVersion], [BuildDate]) VALUES (N'1.1.0.10', CAST(0x00009E6300000000 AS DateTime))
+GO
+INSERT [dbo].[Versions] ([DatabaseVersion], [BuildDate]) VALUES (N'1.1.2.12', CAST(0x00009EBC00000000 AS DateTime))
 GO
 SET ANSI_NULLS ON
 GO
@@ -11401,6 +11513,7 @@ BEGIN
 END
 
 RETURN
+
 
 
 
@@ -12050,6 +12163,7 @@ RETURN
 
 
 
+
 GO
 SET ANSI_NULLS ON
 GO
@@ -12144,6 +12258,7 @@ END
 
 RETURN 0
 END
+
 
 
 
@@ -12305,6 +12420,7 @@ exec sp_executesql @sql, N'@PackageID int, @StartRow int, @MaximumRows int',
 @PackageID, @StartRow, @MaximumRows
 
 END
+
 
 
 
@@ -12579,6 +12695,7 @@ END
 
 
 
+
 GO
 SET ANSI_NULLS ON
 GO
@@ -12700,6 +12817,7 @@ exec sp_executesql @sql, N'@StartRow int, @MaximumRows int, @UserID int, @Filter
 
 
 RETURN
+
 
 
 
@@ -12870,6 +12988,7 @@ RETURN
 
 
 
+
 GO
 SET ANSI_NULLS ON
 GO
@@ -12913,6 +13032,7 @@ BEGIN
 	ORDER BY [DisplayName];
 
 END
+
 
 
 
@@ -13015,6 +13135,7 @@ END
 
 
 
+
 GO
 SET ANSI_NULLS ON
 GO
@@ -13058,6 +13179,7 @@ BEGIN
 	WHERE [PluginName] = @PluginName AND [PluginGroup] = @GroupName;
 
 END
+
 
 
 
@@ -13169,6 +13291,7 @@ END
 
 
 
+
 GO
 SET ANSI_NULLS ON
 GO
@@ -13210,6 +13333,7 @@ BEGIN
 		[OwnerID] = @ActorID AND [ReferenceID] = @ReferenceID AND [Namespace] = @Namespace;
 
 END
+
 
 
 
@@ -13283,6 +13407,7 @@ BEGIN
 		[CategoryID] = @CategoryID;
 
 END
+
 
 
 
@@ -13401,6 +13526,7 @@ END
 
 
 
+
 GO
 SET ANSI_NULLS ON
 GO
@@ -13445,6 +13571,7 @@ BEGIN
     SELECT * FROM [dbo].[ecStoreDefaultSettings]
 		WHERE [SettingsName] = @SettingsName;
 END
+
 
 
 
@@ -13573,6 +13700,7 @@ END
 
 
 
+
 GO
 SET ANSI_NULLS ON
 GO
@@ -13620,6 +13748,7 @@ BEGIN
 		[P].[PaymentID] = @PaymentID AND [P].[ContractID] = @ContractID;
 
 END
+
 
 
 
@@ -13727,6 +13856,7 @@ END
 
 
 
+
 GO
 SET ANSI_NULLS ON
 GO
@@ -13768,6 +13898,7 @@ BEGIN
 	SELECT * FROM [dbo].[ecProductType]	WHERE [TypeID] = @TypeID;
 
 END
+
 
 
 
@@ -13888,6 +14019,7 @@ RETURN
 
 
 
+
 GO
 SET ANSI_NULLS ON
 GO
@@ -13946,6 +14078,7 @@ END
 
 
 
+
 GO
 SET ANSI_NULLS ON
 GO
@@ -13982,6 +14115,7 @@ BEGIN
     SELECT * FROM [dbo].[ecContracts] WHERE [ContractID] = @ContractID;
 
 END
+
 
 
 
@@ -14096,6 +14230,7 @@ END
 
 
 
+
 GO
 SET ANSI_NULLS ON
 GO
@@ -14175,6 +14310,7 @@ END
 
 
 
+
 GO
 SET ANSI_NULLS ON
 GO
@@ -14227,6 +14363,7 @@ VALUES
 
 SET @ClusterID = SCOPE_IDENTITY()
 RETURN
+
 
 
 
@@ -14338,6 +14475,7 @@ RETURN
 
 
 
+
 GO
 SET ANSI_NULLS ON
 GO
@@ -14362,6 +14500,7 @@ BEGIN
 		dbo.OCSUsers
 	WHERE AccountID = @AccountID
 END
+
 
 
 
@@ -14502,6 +14641,7 @@ RETURN
 
 
 
+
 GO
 SET ANSI_NULLS ON
 GO
@@ -14606,6 +14746,7 @@ RETURN
 
 
 
+
 GO
 SET ANSI_NULLS ON
 GO
@@ -14669,6 +14810,7 @@ DELETE FROM GlobalDnsRecords
 WHERE RecordID = @RecordID
 
 RETURN
+
 
 
 
@@ -14832,6 +14974,7 @@ RETURN
 
 
 
+
 GO
 SET ANSI_NULLS ON
 GO
@@ -14862,6 +15005,7 @@ VALUES
 	getdate()
 )		
 END
+
 
 
 
@@ -14962,6 +15106,7 @@ RETURN
 
 
 
+
 GO
 SET ANSI_NULLS ON
 GO
@@ -15012,6 +15157,7 @@ BEGIN
 		[SettingsName] = @SettingsName;
 
 END
+
 
 
 
@@ -15093,6 +15239,7 @@ SELECT
 FROM ScheduleTasks
 WHERE @RoleID <= RoleID
 RETURN
+
 
 
 
@@ -15207,6 +15354,7 @@ RETURN
 
 
 
+
 GO
 SET ANSI_NULLS ON
 GO
@@ -15281,6 +15429,7 @@ FROM Users AS U
 WHERE U.UserID = @UserID
 
 RETURN
+
 
 
 
@@ -15421,6 +15570,7 @@ RETURN
 
 
 
+
 GO
 SET ANSI_NULLS ON
 GO
@@ -15463,6 +15613,7 @@ SELECT
 FROM ResourceGroups
 ORDER BY GroupOrder
 RETURN 
+
 
 
 
@@ -15560,6 +15711,7 @@ END
 
 
 
+
 GO
 SET ANSI_NULLS ON
 GO
@@ -15603,6 +15755,7 @@ BEGIN
 	VALUES (@ServiceID,@ContractID,@InvoiceID,@DataReceived);
 
 END
+
 
 
 
@@ -15677,6 +15830,7 @@ BEGIN
 
 	SET @Result = SCOPE_IDENTITY();
 END
+
 
 
 
@@ -15780,6 +15934,7 @@ BEGIN
 
 RETURN
 END
+
 
 
 
@@ -16006,6 +16161,7 @@ RETURN
 
 
 
+
 GO
 SET ANSI_NULLS ON
 GO
@@ -16107,6 +16263,7 @@ END
 
 RETURN 0
 END
+
 
 
 
@@ -16244,6 +16401,7 @@ RETURN
 
 
 
+
 GO
 SET ANSI_NULLS ON
 GO
@@ -16305,6 +16463,7 @@ RETURN dbo.CanGetUserDetails(@ActorID, @UserID)
 
 RETURN 0
 END
+
 
 
 
@@ -16460,6 +16619,7 @@ END
 
 
 
+
 GO
 SET ANSI_NULLS ON
 GO
@@ -16479,6 +16639,7 @@ WHERE
 	InstanceId = @InstanceId
 
 RETURN 
+
 
 
 
@@ -16548,6 +16709,7 @@ BEGIN
 	
 RETURN
 END
+
 
 
 
@@ -17873,6 +18035,50 @@ INSERT [dbo].[UserSettings] ([UserID], [SettingsName], [PropertyName], [Property
 GO
 INSERT [dbo].[UserSettings] ([UserID], [SettingsName], [PropertyName], [PropertyValue]) VALUES (1, N'WebPolicy', N'PhpInstalled', N'')
 GO
+INSERT [dbo].[UserSettings] ([UserID], [SettingsName], [PropertyName], [PropertyValue]) VALUES (1, N'WebPolicy', N'PublishingProfile', N'
+<?xml version="1.0" encoding="utf-8"?>
+<publishData>
+<ad:if test="#WebSite.WebDeploySitePublishingEnabled#">
+	<publishProfile
+		profileName="#WebSite.Name# - Web Deploy"
+		publishMethod="MSDeploy"
+		publishUrl="#WebSite["WmSvcServiceUrl"]#:#WebSite["WmSvcServicePort"]#"
+		msdeploySite="#WebSite.Name#"
+		userName="#WebSite.WebDeployPublishingAccount#"
+		userPWD="#WebSite.WebDeployPublishingPassword#"
+		destinationAppUrl="http://#WebSite.Name#/"
+		<ad:if test="#Not(IsNull(MsSqlDatabase)) and Not(IsNull(MsSqlUser))#">SQLServerDBConnectionString="server=#MsSqlServerExternalAddress#;database=#MsSqlDatabase.Name#;uid=#MsSqlUser.Name#;pwd=#MsSqlUser.Password#"</ad:if>
+		<ad:if test="#Not(IsNull(MySqlDatabase)) and Not(IsNull(MySqlUser))#">mySQLDBConnectionString="server=#MySqlAddress#;database=#MySqlDatabase.Name#;uid=#MySqlUser.Name#;pwd=#MySqlUser.Password#"</ad:if>
+		hostingProviderForumLink="http://support.acmehosting.com/"
+		controlPanelLink="http://cp.acmehosting.com/"
+	/>
+</ad:if>
+<ad:if test="#IsDefined("FtpAccount")#">
+	<publishProfile
+		profileName="#WebSite.Name# - FTP"
+		publishMethod="FTP"
+		publishUrl="ftp://#FtpServiceAddress#"
+		ftpPassiveMode="True"
+		userName="#FtpAccount.Name#"
+		userPWD="#FtpAccount.Password#"
+		destinationAppUrl="http://#WebSite.Name#/"
+		<ad:if test="#Not(IsNull(MsSqlDatabase)) and Not(IsNull(MsSqlUser))#">SQLServerDBConnectionString="server=#MsSqlServerExternalAddress#;database=#MsSqlDatabase.Name#;uid=#MsSqlUser.Name#;pwd=#MsSqlUser.Password#"</ad:if>
+		<ad:if test="#Not(IsNull(MySqlDatabase)) and Not(IsNull(MySqlUser))#">mySQLDBConnectionString="server=#MySqlAddress#;database=#MySqlDatabase.Name#;uid=#MySqlUser.Name#;pwd=#MySqlUser.Password#"</ad:if>
+		hostingProviderForumLink="http://support.acmehosting.com/"
+		controlPanelLink="http://cp.acmehosting.com/"
+    />
+</ad:if>
+</publishData>
+
+<!--
+Control Panel:
+Username: #User.Username#
+Password: #User.Password#
+
+Technical Contact:
+support@acmehosting.com
+-->')
+GO
 INSERT [dbo].[UserSettings] ([UserID], [SettingsName], [PropertyName], [PropertyValue]) VALUES (1, N'WebPolicy', N'PythonInstalled', N'False')
 GO
 INSERT [dbo].[UserSettings] ([UserID], [SettingsName], [PropertyName], [PropertyValue]) VALUES (1, N'WebPolicy', N'SecuredGroupNamePolicy', N'True;;1;20;;;')
@@ -18048,6 +18254,7 @@ RETURN
 
 
 
+
 GO
 SET ANSI_NULLS ON
 GO
@@ -18152,6 +18359,7 @@ END
 COMMIT TRAN
 
 RETURN 
+
 
 
 
@@ -18295,6 +18503,7 @@ RETURN
 
 
 
+
 GO
 SET ANSI_NULLS ON
 GO
@@ -18371,6 +18580,7 @@ WHERE HP.UserID = @OwnerID
 AND HP.IsAddon = 1
 ORDER BY PlanName
 RETURN
+
 
 
 
@@ -18524,6 +18734,7 @@ END
 
 
 
+
 GO
 SET ANSI_NULLS ON
 GO
@@ -18630,6 +18841,7 @@ END
 
 
 
+
 GO
 SET ANSI_NULLS ON
 GO
@@ -18681,6 +18893,7 @@ LEFT OUTER JOIN Servers AS S ON P.ServerID = S.ServerID
 LEFT OUTER JOIN HostingPlans AS HP ON P.PlanID = HP.PlanID
 WHERE P.UserID = @UserID
 RETURN
+
 
 
 
@@ -18830,6 +19043,7 @@ RETURN
 
 
 
+
 GO
 SET ANSI_NULLS ON
 GO
@@ -18899,6 +19113,7 @@ WHERE
 	AND IsAddon = 1
 ORDER BY PlanName
 RETURN
+
 
 
 
@@ -19079,6 +19294,7 @@ RETURN
 
 
 
+
 GO
 SET ANSI_NULLS ON
 GO
@@ -19155,6 +19371,7 @@ END
 
 
 
+
 GO
 SET ANSI_NULLS ON
 GO
@@ -19199,6 +19416,7 @@ BEGIN
 	DELETE FROM [dbo].[ecContracts]  WHERE [ContractID] = @ContractID;
 
 END
+
 
 
 
@@ -19361,6 +19579,7 @@ END
 
 
 
+
 GO
 SET ANSI_NULLS ON
 GO
@@ -19447,6 +19666,7 @@ END
 
 
 
+
 GO
 SET ANSI_NULLS ON
 GO
@@ -19483,6 +19703,7 @@ FROM dbo.ecInvoice INNER JOIN
 dbo.ecContracts ON dbo.ecInvoice.ContractID = dbo.ecContracts.ContractID LEFT OUTER JOIN 
 dbo.ecCustomersPayments ON dbo.ecInvoice.InvoiceID = dbo.ecCustomersPayments.InvoiceID LEFT OUTER JOIN 
 dbo.Users ON dbo.ecContracts.CustomerID = dbo.Users.UserID
+
 
 
 
@@ -19571,6 +19792,7 @@ WHERE ItemID = @ItemID
 COMMIT TRAN
 
 RETURN 
+
 
 
 
@@ -19704,6 +19926,7 @@ END
 
 
 
+
 GO
 SET ANSI_NULLS ON
 GO
@@ -19743,6 +19966,7 @@ AS
 TRUNCATE TABLE AuditLog
 
 RETURN 
+
 
 
 
@@ -19917,6 +20141,7 @@ END
 
 
 
+
 GO
 SET ANSI_NULLS ON
 GO
@@ -20048,6 +20273,7 @@ END
 
 
 
+
 GO
 SET ANSI_NULLS ON
 GO
@@ -20136,6 +20362,7 @@ RETURN
 
 
 
+
 GO
 SET ANSI_NULLS ON
 GO
@@ -20198,6 +20425,7 @@ BEGIN
     SELECT * FROM [dbo].[ecCustomersPayments] WHERE [TransactionID] = @TransactionID;
 
 END
+
 
 
 
@@ -20434,6 +20662,7 @@ RETURN
 
 
 
+
 GO
 SET ANSI_NULLS ON
 GO
@@ -20510,6 +20739,7 @@ AND U.IsPeer = 0
 AND @CanGetDetails = 1 -- actor user rights
 
 RETURN 
+
 
 
 
@@ -20656,6 +20886,7 @@ RETURN
 
 
 
+
 GO
 SET ANSI_NULLS ON
 GO
@@ -20726,6 +20957,7 @@ WHERE
 	AND dbo.CheckUserParent(@UserID, C.UserID) = 1
 ORDER BY C.CreatedDate ASC
 RETURN
+
 
 
 
@@ -21042,6 +21274,7 @@ RETURN
 
 
 
+
 GO
 SET ANSI_NULLS ON
 GO
@@ -21104,6 +21337,7 @@ WHERE STP.TaskID = @TaskID
 ORDER BY STP.ParameterOrder
 
 RETURN
+
 
 
 
@@ -21254,6 +21488,7 @@ RETURN
 
 
 
+
 GO
 SET ANSI_NULLS ON
 GO
@@ -21342,6 +21577,7 @@ INNER JOIN ScheduleTaskParameters AS STP ON S.TaskID = STP.TaskID
 LEFT OUTER JOIN ScheduleParameters AS SP ON STP.ParameterID = SP.ParameterID AND SP.ScheduleID = S.ScheduleID
 WHERE S.ScheduleID = @ScheduleID
 RETURN
+
 
 
 
@@ -21572,6 +21808,7 @@ RETURN
 
 
 
+
 GO
 SET ANSI_NULLS ON
 GO
@@ -21675,6 +21912,7 @@ GROUP BY I.LogDate, SIT.GroupID
 exec sp_xml_removedocument @idoc
 
 RETURN 
+
 
 
 
@@ -21872,6 +22110,7 @@ RETURN
 
 
 
+
 GO
 SET ANSI_NULLS ON
 GO
@@ -21970,6 +22209,7 @@ RETURN
 
 
 
+
 GO
 SET ANSI_NULLS ON
 GO
@@ -22012,6 +22252,7 @@ AND ((@GroupName IS NULL) OR (@GroupName IS NOT NULL AND RG.GroupName = @GroupNa
 AND ((@ServiceID = 0) OR (@ServiceID > 0 AND SI.ServiceID = @ServiceID))
 
 RETURN
+
 
 
 
@@ -22082,6 +22323,7 @@ WHERE ItemName = @ItemName AND ItemTypeID = @ItemTypeID AND ServiceID = @Service
 SET @Exists = 1
 
 RETURN
+
 
 
 
@@ -22210,6 +22452,7 @@ RETURN
 
 
 
+
 GO
 SET ANSI_NULLS ON
 GO
@@ -22249,6 +22492,7 @@ AS
 SELECT SourceName FROM AuditLogSources
 
 RETURN
+
 
 
 
@@ -22320,6 +22564,7 @@ BEGIN
     
 	SELECT InstanceID FROM OCSUsers WHERE AccountID = @AccountID
 END
+
 
 
 
@@ -22406,6 +22651,7 @@ XML Format:
 	COMMIT TRAN;
 
 END
+
 
 
 
@@ -22526,6 +22772,7 @@ END
 
 
 
+
 GO
 SET ANSI_NULLS ON
 GO
@@ -22604,6 +22851,7 @@ END
 
 
 
+
 GO
 SET ANSI_NULLS ON
 GO
@@ -22650,6 +22898,7 @@ BEGIN
 		AND dbo.CheckActorPackageRights(@ActorID, PIP.PackageID) = 1
 	ORDER BY IP.DefaultGateway, IP.ExternalIP
 END
+
 
 
 
@@ -22727,6 +22976,7 @@ END
 
 
 
+
 GO
 SET ANSI_NULLS ON
 GO
@@ -22767,6 +23017,7 @@ AND (@PoolID = 0 OR @PoolID <> 0 AND IP.PoolID = @PoolID)
 ORDER BY PIP.IsPrimary DESC
 
 RETURN
+
 
 
 
@@ -22843,6 +23094,7 @@ AND (@PoolID = 0 OR @PoolID <> 0 AND IP.PoolID = @PoolID)
 AND (@ServerID = 0 OR @ServerID <> 0 AND IP.ServerID = @ServerID)
 
 END
+
 
 
 
@@ -23051,6 +23303,7 @@ END -- end while
 
 RETURN @Result
 END
+
 
 
 
@@ -23328,6 +23581,7 @@ RETURN
 
 
 
+
 GO
 SET ANSI_NULLS ON
 GO
@@ -23497,6 +23751,7 @@ RETURN
 
 
 
+
 GO
 SET ANSI_NULLS ON
 GO
@@ -23595,6 +23850,7 @@ RETURN
 
 
 
+
 GO
 SET ANSI_NULLS ON
 GO
@@ -23661,6 +23917,7 @@ LEFT OUTER JOIN IPAddresses AS IP ON NR.IPAddressID = IP.AddressID
 WHERE
 	NR.ServerID = @ServerID
 RETURN
+
 
 
 
@@ -23794,6 +24051,7 @@ RETURN
 
 
 
+
 GO
 SET ANSI_NULLS ON
 GO
@@ -23845,6 +24103,7 @@ DELETE FROM IPAddresses
 WHERE AddressID = @AddressID
 
 RETURN
+
 
 
 
@@ -23948,6 +24207,7 @@ XML Format:
 	EXEC sp_xml_removedocument @docid;
 	
 END
+
 
 
 
@@ -24097,6 +24357,7 @@ END
 
 
 
+
 GO
 SET ANSI_NULLS ON
 GO
@@ -24162,6 +24423,7 @@ BEGIN
 	);
 
 END
+
 
 
 
@@ -24293,6 +24555,7 @@ END
 
 
 
+
 GO
 SET ANSI_NULLS ON
 GO
@@ -24349,6 +24612,7 @@ BEGIN
 		[ItemID] = @ItemID;
 
 END
+
 
 
 
@@ -24513,6 +24777,7 @@ RETURN
 
 
 
+
 GO
 SET ANSI_NULLS ON
 GO
@@ -24547,6 +24812,7 @@ FROM         dbo.ecContracts RIGHT OUTER JOIN
                       dbo.ecSupportedPlugins ON dbo.ecPaymentMethods.PluginID = dbo.ecSupportedPlugins.PluginID RIGHT OUTER JOIN
                       dbo.ecServiceHandlersResponses ON dbo.ecSupportedPlugins.UniqueID = dbo.ecServiceHandlersResponses.ServiceID ON 
                       dbo.ecContracts.ContractID = dbo.ecServiceHandlersResponses.ContractID
+
 
 
 
@@ -25353,6 +25619,7 @@ RETURN
 
 
 
+
 GO
 SET ANSI_NULLS ON
 GO
@@ -25459,6 +25726,7 @@ RETURN
 
 
 
+
 GO
 SET ANSI_NULLS ON
 GO
@@ -25544,6 +25812,7 @@ FROM ServiceItemProperties AS IP
 INNER JOIN @Items AS FI ON IP.ItemID = FI.ItemID
 
 RETURN
+
 
 
 
@@ -25672,6 +25941,7 @@ RETURN
 
 
 
+
 GO
 SET ANSI_NULLS ON
 GO
@@ -25763,6 +26033,7 @@ FROM ServiceItemProperties AS IP
 INNER JOIN @Items AS FI ON IP.ItemID = FI.ItemID
 
 RETURN 
+
 
 
 
@@ -25895,6 +26166,7 @@ RETURN
 
 
 
+
 GO
 SET ANSI_NULLS ON
 GO
@@ -25980,6 +26252,7 @@ INNER JOIN @Items AS FI ON IP.ItemID = FI.ItemID
 
 
 RETURN 
+
 
 
 
@@ -26123,6 +26396,7 @@ RETURN
 
 
 
+
 GO
 SET ANSI_NULLS ON
 GO
@@ -26183,6 +26457,7 @@ AND ((@GroupName IS NULL) OR (@GroupName IS NOT NULL AND RG.GroupName = @GroupNa
 SET @Exists = 1
 
 RETURN
+
 
 
 
@@ -26334,6 +26609,7 @@ RETURN
 
 
 
+
 GO
 SET ANSI_NULLS ON
 GO
@@ -26392,6 +26668,7 @@ BEGIN
 		[TriggerID] = @TriggerID;
 
 END
+
 
 
 
@@ -26547,6 +26824,7 @@ RETURN
 
 
 
+
 GO
 SET ANSI_NULLS ON
 GO
@@ -26583,6 +26861,7 @@ FROM Providers AS PROV
 INNER JOIN ResourceGroups AS RG ON PROV.GroupID = RG.GroupID
 ORDER BY RG.GroupOrder, PROV.DisplayName
 RETURN
+
 
 
 
@@ -26654,6 +26933,7 @@ BEGIN
 	--
 	SET @Result = 0;
 END
+
 
 
 
@@ -26792,6 +27072,7 @@ END
 
 
 
+
 GO
 SET ANSI_NULLS ON
 GO
@@ -26853,6 +27134,7 @@ BEGIN
 		[C].[CustomerID] = @UserID;
 
 END
+
 
 
 
@@ -26976,6 +27258,7 @@ END
 
 
 
+
 GO
 SET ANSI_NULLS ON
 GO
@@ -27033,6 +27316,7 @@ BEGIN
 		[CustomerID] = @UserID;
 
 END
+
 
 
 
@@ -27154,6 +27438,7 @@ RETURN
 
 
 
+
 GO
 SET ANSI_NULLS ON
 GO
@@ -27187,6 +27472,7 @@ dbo.ecService.ParentID
 FROM dbo.ecContracts INNER JOIN 
 dbo.ecService ON dbo.ecContracts.ContractID = dbo.ecService.ContractID LEFT OUTER JOIN 
 dbo.Users ON dbo.ecContracts.CustomerID = dbo.Users.UserID
+
 
 
 
@@ -27400,6 +27686,7 @@ END
 
 
 
+
 GO
 SET ANSI_NULLS ON
 GO
@@ -27467,6 +27754,7 @@ BEGIN
 	RETURN;
 
 END
+
 
 
 
@@ -27685,6 +27973,7 @@ END
 
 
 
+
 GO
 SET ANSI_NULLS ON
 GO
@@ -27742,6 +28031,7 @@ BEGIN
 	WHERE [ResellerID] = @UserID AND [MethodName] = @MethodName;
 
 END
+
 
 
 
@@ -27848,6 +28138,7 @@ END
 
 
 
+
 GO
 SET ANSI_NULLS ON
 GO
@@ -27928,6 +28219,7 @@ END
 
 
 
+
 GO
 SET ANSI_NULLS ON
 GO
@@ -27983,6 +28275,7 @@ WHERE
 	ProviderID = @ProviderID
 
 RETURN 
+
 
 
 
@@ -28131,6 +28424,7 @@ RETURN
 
 
 
+
 GO
 SET ANSI_NULLS ON
 GO
@@ -28223,6 +28517,7 @@ ELSE
 
 RETURN @Result
 END
+
 
 
 
@@ -28339,6 +28634,7 @@ RETURN
 
 
 
+
 GO
 SET ANSI_NULLS ON
 GO
@@ -28401,6 +28697,7 @@ FROM Quotas AS Q
 WHERE Q.QuotaName = @QuotaName
 
 RETURN
+
 
 
 
@@ -28550,6 +28847,7 @@ RETURN
 
 
 
+
 GO
 SET ANSI_NULLS ON
 GO
@@ -28605,6 +28903,7 @@ INNER JOIN ResourceGroups AS RG ON PROV.GroupID = RG.GroupID
 WHERE RG.GroupID = @GroupId
 ORDER BY RG.GroupOrder, PROV.DisplayName
 RETURN
+
 
 
 
@@ -28734,6 +29033,7 @@ END
 
 
 
+
 GO
 SET ANSI_NULLS ON
 GO
@@ -28788,6 +29088,7 @@ BEGIN
 	RETURN;
 
 END
+
 
 
 
@@ -28892,6 +29193,7 @@ BEGIN
 		[ContractID] = @ContractID;
 
 END
+
 
 
 
@@ -29047,6 +29349,7 @@ END
 
 
 
+
 GO
 SET ANSI_NULLS ON
 GO
@@ -29167,6 +29470,7 @@ RETURN
 
 
 
+
 GO
 SET ANSI_NULLS ON
 GO
@@ -29216,6 +29520,7 @@ BEGIN
     SELECT * FROM [dbo].[ecService] WHERE [ServiceID] = @ServiceID;
 
 END
+
 
 
 
@@ -29293,6 +29598,7 @@ DELETE FROM Comments
 WHERE CommentID = @CommentID
 
 RETURN
+
 
 
 
@@ -29520,6 +29826,7 @@ RETURN
 
 
 
+
 GO
 SET ANSI_NULLS ON
 GO
@@ -29580,6 +29887,7 @@ GROUP BY RoleID
 ORDER BY RoleID DESC
 
 RETURN
+
 
 
 
@@ -29696,6 +30004,7 @@ RETURN
 
 
 
+
 GO
 SET ANSI_NULLS ON
 GO
@@ -29748,6 +30057,7 @@ BEGIN
 	DELETE FROM [dbo].[ecInvoice] WHERE [InvoiceID] = @InvoiceID;
 
 END
+
 
 
 
@@ -29825,6 +30135,7 @@ BEGIN
 	SET @Result = 0;
 
 END
+
 
 
 
@@ -30031,6 +30342,7 @@ RETURN
 
 
 
+
 GO
 SET ANSI_NULLS ON
 GO
@@ -30151,6 +30463,7 @@ END
 
 
 
+
 GO
 SET ANSI_NULLS ON
 GO
@@ -30190,6 +30503,7 @@ BEGIN
 	END
 
 END
+
 
 
 
@@ -30263,6 +30577,7 @@ UPDATE Servers SET
 	ADAuthenticationType = @ADAuthenticationType
 WHERE ServerID = @ServerID
 RETURN
+
 
 
 
@@ -30421,6 +30736,7 @@ END
 
 
 
+
 GO
 SET ANSI_NULLS ON
 GO
@@ -30478,6 +30794,7 @@ WHERE
 	ServerID = @ServerID
 
 RETURN 
+
 
 
 
@@ -30571,6 +30888,7 @@ WHERE
 	AND @IsAdmin = 1
 
 RETURN 
+
 
 
 
@@ -30705,6 +31023,7 @@ RETURN
 
 
 
+
 GO
 SET ANSI_NULLS ON
 GO
@@ -30749,6 +31068,7 @@ FROM
 WHERE Searchable = 1
 ORDER BY TypeOrder
 RETURN
+
 
 
 
@@ -30826,6 +31146,7 @@ FROM ScheduleTaskViewConfiguration AS STVC
 WHERE STVC.TaskID = @TaskID
 
 RETURN
+
 
 
 
@@ -30950,6 +31271,7 @@ END
 
 
 
+
 GO
 SET ANSI_NULLS ON
 GO
@@ -31002,6 +31324,7 @@ BEGIN
     SELECT @Result = COUNT([TaxationID]) FROM [dbo].[ecTaxations] WHERE [ResellerID] = @UserID;
 
 END
+
 
 
 
@@ -31113,6 +31436,7 @@ END
 
 
 
+
 GO
 SET ANSI_NULLS ON
 GO
@@ -31166,6 +31490,7 @@ FROM Clusters
 WHERE @IsAdmin = 1
 
 RETURN
+
 
 
 
@@ -31344,6 +31669,7 @@ RETURN
 
 
 
+
 GO
 SET ANSI_NULLS ON
 GO
@@ -31457,6 +31783,7 @@ RETURN
 
 
 
+
 GO
 SET ANSI_NULLS ON
 GO
@@ -31527,6 +31854,7 @@ FROM UserParents(@ActorID, @UserID) AS UP
 INNER JOIN Users AS U ON UP.UserID = U.UserID
 ORDER BY UP.UserOrder DESC
 RETURN 
+
 
 
 
@@ -31677,6 +32005,7 @@ RETURN
 
 
 
+
 GO
 SET ANSI_NULLS ON
 GO
@@ -31728,6 +32057,7 @@ SELECT
 FROM
 	[ServiceItemTypes]
 ORDER BY TypeOrder
+
 
 
 
@@ -31812,6 +32142,7 @@ FROM
 	[ServiceItemTypes]
 WHERE
 	[ItemTypeID] = @ItemTypeID
+
 
 
 
@@ -31926,6 +32257,7 @@ RETURN
 
 
 
+
 GO
 SET ANSI_NULLS ON
 GO
@@ -31979,6 +32311,7 @@ FROM
 WHERE RGR.GroupID = @GroupID
 ORDER BY RGR.RecordOrder
 RETURN
+
 
 
 
@@ -32182,6 +32515,7 @@ RETURN
 
 
 
+
 GO
 SET ANSI_NULLS ON
 GO
@@ -32271,6 +32605,7 @@ END
 
 
 
+
 GO
 SET ANSI_NULLS ON
 GO
@@ -32332,6 +32667,7 @@ VALUES
 	@SeverityID
 )
 RETURN
+
 
 
 
@@ -32486,6 +32822,7 @@ END
 
 
 
+
 GO
 SET ANSI_NULLS ON
 GO
@@ -32534,6 +32871,7 @@ BEGIN
     DELETE FROM [dbo].[ecSystemTriggers] WHERE [TriggerID] = @TriggerID;
 
 END
+
 
 
 
@@ -32709,6 +33047,7 @@ END
 
 
 
+
 GO
 SET ANSI_NULLS ON
 GO
@@ -32791,6 +33130,7 @@ BEGIN
 	SET @Result = SCOPE_IDENTITY();
 
 END
+
 
 
 
@@ -32957,6 +33297,7 @@ END
 
 
 
+
 GO
 SET ANSI_NULLS ON
 GO
@@ -33028,6 +33369,7 @@ BEGIN
 	SET @Result = SCOPE_IDENTITY();
 
 END
+
 
 
 
@@ -33181,6 +33523,7 @@ RETURN
 
 
 
+
 GO
 SET ANSI_NULLS ON
 GO
@@ -33267,6 +33610,7 @@ AS
 		END
 	
 RETURN
+
 
 
 
@@ -33399,6 +33743,7 @@ END
 
 
 
+
 GO
 SET ANSI_NULLS ON
 GO
@@ -33460,6 +33805,7 @@ BEGIN
 	EXEC sp_xml_removedocument @DocID;
 
 END
+
 
 
 
@@ -33568,6 +33914,7 @@ END
 
 
 
+
 GO
 SET ANSI_NULLS ON
 GO
@@ -33618,6 +33965,7 @@ BEGIN
     SELECT * FROM [dbo].[ecBillingCycles] WHERE [ResellerID] = @UserID AND [CycleID] = @CycleID;
 
 END
+
 
 
 
@@ -33745,6 +34093,7 @@ END
 
 
 
+
 GO
 SET ANSI_NULLS ON
 GO
@@ -33825,6 +34174,7 @@ END
 
 
 
+
 GO
 SET ANSI_NULLS ON
 GO
@@ -33867,6 +34217,7 @@ BEGIN
     SELECT * FROM [dbo].[ecProduct] WHERE [ResellerID] = @UserID AND [TypeID] = @TypeID ORDER BY [ProductName];
 
 END
+
 
 
 
@@ -33981,6 +34332,7 @@ END
 
 
 
+
 GO
 SET ANSI_NULLS ON
 GO
@@ -34024,6 +34376,7 @@ BEGIN
 	WHERE [ResellerID] = @ResellerID;
 
 END
+
 
 
 
@@ -34145,6 +34498,7 @@ END
 
 
 
+
 GO
 SET ANSI_NULLS ON
 GO
@@ -34195,6 +34549,7 @@ BEGIN
 		[I].[InvoiceID] = @InvoiceID;
 
 END
+
 
 
 
@@ -34264,6 +34619,7 @@ BEGIN
 		[InvoiceID] = @InvoiceID AND [ContractID] = @ContractID;
 
 END
+
 
 
 
@@ -34385,6 +34741,7 @@ END
 
 
 
+
 GO
 SET ANSI_NULLS ON
 GO
@@ -34433,6 +34790,7 @@ BEGIN
 	SELECT * FROM [dbo].[ecPaymentProfiles] WHERE [ContractID] = @ContractID;
 
 END
+
 
 
 
@@ -34539,6 +34897,7 @@ END
 
 
 
+
 GO
 SET ANSI_NULLS ON
 GO
@@ -34595,6 +34954,7 @@ BEGIN
 		
 
 END
+
 
 
 
@@ -34712,6 +35072,7 @@ END
 
 
 
+
 GO
 SET ANSI_NULLS ON
 GO
@@ -34750,6 +35111,7 @@ BEGIN
 		[S].[ServiceID] = @ServiceID;
 
 END
+
 
 
 
@@ -34827,6 +35189,7 @@ BEGIN
 		[ProductName] ASC;
 
 END
+
 
 
 
@@ -34943,6 +35306,7 @@ END
 
 
 
+
 GO
 SET ANSI_NULLS ON
 GO
@@ -34994,6 +35358,7 @@ BEGIN
 	SET @Result = ISNULL(@Result, @DefaultValue);
 
 END
+
 
 
 
@@ -35075,6 +35440,7 @@ BEGIN
 		[P].[Enabled] = 1;
 
 END
+
 
 
 
@@ -35200,6 +35566,7 @@ END
 
 
 
+
 GO
 SET ANSI_NULLS ON
 GO
@@ -35238,6 +35605,7 @@ BEGIN
 	WHERE
 		[ResellerID] = @ResellerID AND [ErrorMessage] IS NULL
 END
+
 
 
 
@@ -35342,6 +35710,7 @@ END
 
 
 
+
 GO
 SET ANSI_NULLS ON
 GO
@@ -35395,6 +35764,7 @@ BEGIN
 		WHERE [ServiceID] = @ServiceID;
 
 END
+
 
 
 
@@ -35512,6 +35882,7 @@ END
 
 
 
+
 GO
 SET ANSI_NULLS ON
 GO
@@ -35560,6 +35931,7 @@ BEGIN
     SELECT [PlanID] FROM [dbo].[ecHostingPlans] WHERE [ResellerID] = @UserID;
 
 END
+
 
 
 
@@ -35676,6 +36048,7 @@ END
 
 
 
+
 GO
 SET ANSI_NULLS ON
 GO
@@ -35718,6 +36091,7 @@ BEGIN
 	SELECT [CategoryID] FROM [dbo].[ecProductCategories] WHERE [ResellerID] = @UserID AND [ProductID] = @ProductID;	
 
 END
+
 
 
 
@@ -35841,6 +36215,7 @@ END
 
 
 
+
 GO
 SET ANSI_NULLS ON
 GO
@@ -35892,6 +36267,7 @@ BEGIN
 		[P].[ResellerID] = @UserID;	
 
 END
+
 
 
 
@@ -35977,6 +36353,7 @@ BEGIN
 		[P].[ResellerID] = @UserID;
 
 END
+
 
 
 
@@ -36164,6 +36541,7 @@ END
 
 
 
+
 GO
 SET ANSI_NULLS ON
 GO
@@ -36300,6 +36678,7 @@ BEGIN
 END
 
 END
+
 
 
 
@@ -36510,6 +36889,7 @@ END
 
 
 
+
 GO
 SET ANSI_NULLS ON
 GO
@@ -36653,6 +37033,7 @@ BEGIN
 END
 
 END
+
 
 
 
@@ -36853,6 +37234,7 @@ END
 
 
 
+
 GO
 SET ANSI_NULLS ON
 GO
@@ -36895,6 +37277,7 @@ BEGIN
 
 	RETURN
 END
+
 
 
 
@@ -37017,6 +37400,7 @@ END
 
 
 
+
 GO
 SET ANSI_NULLS ON
 GO
@@ -37072,6 +37456,7 @@ BEGIN
 		[TLDC].[SortOrder];	
 
 END
+
 
 
 
@@ -37159,6 +37544,7 @@ BEGIN
 		[P].[ProductID] = @ProductID;
 
 END
+
 
 
 
@@ -37290,6 +37676,7 @@ RETURN
 
 
 
+
 GO
 SET ANSI_NULLS ON
 GO
@@ -37322,6 +37709,7 @@ WHERE
 	ServiceID = @ServiceID
 
 RETURN 
+
 
 
 
@@ -37394,6 +37782,7 @@ WHERE
 ORDER BY RG.GroupOrder
 
 RETURN 
+
 
 
 
@@ -37532,6 +37921,7 @@ RETURN
 
 
 
+
 GO
 SET ANSI_NULLS ON
 GO
@@ -37572,6 +37962,7 @@ WHERE
 	RG.GroupName = @GroupName
 	AND @IsAdmin = 1
 RETURN 
+
 
 
 
@@ -37645,6 +38036,7 @@ WHERE
 	PROV.GroupID = @GroupID
 	AND @IsAdmin = 1
 RETURN 
+
 
 
 
@@ -37813,6 +38205,7 @@ END
 
 
 
+
 GO
 SET ANSI_NULLS ON
 GO
@@ -37880,6 +38273,7 @@ BEGIN
 	);
 	
 END
+
 
 
 
@@ -37981,6 +38375,7 @@ END
 
 
 
+
 GO
 SET ANSI_NULLS ON
 GO
@@ -38028,6 +38423,7 @@ BEGIN
 
 	RETURN
 END
+
 
 
 
@@ -38168,6 +38564,7 @@ BEGIN
 END
 
 END
+
 
 
 
@@ -38350,6 +38747,7 @@ END
 
 
 
+
 GO
 SET ANSI_NULLS ON
 GO
@@ -38467,6 +38865,7 @@ RETURN
 
 
 
+
 GO
 SET ANSI_NULLS ON
 GO
@@ -38549,6 +38948,7 @@ RETURN
 
 
 
+
 GO
 SET ANSI_NULLS ON
 GO
@@ -38591,6 +38991,7 @@ BEGIN
 
 	RETURN 
 END
+
 
 
 
@@ -38725,6 +39126,7 @@ END
 
 
 
+
 GO
 SET ANSI_NULLS ON
 GO
@@ -38797,6 +39199,7 @@ WHERE ServiceID = @ServiceID
 COMMIT TRAN
 
 RETURN 
+
 
 
 
@@ -38949,6 +39352,7 @@ RETURN
 
 
 
+
 GO
 SET ANSI_NULLS ON
 GO
@@ -39051,6 +39455,7 @@ BEGIN
 END
 
 END
+
 
 
 
@@ -39248,6 +39653,7 @@ END
 
 
 
+
 GO
 SET ANSI_NULLS ON
 GO
@@ -39349,6 +39755,7 @@ BEGIN
 	RETURN;
 END    
 END
+
 
 
 
@@ -39545,6 +39952,7 @@ END
 
 
 
+
 GO
 SET ANSI_NULLS ON
 GO
@@ -39646,6 +40054,7 @@ BEGIN
 END
 
 END
+
 
 
 
@@ -39808,6 +40217,7 @@ END
 
 
 
+
 GO
 SET ANSI_NULLS ON
 GO
@@ -39890,6 +40300,7 @@ BEGIN
 END
 
 END
+
 
 
 
@@ -40027,6 +40438,7 @@ END
 
 
 
+
 GO
 SET ANSI_NULLS ON
 GO
@@ -40083,6 +40495,7 @@ BEGIN
 		[CustomerID] = @UserID;
 
 END
+
 
 
 
@@ -40170,6 +40583,7 @@ END
 
 
 
+
 GO
 SET ANSI_NULLS ON
 GO
@@ -40228,6 +40642,7 @@ BEGIN
 		[HP].[ProductID] = @ProductID;
 
 END
+
 
 
 
@@ -40351,6 +40766,7 @@ END
 
 
 
+
 GO
 SET ANSI_NULLS ON
 GO
@@ -40450,6 +40866,7 @@ END
 
 
 
+
 GO
 SET ANSI_NULLS ON
 GO
@@ -40520,6 +40937,7 @@ BEGIN
 		[HAC].[ServiceID] = @ServiceID;
 
 END
+
 
 
 
@@ -40635,6 +41053,7 @@ END
 
 
 
+
 GO
 SET ANSI_NULLS ON
 GO
@@ -40712,6 +41131,7 @@ END
 
 
 
+
 GO
 SET ANSI_NULLS ON
 GO
@@ -40755,6 +41175,7 @@ BEGIN
 		[HAC].[SortOrder];
 
 END
+
 
 
 
@@ -40864,6 +41285,7 @@ END
 
 
 
+
 GO
 SET ANSI_NULLS ON
 GO
@@ -40933,6 +41355,7 @@ BEGIN
 	WHERE
 		[DNC].[ServiceID] = @ServiceID;
 END
+
 
 
 
@@ -41061,6 +41484,7 @@ END
 
 
 
+
 GO
 SET ANSI_NULLS ON
 GO
@@ -41165,6 +41589,7 @@ RETURN
 
 
 
+
 GO
 SET ANSI_NULLS ON
 GO
@@ -41210,6 +41635,7 @@ FROM Quotas AS Q
 INNER JOIN ResourceGroups AS RG ON Q.GroupID = RG.GroupID
 ORDER BY RG.GroupOrder, Q.QuotaOrder
 RETURN 
+
 
 
 
@@ -41334,6 +41760,7 @@ RETURN
 
 
 
+
 GO
 SET ANSI_NULLS ON
 GO
@@ -41389,6 +41816,7 @@ WHERE
 	S.ServiceID = @ServiceID
 
 RETURN 
+
 
 
 
@@ -41483,6 +41911,7 @@ SET
 WHERE ServiceID = @ServiceID
 
 RETURN 
+
 
 
 
@@ -41690,6 +42119,7 @@ RETURN
 
 
 
+
 GO
 SET ANSI_NULLS ON
 GO
@@ -41738,6 +42168,7 @@ BEGIN
 			SELECT [SXML].[Data].value('@id','int') FROM @XmlSvcs.nodes('/records/record') [SXML]([Data]));
 
 END
+
 
 
 
@@ -41864,6 +42295,7 @@ RETURN
 
 
 
+
 GO
 SET ANSI_NULLS ON
 GO
@@ -41920,6 +42352,7 @@ SELECT
 FROM Servers AS S
 WHERE @IsAdmin = 1
 ORDER BY S.VirtualServer, S.ServerName
+
 
 
 
@@ -42059,6 +42492,7 @@ RETURN
 
 
 
+
 GO
 SET ANSI_NULLS ON
 GO
@@ -42135,6 +42569,7 @@ exec sp_xml_removedocument @idoc
 
 COMMIT TRAN
 RETURN
+
 
 
 
@@ -42278,6 +42713,7 @@ RETURN
 
 
 
+
 GO
 SET ANSI_NULLS ON
 GO
@@ -42336,6 +42772,7 @@ WHERE
 ORDER BY S.ServerName
 
 RETURN 
+
 
 
 
@@ -42455,6 +42892,7 @@ RETURN
 
 
 
+
 GO
 SET ANSI_NULLS ON
 GO
@@ -42528,6 +42966,7 @@ EXEC sp_xml_removedocument @idoc
 
 COMMIT TRAN
 RETURN
+
 
 
 

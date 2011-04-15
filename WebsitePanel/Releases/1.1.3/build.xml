@@ -1,20 +1,20 @@
 <Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
 	<Import Project="C:\Program Files (x86)\MSBuild\MSBuildCommunityTasks\MSBuild.Community.Tasks.Targets"/>
 	<PropertyGroup>
-		<Version>1.1.2.12</Version>
-		<ReleaseDate>2011-04-05</ReleaseDate>
+		<Version>1.1.3.0</Version>
+		<ReleaseDate>2011-04-15</ReleaseDate>
 		<BuildConfiguration>Release</BuildConfiguration>
-		<SourcesPath>https://websitepanel.svn.sourceforge.net/svnroot/websitepanel/WebsitePanel/Releases/1.1.2</SourcesPath>
+		<SourcesPath>https://websitepanel.svn.sourceforge.net/svnroot/websitepanel/WebsitePanel/Releases/1.1.3</SourcesPath>
 		<RootFolder>C:\Projects\Sourceforge\WebsitePanel</RootFolder>
-		<TrunkFolder>$(RootFolder)\Releases\1.1.2</TrunkFolder>
+		<TrunkFolder>$(RootFolder)\Releases\1.1.3</TrunkFolder>
 
-		<SetupTrunkFolder>C:\Projects\Sourceforge\WebsitePanel.Installer\Releases\1.1.2</SetupTrunkFolder>
+		<SetupTrunkFolder>C:\Projects\Sourceforge\WebsitePanel.Installer\Releases\1.1.3</SetupTrunkFolder>
 		<SetupBuildFolder>$(SetupTrunkFolder)\Build\$(BuildConfiguration)</SetupBuildFolder>
 
 		<BuildFolder>$(TrunkFolder)\Build\$(BuildConfiguration)</BuildFolder>
 		<DeployFolder>$(TrunkFolder)\Deploy\$(BuildConfiguration)</DeployFolder>
 
-		<PreviousBuildFolder>C:\Projects\Sourceforge\WebsitePanel\Releases\1.1.0\Build</PreviousBuildFolder>
+		<PreviousBuildFolder>C:\Projects\Sourceforge\WebsitePanel\Releases\1.1.2\Build</PreviousBuildFolder>
 
 
 		<DiffCmd>$(TrunkFolder)\Tools\Diff.exe</DiffCmd>
