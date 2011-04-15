@@ -6,6 +6,32 @@ using System.Windows.Forms;
 namespace WebsitePanel.Setup
 {
 	/// <summary>
+	/// Release 1.1.3
+	/// </summary>
+	public class EnterpriseServer113 : EnterpriseServer
+	{
+		public static new object Install(object obj)
+		{
+			return EnterpriseServer.InstallBase(obj, "1.1.0");
+		}
+
+		public static new DialogResult Uninstall(object obj)
+		{
+			return EnterpriseServer.Uninstall(obj);
+		}
+
+		public static new DialogResult Setup(object obj)
+		{
+			return EnterpriseServer.Setup(obj);
+		}
+
+		public static new DialogResult Update(object obj)
+		{
+			return UpdateBase(obj, "1.1.0", "1.1.2", true);
+		}
+	}
+
+	/// <summary>
 	/// Release 1.1.2
 	/// </summary>
 	public class EnterpriseServer112 : EnterpriseServer

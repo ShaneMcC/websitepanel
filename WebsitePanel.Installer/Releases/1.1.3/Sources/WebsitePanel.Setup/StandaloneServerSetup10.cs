@@ -6,6 +6,17 @@ using System.Windows.Forms;
 namespace WebsitePanel.Setup
 {
 	/// <summary>
+	/// Release 1.1.3
+	/// </summary>
+	public class StandaloneServerSetup113 : StandaloneServerSetup
+	{
+		public static new object Install(object obj)
+		{
+			return StandaloneServerSetup.InstallBase(obj, "1.1.0");
+		}
+	}
+
+	/// <summary>
 	/// Release 1.1.1
 	/// </summary>
 	public class StandaloneServerSetup111 : StandaloneServerSetup

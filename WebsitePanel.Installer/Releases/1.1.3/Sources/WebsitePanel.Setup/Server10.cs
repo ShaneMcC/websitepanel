@@ -6,6 +6,32 @@ using System.Windows.Forms;
 namespace WebsitePanel.Setup
 {
 	/// <summary>
+	/// Release 1.1.3
+	/// </summary>
+	public class Server113 : Server
+	{
+		public static new object Install(object obj)
+		{
+			return Server.InstallBase(obj, "1.1.0");
+		}
+
+		public static new object Uninstall(object obj)
+		{
+			return Server.Uninstall(obj);
+		}
+
+		public static new object Setup(object obj)
+		{
+			return Server.Setup(obj);
+		}
+
+		public static new object Update(object obj)
+		{
+			return UpdateBase(obj, "1.1.0", "1.1.2", false);
+		}
+	}
+
+	/// <summary>
 	/// Release 1.1.2
 	/// </summary>
 	public class Server112 : Server

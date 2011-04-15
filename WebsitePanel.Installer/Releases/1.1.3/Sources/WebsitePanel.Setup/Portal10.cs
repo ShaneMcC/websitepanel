@@ -6,6 +6,32 @@ using System.Windows.Forms;
 namespace WebsitePanel.Setup
 {
 	/// <summary>
+	/// Release 1.1.3
+	/// </summary>
+	public class Portal113 : Portal
+	{
+		public static new object Install(object obj)
+		{
+			return Portal.InstallBase(obj, "1.1.0");
+		}
+
+		public static new DialogResult Uninstall(object obj)
+		{
+			return Portal.Uninstall(obj);
+		}
+
+		public static new DialogResult Setup(object obj)
+		{
+			return Portal.Setup(obj);
+		}
+
+		public static new DialogResult Update(object obj)
+		{
+			return UpdateBase(obj, "1.1.0", "1.1.2", false);
+		}
+	}
+
+	/// <summary>
 	/// Release 1.1.2
 	/// </summary>
 	public class Portal112 : Portal
