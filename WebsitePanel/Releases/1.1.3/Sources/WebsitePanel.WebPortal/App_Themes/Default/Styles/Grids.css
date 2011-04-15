@@ -1,0 +1,196 @@
+.foo {} /* W3C CSS validator likes CSS files to start with a class rather than a comment. Soooooo.... */
+
+/* This style sheet is intended to contain OFTEN CHANGED rules used when the GridView control adapter is enabled. */
+/* Empty rules are provided merely as a convenience for your future use or experimentation. */
+
+.LightGridView .AspNet-GridView
+{
+    width: 100%;
+}
+
+.LightGridView .AspNet-GridView div.AspNet-GridView-Pagination
+{
+    padding: 8px;
+	background: #F7F6F3 url(../images/grid_footer_bkg.gif) left top repeat-x;
+	font-size: 8pt;
+}
+
+.LightGridView .AspNet-GridView table tbody tr td
+{
+    background: White;
+    padding: 5px;
+    text-align: left;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+
+
+
+.NormalGridView .AspNet-GridView
+{
+    width: 100%;
+}
+
+.NormalGridView .AspNet-GridView table
+{
+    border-left: solid 1px #CCCCCC;
+    border-bottom: solid 1px #CCCCCC;
+    width: 100%;
+}
+
+.NormalGridView .AspNet-GridView div.AspNet-GridView-Empty
+{
+	border: solid 1px #CCCCCC;
+    padding: 10px;
+    font-size: 8pt;
+}
+
+.NormalGridView .AspNet-GridView div.AspNet-GridView-Pagination
+{
+	border-left: solid 1px #CCCCCC;
+    border-bottom: solid 1px #CCCCCC;
+    border-right: solid 1px #CCCCCC;
+    padding: 4px;
+	background: #F7F6F3 url(../images/grid_footer_bkg.gif) left top repeat-x;
+	/*border-top: solid 1px #98B3C3;*/
+}
+
+.NormalGridView .AspNet-GridView div.AspNet-GridView-Pagination a,
+.NormalGridView .AspNet-GridView div.AspNet-GridView-Pagination span
+{
+    color: #505050;
+    font-size: 8pt;
+    font-weight: normal;
+    padding-left: 1px;
+    padding-right: 1px;
+    text-decoration: none;
+}
+
+.NormalGridView .AspNet-GridView div.AspNet-GridView-Pagination span
+{
+	font-weight: bold;
+	color: #000000;
+}
+
+.NormalGridView .AspNet-GridView table thead tr th
+{
+    background: #efefef url(../images/grid_header.gif) left top repeat-x;
+	border-top: solid 1px #CCCCCC;
+    border-bottom: solid 1px #CCCCCC;
+    border-right: solid 1px #CCCCCC;
+    text-align: left;
+    vertical-align: middle;
+    padding-left: 5px;
+    padding-right: 5px;
+    height: 22px;
+	font-family: Tahoma;
+	font-size: 8pt;
+    color: #000000;
+}
+
+.NormalGridView .AspNet-GridView table thead tr th span
+{
+	white-space: nowrap;
+}
+
+.NormalGridView .AspNet-GridView table thead tr th a
+{
+    color: #000000;
+	padding-top: 4px;
+	padding-bottom: 4px;
+    width: 100%;
+    display: inline-block;
+}
+
+.NormalGridView .AspNet-GridView table thead tr th.AspNet-GridView-Sort
+{
+	background: #efefef url(../images/grid_header_sort.gif) left top repeat-x;
+    border: solid 1px #96D9F9;
+}
+
+.NormalGridView .AspNet-GridView table thead.Centered th
+{
+	text-align: center;
+}
+
+.NormalGridView .AspNet-GridView table tr.Centered td
+{
+	text-align: center;
+}
+
+.NormalGridView .AspNet-GridView table thead tr.Narrow th
+{
+	padding-top: 3px;
+	padding-bottom: 3px;
+	font-weight: normal;
+}
+
+.NormalGridView .AspNet-GridView table tbody tr td
+{
+	font-family: Tahoma;
+	font-size: 8pt;
+    color: #333333;
+    background: White;
+    padding: 5px;
+    /*border-bottom: solid 1px #CCCCCC;*/
+    border-right: solid 1px #CCCCCC;
+    text-align: left;
+}
+
+.NormalGridView .AspNet-GridView table tbody tr.AspNet-GridView-Alternate td
+{
+    background: #F7F6F3;
+}
+
+.NormalGridView .AspNet-GridView table tbody tr.AspNet-GridView-Selected td
+{
+}
+
+.NormalGridView .AspNet-GridView table tfoot tr td
+{
+}
+
+.SelectedRow TD
+{
+	background-color: #e7f2ff!important; /*#F0FCFF!important;*/
+}
+
+.RadioButtonsGridView AspNet-GridView
+{
+	width: 100%;
+}
+
+.RadioButtonsGridView .AspNet-GridView table
+{
+    width: 100%;
+}
+
+.RadioButtonsGridView .AspNet-GridView table tbody tr td
+{
+	font-family: Tahoma;
+	font-size: 9pt;
+    color: #333333;
+    background: White;
+    padding: 5px;
+    text-align: left;
+    white-space: nowrap;
+}
+
+.RadioButtonsGridView .AspNet-GridView table tbody tr td.RadioButtonColumn
+{
+	padding-right: 25px;
+	padding-left: 10px!important;
+}
+
+.RadioButtonsGridView .AspNet-GridView table thead tr th
+{
+	clear: both;
+	background: #f5f5f5;
+	padding: 4px;
+	border-top: solid 1px #CCCCCC;
+	font-family: Tahoma;
+	font-size: 9pt;
+	color: #333333;
+    text-align: left;
+    white-space: nowrap;
+}

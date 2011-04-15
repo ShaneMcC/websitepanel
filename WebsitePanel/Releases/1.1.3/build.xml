@@ -1,0 +1,422 @@
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+	<Import Project="C:\Program Files (x86)\MSBuild\MSBuildCommunityTasks\MSBuild.Community.Tasks.Targets"/>
+	<PropertyGroup>
+		<Version>1.1.2.12</Version>
+		<ReleaseDate>2011-04-05</ReleaseDate>
+		<BuildConfiguration>Release</BuildConfiguration>
+		<SourcesPath>https://websitepanel.svn.sourceforge.net/svnroot/websitepanel/WebsitePanel/Releases/1.1.2</SourcesPath>
+		<RootFolder>C:\Projects\Sourceforge\WebsitePanel</RootFolder>
+		<TrunkFolder>$(RootFolder)\Releases\1.1.2</TrunkFolder>
+
+		<SetupTrunkFolder>C:\Projects\Sourceforge\WebsitePanel.Installer\Releases\1.1.2</SetupTrunkFolder>
+		<SetupBuildFolder>$(SetupTrunkFolder)\Build\$(BuildConfiguration)</SetupBuildFolder>
+
+		<BuildFolder>$(TrunkFolder)\Build\$(BuildConfiguration)</BuildFolder>
+		<DeployFolder>$(TrunkFolder)\Deploy\$(BuildConfiguration)</DeployFolder>
+
+		<PreviousBuildFolder>C:\Projects\Sourceforge\WebsitePanel\Releases\1.1.0\Build</PreviousBuildFolder>
+
+
+		<DiffCmd>$(TrunkFolder)\Tools\Diff.exe</DiffCmd>
+		<SqlCmd>"C:\Program Files\Microsoft SQL Server\100\Tools\Binn\sqlcmd.exe" -S (local)\SQLEXPRESS -E</SqlCmd>
+
+		<MSDeployPath>"C:\Program Files\IIS\Microsoft Web Deploy\msdeploy.exe"</MSDeployPath>
+
+		<DataBaseName>WebsitePanel_build</DataBaseName>
+		<MSDeployConnectionString>server=(local)\SQLEXPRESS;database=$(DataBaseName);Integrated Security=true;</MSDeployConnectionString>
+
+		<PortalSrc>$(TrunkFolder)\Sources\WebsitePanel.WebPortal</PortalSrc>
+		<ServerSrc>$(TrunkFolder)\Sources\WebsitePanel.Server</ServerSrc>
+		<EnterpriseServerSrc>$(TrunkFolder)\Sources\WebsitePanel.EnterpriseServer</EnterpriseServerSrc>
+		<ImportCsvSrc>$(TrunkFolder)\Sources\Tools\WebsitePanel.Import.CsvBulk\bin\$(BuildConfiguration)</ImportCsvSrc>
+		<ImportEnterpriseSrc>$(TrunkFolder)\Sources\Tools\WebsitePanel.Import.Enterprise\bin\$(BuildConfiguration)</ImportEnterpriseSrc>
+		<AWStatsViewerSrc>$(TrunkFolder)\Sources\Tools\WebsitePanel.AWStats.Viewer</AWStatsViewerSrc>
+
+		<ServerBuild>$(BuildFolder)\Server</ServerBuild>
+		<EnterpriseServerBuild>$(BuildFolder)\EnterpriseServer</EnterpriseServerBuild>
+		<PortalBuild>$(BuildFolder)\Portal</PortalBuild>
+		<ImportCsvBuild>$(BuildFolder)\Import.CsvBulk</ImportCsvBuild>
+		<ImportEnterpriseBuild>$(BuildFolder)\Import.Enterprise</ImportEnterpriseBuild>
+		<AWStatsViewerBuild>$(BuildFolder)\AWStats.Viewer</AWStatsViewerBuild>
+
+	</PropertyGroup>
+
+	<Target Name="CompileSources">
+		<!-- WebsitePanel -->
+		<MSBuild Projects="$(TrunkFolder)\Sources\WebSitePanel.Server.sln;$(TrunkFolder)\Sources\WebsitePanel.EnterpriseServer.sln;$(TrunkFolder)\Sources\WebsitePanel.WebPortal.sln" Properties="Configuration=$(BuildConfiguration)" />
+
+		<!-- Tools -->
+		<MSBuild Projects="$(TrunkFolder)\Sources\Tools\WebsitePanel.Import.CsvBulk.sln" Properties="Configuration=$(BuildConfiguration)" />
+		<MSBuild Projects="$(TrunkFolder)\Sources\Tools\WebsitePanel.Import.Enterprise.sln" Properties="Configuration=$(BuildConfiguration)" />
+		<MSBuild Projects="$(TrunkFolder)\Sources\Tools\WebsitePanel.AWStats.Viewer.sln" Properties="Configuration=$(BuildConfiguration)" />
+	</Target>
+
+	<Target Name="PrepareBuilds" DependsOnTargets="CompileSources">
+		<!-- Remove build output folders in reversed order (e.q. root folder removed last) -->
+		<RemoveDir Directories="$(ServerBuild)"/>
+		<RemoveDir Directories="$(EnterpriseServerBuild)"/>
+		<RemoveDir Directories="$(PortalBuild)"/>
+		<RemoveDir Directories="$(ImportCsvBuild)"/>
+		<RemoveDir Directories="$(ImportEnterpriseBuild)"/>
+		<RemoveDir Directories="$(AWStatsViewerBuild)"/>
+		<RemoveDir Directories="$(BuildFolder)"/>
+
+		<MakeDir Directories="$(BuildFolder)"/>
+		<MakeDir Directories="$(ServerBuild)"/>
+		<MakeDir Directories="$(EnterpriseServerBuild)"/>
+		<MakeDir Directories="$(PortalBuild)"/>
+		<MakeDir Directories="$(ImportCsvBuild)"/>
+		<MakeDir Directories="$(ImportEnterpriseBuild)"/>
+		<MakeDir Directories="$(AWStatsViewerBuild)"/>
+	</Target>
+
+	<Target Name="CreateServerBuild" DependsOnTargets="PrepareBuilds">
+		<ItemGroup>
+			<ServerBuildExclude Include="$(ServerSrc)\**\.svn\**" />
+			<ServerBuildExclude Include="$(ServerSrc)\bin\*.xml" />
+			<ServerBuildExclude Include="$(ServerSrc)\obj\**" />
+			<ServerBuildExclude Include="$(ServerSrc)\**\Release\**" />
+			<ServerBuildExclude Include="$(ServerSrc)\**\Debug\**" />
+			<ServerBuildExclude Include="$(ServerSrc)\App_Cache\**" />
+			<ServerBuildExclude Include="$(ServerSrc)\Images\**" />
+			<ServerBuildExclude Include="$(ServerSrc)\LogParser\**" />
+			<ServerBuildExclude Include="$(ServerSrc)\**\*.pdb" Condition="'$(BuildConfiguration)' == 'Release'" />
+			<ServerBuildExclude Include="$(ServerSrc)\**\*.user" />
+			<ServerBuildExclude Include="$(ServerSrc)\**\*.suo" />
+			<ServerBuildExclude Include="$(ServerSrc)\**\*.cs" />
+			<ServerBuildExclude Include="$(ServerSrc)\**\*.csproj" />
+			<ServerBuildExclude Include="$(ServerSrc)\**\*.vb" />
+			<ServerBuildExclude Include="$(ServerSrc)\**\*.vbproj" />
+			<ServerBuildExclude Include="$(ServerSrc)\bin\Microsoft.Web.Administration.*"/>
+			<ServerBuildExclude Include="$(ServerSrc)\bin\Microsoft.Web.Management.*"/>
+			<ServerBuildExclude Include="$(ServerSrc)\bin\Microsoft.Exchange.*"/>
+			<ServerBuildExclude Include="$(ServerSrc)\bin\Microsoft.Crm.*"/>
+			<ServerBuildExclude Include="$(ServerSrc)\bin\Microsoft.SqlServer.BatchParser.dll"/>
+			<ServerBuildFiles Include="$(ServerSrc)\**\*.*" Exclude="@(ServerBuildExclude)"/>
+		</ItemGroup>
+		<Copy SourceFiles="@(ServerBuildFiles)" DestinationFolder="$(ServerBuild)\%(RecursiveDir)" />
+	</Target>
+
+	<Target Name="CreateEnterpriseServerBuild" DependsOnTargets="CreateServerBuild">
+		<ItemGroup>
+			<EnterpriseServerBuildExclude Include="$(EnterpriseServerSrc)\**\.svn\**" />
+			<EnterpriseServerBuildExclude Include="$(EnterpriseServerSrc)\**\obj\**" />
+			<EnterpriseServerBuildExclude Include="$(EnterpriseServerSrc)\bin\*.xml" />
+			<EnterpriseServerBuildExclude Include="$(EnterpriseServerSrc)\**\Release\**" />
+			<EnterpriseServerBuildExclude Include="$(EnterpriseServerSrc)\**\Debug\**" />
+			<EnterpriseServerBuildExclude Include="$(EnterpriseServerSrc)\**\Images\**" />
+			<EnterpriseServerBuildExclude Include="$(EnterpriseServerSrc)\**\*.pdb" Condition="'$(BuildConfiguration)' == 'Release'" />
+			<EnterpriseServerBuildExclude Include="$(EnterpriseServerSrc)\**\*.user" />
+			<EnterpriseServerBuildExclude Include="$(EnterpriseServerSrc)\**\*.suo" />
+			<EnterpriseServerBuildExclude Include="$(EnterpriseServerSrc)\**\*.cs" />
+			<EnterpriseServerBuildExclude Include="$(EnterpriseServerSrc)\**\*.csproj" />
+			<EnterpriseServerBuildFiles Include="$(EnterpriseServerSrc)\**\*.*" Exclude="@(EnterpriseServerBuildExclude)"/>
+		</ItemGroup>
+		<Copy SourceFiles="@(EnterpriseServerBuildFiles)" DestinationFolder="$(EnterpriseServerBuild)\%(RecursiveDir)" />
+	</Target>
+
+	<Target Name="CreatePortalBuild" DependsOnTargets="CreateEnterpriseServerBuild">
+		<ItemGroup>
+			<PortalBuildExclude Include="$(PortalSrc)\**\.svn\**" />
+			<PortalBuildExclude Include="$(PortalSrc)\**\obj\**" />
+			<PortalBuildExclude Include="$(PortalSrc)\bin\*.xml" />
+			<PortalBuildExclude Include="$(PortalSrc)\**\Release\**" />
+			<PortalBuildExclude Include="$(PortalSrc)\**\Debug\**" />
+			<PortalBuildExclude Include="$(PortalSrc)\**\*.pdb" Condition="'$(BuildConfiguration)' == 'Release'" />
+			<PortalBuildExclude Include="$(PortalSrc)\**\*.user" />
+			<PortalBuildExclude Include="$(PortalSrc)\**\*.suo" />
+			<PortalBuildExclude Include="$(PortalSrc)\**\*.cs" />
+			<PortalBuildExclude Include="$(PortalSrc)\**\*.csproj" />
+			<PortalBuildExclude Include="$(PortalSrc)\Code\**" />
+			<PortalBuildExclude Include="$(PortalSrc)\DesktopModules\**\bin\**" />
+			<PortalBuildExclude Include="$(PortalSrc)\DesktopModules\**\scripts\**" />
+			<PortalBuildExclude Include="$(PortalSrc)\DesktopModules\**\web.config" />
+			<PortalBuildFiles Include="$(PortalSrc)\**\*.*" Exclude="@(PortalBuildExclude)" />
+		</ItemGroup>
+		<Copy SourceFiles="@(PortalBuildFiles)" DestinationFolder="$(PortalBuild)\%(RecursiveDir)" />
+	</Target>
+
+	<Target Name="CreateImportCsvBuild" DependsOnTargets="CreatePortalBuild">
+		<ItemGroup>
+			<ImportCsvExclude Include="$(ImportCsvSrc)\**\*.pdb" Condition="'$(BuildConfiguration)' == 'Release'" />
+			<ImportCsvExclude Include="$(ImportCsvSrc)\**\*.vshost.*" />
+			<ImportCsvBuildFiles Include="$(ImportCsvSrc)\**\*.*" Exclude="@(ImportCsvExclude)" />
+		</ItemGroup>
+		<Copy SourceFiles="@(ImportCsvBuildFiles)" DestinationFolder="$(ImportCsvBuild)\%(RecursiveDir)" />
+	</Target>
+
+	<Target Name="CreateImportEnterpriseBuild" DependsOnTargets="CreateImportCsvBuild">
+		<ItemGroup>
+			<ImportEnterpriseExclude Include="$(ImportEnterpriseSrc)\**\*.pdb" Condition="'$(BuildConfiguration)' == 'Release'" />
+			<ImportEnterpriseExclude Include="$(ImportEnterpriseSrc)\**\*.vshost.*" />
+			<ImportEnterpriseBuildFiles Include="$(ImportEnterpriseSrc)\**\*.*" Exclude="@(ImportEnterpriseExclude)" />
+		</ItemGroup>
+		<Copy SourceFiles="@(ImportEnterpriseBuildFiles)" DestinationFolder="$(ImportEnterpriseBuild)\%(RecursiveDir)" />
+	</Target>
+
+	<Target Name="CreateAWStatsViewerBuild" DependsOnTargets="CreateImportEnterpriseBuild">
+		<ItemGroup>
+			<AWStatsViewerBuildExclude Include="$(AWStatsViewerSrc)\**\.svn\**" />
+			<AWStatsViewerBuildExclude Include="$(AWStatsViewerSrc)\**\obj\**" />
+			<AWStatsViewerBuildExclude Include="$(AWStatsViewerSrc)\bin\*.xml" />
+			<AWStatsViewerBuildExclude Include="$(AWStatsViewerSrc)\**\Release\**" />
+			<AWStatsViewerBuildExclude Include="$(AWStatsViewerSrc)\**\Debug\**" />
+			<AWStatsViewerBuildExclude Include="$(AWStatsViewerSrc)\**\*.pdb" Condition="'$(BuildConfiguration)' == 'Release'" />
+			<AWStatsViewerBuildExclude Include="$(AWStatsViewerSrc)\**\*.user" />
+			<AWStatsViewerBuildExclude Include="$(AWStatsViewerSrc)\**\*.suo" />
+			<AWStatsViewerBuildExclude Include="$(AWStatsViewerSrc)\**\*.cs" />
+			<AWStatsViewerBuildExclude Include="$(AWStatsViewerSrc)\**\*.csproj" />
+			<AWStatsViewerBuildExclude Include="$(AWStatsViewerSrc)\Code\**" />
+			<AWStatsViewerBuildExclude Include="$(AWStatsViewerSrc)\**\*.publish.xml" />
+			<AWStatsViewerBuildFiles Include="$(AWStatsViewerSrc)\**\*.*" Exclude="@(AWStatsViewerBuildExclude)" />
+		</ItemGroup>
+		<Copy SourceFiles="@(AWStatsViewerBuildFiles)" DestinationFolder="$(AWStatsViewerBuild)\%(RecursiveDir)" />
+	</Target>
+
+	<Target Name="Build" DependsOnTargets="CreateAWStatsViewerBuild">
+		<!-- Do nothing -->
+	</Target>
+
+	<!-- Create full distributives -->
+	<PropertyGroup>
+		<InstallFolder>$(DeployFolder)\Install</InstallFolder>
+		<ServerInstall>$(InstallFolder)\Server</ServerInstall>
+		<EnterpriseServerInstall>$(InstallFolder)\EnterpriseServer</EnterpriseServerInstall>
+		<PortalInstall>$(InstallFolder)\Portal</PortalInstall>
+		<StandaloneInstall>$(InstallFolder)\StandaloneServerSetup</StandaloneInstall>
+
+		<!-- Tools -->
+		<ToolsFolder>$(DeployFolder)\Tools</ToolsFolder>
+		<ImportCsvInstall>$(ToolsFolder)\Import.CsvBulk</ImportCsvInstall>
+		<ImportEnterpriseInstall>$(ToolsFolder)\Import.Enterprise</ImportEnterpriseInstall>
+		<AWStatsViewerInstall>$(ToolsFolder)\AWStats.Viewer</AWStatsViewerInstall>
+	</PropertyGroup>
+
+	<Target Name="PrepareInstalls" DependsOnTargets="Build">
+		<Delete Files="$(InstallFolder)\**\*.*"/>
+		<RemoveDir Directories="$(InstallFolder)"/>
+		<MakeDir Directories="$(InstallFolder)"/>
+
+		<Delete Files="$(ToolsFolder)\**\*.*"/>
+		<RemoveDir Directories="$(ToolsFolder)"/>
+		<MakeDir Directories="$(ToolsFolder)"/>
+	</Target>
+
+	<Target Name="CreateServerInstall" DependsOnTargets="PrepareInstalls">
+		<ItemGroup>
+			<ServerDeployExclude Include="$(ServerBuild)\bin\SDNSAPI.dll" />
+			<ServerDeployExclude Include="$(ServerBuild)\bin\MySql.Data.dll"/>
+			<ServerDeployFiles Include="$(ServerBuild)\**\*.*" Exclude="@(ServerDeployExclude)" />
+		</ItemGroup>
+		<RemoveDir Directories="$(ServerInstall)"/>
+		<MakeDir Directories="$(ServerInstall)"/>
+		<Copy SourceFiles="@(ServerDeployFiles)" DestinationFolder="$(ServerInstall)\%(RecursiveDir)" />
+		<XmlUpdate XmlFileName="$(ServerInstall)\web.config" Xpath="//configuration/websitepanel.server/security/password/@value" Value="${installer.server.password}" />
+	</Target>
+
+	<Target Name="CreateEnterpriseServerInstall" DependsOnTargets="CreateServerInstall">
+		<ItemGroup>
+			<EnterpriseServerDeployExclude Include="$(EnterpriseServerBuild)\bin\OrderBoxDomainsLib.DLL" />
+			<EnterpriseServerDeployExclude Include="$(EnterpriseServerBuild)\bin\OrderBoxCoreLib.DLL" />
+			<EnterpriseServerDeployFiles Include="$(EnterpriseServerBuild)\**\*.*" Exclude="@(EnterpriseServerDeployExclude)" />
+		</ItemGroup>
+		<RemoveDir Directories="$(EnterpriseServerInstall)"/>
+		<MakeDir Directories="$(EnterpriseServerInstall)"/>
+		<Copy SourceFiles="@(EnterpriseServerDeployFiles)" DestinationFolder="$(EnterpriseServerInstall)\%(RecursiveDir)" />
+		<XmlUpdate XmlFileName="$(EnterpriseServerInstall)\web.config" Xpath="//configuration/connectionStrings/add/@connectionString" Value="${installer.connectionstring}"  />
+		<XmlUpdate XmlFileName="$(EnterpriseServerInstall)\web.config" Xpath="//configuration/appSettings/add[@key=%22WebsitePanel.CryptoKey%22]/@value" Value="${installer.cryptokey}"  />
+	</Target>
+
+	<Target Name="CreatePortalInstall" DependsOnTargets="CreateEnterpriseServerInstall">
+		<ItemGroup>
+			<PortalDeployFiles Include="$(PortalBuild)\**\*.*" />
+		</ItemGroup>
+		<RemoveDir Directories="$(PortalInstall)"/>
+		<MakeDir Directories="$(PortalInstall)"/>
+		<Copy SourceFiles="@(PortalDeployFiles)" DestinationFolder="$(PortalInstall)\%(RecursiveDir)" />
+		<XmlUpdate XmlFileName="$(PortalInstall)\App_Data\SiteSettings.config" Xpath="//SiteSettings/EnterpriseServer" Value="http://localhost:9002"  />
+	</Target>
+
+	<Target Name="CreateImportCsvInstall" DependsOnTargets="CreatePortalInstall">
+		<ItemGroup>
+			<ImportCsvDeployFiles Include="$(ImportCsvBuild)\**\*.*" />
+		</ItemGroup>
+		<RemoveDir Directories="$(ImportCsvInstall)"/>
+		<MakeDir Directories="$(ImportCsvInstall)"/>
+		<Copy SourceFiles="@(ImportCsvDeployFiles)" DestinationFolder="$(ImportCsvInstall)\%(RecursiveDir)" />
+		<Copy SourceFiles="$(RootFolder)\LICENSE.txt" DestinationFolder="$(ImportCsvInstall)" />
+	</Target>
+
+	<Target Name="CreateImportEnterpriseInstall" DependsOnTargets="CreateImportCsvInstall">
+		<ItemGroup>
+			<ImportEnterpriseDeployFiles Include="$(ImportEnterpriseBuild)\**\*.*" />
+		</ItemGroup>
+		<RemoveDir Directories="$(ImportEnterpriseInstall)"/>
+		<MakeDir Directories="$(ImportEnterpriseInstall)"/>
+		<Copy SourceFiles="@(ImportEnterpriseDeployFiles)" DestinationFolder="$(ImportEnterpriseInstall)\%(RecursiveDir)" />
+		<Copy SourceFiles="$(RootFolder)\LICENSE.txt" DestinationFolder="$(ImportEnterpriseInstall)" />
+	</Target>
+
+	<Target Name="CreateAWStatsViewerInstall" DependsOnTargets="CreateImportEnterpriseInstall">
+		<ItemGroup>
+			<AWStatsViewerDeployFiles Include="$(AWStatsViewerBuild)\**\*.*" />
+		</ItemGroup>
+		<RemoveDir Directories="$(AWStatsViewerInstall)"/>
+		<MakeDir Directories="$(AWStatsViewerInstall)"/>
+		<Copy SourceFiles="@(AWStatsViewerDeployFiles)" DestinationFolder="$(AWStatsViewerInstall)\%(RecursiveDir)" />
+		<Copy SourceFiles="$(RootFolder)\LICENSE.txt" DestinationFolder="$(AWStatsViewerInstall)" />
+	</Target>
+
+	<!-- Create update from previous version -->
+	<PropertyGroup>
+		<UpdateFolder>$(DeployFolder)\Update</UpdateFolder>
+		<ServerUpdate>$(UpdateFolder)\Server</ServerUpdate>
+		<EnterpriseServerUpdate>$(UpdateFolder)\EnterpriseServer</EnterpriseServerUpdate>
+		<PortalUpdate>$(UpdateFolder)\Portal</PortalUpdate>
+	</PropertyGroup>
+
+	<Target Name="PrepareUpdates" DependsOnTargets="CreateAWStatsViewerInstall">
+		<RemoveDir Directories="$(UpdateFolder)"/>
+		<MakeDir Directories="$(UpdateFolder)"/>
+
+		<RemoveDir Directories="$(ServerUpdate)"/>
+		<MakeDir Directories="$(ServerUpdate)"/>
+
+		<RemoveDir Directories="$(EnterpriseServerUpdate)"/>
+		<MakeDir Directories="$(EnterpriseServerUpdate)"/>
+
+		<RemoveDir Directories="$(PortalUpdate)"/>
+		<MakeDir Directories="$(PortalUpdate)"/>
+	</Target>
+
+	<Target Name="CreateServerUpdate" DependsOnTargets="PrepareUpdates">
+		<Exec Command="$(DiffCmd) %22$(PreviousBuildFolder)\Server%22 %22$(ServerInstall)%22  %22$(ServerUpdate)%22 /ex:web.config"/>
+	</Target>
+
+	<Target Name="CreateEnterpriseServerUpdate" DependsOnTargets="CreateServerUpdate" >
+		<Exec Command="$(DiffCmd) %22$(PreviousBuildFolder)\EnterpriseServer%22 %22$(EnterpriseServerInstall)%22  %22$(EnterpriseServerUpdate)%22 /ex:web.config"/>
+		<Copy SourceFiles="$(TrunkFolder)\Database\update_db.sql" DestinationFolder="$(EnterpriseServerUpdate)\Setup" />
+		<!-- Update variables in the file -->
+		<FileUpdate Files="$(EnterpriseServerUpdate)\Setup\update_db.sql" Regex="\${release.version}" ReplacementText="$(Version)" />
+		<FileUpdate Files="$(EnterpriseServerUpdate)\Setup\update_db.sql" Regex="\${release.date}" ReplacementText="$(ReleaseDate)" />
+	</Target>
+
+	<Target Name="CreatePortalUpdate" DependsOnTargets="CreateEnterpriseServerUpdate" >
+		<Exec Command="$(DiffCmd) %22$(PreviousBuildFolder)\Portal%22 %22$(PortalInstall)%22  %22$(PortalUpdate)%22 /ex:web.config,web7.config"/>
+	</Target>
+
+	<!-- Create Enterprise Server database and script it -->
+	<PropertyGroup>
+		<DatabaseFolder>$(DeployFolder)\Database</DatabaseFolder>
+	</PropertyGroup>
+
+	<Target Name="CreateEnterpriseServerDatabase" DependsOnTargets="CreatePortalUpdate">
+		<MakeDir Directories="$(DatabaseFolder)"/>
+
+		<Exec Command="$(SqlCmd) -Q &quot;IF DB_ID (N'$(DataBaseName)') IS NOT NULL DROP DATABASE $(DataBaseName)&quot;" />
+		<Exec Command="$(SqlCmd) -Q &quot;CREATE DATABASE $(DataBaseName)&quot;" />
+
+		<Copy SourceFiles="$(TrunkFolder)\Database\install_db.sql" DestinationFolder="$(DatabaseFolder)" />
+		<Copy SourceFiles="$(TrunkFolder)\Database\update_db.sql" DestinationFolder="$(DatabaseFolder)" />
+
+		<!-- Update variables in files -->
+		<FileUpdate Files="$(DatabaseFolder)\install_db.sql" Regex="\${install.database}" ReplacementText="$(DataBaseName)" />
+		<FileUpdate Files="$(DatabaseFolder)\update_db.sql" Regex="\${install.database}" ReplacementText="$(DataBaseName)" />
+		<FileUpdate Files="$(DatabaseFolder)\update_db.sql" Regex="\${release.version}" ReplacementText="$(Version)" />
+		<FileUpdate Files="$(DatabaseFolder)\update_db.sql" Regex="\${release.date}" ReplacementText="$(ReleaseDate)" />
+
+		<Exec Command="$(SqlCmd) -i $(DatabaseFolder)\install_db.sql" />
+		<Exec Command="$(SqlCmd) -i $(DatabaseFolder)\update_db.sql" />
+		
+		<Delete Files="$(DatabaseFolder)\install_db.sql" />
+		<Delete Files="$(DatabaseFolder)\update_db.sql" />
+	</Target>
+
+	<Target Name="ScriptEnterpriseServerDatabase" DependsOnTargets="CreateEnterpriseServerDatabase">
+		<Exec Command="$(MSDeployPath) -verb:sync -source:dbFullSql=&quot;$(MSDeployConnectionString)&quot; -dest:dbFullSql=&quot;$(DatabaseFolder)\install_db_temp.sql&quot;"/>
+		<Exec Command="copy $(TrunkFolder)\Resources\database_header.sql+$(DatabaseFolder)\install_db_temp.sql $(DatabaseFolder)\install_db.sql" />
+
+		<MakeDir Directories="$(EnterpriseServerInstall)\Setup"/>
+		<Copy SourceFiles="$(DatabaseFolder)\install_db.sql" DestinationFolder="$(EnterpriseServerInstall)\Setup" />
+
+		<Delete Files="$(DatabaseFolder)\install_db_temp.sql" />
+	</Target>
+
+	<!-- Compile and deploy Setup.dll -->
+	<Target Name="CreateSetupDLL" DependsOnTargets="ScriptEnterpriseServerDatabase">
+
+		<!-- Compile Setup.dll -->
+		<MSBuild Projects="$(SetupTrunkFolder)\Sources\WebsitePanel.Installer.sln"  Properties="Configuration=$(BuildConfiguration)" />
+
+		<!-- Copy Setup.dll -->
+		<MakeDir Directories="$(ServerInstall)\Setup"/>
+		<Copy SourceFiles="$(SetupBuildFolder)\setup.dll" DestinationFolder="$(ServerInstall)\Setup" />
+		<Copy SourceFiles="$(SetupBuildFolder)\setup.pdb" DestinationFolder="$(ServerInstall)\Setup" Condition="'$(BuildConfiguration)' == 'Debug'" />
+		<Copy SourceFiles="$(SetupBuildFolder)\setup.dll" DestinationFolder="$(ServerUpdate)\Setup" />
+		<Copy SourceFiles="$(SetupBuildFolder)\setup.pdb" DestinationFolder="$(ServerUpdate)\Setup" Condition="'$(BuildConfiguration)' == 'Debug'" />
+
+		<Copy SourceFiles="$(SetupBuildFolder)\setup.dll" DestinationFolder="$(EnterpriseServerInstall)\Setup" />
+		<Copy SourceFiles="$(SetupBuildFolder)\setup.pdb" DestinationFolder="$(EnterpriseServerInstall)\Setup" Condition="'$(BuildConfiguration)' == 'Debug'" />
+		<Copy SourceFiles="$(SetupBuildFolder)\setup.dll" DestinationFolder="$(EnterpriseServerUpdate)\Setup" />
+		<Copy SourceFiles="$(SetupBuildFolder)\setup.pdb" DestinationFolder="$(EnterpriseServerUpdate)\Setup" Condition="'$(BuildConfiguration)' == 'Debug'" />
+
+		<MakeDir Directories="$(PortalInstall)\Setup"/>
+		<Copy SourceFiles="$(SetupBuildFolder)\setup.dll" DestinationFolder="$(PortalInstall)\Setup" />
+		<Copy SourceFiles="$(SetupBuildFolder)\setup.pdb" DestinationFolder="$(PortalInstall)\Setup" Condition="'$(BuildConfiguration)' == 'Debug'" />
+		<Copy SourceFiles="$(SetupBuildFolder)\setup.dll" DestinationFolder="$(PortalUpdate)\Setup" />
+		<Copy SourceFiles="$(SetupBuildFolder)\setup.pdb" DestinationFolder="$(PortalUpdate)\Setup" Condition="'$(BuildConfiguration)' == 'Debug'" />
+
+		<RemoveDir Directories="$(StandaloneInstall)"/>
+		<MakeDir Directories="$(StandaloneInstall)"/>
+		<MakeDir Directories="$(StandaloneInstall)\Setup"/>
+		<Copy SourceFiles="$(SetupBuildFolder)\setup.dll" DestinationFolder="$(StandaloneInstall)\Setup" />
+		<Copy SourceFiles="$(SetupBuildFolder)\setup.pdb" DestinationFolder="$(StandaloneInstall)\Setup" Condition="'$(BuildConfiguration)' == 'Debug'" />
+	</Target>
+
+	<!-- Deploy -->
+	<Target Name="Deploy" DependsOnTargets="CreateSetupDLL" >
+		<ItemGroup>
+			<PortalInstallFiles Include="$(PortalInstall)\**\*.*" />
+			<EnterpriseServerInstallFiles Include="$(EnterpriseServerInstall)\**\*.*" />
+			<ServerInstallFiles Include="$(ServerInstall)\**\*.*" />
+
+			<ImportCsvInstallFiles Include="$(ImportCsvInstall)\**\*.*" />
+			<ImportEnterpriseInstallFiles Include="$(ImportEnterpriseInstall)\**\*.*" />
+			<AWStatsViewerInstallFiles Include="$(AWStatsViewerInstall)\**\*.*" />
+		</ItemGroup>
+
+		<!-- Assemble "Standalone" package -->
+		<Copy SourceFiles="@(PortalInstallFiles)" DestinationFolder="$(StandaloneInstall)\Portal\%(RecursiveDir)" />
+		<Copy SourceFiles="@(EnterpriseServerInstallFiles)" DestinationFolder="$(StandaloneInstall)\Enterprise Server\%(RecursiveDir)" />
+		<Copy SourceFiles="@(ServerInstallFiles)" DestinationFolder="$(StandaloneInstall)\Server\%(RecursiveDir)" />
+
+
+		<!-- zip full distributives -->
+		<ItemGroup>
+			<StandaloneInstallFiles Include="$(StandaloneInstall)\**\*.*" />
+		</ItemGroup>
+
+		<Zip Files="@(PortalInstallFiles)" ZipFileName="$(DeployFolder)\WebsitePanel-Portal-$(Version).zip" WorkingDirectory="$(PortalInstall)" />
+		<Zip Files="@(EnterpriseServerInstallFiles)" ZipFileName="$(DeployFolder)\WebsitePanel-EnterpriseServer-$(Version).zip" WorkingDirectory="$(EnterpriseServerInstall)" />
+		<Zip Files="@(ServerInstallFiles)" ZipFileName="$(DeployFolder)\WebsitePanel-Server-$(Version).zip" WorkingDirectory="$(ServerInstall)" />
+		<Zip Files="@(StandaloneInstallFiles)" ZipFileName="$(DeployFolder)\WebsitePanel-StandaloneServerSetup-$(Version).zip" WorkingDirectory="$(StandaloneInstall)" />
+
+
+		<!-- zip updates -->
+		<ItemGroup>
+			<PortalUpdateFiles Include="$(PortalUpdate)\**\*.*" />
+			<EnterpriseServerUpdateFiles Include="$(EnterpriseServerUpdate)\**\*.*" />
+			<ServerUpdateFiles Include="$(ServerUpdate)\**\*.*" />
+		</ItemGroup>
+
+		<Zip Files="@(PortalUpdateFiles)" ZipFileName="$(DeployFolder)\WebsitePanel-Portal-$(Version)-Update.zip" WorkingDirectory="$(PortalUpdate)" />
+		<Zip Files="@(EnterpriseServerUpdateFiles)" ZipFileName="$(DeployFolder)\WebsitePanel-EnterpriseServer-$(Version)-Update.zip" WorkingDirectory="$(EnterpriseServerUpdate)" />
+		<Zip Files="@(ServerUpdateFiles)" ZipFileName="$(DeployFolder)\WebsitePanel-Server-$(Version)-Update.zip" WorkingDirectory="$(ServerUpdate)" />
+
+		<!-- zip tools -->
+		<Zip Files="@(ImportCsvInstallFiles)" ZipFileName="$(ToolsFolder)\WebsitePanel-Import-CsvBulk-$(Version).zip" WorkingDirectory="$(ImportCsvInstall)" />
+		<Zip Files="@(ImportEnterpriseInstallFiles)" ZipFileName="$(ToolsFolder)\WebsitePanel-Import-Enterprise-$(Version).zip" WorkingDirectory="$(ImportEnterpriseInstall)" />
+		<Zip Files="@(AWStatsViewerInstallFiles)" ZipFileName="$(ToolsFolder)\WebsitePanel-AWStatsViewer-$(Version).zip" WorkingDirectory="$(AWStatsViewerInstall)" />
+	</Target>
+
+</Project>
