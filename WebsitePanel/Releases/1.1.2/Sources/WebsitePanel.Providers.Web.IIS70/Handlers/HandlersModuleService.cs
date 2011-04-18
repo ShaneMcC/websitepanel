@@ -141,16 +141,16 @@ namespace WebsitePanel.Providers.Web.Handlers
 			if (String.IsNullOrEmpty(processor))
 				return;
 			// This section helps to overcome "legacy" issues
-			using (var srvman = GetServerManager())
-			{
-				var config = srvman.GetWebConfiguration(virtualDir.FullQualifiedPath);
-				//
-				var handlersSection = config.GetSection(Constants.HandlersSection);
-				// Do a complete section cleanup
-				handlersSection.RevertToParent();
-				//
-				srvman.CommitChanges();
-			}
+			//using (var srvman = GetServerManager())
+			//{
+			//    var config = srvman.GetWebConfiguration(virtualDir.FullQualifiedPath);
+			//    //
+			//    var handlersSection = config.GetSection(Constants.HandlersSection);
+			//    // Do a complete section cleanup
+			//    handlersSection.RevertToParent();
+			//    //
+			//    srvman.CommitChanges();
+			//}
 			//
 			using (var srvman = GetServerManager())
 			{

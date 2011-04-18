@@ -466,12 +466,16 @@ namespace WebsitePanel.Providers.FTP.IIs70
 				Application application = site.Applications["/"];
 				if (application != null)
 				{
-					VirtualDirectory accountDirectory = application.VirtualDirectories[account.Name];
+					// Convert FTP account name to virtual directory format
+					var ftpVirtualDir = String.Format("/{0}", account.Name);
+					//
+					VirtualDirectory accountDirectory = application.VirtualDirectories[ftpVirtualDir];
+					//
 					if (accountDirectory != null)
 					{
 						application.VirtualDirectories.Remove(accountDirectory);
 					}
-					VirtualDirectory createdVirtualDirectory = application.VirtualDirectories.Add(String.Format("/{0}", account.Name), account.Folder);
+					VirtualDirectory createdVirtualDirectory = application.VirtualDirectories.Add(ftpVirtualDir, account.Folder);
 
 
 					AuthorizationRuleCollection authRulesCollection = this.GetAuthorizationRuleCollection(String.Format("{0}/{1}", siteName, account.Name));

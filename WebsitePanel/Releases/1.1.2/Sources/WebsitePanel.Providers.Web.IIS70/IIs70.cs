@@ -813,7 +813,7 @@ namespace WebsitePanel.Providers.Web
 			mimeTypesSvc.SetMimeMaps(virtualDir);
 
 			// Revert script mappings to the parent to simplify script mappings cleanup
-			handlersSvc.InheritScriptMapsFromParent(virtualDir.FullQualifiedPath);
+			//handlersSvc.InheritScriptMapsFromParent(virtualDir.FullQualifiedPath);
 
 			// TO-DO: SCRIPT MAPS
 			#region ASP script mappings

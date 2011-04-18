@@ -573,7 +573,6 @@ namespace WebsitePanel.Providers.FTP
 		/// <param name="allowWrite">A value which specifies whether write operation is allowed or not.</param>
 		private void EnsureUserHomeFolderExists(string folder, string accountName, bool allowRead, bool allowWrite)
 		{
-			Log.WriteError(String.Format("Trying to create folder {0}", folder), new Exception());
 			// create folder
 			if (!FileUtils.DirectoryExists(folder))
 			{
