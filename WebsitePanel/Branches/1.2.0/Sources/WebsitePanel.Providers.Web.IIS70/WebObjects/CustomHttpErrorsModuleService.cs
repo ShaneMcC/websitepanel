@@ -47,6 +47,7 @@ namespace WebsitePanel.Providers.Web.Iis.WebObjects
 		public const string SubStatusCodeAttribute = "subStatusCode";
 		public const string PathAttribute = "path";
 		public const string ResponseModeAttribute = "responseMode";
+		public const string PrefixLanguageFilePath = "prefixLanguageFilePath";
 
 		public void GetCustomErrors(WebVirtualDirectory virtualDir)
 		{
@@ -102,8 +103,6 @@ namespace WebsitePanel.Providers.Web.Iis.WebObjects
 				var section = config.GetSection(Constants.HttpErrorsSection);
 				//
 				var errorsCollection = section.GetCollection();
-				//
-				errorsCollection.Clear();
 				//
 				foreach (var item in virtualDir.HttpErrors)
 				{
@@ -200,7 +199,9 @@ namespace WebsitePanel.Providers.Web.Iis.WebObjects
 
 			item2Fill.SetAttributeValue(StatusCodeAttribute, statusCode);
 			item2Fill.SetAttributeValue(SubStatusCodeAttribute, subStatusCode);
-            item2Fill.SetAttributeValue(PathAttribute, errorContent);
+			item2Fill.SetAttributeValue(PathAttribute, errorContent);
+			// Cleanup prefix language file path attribute.
+			item2Fill.SetAttributeValue(PrefixLanguageFilePath, String.Empty);
 
 			//
 			item2Fill.SetAttributeValue(ResponseModeAttribute, error.HandlerType);
