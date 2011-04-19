@@ -134,6 +134,9 @@ namespace WebsitePanel.Providers.Web
 		void ChangeWebManagementAccessPassword(string accountName, string accountPassword);
 		bool CheckWebManagementAccountExists(string accountName);
 		ResultObject CheckWebManagementPasswordComplexity(string accountPassword);
+		// Web Deploy Publishing Access
+		void GrantWebDeployPublishingAccess(string siteId, string accountName, string accountPassword);
+		void RevokeWebDeployPublishingAccess(string siteId, string accountName);
 
 		//SSL
 		SSLCertificate generateCSR(SSLCertificate certificate);

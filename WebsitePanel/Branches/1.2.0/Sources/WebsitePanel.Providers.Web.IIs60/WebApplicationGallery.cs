@@ -117,6 +117,8 @@ namespace WebsitePanel.Providers.Web
 				return null;
 			// Always start with the most recent version of MSDeploy
 			var versionKeys = regkey.GetSubKeyNames().OrderByDescending(x => x).ToArray();
+			// Log all version keys found
+			Array.ForEach(versionKeys, (x) => { Log.WriteInfo("MSDeploy version key found: {0}", x); });
 			// Determine appropriate key name to query for
 			var installPathKey = Environment.Is64BitProcess ? "InstallPath" : "InstallPath_x86";
 			var fileVersion = String.Empty;
@@ -128,6 +130,8 @@ namespace WebsitePanel.Providers.Web
 				var versionKey = regkey.OpenSubKey(versionKeys[i]);
 				//
 				libPath = Path.Combine(versionKey.GetValue(installPathKey).ToString(), String.Concat(MS_DEPLOY_ASSEMBLY_NAME, ".dll"));
+				//
+				Log.WriteInfo("MSDeploy v{0}; Lib Path: {1}", versionKeys[i], libPath);
 				//
 				if (File.Exists(libPath) == true)
 				{

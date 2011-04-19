@@ -2120,7 +2120,7 @@ exit", Convert.ToInt32(objDisk["Index"])));
         #endregion
 
         #region Private Methods
-        private JobResult CreateJobResultFromWmiMethodResults(ManagementBaseObject outParams)
+        protected JobResult CreateJobResultFromWmiMethodResults(ManagementBaseObject outParams)
         {
             JobResult result = new JobResult();
 
@@ -2156,7 +2156,7 @@ exit", Convert.ToInt32(objDisk["Index"])));
             return wmi.GetWmiObject("msvm_VirtualSwitchManagementService");
         }
 
-        private ManagementObject GetImageManagementService()
+        protected ManagementObject GetImageManagementService()
         {
             return wmi.GetWmiObject("msvm_ImageManagementService");
         }

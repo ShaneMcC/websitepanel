@@ -22,6 +22,159 @@ namespace WebsitePanel.Portal {
         protected global::WebsitePanel.Portal.EnableAsyncTasksSupport asyncTasks;
         
         /// <summary>
+        /// WDeployBuildPublishingProfileWizardPanel control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Panel WDeployBuildPublishingProfileWizardPanel;
+        
+        /// <summary>
+        /// WDeployPubProfilePanel control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.UpdatePanel WDeployPubProfilePanel;
+        
+        /// <summary>
+        /// ChooseDatabasePanel control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.PlaceHolder ChooseDatabasePanel;
+        
+        /// <summary>
+        /// Localize1 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Localize Localize1;
+        
+        /// <summary>
+        /// Localize2 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Localize Localize2;
+        
+        /// <summary>
+        /// MyDatabaseList control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.DropDownList MyDatabaseList;
+        
+        /// <summary>
+        /// ChooseDatabaseUserPanel control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.PlaceHolder ChooseDatabaseUserPanel;
+        
+        /// <summary>
+        /// Localize3 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Localize Localize3;
+        
+        /// <summary>
+        /// Localize4 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Localize Localize4;
+        
+        /// <summary>
+        /// MyDatabaseUserList control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.DropDownList MyDatabaseUserList;
+        
+        /// <summary>
+        /// ChooseFtpAccountPanel control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.PlaceHolder ChooseFtpAccountPanel;
+        
+        /// <summary>
+        /// Localize5 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Localize Localize5;
+        
+        /// <summary>
+        /// Localize6 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Localize Localize6;
+        
+        /// <summary>
+        /// MyFtpAccountList control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.DropDownList MyFtpAccountList;
+        
+        /// <summary>
+        /// PubProfileWizardOkButton control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button PubProfileWizardOkButton;
+        
+        /// <summary>
+        /// PubProfileWizardCancelButton control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button PubProfileWizardCancelButton;
+        
+        /// <summary>
+        /// WDeployRebuildPublishingProfileWizardModal control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::AjaxControlToolkit.ModalPopupExtender WDeployRebuildPublishingProfileWizardModal;
+        
+        /// <summary>
         /// messageBox control.
         /// </summary>
         /// <remarks>
@@ -398,6 +551,168 @@ namespace WebsitePanel.Portal {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::WebsitePanel.Portal.WebSitesCustomHeadersControl webSitesCustomHeadersControl;
+        
+        /// <summary>
+        /// tabWebDeployPublishing control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.View tabWebDeployPublishing;
+        
+        /// <summary>
+        /// PanelWDeploySitePublishingDisabled control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.PlaceHolder PanelWDeploySitePublishingDisabled;
+        
+        /// <summary>
+        /// PanelWDeployManagePublishingProfile control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.PlaceHolder PanelWDeployManagePublishingProfile;
+        
+        /// <summary>
+        /// WDeployDownloadPubProfileLink control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.LinkButton WDeployDownloadPubProfileLink;
+        
+        /// <summary>
+        /// WDeployRebuildPubProfileLinkButton control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.LinkButton WDeployRebuildPubProfileLinkButton;
+        
+        /// <summary>
+        /// PanelWDeployPublishingCredentials control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.PlaceHolder PanelWDeployPublishingCredentials;
+        
+        /// <summary>
+        /// WDeployPublishingAccountTextBox control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox WDeployPublishingAccountTextBox;
+        
+        /// <summary>
+        /// WDeployPublishingAccountLiteral control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Literal WDeployPublishingAccountLiteral;
+        
+        /// <summary>
+        /// WDeployPublishingAccountRequiredFieldValidator control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.RequiredFieldValidator WDeployPublishingAccountRequiredFieldValidator;
+        
+        /// <summary>
+        /// WDeployPublishingPasswordTextBox control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox WDeployPublishingPasswordTextBox;
+        
+        /// <summary>
+        /// WDeployPublishingPasswordRequiredFieldValidator control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.RequiredFieldValidator WDeployPublishingPasswordRequiredFieldValidator;
+        
+        /// <summary>
+        /// WDeployPublishingConfirmPasswordTextBox control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox WDeployPublishingConfirmPasswordTextBox;
+        
+        /// <summary>
+        /// WDeployPublishingConfirmPasswordRequiredFieldValidator control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.RequiredFieldValidator WDeployPublishingConfirmPasswordRequiredFieldValidator;
+        
+        /// <summary>
+        /// WDeployPublishingConfirmPasswordTextBoxCompareValidator control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.CompareValidator WDeployPublishingConfirmPasswordTextBoxCompareValidator;
+        
+        /// <summary>
+        /// WDeployEnabePublishingButton control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button WDeployEnabePublishingButton;
+        
+        /// <summary>
+        /// WDeployChangePublishingPasswButton control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button WDeployChangePublishingPasswButton;
+        
+        /// <summary>
+        /// WDeployDisablePublishingButton control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button WDeployDisablePublishingButton;
+        
+        /// <summary>
+        /// PanelWDeployNotInstalled control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.PlaceHolder PanelWDeployNotInstalled;
         
         /// <summary>
         /// tabMimes control.

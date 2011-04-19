@@ -1,8 +1,8 @@
 <Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
 	<Import Project="C:\Program Files (x86)\MSBuild\MSBuildCommunityTasks\MSBuild.Community.Tasks.Targets"/>
 	<PropertyGroup>
-		<Version>1.2.0.22</Version>
-		<ReleaseDate>2011-03-25</ReleaseDate>
+		<Version>1.2.0.24</Version>
+		<ReleaseDate>2011-04-10</ReleaseDate>
 		<BuildConfiguration>Release</BuildConfiguration>
 		<SourcesPath>https://websitepanel.svn.sourceforge.net/svnroot/websitepanel/WebsitePanel/Trunk</SourcesPath>
 		<RootFolder>C:\Projects\Sourceforge\WebsitePanel</RootFolder>

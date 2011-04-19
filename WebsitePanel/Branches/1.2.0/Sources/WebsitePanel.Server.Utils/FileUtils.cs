@@ -133,9 +133,12 @@ namespace WebsitePanel.Providers.Utils
                 i++;
             }
 
-            // set permissions
-            SecurityUtils.GrantNtfsPermissionsBySid(path, SystemSID.ADMINISTRATORS, NTFSPermission.FullControl, false, false);
-            SecurityUtils.GrantNtfsPermissionsBySid(path, SystemSID.SYSTEM, NTFSPermission.FullControl, false, true);
+			// Set permissions
+			// We decided to inherit NTFS permissions from the parent folder to comply with with the native security schema in Windows,
+			// when a user decides on his own how to implement security practices for NTFS permissions schema and harden the server.
+			SecurityUtils.GrantNtfsPermissionsBySid(path, SystemSID.ADMINISTRATORS, NTFSPermission.FullControl, true, true);
+			SecurityUtils.GrantNtfsPermissionsBySid(path, SystemSID.SYSTEM, NTFSPermission.FullControl, true, true);
+			//
             return path;
         }
 

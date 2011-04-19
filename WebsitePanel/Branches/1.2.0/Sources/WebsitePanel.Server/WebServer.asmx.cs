@@ -1011,6 +1011,38 @@ namespace WebsitePanel.Server
             }
         }
 
+		[WebMethod, SoapHeader("settings")]
+		public void GrantWebDeployPublishingAccess(string siteId, string accountName, string accountPassword)
+		{
+			try
+			{
+				Log.WriteStart("'{0}' GrantWebDeployPublishingAccess", ProviderSettings.ProviderName);
+				WebProvider.GrantWebDeployPublishingAccess(siteId, accountName, accountPassword);
+				Log.WriteEnd("'{0}' GrantWebDeployPublishingAccess", ProviderSettings.ProviderName);
+			}
+			catch (Exception ex)
+			{
+				Log.WriteError(String.Format("'{0}' GrantWebDeployPublishingAccess", ProviderSettings.ProviderName), ex);
+				throw;
+			}
+		}
+
+		[WebMethod, SoapHeader("settings")]
+		public void RevokeWebDeployPublishingAccess(string siteId, string accountName)
+		{
+			try
+			{
+				Log.WriteStart("'{0}' RevokeWebDeployPublishingAccess", ProviderSettings.ProviderName);
+				WebProvider.RevokeWebDeployPublishingAccess(siteId, accountName);
+				Log.WriteEnd("'{0}' RevokeWebDeployPublishingAccess", ProviderSettings.ProviderName);
+			}
+			catch (Exception ex)
+			{
+				Log.WriteError(String.Format("'{0}' RevokeWebDeployPublishingAccess", ProviderSettings.ProviderName), ex);
+				throw;
+			}
+		}
+
         [WebMethod, SoapHeader("settings")]
         public void DeleteHeliconApeGroup(string siteId, string groupName)
         {

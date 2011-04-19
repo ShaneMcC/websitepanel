@@ -196,6 +196,10 @@ namespace WebsitePanel.Providers.Web {
         private System.Threading.SendOrPostCallback CheckWebManagementPasswordComplexityOperationCompleted;
         
         private System.Threading.SendOrPostCallback GrantWebManagementAccessOperationCompleted;
+
+		private System.Threading.SendOrPostCallback GrantWebDeployPublishingAccessOperationCompleted;
+
+		private System.Threading.SendOrPostCallback RevokeWebDeployPublishingAccessOperationCompleted;
         
         private System.Threading.SendOrPostCallback RevokeWebManagementAccessOperationCompleted;
         
@@ -431,7 +435,13 @@ namespace WebsitePanel.Providers.Web {
         public event GrantWebManagementAccessCompletedEventHandler GrantWebManagementAccessCompleted;
         
         /// <remarks/>
-        public event RevokeWebManagementAccessCompletedEventHandler RevokeWebManagementAccessCompleted;
+		public event GrantWebDeployPublishingAccessCompletedEventHandler GrantWebDeployPublishingAccessCompleted;
+
+		/// <remarks/>
+		public event RevokeWebDeployPublishingAccessCompletedEventHandler RevokeWebDeployPublishingAccessCompleted;
+
+		/// <remarks/>
+		public event RevokeWebManagementAccessCompletedEventHandler RevokeWebManagementAccessCompleted;
         
         /// <remarks/>
         public event ChangeWebManagementAccessPasswordCompletedEventHandler ChangeWebManagementAccessPasswordCompleted;
@@ -3350,7 +3360,112 @@ namespace WebsitePanel.Providers.Web {
         
         /// <remarks/>
         [System.Web.Services.Protocols.SoapHeaderAttribute("ServiceProviderSettingsSoapHeaderValue")]
-        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://smbsaas/websitepanel/server/RevokeWebManagementAccess", RequestNamespace="http://smbsaas/websitepanel/server/", ResponseNamespace="http://smbsaas/websitepanel/server/", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
+		[System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://smbsaas/websitepanel/server/GrantWebDeployPublishingAccess", RequestNamespace = "http://smbsaas/websitepanel/server/", ResponseNamespace = "http://smbsaas/websitepanel/server/", Use = System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle = System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
+		public void GrantWebDeployPublishingAccess(string siteId, string accountName, string accountPassword)
+		{
+			this.Invoke("GrantWebDeployPublishingAccess", new object[] {
+                        siteId,
+                        accountName,
+                        accountPassword});
+		}
+
+		/// <remarks/>
+		public System.IAsyncResult BeginGrantWebDeployPublishingAccess(string siteId, string accountName, string accountPassword, System.AsyncCallback callback, object asyncState)
+		{
+			return this.BeginInvoke("GrantWebDeployPublishingAccess", new object[] {
+                        siteId,
+                        accountName,
+                        accountPassword}, callback, asyncState);
+		}
+
+		/// <remarks/>
+		public void EndGrantWebDeployPublishingAccess(System.IAsyncResult asyncResult)
+		{
+			this.EndInvoke(asyncResult);
+		}
+
+		/// <remarks/>
+		public void GrantWebDeployPublishingAccessAsync(string siteId, string accountName, string accountPassword)
+		{
+			this.GrantWebDeployPublishingAccessAsync(siteId, accountName, accountPassword, null);
+		}
+
+		/// <remarks/>
+		public void GrantWebDeployPublishingAccessAsync(string siteId, string accountName, string accountPassword, object userState)
+		{
+			if ((this.GrantWebDeployPublishingAccessOperationCompleted == null))
+			{
+				this.GrantWebDeployPublishingAccessOperationCompleted = new System.Threading.SendOrPostCallback(this.OnGrantWebDeployPublishingAccessOperationCompleted);
+			}
+			this.InvokeAsync("GrantWebDeployPublishingAccess", new object[] {
+                        siteId,
+                        accountName,
+                        accountPassword}, this.GrantWebDeployPublishingAccessOperationCompleted, userState);
+		}
+
+		private void OnGrantWebDeployPublishingAccessOperationCompleted(object arg)
+		{
+			if ((this.GrantWebDeployPublishingAccessCompleted != null))
+			{
+				System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
+				this.GrantWebDeployPublishingAccessCompleted(this, new System.ComponentModel.AsyncCompletedEventArgs(invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
+			}
+		}
+
+		/// <remarks/>
+		[System.Web.Services.Protocols.SoapHeaderAttribute("ServiceProviderSettingsSoapHeaderValue")]
+		[System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://smbsaas/websitepanel/server/RevokeWebDeployPublishingAccess", RequestNamespace = "http://smbsaas/websitepanel/server/", ResponseNamespace = "http://smbsaas/websitepanel/server/", Use = System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle = System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
+		public void RevokeWebDeployPublishingAccess(string siteId, string accountName)
+		{
+			this.Invoke("RevokeWebDeployPublishingAccess", new object[] {
+                        siteId,
+                        accountName});
+		}
+
+		/// <remarks/>
+		public System.IAsyncResult BeginRevokeWebDeployPublishingAccess(string siteId, string accountName, System.AsyncCallback callback, object asyncState)
+		{
+			return this.BeginInvoke("RevokeWebDeployPublishingAccess", new object[] {
+                        siteId,
+                        accountName}, callback, asyncState);
+		}
+
+		/// <remarks/>
+		public void EndRevokeWebDeployPublishingAccess(System.IAsyncResult asyncResult)
+		{
+			this.EndInvoke(asyncResult);
+		}
+
+		/// <remarks/>
+		public void RevokeWebDeployPublishingAccessAsync(string siteId, string accountName)
+		{
+			this.RevokeWebDeployPublishingAccessAsync(siteId, accountName, null);
+		}
+
+		/// <remarks/>
+		public void RevokeWebDeployPublishingAccessAsync(string siteId, string accountName, object userState)
+		{
+			if ((this.RevokeWebDeployPublishingAccessOperationCompleted == null))
+			{
+				this.RevokeWebDeployPublishingAccessOperationCompleted = new System.Threading.SendOrPostCallback(this.OnRevokeWebDeployPublishingAccessOperationCompleted);
+			}
+			this.InvokeAsync("RevokeWebDeployPublishingAccess", new object[] {
+                        siteId,
+                        accountName}, this.RevokeWebDeployPublishingAccessOperationCompleted, userState);
+		}
+
+		private void OnRevokeWebDeployPublishingAccessOperationCompleted(object arg)
+		{
+			if ((this.RevokeWebDeployPublishingAccessCompleted != null))
+			{
+				System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
+				this.RevokeWebDeployPublishingAccessCompleted(this, new System.ComponentModel.AsyncCompletedEventArgs(invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
+			}
+		}
+
+		/// <remarks/>
+		[System.Web.Services.Protocols.SoapHeaderAttribute("ServiceProviderSettingsSoapHeaderValue")]
+		[System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://smbsaas/websitepanel/server/RevokeWebManagementAccess", RequestNamespace = "http://smbsaas/websitepanel/server/", ResponseNamespace = "http://smbsaas/websitepanel/server/", Use = System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle = System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
         public void RevokeWebManagementAccess(string siteId, string accountName) {
             this.Invoke("RevokeWebManagementAccess", new object[] {
                         siteId,
@@ -5118,7 +5233,15 @@ namespace WebsitePanel.Providers.Web {
     
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("wsdl", "2.0.50727.3038")]
-    public delegate void RevokeWebManagementAccessCompletedEventHandler(object sender, System.ComponentModel.AsyncCompletedEventArgs e);
+	public delegate void GrantWebDeployPublishingAccessCompletedEventHandler(object sender, System.ComponentModel.AsyncCompletedEventArgs e);
+
+	/// <remarks/>
+	[System.CodeDom.Compiler.GeneratedCodeAttribute("wsdl", "2.0.50727.3038")]
+	public delegate void RevokeWebDeployPublishingAccessCompletedEventHandler(object sender, System.ComponentModel.AsyncCompletedEventArgs e);
+
+	/// <remarks/>
+	[System.CodeDom.Compiler.GeneratedCodeAttribute("wsdl", "2.0.50727.3038")]
+	public delegate void RevokeWebManagementAccessCompletedEventHandler(object sender, System.ComponentModel.AsyncCompletedEventArgs e);
     
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("wsdl", "2.0.50727.3038")]

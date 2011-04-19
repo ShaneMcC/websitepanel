@@ -86,11 +86,11 @@ namespace WebsitePanel.Providers.Web
             set { siteIPAddressId = value; }
         }
 
-		public string LogsPath
-		{
-			get { return logsPath; }
-            set { logsPath = value; }
-		}
+		/// <summary>
+		/// Gets or sets logs path for the web site
+		/// </summary>
+		[Persistent]
+		public string LogsPath { get; set; }
 
         [Persistent]
         public string DataPath

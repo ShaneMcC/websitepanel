@@ -37,6 +37,26 @@
 </fieldset>
 <br />
 
+<fieldset>
+    <legend>
+        <asp:Label runat="server" meta:resourcekey="WDeployPublishingSettings" Text="Web Publishing Settings" CssClass="NormalBold"></asp:Label>&nbsp;
+    </legend>
+
+	<p><asp:Localize runat="server" Text="Web publishing enables your customers to publish content to their web sites through Web Deployment publishing protocol that is supported in modern web development tools such as Web Matrix and Visual Studio .NET 2010." /></p>
+    <table width="100%" cellpadding="4">
+		<tr>
+			<td class="Normal" nowrap>
+			    <asp:RadioButton runat="server" ID="WDeployEnabledCheckBox" Text="Enable publishing via Web Deploy" TextAlign="Right" GroupName="WDeployPublishing" />
+			</td>
+		</tr>
+		<tr>
+			<td><asp:RadioButton runat="server" ID="WDeployDisabledCheckBox" Text="Disable publishing via Web Deploy" TextAlign="Right" GroupName="WDeployPublishing" /></td>
+		</tr>
+    </table>
+	<p><asp:CheckBox runat="server" ID="WDeployRepairSettingCheckBox" Text="Repair publishing settings" TextAlign="Right" /></p>
+</fieldset>
+<br />
+
 
 <fieldset>
     <legend>
@@ -362,7 +382,7 @@
 
 <fieldset >
     <legend>
-        <asp:Label ID="Label1" runat="server" meta:resourcekey="HtaccessLabel" Text=".htaccess" CssClass="NormalBold"></asp:Label>&nbsp;
+        <asp:Label runat="server" meta:resourcekey="HtaccessLabel" Text=".htaccess" CssClass="NormalBold"></asp:Label>&nbsp;
     </legend>
     
     <asp:Panel ID="downloadApePanel" runat="server">

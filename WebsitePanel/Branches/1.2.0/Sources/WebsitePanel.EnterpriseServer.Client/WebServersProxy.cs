@@ -140,6 +140,16 @@ namespace WebsitePanel.EnterpriseServer {
         private System.Threading.SendOrPostCallback UpdateSecuredGroupOperationCompleted;
         
         private System.Threading.SendOrPostCallback DeleteSecuredGroupOperationCompleted;
+
+		private System.Threading.SendOrPostCallback GrantWebDeployPublishingAccessOperationCompleted;
+
+		private System.Threading.SendOrPostCallback SaveWebDeployPublishingProfileOperationCompleted;
+
+		private System.Threading.SendOrPostCallback RevokeWebDeployPublishingAccessOperationCompleted;
+
+		private System.Threading.SendOrPostCallback GetWebDeployPublishingProfileOperationCompleted;
+
+		private System.Threading.SendOrPostCallback ChangeWebDeployPublishingPasswordOperationCompleted;
         
         private System.Threading.SendOrPostCallback GetHeliconApeStatusOperationCompleted;
         
@@ -391,7 +401,22 @@ namespace WebsitePanel.EnterpriseServer {
         public event DeleteHeliconApeGroupCompletedEventHandler DeleteHeliconApeGroupCompleted;
         
         /// <remarks/>
-        public event GrantWebManagementAccessCompletedEventHandler GrantWebManagementAccessCompleted;
+		public event GrantWebDeployPublishingAccessCompletedEventHandler GrantWebDeployPublishingAccessCompleted;
+
+		/// <remarks/>
+		public event SaveWebDeployPublishingProfileCompletedEventHandler SaveWebDeployPublishingProfileCompleted;
+
+		/// <remarks/>
+		public event RevokeWebDeployPublishingAccessCompletedEventHandler RevokeWebDeployPublishingAccessCompleted;
+
+		/// <remarks/>
+		public event GetWebDeployPublishingProfileCompletedEventHandler GetWebDeployPublishingProfileCompleted;
+
+		/// <remarks/>
+		public event ChangeWebDeployPublishingPasswordCompletedEventHandler ChangeWebDeployPublishingPasswordCompleted;
+
+		/// <remarks/>
+		public event GrantWebManagementAccessCompletedEventHandler GrantWebManagementAccessCompleted;
         
         /// <remarks/>
         public event RevokeWebManagementAccessCompletedEventHandler RevokeWebManagementAccessCompleted;
@@ -2199,7 +2224,262 @@ namespace WebsitePanel.EnterpriseServer {
         }
         
         /// <remarks/>
-        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://smbsaas/websitepanel/enterpriseserver/GetHeliconApeStatus", RequestNamespace="http://smbsaas/websitepanel/enterpriseserver", ResponseNamespace="http://smbsaas/websitepanel/enterpriseserver", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
+		[System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://smbsaas/websitepanel/enterpriseserver/GrantWebDeployPublishingAccess", RequestNamespace = "http://smbsaas/websitepanel/enterpriseserver", ResponseNamespace = "http://smbsaas/websitepanel/enterpriseserver", Use = System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle = System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
+		public ResultObject GrantWebDeployPublishingAccess(int siteItemId, string accountName, string accountPassword)
+		{
+			object[] results = this.Invoke("GrantWebDeployPublishingAccess", new object[] {
+                        siteItemId,
+                        accountName,
+                        accountPassword});
+			return ((ResultObject)(results[0]));
+		}
+
+		/// <remarks/>
+		public System.IAsyncResult BeginGrantWebDeployPublishingAccess(int siteItemId, string accountName, string accountPassword, System.AsyncCallback callback, object asyncState)
+		{
+			return this.BeginInvoke("GrantWebDeployPublishingAccess", new object[] {
+                        siteItemId,
+                        accountName,
+                        accountPassword}, callback, asyncState);
+		}
+
+		/// <remarks/>
+		public ResultObject EndGrantWebDeployPublishingAccess(System.IAsyncResult asyncResult)
+		{
+			object[] results = this.EndInvoke(asyncResult);
+			return ((ResultObject)(results[0]));
+		}
+
+		/// <remarks/>
+		public void GrantWebDeployPublishingAccessAsync(int siteItemId, string accountName, string accountPassword)
+		{
+			this.GrantWebDeployPublishingAccessAsync(siteItemId, accountName, accountPassword, null);
+		}
+
+		/// <remarks/>
+		public void GrantWebDeployPublishingAccessAsync(int siteItemId, string accountName, string accountPassword, object userState)
+		{
+			if ((this.GrantWebDeployPublishingAccessOperationCompleted == null))
+			{
+				this.GrantWebDeployPublishingAccessOperationCompleted = new System.Threading.SendOrPostCallback(this.OnGrantWebDeployPublishingAccessOperationCompleted);
+			}
+			this.InvokeAsync("GrantWebDeployPublishingAccess", new object[] {
+                        siteItemId,
+                        accountName,
+                        accountPassword}, this.GrantWebDeployPublishingAccessOperationCompleted, userState);
+		}
+
+		private void OnGrantWebDeployPublishingAccessOperationCompleted(object arg)
+		{
+			if ((this.GrantWebDeployPublishingAccessCompleted != null))
+			{
+				System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
+				this.GrantWebDeployPublishingAccessCompleted(this, new GrantWebDeployPublishingAccessCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
+			}
+		}
+
+		/// <remarks/>
+		[System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://smbsaas/websitepanel/enterpriseserver/SaveWebDeployPublishingProfile", RequestNamespace = "http://smbsaas/websitepanel/enterpriseserver", ResponseNamespace = "http://smbsaas/websitepanel/enterpriseserver", Use = System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle = System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
+		public ResultObject SaveWebDeployPublishingProfile(int siteItemId, int[] serviceItemIds)
+		{
+			object[] results = this.Invoke("SaveWebDeployPublishingProfile", new object[] {
+                        siteItemId,
+                        serviceItemIds});
+			return ((ResultObject)(results[0]));
+		}
+
+		/// <remarks/>
+		public System.IAsyncResult BeginSaveWebDeployPublishingProfile(int siteItemId, int[] serviceItemIds, System.AsyncCallback callback, object asyncState)
+		{
+			return this.BeginInvoke("SaveWebDeployPublishingProfile", new object[] {
+                        siteItemId,
+                        serviceItemIds}, callback, asyncState);
+		}
+
+		/// <remarks/>
+		public ResultObject EndSaveWebDeployPublishingProfile(System.IAsyncResult asyncResult)
+		{
+			object[] results = this.EndInvoke(asyncResult);
+			return ((ResultObject)(results[0]));
+		}
+
+		/// <remarks/>
+		public void SaveWebDeployPublishingProfileAsync(int siteItemId, int[] serviceItemIds)
+		{
+			this.SaveWebDeployPublishingProfileAsync(siteItemId, serviceItemIds, null);
+		}
+
+		/// <remarks/>
+		public void SaveWebDeployPublishingProfileAsync(int siteItemId, int[] serviceItemIds, object userState)
+		{
+			if ((this.SaveWebDeployPublishingProfileOperationCompleted == null))
+			{
+				this.SaveWebDeployPublishingProfileOperationCompleted = new System.Threading.SendOrPostCallback(this.OnSaveWebDeployPublishingProfileOperationCompleted);
+			}
+			this.InvokeAsync("SaveWebDeployPublishingProfile", new object[] {
+                        siteItemId,
+                        serviceItemIds}, this.SaveWebDeployPublishingProfileOperationCompleted, userState);
+		}
+
+		private void OnSaveWebDeployPublishingProfileOperationCompleted(object arg)
+		{
+			if ((this.SaveWebDeployPublishingProfileCompleted != null))
+			{
+				System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
+				this.SaveWebDeployPublishingProfileCompleted(this, new SaveWebDeployPublishingProfileCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
+			}
+		}
+
+		/// <remarks/>
+		[System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://smbsaas/websitepanel/enterpriseserver/RevokeWebDeployPublishingAccess", RequestNamespace = "http://smbsaas/websitepanel/enterpriseserver", ResponseNamespace = "http://smbsaas/websitepanel/enterpriseserver", Use = System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle = System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
+		public void RevokeWebDeployPublishingAccess(int siteItemId)
+		{
+			this.Invoke("RevokeWebDeployPublishingAccess", new object[] {
+                        siteItemId});
+		}
+
+		/// <remarks/>
+		public System.IAsyncResult BeginRevokeWebDeployPublishingAccess(int siteItemId, System.AsyncCallback callback, object asyncState)
+		{
+			return this.BeginInvoke("RevokeWebDeployPublishingAccess", new object[] {
+                        siteItemId}, callback, asyncState);
+		}
+
+		/// <remarks/>
+		public void EndRevokeWebDeployPublishingAccess(System.IAsyncResult asyncResult)
+		{
+			this.EndInvoke(asyncResult);
+		}
+
+		/// <remarks/>
+		public void RevokeWebDeployPublishingAccessAsync(int siteItemId)
+		{
+			this.RevokeWebDeployPublishingAccessAsync(siteItemId, null);
+		}
+
+		/// <remarks/>
+		public void RevokeWebDeployPublishingAccessAsync(int siteItemId, object userState)
+		{
+			if ((this.RevokeWebDeployPublishingAccessOperationCompleted == null))
+			{
+				this.RevokeWebDeployPublishingAccessOperationCompleted = new System.Threading.SendOrPostCallback(this.OnRevokeWebDeployPublishingAccessOperationCompleted);
+			}
+			this.InvokeAsync("RevokeWebDeployPublishingAccess", new object[] {
+                        siteItemId}, this.RevokeWebDeployPublishingAccessOperationCompleted, userState);
+		}
+
+		private void OnRevokeWebDeployPublishingAccessOperationCompleted(object arg)
+		{
+			if ((this.RevokeWebDeployPublishingAccessCompleted != null))
+			{
+				System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
+				this.RevokeWebDeployPublishingAccessCompleted(this, new System.ComponentModel.AsyncCompletedEventArgs(invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
+			}
+		}
+
+		/// <remarks/>
+		[System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://smbsaas/websitepanel/enterpriseserver/GetWebDeployPublishingProfile", RequestNamespace = "http://smbsaas/websitepanel/enterpriseserver", ResponseNamespace = "http://smbsaas/websitepanel/enterpriseserver", Use = System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle = System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
+		public BytesResult GetWebDeployPublishingProfile(int siteItemId)
+		{
+			object[] results = this.Invoke("GetWebDeployPublishingProfile", new object[] {
+                        siteItemId});
+			return ((BytesResult)(results[0]));
+		}
+
+		/// <remarks/>
+		public System.IAsyncResult BeginGetWebDeployPublishingProfile(int siteItemId, System.AsyncCallback callback, object asyncState)
+		{
+			return this.BeginInvoke("GetWebDeployPublishingProfile", new object[] {
+                        siteItemId}, callback, asyncState);
+		}
+
+		/// <remarks/>
+		public BytesResult EndGetWebDeployPublishingProfile(System.IAsyncResult asyncResult)
+		{
+			object[] results = this.EndInvoke(asyncResult);
+			return ((BytesResult)(results[0]));
+		}
+
+		/// <remarks/>
+		public void GetWebDeployPublishingProfileAsync(int siteItemId)
+		{
+			this.GetWebDeployPublishingProfileAsync(siteItemId, null);
+		}
+
+		/// <remarks/>
+		public void GetWebDeployPublishingProfileAsync(int siteItemId, object userState)
+		{
+			if ((this.GetWebDeployPublishingProfileOperationCompleted == null))
+			{
+				this.GetWebDeployPublishingProfileOperationCompleted = new System.Threading.SendOrPostCallback(this.OnGetWebDeployPublishingProfileOperationCompleted);
+			}
+			this.InvokeAsync("GetWebDeployPublishingProfile", new object[] {
+                        siteItemId}, this.GetWebDeployPublishingProfileOperationCompleted, userState);
+		}
+
+		private void OnGetWebDeployPublishingProfileOperationCompleted(object arg)
+		{
+			if ((this.GetWebDeployPublishingProfileCompleted != null))
+			{
+				System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
+				this.GetWebDeployPublishingProfileCompleted(this, new GetWebDeployPublishingProfileCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
+			}
+		}
+
+		/// <remarks/>
+		[System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://smbsaas/websitepanel/enterpriseserver/ChangeWebDeployPublishingPassword", RequestNamespace = "http://smbsaas/websitepanel/enterpriseserver", ResponseNamespace = "http://smbsaas/websitepanel/enterpriseserver", Use = System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle = System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
+		public ResultObject ChangeWebDeployPublishingPassword(int siteItemId, string newAccountPassword)
+		{
+			object[] results = this.Invoke("ChangeWebDeployPublishingPassword", new object[] {
+                        siteItemId,
+                        newAccountPassword});
+			return ((ResultObject)(results[0]));
+		}
+
+		/// <remarks/>
+		public System.IAsyncResult BeginChangeWebDeployPublishingPassword(int siteItemId, string newAccountPassword, System.AsyncCallback callback, object asyncState)
+		{
+			return this.BeginInvoke("ChangeWebDeployPublishingPassword", new object[] {
+                        siteItemId,
+                        newAccountPassword}, callback, asyncState);
+		}
+
+		/// <remarks/>
+		public ResultObject EndChangeWebDeployPublishingPassword(System.IAsyncResult asyncResult)
+		{
+			object[] results = this.EndInvoke(asyncResult);
+			return ((ResultObject)(results[0]));
+		}
+
+		/// <remarks/>
+		public void ChangeWebDeployPublishingPasswordAsync(int siteItemId, string newAccountPassword)
+		{
+			this.ChangeWebDeployPublishingPasswordAsync(siteItemId, newAccountPassword, null);
+		}
+
+		/// <remarks/>
+		public void ChangeWebDeployPublishingPasswordAsync(int siteItemId, string newAccountPassword, object userState)
+		{
+			if ((this.ChangeWebDeployPublishingPasswordOperationCompleted == null))
+			{
+				this.ChangeWebDeployPublishingPasswordOperationCompleted = new System.Threading.SendOrPostCallback(this.OnChangeWebDeployPublishingPasswordOperationCompleted);
+			}
+			this.InvokeAsync("ChangeWebDeployPublishingPassword", new object[] {
+                        siteItemId,
+                        newAccountPassword}, this.ChangeWebDeployPublishingPasswordOperationCompleted, userState);
+		}
+
+		private void OnChangeWebDeployPublishingPasswordOperationCompleted(object arg)
+		{
+			if ((this.ChangeWebDeployPublishingPasswordCompleted != null))
+			{
+				System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
+				this.ChangeWebDeployPublishingPasswordCompleted(this, new ChangeWebDeployPublishingPasswordCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
+			}
+		}
+
+		/// <remarks/>
+		[System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://smbsaas/websitepanel/enterpriseserver/GetHeliconApeStatus", RequestNamespace="http://smbsaas/websitepanel/enterpriseserver", ResponseNamespace="http://smbsaas/websitepanel/enterpriseserver", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
         public HeliconApeStatus GetHeliconApeStatus(int siteItemId) {
             object[] results = this.Invoke("GetHeliconApeStatus", new object[] {
                         siteItemId});
@@ -4873,7 +5153,131 @@ namespace WebsitePanel.EnterpriseServer {
     
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("wsdl", "2.0.50727.3038")]
-    public delegate void GetHeliconApeStatusCompletedEventHandler(object sender, GetHeliconApeStatusCompletedEventArgs e);
+	public delegate void GrantWebDeployPublishingAccessCompletedEventHandler(object sender, GrantWebDeployPublishingAccessCompletedEventArgs e);
+
+	/// <remarks/>
+	[System.CodeDom.Compiler.GeneratedCodeAttribute("wsdl", "2.0.50727.42")]
+	[System.Diagnostics.DebuggerStepThroughAttribute()]
+	[System.ComponentModel.DesignerCategoryAttribute("code")]
+	public partial class GrantWebDeployPublishingAccessCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs
+	{
+
+		private object[] results;
+
+		internal GrantWebDeployPublishingAccessCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) :
+			base(exception, cancelled, userState)
+		{
+			this.results = results;
+		}
+
+		/// <remarks/>
+		public ResultObject Result
+		{
+			get
+			{
+				this.RaiseExceptionIfNecessary();
+				return ((ResultObject)(this.results[0]));
+			}
+		}
+	}
+
+	/// <remarks/>
+	[System.CodeDom.Compiler.GeneratedCodeAttribute("wsdl", "2.0.50727.42")]
+	public delegate void SaveWebDeployPublishingProfileCompletedEventHandler(object sender, SaveWebDeployPublishingProfileCompletedEventArgs e);
+
+	/// <remarks/>
+	[System.CodeDom.Compiler.GeneratedCodeAttribute("wsdl", "2.0.50727.42")]
+	[System.Diagnostics.DebuggerStepThroughAttribute()]
+	[System.ComponentModel.DesignerCategoryAttribute("code")]
+	public partial class SaveWebDeployPublishingProfileCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs
+	{
+
+		private object[] results;
+
+		internal SaveWebDeployPublishingProfileCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) :
+			base(exception, cancelled, userState)
+		{
+			this.results = results;
+		}
+
+		/// <remarks/>
+		public ResultObject Result
+		{
+			get
+			{
+				this.RaiseExceptionIfNecessary();
+				return ((ResultObject)(this.results[0]));
+			}
+		}
+	}
+
+	/// <remarks/>
+	[System.CodeDom.Compiler.GeneratedCodeAttribute("wsdl", "2.0.50727.42")]
+	public delegate void RevokeWebDeployPublishingAccessCompletedEventHandler(object sender, System.ComponentModel.AsyncCompletedEventArgs e);
+
+	/// <remarks/>
+	[System.CodeDom.Compiler.GeneratedCodeAttribute("wsdl", "2.0.50727.42")]
+	public delegate void GetWebDeployPublishingProfileCompletedEventHandler(object sender, GetWebDeployPublishingProfileCompletedEventArgs e);
+
+	/// <remarks/>
+	[System.CodeDom.Compiler.GeneratedCodeAttribute("wsdl", "2.0.50727.42")]
+	[System.Diagnostics.DebuggerStepThroughAttribute()]
+	[System.ComponentModel.DesignerCategoryAttribute("code")]
+	public partial class GetWebDeployPublishingProfileCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs
+	{
+
+		private object[] results;
+
+		internal GetWebDeployPublishingProfileCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) :
+			base(exception, cancelled, userState)
+		{
+			this.results = results;
+		}
+
+		/// <remarks/>
+		public BytesResult Result
+		{
+			get
+			{
+				this.RaiseExceptionIfNecessary();
+				return ((BytesResult)(this.results[0]));
+			}
+		}
+	}
+
+	/// <remarks/>
+	[System.CodeDom.Compiler.GeneratedCodeAttribute("wsdl", "2.0.50727.42")]
+	public delegate void ChangeWebDeployPublishingPasswordCompletedEventHandler(object sender, ChangeWebDeployPublishingPasswordCompletedEventArgs e);
+
+	/// <remarks/>
+	[System.CodeDom.Compiler.GeneratedCodeAttribute("wsdl", "2.0.50727.42")]
+	[System.Diagnostics.DebuggerStepThroughAttribute()]
+	[System.ComponentModel.DesignerCategoryAttribute("code")]
+	public partial class ChangeWebDeployPublishingPasswordCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs
+	{
+
+		private object[] results;
+
+		internal ChangeWebDeployPublishingPasswordCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) :
+			base(exception, cancelled, userState)
+		{
+			this.results = results;
+		}
+
+		/// <remarks/>
+		public ResultObject Result
+		{
+			get
+			{
+				this.RaiseExceptionIfNecessary();
+				return ((ResultObject)(this.results[0]));
+			}
+		}
+	}
+
+	/// <remarks/>
+	[System.CodeDom.Compiler.GeneratedCodeAttribute("wsdl", "2.0.50727.42")]
+	public delegate void GetHeliconApeStatusCompletedEventHandler(object sender, GetHeliconApeStatusCompletedEventArgs e);
     
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("wsdl", "2.0.50727.3038")]

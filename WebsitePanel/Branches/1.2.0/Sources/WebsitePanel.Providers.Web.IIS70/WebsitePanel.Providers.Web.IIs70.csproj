@@ -89,6 +89,7 @@
     <Compile Include="Common\FastCgiSection.cs" />
     <Compile Include="Common\HttpErrorResponseMode.cs" />
     <Compile Include="DefaultDocuments\DefaultDocumentModuleService.cs" />
+    <Compile Include="Delegation\DelegationRulesModuleService.cs" />
     <Compile Include="DirectoryBrowse\DirectoryBrowseGlobals.cs" />
     <Compile Include="DirectoryBrowse\DirectoryBrowseModuleService.cs" />
     <Compile Include="DirectoryBrowse\DirectoryBrowseSection.cs" />

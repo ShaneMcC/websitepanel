@@ -251,6 +251,38 @@ namespace WebsitePanel.Providers.Web
             set { this.iis7 = value; }
         }
 
+		#region Web Deploy Publishing Properties
+		/// <summary>
+		/// Gets or sets Web Deploy publishing account name
+		/// </summary>
+		[Persistent]
+		public string WebDeployPublishingAccount { get; set; }
+
+		/// <summary>
+		/// Gets or sets Web Deploy publishing password
+		/// </summary>
+		[Persistent]
+		public string WebDeployPublishingPassword { get; set; }
+
+		/// <summary>
+		/// Gets or sets whether Web Deploy publishing is enabled on the server
+		/// </summary>
+		public bool WebDeployPublishingAvailable { get; set; }
+
+		/// <summary>
+		/// Gets or sets whether Web Deploy publishing is enabled for this particular web site
+		/// </summary>
+		[Persistent]
+		public bool WebDeploySitePublishingEnabled { get; set; }
+
+		/// <summary>
+		/// Gets or sets Web Deploy publishing profile data for this particular web site
+		/// </summary>
+		[Persistent]
+		public string WebDeploySitePublishingProfile { get; set; }
+
+		#endregion
+
 		/// <summary>
 		/// Gets fully qualified name which consists of parent website name if present and virtual directory name.
 		/// </summary>

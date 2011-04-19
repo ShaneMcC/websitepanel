@@ -67,6 +67,51 @@ namespace WebsitePanel.Portal.ProviderControls {
         protected global::System.Web.UI.WebControls.CheckBox chkAssignIPAutomatically;
         
         /// <summary>
+        /// Label1 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label Label1;
+        
+        /// <summary>
+        /// Localize1 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Localize Localize1;
+        
+        /// <summary>
+        /// WDeployEnabledCheckBox control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.RadioButton WDeployEnabledCheckBox;
+        
+        /// <summary>
+        /// WDeployDisabledCheckBox control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.RadioButton WDeployDisabledCheckBox;
+        
+        /// <summary>
+        /// WDeployRepairSettingCheckBox control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.CheckBox WDeployRepairSettingCheckBox;
+        
+        /// <summary>
         /// secAspNet control.
         /// </summary>
         /// <remarks>
@@ -580,15 +625,6 @@ namespace WebsitePanel.Portal.ProviderControls {
         protected global::System.Web.UI.WebControls.TextBox txtProtectedGroupsFile;
         
         /// <summary>
-        /// Label1 control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Label Label1;
-        
-        /// <summary>
         /// downloadApePanel control.
         /// </summary>
         /// <remarks>
@@ -596,15 +632,6 @@ namespace WebsitePanel.Portal.ProviderControls {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Panel downloadApePanel;
-        
-        /// <summary>
-        /// Localize1 control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Localize Localize1;
         
         /// <summary>
         /// configureApePanel control.

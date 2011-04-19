@@ -21,6 +21,7 @@
 	TagPrefix="wsp" %>
 <%@ Register Src="UserControls/SimpleMessageBox.ascx" TagName="SimpleMessageBox"
 	TagPrefix="wsp" %>
+<%@ Register Src="UserControls/PopupHeader.ascx" TagName="PopupHeader" TagPrefix="wsp" %>
 <%@ Register TagPrefix="wsp" Namespace="WebsitePanel.Portal" %>
 <%@ Register Src="WebsitesSSL.ascx" TagName="WebsitesSSL" TagPrefix="uc2" %>
 <style type="text/css">
@@ -43,7 +44,75 @@
 	function confirmationWMSVC() {
 		if (!confirm("Are you sure you want to disable Remote Management?")) return false; else ShowProgressDialog('Disabling Remote Management...');
 	}
+
+	function confirmationWebDeployPublishing() {
+		if (!confirm("Are you sure you want to disable Web Publishing?")) return false; else ShowProgressDialog('Disabling Web Publishing...');
+	}
 </script>
+<asp:Panel ID="WDeployBuildPublishingProfileWizardPanel" runat="server" CssClass="PopupContainer"
+	DefaultButton="PubProfileWizardOkButton" Style="display: none;">
+	<wsp:PopupHeader runat="server" meta:resourcekey="WDeployBuildPublishingProfileWizard" />
+	<div class="Content">
+		<asp:UpdatePanel runat="server" ID="WDeployPubProfilePanel" UpdateMode="Conditional" ChildrenAsTriggers="true">
+			<Triggers>
+				<asp:AsyncPostBackTrigger ControlID="MyDatabaseList" EventName="SelectedIndexChanged" />
+			</Triggers>
+			<ContentTemplate>
+				<div class="FormBody">
+					<asp:PlaceHolder runat="server" ID="ChooseDatabasePanel">
+						<fieldset>
+							<legend>
+								<asp:Localize ID="Localize1" runat="server" Text="Database Name" /></legend>
+							<div class="FormFieldDescription">
+								<asp:Localize ID="Localize2" runat="server">Please choose database name...</asp:Localize>
+							</div>
+							<div class="FormField">
+								<asp:DropDownList ID="MyDatabaseList" runat="server" DataTextField="Name" DataValueField="Id"
+									AutoPostBack="true" Width="100%" OnSelectedIndexChanged="MyDatabaseList_SelectedIndexChanged">
+								</asp:DropDownList>
+							</div>
+						</fieldset>
+					</asp:PlaceHolder>
+					<asp:PlaceHolder runat="server" ID="ChooseDatabaseUserPanel">
+						<fieldset>
+							<legend>
+								<asp:Localize ID="Localize3" runat="server" Text="Database User" /></legend>
+							<div class="FormFieldDescription">
+								<asp:Localize ID="Localize4" runat="server">Please choose database user name...</asp:Localize>
+							</div>
+							<div class="FormField">
+								<asp:DropDownList ID="MyDatabaseUserList" runat="server" DataTextField="Name" DataValueField="Id" Width="100%">
+								</asp:DropDownList>
+							</div>
+						</fieldset>
+					</asp:PlaceHolder>
+					<asp:PlaceHolder runat="server" ID="ChooseFtpAccountPanel">
+						<fieldset>
+							<legend>
+								<asp:Localize ID="Localize5" runat="server" Text="FTP Account" /></legend>
+							<div class="FormFieldDescription">
+								<asp:Localize ID="Localize6" runat="server">Please choose FTP account...</asp:Localize>
+							</div>
+							<div class="FormField">
+								<asp:DropDownList ID="MyFtpAccountList" runat="server" DataTextField="Name" DataValueField="Id" Width="100%">
+								</asp:DropDownList>
+							</div>
+						</fieldset>
+					</asp:PlaceHolder>
+				</div>
+			</ContentTemplate>
+		</asp:UpdatePanel>
+		<div class="FormFooter">
+			<asp:Button ID="PubProfileWizardOkButton" runat="server" CssClass="Button1" meta:resourcekey="PubProfileWizardOkButton"
+				Text="OK" ValidationGroup="WDeployBuildPublishingProfileWizard" OnClick="PubProfileWizardOkButton_Click" />
+			<asp:Button ID="PubProfileWizardCancelButton" runat="server" CssClass="Button1" meta:resourcekey="PubProfileWizardCancelButton"
+				ValidationGroup="WDeployBuildPublishingProfileWizard" Text="Cancel" CausesValidation="false" />
+		</div>
+	</div>
+</asp:Panel>
+<ajaxToolkit:ModalPopupExtender ID="WDeployRebuildPublishingProfileWizardModal" runat="server"
+	TargetControlID="WDeployRebuildPubProfileLinkButton" PopupControlID="WDeployBuildPublishingProfileWizardPanel"
+	BackgroundCssClass="modalBackground" DropShadow="false" CancelControlID="PubProfileWizardCancelButton" />
 <div class="FormBody">
 	<wsp:SimpleMessageBox id="messageBox" runat="server" EnableViewState="false" />
 	<table width="100%" cellpadding="0" cellspacing="0" border="0">
@@ -224,6 +293,84 @@
 						</asp:View>
 						<asp:View ID="tabHeaders" runat="server">
 							<uc6:WebSitesCustomHeadersControl ID="webSitesCustomHeadersControl" runat="server" />
+						</asp:View>
+						<asp:View ID="tabWebDeployPublishing" runat="server">
+							<div style="padding: 20;">
+								<asp:PlaceHolder runat="server" ID="PanelWDeploySitePublishingDisabled" Visible="false">
+									<div class="NormalBold">
+										<asp:Localize runat="server" meta:resourcekey="WDeploySitePublishingDisabled" /></div>
+									<br />
+									<div class="Normal">
+										<asp:Localize runat="server" meta:resourcekey="WDeploySitePublishingEnablementHint" /></div>
+									<br />
+								</asp:PlaceHolder>
+								<asp:PlaceHolder runat="server" ID="PanelWDeployManagePublishingProfile" Visible="false">
+									<div class="NormalBold">
+										<asp:Localize runat="server" meta:resourcekey="WDeploySitePublishingEnabled" /></div>
+									<br />
+									<div class="Normal">
+										<asp:Localize runat="server" meta:resourcekey="WDeployPublishingProfileUsageNotes" /></div>
+									<br />
+									<p>
+										<asp:LinkButton runat="server" ID="WDeployDownloadPubProfileLink" Text="Download Publishing Profile for this web site"
+											CommandName="DownloadProfile" OnCommand="WDeployDownloadPubProfileLink_Command" />&nbsp;/&nbsp;<asp:LinkButton
+												runat="server" ID="WDeployRebuildPubProfileLinkButton" Text="Re-build Publishing Profile for this web site" /></p>
+									<br />
+								</asp:PlaceHolder>
+								<asp:PlaceHolder runat="server" ID="PanelWDeployPublishingCredentials" Visible="false">
+									<table cellpadding="4" border="0">
+										<tr>
+											<td class="Normal">
+												<asp:Localize runat="server" meta:resourcekey="WDeployPublishingAccountLocalize" />
+											</td>
+											<td class="NormalBold">
+												<asp:TextBox runat="server" ID="WDeployPublishingAccountTextBox" CssClass="NormalTextBox"
+													ValidationGroup="WDeployPublishingGroup" MaxLength="20" />
+												<asp:Literal runat="server" ID="WDeployPublishingAccountLiteral" Visible="false" />
+												<asp:RequiredFieldValidator ID="WDeployPublishingAccountRequiredFieldValidator" runat="server"
+													ErrorMessage="*" ValidationGroup="WDeployPublishingGroup" ControlToValidate="WDeployPublishingAccountTextBox" />
+											</td>
+										</tr>
+										<tr>
+											<td class="Normal">
+												<asp:Localize runat="server" meta:resourcekey="WDeployPublishingPasswordLocalize" />
+											</td>
+											<td>
+												<asp:TextBox runat="server" ID="WDeployPublishingPasswordTextBox" TextMode="Password"
+													CssClass="NormalTextBox" ValidationGroup="WDeployPublishingGroup" />
+												<asp:RequiredFieldValidator ID="WDeployPublishingPasswordRequiredFieldValidator"
+													runat="server" ErrorMessage="*" ValidationGroup="WDeployPublishingGroup" ControlToValidate="WDeployPublishingPasswordTextBox" />
+											</td>
+										</tr>
+										<tr>
+											<td class="Normal">
+												<asp:Localize runat="server" meta:resourcekey="WDeployPublishingConfirmPasswordLocalize" />
+											</td>
+											<td>
+												<asp:TextBox runat="server" ID="WDeployPublishingConfirmPasswordTextBox" TextMode="Password"
+													CssClass="NormalTextBox" ValidationGroup="WDeployPublishingGroup" />
+												<asp:RequiredFieldValidator ID="WDeployPublishingConfirmPasswordRequiredFieldValidator"
+													runat="server" ErrorMessage="*" ValidationGroup="WDeployPublishingGroup" ControlToValidate="WDeployPublishingConfirmPasswordTextBox" />
+												<asp:CompareValidator ID="WDeployPublishingConfirmPasswordTextBoxCompareValidator"
+													runat="server" meta:resourcekey="cvPasswordComparer" ControlToValidate="WDeployPublishingConfirmPasswordTextBox"
+													ControlToCompare="WDeployPublishingPasswordTextBox" Display="Dynamic" />
+											</td>
+										</tr>
+									</table>
+									<br />
+									<div>
+										<asp:Button runat="server" ID="WDeployEnabePublishingButton" meta:resourcekey="WDeployEnabePublishingButton"
+											CssClass="Button1" OnClick="WDeployEnabePublishingButton_Click" ValidationGroup="WDeployPublishingGroup" />&nbsp;
+										<asp:Button runat="server" ID="WDeployChangePublishingPasswButton" meta:resourcekey="WDeployChangePublishingPasswButton"
+											CssClass="Button1" OnClick="WDeployChangePublishingPasswButton_Click" ValidationGroup="WDeployPublishingGroup" />&nbsp;
+										<asp:Button runat="server" ID="WDeployDisablePublishingButton" meta:resourcekey="WDeployDisablePublishingButton"
+											CssClass="Button1" OnClick="WDeployDisablePublishingButton_Click" OnClientClick="return confirmationWebDeployPublishing();"
+											ValidationGroup="WDeployPublishingGroup" CausesValidation="false" />
+									</div>
+								</asp:PlaceHolder>
+								<asp:PlaceHolder runat="server" ID="PanelWDeployNotInstalled" Visible="false">Web Deploy
+									Remote Agent is not installed... </asp:PlaceHolder>
+							</div>
 						</asp:View>
 						<asp:View ID="tabMimes" runat="server">
 							<uc5:WebSitesMimeTypesControl ID="webSitesMimeTypesControl" runat="server" />

@@ -49,6 +49,7 @@ namespace WebsitePanel.Portal
             chkAddParkingPage.Checked = Utils.ParseBool(settings["AddParkingPage"], false);
             txtPageName.Text = settings["ParkingPageName"];
             txtPageContent.Text = settings["ParkingPageContent"];
+			PublishingProfileTextBox.Text = settings["PublishingProfile"];
 
             // default documents
             if (!String.IsNullOrEmpty(settings["DefaultDocuments"]))
@@ -100,6 +101,7 @@ namespace WebsitePanel.Portal
             settings["AddParkingPage"] = chkAddParkingPage.Checked.ToString();
             settings["ParkingPageName"] = txtPageName.Text;
             settings["ParkingPageContent"] = txtPageContent.Text;
+			settings["PublishingProfile"] = PublishingProfileTextBox.Text;
 
             // default documents
             settings["DefaultDocuments"] = String.Join(",", Utils.ParseDelimitedString(txtDefaultDocs.Text, '\n', '\r', ';', ',')); ;

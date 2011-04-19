@@ -60,6 +60,7 @@ using WebsitePanel.Providers.Web.Iis.Common;
 using WebsitePanel.Providers.Web.Iis;
 using Ionic.Zip;
 using WebsitePanel.Server.Utils;
+using WebsitePanel.Providers.Web.Delegation;
 
 namespace WebsitePanel.Providers.Web
 {
@@ -1126,6 +1127,8 @@ namespace WebsitePanel.Providers.Web
 			CheckEnableWritePermissions(site);
 			//
 			ReadWebManagementAccessDetails(site);
+			//
+			ReadWebDeployPublishingAccessDetails(site);
             //
             site.SecuredFoldersInstalled = IsSecuredFoldersInstalled(siteId);
 
@@ -1305,6 +1308,11 @@ namespace WebsitePanel.Providers.Web
 					// update iisDirObject
 					UpdateVirtualDirectory(site.SiteId, vdir);
 				}
+				// Enforce Web Deploy publishing settings if enabled to ensure we use correct settings all the time
+				if (site.WebDeploySitePublishingEnabled == true)
+				{
+					EnforceDelegationRulesRestrictions(site.Name, site.WebDeployPublishingAccount);
+				}
 			}
 
 			#region ColdFusion Virtual Directories
@@ -1363,6 +1371,12 @@ namespace WebsitePanel.Providers.Web
 				RevokeWebManagementAccess(siteId, site[WebSite.WmSvcAccountName]);
 			}
 			#endregion
+
+			// Disable Web Deploy publishing functionality and revoke access permissions if any
+			if (IsWebDeployInstalled() && site.WebDeploySitePublishingEnabled)
+			{
+				RevokeWebDeployPublishingAccess(site.SiteId, site.WebDeployPublishingAccount);
+			}
 
 			// Get non-qualified account name
 			string anonymousAccount = GetNonQualifiedAccountName(site.AnonymousUsername);
@@ -1452,6 +1466,8 @@ namespace WebsitePanel.Providers.Web
 			CheckEnableWritePermissions(webVirtualDirectory);
 			//
 			ReadWebManagementAccessDetails(webVirtualDirectory);
+			//
+			ReadWebDeployPublishingAccessDetails(webVirtualDirectory);
 			//
 			return webVirtualDirectory;
 		}
@@ -1747,6 +1763,79 @@ namespace WebsitePanel.Providers.Web
             return false;
 
         }
+
+		/// <summary>
+		/// Creates the specified account and grants it Web Publishing Access permissions
+		/// </summary>
+		/// <param name="siteName">Web site name to enable Web Publishing Access at</param>
+		/// <param name="accountName">User name to grant the access for</param>
+		/// <param name="accountPassword">User password</param>
+		public new void GrantWebDeployPublishingAccess(string siteName, string accountName, string accountPassword)
+		{
+			// Web Publishing Access feature requires FullControl permissions on the web site's wwwroot folder
+			GrantWebManagementAccessInternally(siteName, accountName, accountPassword, NTFSPermission.FullControl);
+			//
+			EnforceDelegationRulesRestrictions(siteName, accountName);
+		}
+
+		/// <summary>
+		/// Creates the specified account and grants it Web Publishing Access permissions
+		/// </summary>
+		/// <param name="siteName">Web site name to enable Web Publishing Access at</param>
+		/// <param name="accountName">User name to grant the access for</param>
+		/// <param name="accountPassword">User password</param>
+		public new void RevokeWebDeployPublishingAccess(string siteName, string accountName)
+		{
+			// Web Publishing Access feature requires FullControl permissions on the web site's wwwroot folder
+			RevokeWebManagementAccess(siteName, accountName);
+			//
+			RemoveDelegationRulesRestrictions(siteName, accountName);
+		}
+
+		private void RemoveDelegationRulesRestrictions(string siteName, string accountName)
+		{
+			var moduleService = new DelegationRulesModuleService();
+			// Adjust web publishing permissions to the user accordingly to deny some rules for shared app pools
+			var webSite = webObjectsSvc.GetWebSiteFromIIS(siteName);
+			//
+			var fqUsername = GetFullQualifiedAccountName(accountName);
+			// Instantiate application pool helper to retrieve the app pool mode web site is running in
+			WebAppPoolHelper aphl = new WebAppPoolHelper(ProviderSettings);
+			//
+			// Shared app pool is a subject restrictions to change ASP.NET version and recycle the pool,
+			// so we need to remove these restrictions
+			if (aphl.is_shared_pool(webSite.ApplicationPool) == true)
+			{
+				//
+				moduleService.RemoveUserFromRule("recycleApp", "{userScope}", fqUsername);
+				moduleService.RemoveUserFromRule("appPoolPipeline,appPoolNetFx", "{userScope}", fqUsername);
+			}
+		}
+
+		public void EnforceDelegationRulesRestrictions(string siteName, string accountName)
+		{
+			var moduleService = new DelegationRulesModuleService();
+			// Adjust web publishing permissions to the user accordingly to deny some rules for shared app pools
+			var webSite = webObjectsSvc.GetWebSiteFromIIS(siteName);
+			//
+			var fqUsername = GetFullQualifiedAccountName(accountName);
+			// Instantiate application pool helper to retrieve the app pool mode web site is running in
+			WebAppPoolHelper aphl = new WebAppPoolHelper(ProviderSettings);
+			// Shared app pool is a subject restrictions to change ASP.NET version and recycle the pool
+			if (aphl.is_shared_pool(webSite.ApplicationPool) == true)
+			{
+				//
+				moduleService.RestrictRuleToUser("recycleApp", "{userScope}", fqUsername);
+				moduleService.RestrictRuleToUser("appPoolPipeline,appPoolNetFx", "{userScope}", fqUsername);
+			}
+			// Dedicated app pool is not a subject for any restrictions
+			else
+			{
+				//
+				moduleService.AllowRuleToUser("recycleApp", "{userScope}", fqUsername);
+				moduleService.AllowRuleToUser("appPoolPipeline,appPoolNetFx", "{userScope}", fqUsername);
+			}
+		}
         
         private string GetHeliconApeInstallDir(string siteId)
         {
@@ -2895,7 +2984,227 @@ namespace WebsitePanel.Providers.Web
 					logging settings. Reason: {0}", ex.StackTrace));
 			}
 
+			// Setup Web Deploy publishing settings and rules
+			SetupWebDeployPublishingOnServer(messages);
+
 			return messages.ToArray();
+		}
+
+		public const string WDeployEnabled = "WDeployEnabled";
+		public const string WDeployRepair = "WDeployRepair";
+		public const string WDeployAppHostConfigWriter = "WDeployAppHostConfigWriter";
+		public const string WDeployAppPoolConfigEditor = "WDeployAppPoolConfigEditor";
+
+
+		private void SetupWebDeployPublishingOnServer(List<string> messages)
+		{
+			if (IsWebDeployInstalled() == false
+				|| String.IsNullOrEmpty(ProviderSettings[WDeployEnabled]))
+				return;
+			//
+			var enableFeature = Convert.ToBoolean(ProviderSettings[WDeployEnabled]);
+			var repairFeature = Convert.ToBoolean(ProviderSettings[WDeployRepair]);
+			//
+			var appHostConfigWriter = "WDeployConfigWriter";
+			var appHostConfigWriterPassword = Guid.NewGuid().ToString();
+			//
+			var appPoolConfigEditor = "WDeployAdmin";
+			var appPoolConfigEditorPassword = Guid.NewGuid().ToString();
+			//
+			var appHostConfigFilePath = FileUtils.EvaluateSystemVariables(@"%WINDIR%\system32\inetsrv\config\applicationHost.config");
+			//
+			#region Repair feature
+			if (repairFeature == true && enableFeature == true)
+			{
+				// Cleanup NTFS permissions
+				SecurityUtils.RemoveNtfsPermissions(appHostConfigFilePath, appHostConfigWriter, ServerSettings, UsersOU, GroupsOU);
+				// Remove applicationHost.config writer account
+				SecurityUtils.DeleteUser(appHostConfigWriter, ServerSettings, UsersOU);
+				// Remove local admin user to recycle app pools
+				SecurityUtils.DeleteUser(appPoolConfigEditor, ServerSettings, UsersOU);
+				// Remove delegation rules if any
+				var moduleService = new DelegationRulesModuleService();
+				//
+				moduleService.RemoveDelegationRule("contentPath,iisApp", "{userScope}");
+				moduleService.RemoveDelegationRule("dbFullSql", "Data Source=");
+				moduleService.RemoveDelegationRule("dbMySql", "Server=");
+				moduleService.RemoveDelegationRule("createApp", "{userScope}");
+				moduleService.RemoveDelegationRule("setAcl", "{userScope}");
+				moduleService.RemoveDelegationRule("recycleApp", "{userScope}");
+				moduleService.RemoveDelegationRule("appPoolPipeline,appPoolNetFx", "{userScope}");
+			}
+			#endregion
+
+			// Create applicationHost.config writer account
+			#region appHostConfigWriter account provisioning
+			if (enableFeature == true)
+			{
+				//
+				if (SecurityUtils.UserExists(appHostConfigWriter, ServerSettings, UsersOU) == false)
+				{
+					//
+					try
+					{
+						SecurityUtils.CreateUser(new SystemUser
+						{
+							Name = appHostConfigWriter,
+							FullName = appHostConfigWriter,
+							Password = appHostConfigWriterPassword,
+							PasswordCantChange = true,
+							PasswordNeverExpires = true,
+							MemberOf = new string[] { },
+							Description = "Web Deploy applicationHost.config writer account",
+						},
+							ServerSettings,
+							UsersOU,
+							GroupsOU);
+						// Grant appropriate NTFS permissions
+						SecurityUtils.GrantNtfsPermissions(appHostConfigFilePath, appHostConfigWriter, NTFSPermission.Modify, true, true, ServerSettings, UsersOU, GroupsOU);
+					}
+					catch (Exception ex)
+					{
+						var errorMessage = "Could not create applicationHost.config writer account";
+						//
+						Log.WriteError(errorMessage, ex);
+						//
+						messages.Add(errorMessage);
+					}
+				}
+			}
+			else
+			{
+				if (SecurityUtils.UserExists(appHostConfigWriter, ServerSettings, UsersOU) == true)
+				{
+					//
+					try
+					{
+						// Remove NTFS permissions
+						SecurityUtils.RemoveNtfsPermissions(appHostConfigFilePath, appHostConfigWriter, ServerSettings, UsersOU, GroupsOU);
+						// Remove writer account
+						SecurityUtils.DeleteUser(appHostConfigWriter, ServerSettings, UsersOU);
+					}
+					catch (Exception ex)
+					{
+						var errorMessage = "Could not remove applicationHost.config writer user account";
+						//
+						Log.WriteError(errorMessage, ex);
+						//
+						messages.Add(errorMessage);
+					}
+				}
+			}
+			#endregion
+
+			// Create local admin user to recycle app pools
+			#region appPoolConfigEditor account provisioning
+			if (enableFeature)
+			{
+				//
+				if (SecurityUtils.UserExists(appPoolConfigEditor, ServerSettings, UsersOU) == false)
+				{
+					//
+					try
+					{
+						SecurityUtils.CreateUser(new SystemUser
+						{
+							Name = appPoolConfigEditor,
+							FullName = appPoolConfigEditor,
+							Password = appPoolConfigEditorPassword,
+							PasswordCantChange = true,
+							PasswordNeverExpires = true,
+							MemberOf = new string[] { "Administrators" },
+							Description = "Web Deploy AppPool configuration editor account",
+						},
+							ServerSettings,
+							UsersOU,
+							GroupsOU);
+					}
+					catch (Exception ex)
+					{
+						var errorMessage = "Could not create application pool configuration editor account";
+						//
+						Log.WriteError(errorMessage, ex);
+						//
+						messages.Add(errorMessage);
+					}
+				}
+			}
+			else
+			{
+				if (SecurityUtils.UserExists(appPoolConfigEditor, ServerSettings, UsersOU) == true)
+				{
+					//
+					try
+					{
+						// Remove appPool config editor account
+						SecurityUtils.DeleteUser(appPoolConfigEditor, ServerSettings, UsersOU);
+					}
+					catch (Exception ex)
+					{
+						var errorMessage = "Could not remove applicationHost.config writer user account";
+						//
+						Log.WriteError(errorMessage, ex);
+						//
+						messages.Add(errorMessage);
+					}
+				}
+			}
+			#endregion
+
+			// Add delegation rules
+			#region Delegation rules provisioning
+			if (enableFeature)
+			{
+				var moduleService = new DelegationRulesModuleService();
+				//
+				if (moduleService.DelegationRuleExists("contentPath,iisApp", "{userScope}") == false)
+				{
+					moduleService.AddDelegationRule("contentPath,iisApp", "{userScope}", "PathPrefix", "CurrentUser", String.Empty, String.Empty);
+				}
+				//
+				if (moduleService.DelegationRuleExists("dbFullSql", "Data Source=") == false)
+				{
+					moduleService.AddDelegationRule("dbFullSql", "Data Source=", "ConnectionString", "CurrentUser", String.Empty, String.Empty);
+				}
+				//
+				if (moduleService.DelegationRuleExists("dbMySql", "Server=") == false)
+				{
+					moduleService.AddDelegationRule("dbMySql", "Server=", "ConnectionString", "CurrentUser", String.Empty, String.Empty);
+				}
+				//
+				if (moduleService.DelegationRuleExists("createApp", "{userScope}") == false)
+				{
+					moduleService.AddDelegationRule("createApp", "{userScope}", "PathPrefix", "SpecificUser", appHostConfigWriter, appHostConfigWriterPassword);
+				}
+				//
+				if (moduleService.DelegationRuleExists("setAcl", "{userScope}") == false)
+				{
+					moduleService.AddDelegationRule("setAcl", "{userScope}", "PathPrefix", "CurrentUser", String.Empty, String.Empty);
+				}
+				//
+				if (moduleService.DelegationRuleExists("recycleApp", "{userScope}") == false)
+				{
+					moduleService.AddDelegationRule("recycleApp", "{userScope}", "PathPrefix", "SpecificUser", appPoolConfigEditor, appPoolConfigEditorPassword);
+				}
+				//
+				if (moduleService.DelegationRuleExists("appPoolPipeline,appPoolNetFx", "{userScope}") == false)
+				{
+					moduleService.AddDelegationRule("appPoolPipeline,appPoolNetFx", "{userScope}", "PathPrefix", "SpecificUser", appHostConfigWriter, appHostConfigWriterPassword);
+				}
+			}
+			else
+			{
+				var moduleService = new DelegationRulesModuleService();
+				//
+				moduleService.RemoveDelegationRule("contentPath,iisApp", "{userScope}");
+				moduleService.RemoveDelegationRule("dbFullSql", "Data Source=");
+				moduleService.RemoveDelegationRule("dbMySql", "Server=");
+				moduleService.RemoveDelegationRule("createApp", "{userScope}");
+				moduleService.RemoveDelegationRule("setAcl", "{userScope}");
+				moduleService.RemoveDelegationRule("recycleApp", "{userScope}");
+				moduleService.RemoveDelegationRule("appPoolPipeline,appPoolNetFx", "{userScope}");
+			}
+			#endregion
 		}
 
 		public override ServiceProviderItemBandwidth[] GetServiceItemsBandwidth(ServiceProviderItem[] items, DateTime since)
@@ -3058,6 +3367,12 @@ namespace WebsitePanel.Providers.Web
 
 		public new void GrantWebManagementAccess(string siteName, string accountName, string accountPassword)
 		{
+			// Remote Management Access feature requires Modify permissions on the web site's wwwroot folder
+			GrantWebManagementAccessInternally(siteName, accountName, accountPassword, NTFSPermission.Modify);
+		}
+
+		private void GrantWebManagementAccessInternally(string siteName, string accountName, string accountPassword, NTFSPermission permissions)
+		{
 			// Preserve setting to restore it back
 			bool adEnabled = ServerSettings.ADEnabled;
 			// !!! Bypass AD for WMSVC as it requires full-qualified username to authenticate user
@@ -3110,13 +3425,17 @@ namespace WebsitePanel.Providers.Web
 			Log.WriteInfo("Site Content Path: {0};", contentPath);
 			//
 			if (IdentityCredentialsMode == "IISMNGR")
-				SecurityUtils.GrantNtfsPermissionsBySid(contentPath, SystemSID.LOCAL_SERVICE, NTFSPermission.Modify, true, true);
+			{
+				SecurityUtils.GrantNtfsPermissionsBySid(contentPath, SystemSID.LOCAL_SERVICE, permissions, true, true);
+			}
 			else
-				SecurityUtils.GrantNtfsPermissions(contentPath, accountName, NTFSPermission.Modify,
-					true, true, ServerSettings, String.Empty, String.Empty);
+			{
+				SecurityUtils.GrantNtfsPermissions(contentPath, accountName, permissions, true, true, ServerSettings, String.Empty, String.Empty);
+			}
 			// Restore setting back
 			ServerSettings.ADEnabled = adEnabled;
 		}
+		
 
 		public new void ChangeWebManagementAccessPassword(string accountName, string accountPassword)
 		{
@@ -3179,6 +3498,37 @@ namespace WebsitePanel.Providers.Web
 			}
 			// Restore setting back
 			ServerSettings.ADEnabled = adEnabled;
+		}
+
+		private void ReadWebDeployPublishingAccessDetails(WebVirtualDirectory iisObject)
+		{
+			iisObject.WebDeployPublishingAvailable = IsWebDeployInstalled() && IsWebManagementServiceInstalled();
+			// No way to find out Web Deploy Publishing Access password
+			//iisObject.
+		}
+
+		private bool IsWebDeployInstalled()
+		{
+			// TO-DO: Implement Web Deploy detection (x64/x86)
+			var isInstalled = false;
+			//
+			try
+			{
+				var msdeployRegKey = Registry.LocalMachine.OpenSubKey(@"SOFTWARE\Microsoft\IIS Extensions\MSDeploy\2");
+				//
+				var keyValue = msdeployRegKey.GetValue("Install");
+				// We have found the required key in the registry hive
+				if (keyValue != null && keyValue.Equals(1))
+				{
+					isInstalled = true;
+				}
+			}
+			catch (Exception ex)
+			{
+				Log.WriteError("Could not retrieve Web Deploy key from the registry", ex);
+			}
+			//
+			return isInstalled;
 		}
 
 		private bool? isWmSvcInstalled;

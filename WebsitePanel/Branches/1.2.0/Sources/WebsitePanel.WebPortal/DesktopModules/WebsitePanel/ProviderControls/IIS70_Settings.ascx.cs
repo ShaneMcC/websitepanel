@@ -47,6 +47,9 @@ namespace WebsitePanel.Portal.ProviderControls
 	{
 		private string FilteredAppIds;
 
+		public const string WDeployEnabled = "WDeployEnabled";
+		public const string WDeployRepair = "WDeployRepair";
+
 		protected void Page_Load(object sender, EventArgs e)
 		{
 		}
@@ -177,6 +180,18 @@ namespace WebsitePanel.Portal.ProviderControls
 			Utils.SelectListItem(ddlWmSvcCredentialsMode, settings["WmSvc.CredentialsMode"]);
 			//
 			FilteredAppIds = settings["GalleryAppsFilter"];
+			//
+			if (String.IsNullOrEmpty(settings[WDeployEnabled]) == false)
+			{
+				if (Convert.ToBoolean(settings[WDeployEnabled]) == true)
+				{
+					WDeployEnabledCheckBox.Checked = true;
+				}
+				else
+				{
+					WDeployDisabledCheckBox.Checked = true;
+				}
+			}
 		}
 
 		public void SaveSettings(StringDictionary settings)
@@ -227,6 +242,20 @@ namespace WebsitePanel.Portal.ProviderControls
 			ActiveDirectoryIntegration.SaveSettings(settings);
 
 			settings["GalleryAppsFilter"] = GetAppsCatalogFilter();
+
+			if (WDeployEnabledCheckBox.Checked)
+			{
+				settings[WDeployEnabled] = Boolean.TrueString;
+				//
+				if (WDeployRepairSettingCheckBox.Checked)
+				{
+					settings[WDeployRepair] = Boolean.TrueString;
+				}
+			}
+			else if (WDeployDisabledCheckBox.Checked)
+			{
+				settings[WDeployEnabled] = Boolean.FalseString;
+			}
 		}
 
         protected void DownladAndIstallApeLinkButton_Click(object sender, EventArgs e)

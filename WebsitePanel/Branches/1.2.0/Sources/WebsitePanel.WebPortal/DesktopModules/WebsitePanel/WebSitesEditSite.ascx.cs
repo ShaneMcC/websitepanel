@@ -43,6 +43,7 @@ using WebsitePanel.Providers;
 using WebsitePanel.Providers.Web;
 using WebsitePanel.Providers.Common;
 using WebsitePanel.Portal.Code.Helpers;
+using WebsitePanel.Providers.ResultObjects;
 
 namespace WebsitePanel.Portal
 {
@@ -61,10 +62,11 @@ namespace WebsitePanel.Portal
 			new Tab { Id = "extensions", ResourceKey = "Tab.Extensions", ViewId = "tabExtensions" },
 			new Tab { Id = "errors", ResourceKey = "Tab.CustomErrors", Quota = Quotas.WEB_ERRORS, ViewId = "tabErrors" },
 			new Tab { Id = "headers", ResourceKey = "Tab.CustomHeaders", Quota = Quotas.WEB_HEADERS, ViewId = "tabHeaders" },
+			new Tab { Id = "webpub", ResourceKey = "Tab.WebDeployPublishing", Quota = Quotas.WEB_REMOTEMANAGEMENT, ViewId = "tabWebDeployPublishing" },
 			new Tab { Id = "mime", ResourceKey = "Tab.MIMETypes", Quota = Quotas.WEB_MIME, ViewId = "tabMimes" },
 			new Tab { Id = "coldfusion", ResourceKey = "Tab.ColdFusion", Quota = Quotas.WEB_COLDFUSION, ViewId = "tabCF" },
 			new Tab { Id = "webman", ResourceKey = "Tab.WebManagement", Quota = Quotas.WEB_REMOTEMANAGEMENT, ViewId = "tabWebManagement" },
-			new Tab { Id = "SSL", ResourceKey = "Tab.SSL", Quota = Quotas.WEB_SSL, ViewId = "SSL" }
+			new Tab { Id = "SSL", ResourceKey = "Tab.SSL", Quota = Quotas.WEB_SSL, ViewId = "SSL" },
 		};
 
 		private int PackageId
@@ -250,9 +252,310 @@ namespace WebsitePanel.Portal
 			AutoSuggestWmSvcAccontName(site);
 			ToggleWmSvcConnectionHint(site);
 
+			// Web Deploy Publishing
+			ToggleWebDeployPublishingControls(site);
+			BindWebPublishingProfileDatabases();
+			BindWebPublishingProfileDatabaseUsers();
+			BindWebPublishingProfileFtpAccounts(site);
+
 			// bind tabs
 			BindTabs();
 		}
+
+		#region Web Deploy Publishing
+
+		protected void WDeployEnabePublishingButton_Click(object sender, EventArgs e)
+		{
+			if (!Page.IsValid)
+				return;
+			//
+			GrantWebDeployPublishingAccess(WDeployPublishingAccountTextBox.Text.Trim(), WDeployPublishingPasswordTextBox.Text);
+			//
+			BindWebSite();
+		}
+
+		protected void MyDatabaseList_SelectedIndexChanged(object sender, EventArgs e)
+		{
+			//
+			BindWebPublishingProfileDatabaseUsers();
+		}
+
+		private void GrantWebDeployPublishingAccess(string accountName, string accountPassword)
+		{
+			//
+			ResultObject result = ES.Services.WebServers.GrantWebDeployPublishingAccess(PanelRequest.ItemID, accountName, accountPassword);
+			//
+			if (!result.IsSuccess)
+			{
+				messageBox.ShowMessage(result, "WEB_PUB_ENABLE", "IIS7");
+				return;
+			}
+			//
+			messageBox.ShowSuccessMessage("WEB_PUB_ENABLE");
+		}
+
+		protected void WDeployChangePublishingPasswButton_Click(object sender, EventArgs e)
+		{
+			if (!Page.IsValid || WDeployPublishingPasswordTextBox.Text.Equals(PasswordControl.EMPTY_PASSWORD))
+				return;
+			//
+			ChangeWDeployAccountPassword(PanelRequest.ItemID, WDeployPublishingPasswordTextBox.Text);
+		}
+
+		private void ChangeWDeployAccountPassword(int siteItemId, string newAccountPassword)
+		{
+			try
+			{
+				//
+				var result = ES.Services.WebServers.ChangeWebDeployPublishingPassword(siteItemId, newAccountPassword);
+				//
+				if (result.IsSuccess == false)
+				{
+					messageBox.ShowErrorMessage("WPUB_PASSW_CHANGE");
+					return;
+				}
+				//
+				messageBox.ShowSuccessMessage("WPUB_PASSW_CHANGE");
+			}
+			catch (Exception ex)
+			{
+				messageBox.ShowErrorMessage("WPUB_PASSW_CHANGE", ex);
+			}
+		}
+
+		protected void WDeployDownloadPubProfileLink_Command(object sender, CommandEventArgs e)
+		{
+			DownloadWDeployPublishingProfile((string)e.CommandArgument);
+		}
+
+		private void DownloadWDeployPublishingProfile(string siteName)
+		{
+			// download file
+			Response.Clear();
+			Response.AddHeader("Content-Disposition", "attachment; filename=" + String.Format("{0}.publishsettings", siteName));
+			Response.ContentType = "application/octet-stream";
+
+			var result = default(BytesResult);
+
+			try
+			{
+				// read remote content
+				result = ES.Services.WebServers.GetWebDeployPublishingProfile(PanelRequest.ItemID);
+				//
+				if (result.IsSuccess == false)
+				{
+					messageBox.ShowErrorMessage("WDEPLOY_GET_PROFILE");
+					//
+					return;
+				}
+			}
+			catch (Exception ex)
+			{
+				messageBox.ShowErrorMessage("FILES_READ_FILE", ex);
+				return;
+			}
+
+			// write to stream
+			Response.BinaryWrite(result.Value);
+			//
+			Response.End();
+		}
+
+		protected void WDeployDisablePublishingButton_Click(object sender, EventArgs e)
+		{
+			DisableWebDeployPublishing();
+			//
+			BindWebSite();
+		}
+
+		private void DisableWebDeployPublishing()
+		{
+			try
+			{
+				ES.Services.WebServers.RevokeWebDeployPublishingAccess(PanelRequest.ItemID);
+				//
+				messageBox.ShowSuccessMessage("WEB_PUB_DISABLE");
+			}
+			catch (Exception ex)
+			{
+				messageBox.ShowErrorMessage("WEB_PUB_DISABLE", ex);
+			}
+		}
+
+		protected void PubProfileWizardOkButton_Click(object sender, EventArgs e)
+		{
+			if (!Page.IsValid)
+				return;
+			//
+			SaveWebDeployPublishingProfile();
+			//
+			BindWebSite();
+		}
+
+		private void SaveWebDeployPublishingProfile()
+		{
+			var ids = new List<int>();
+			// Add FTP account to profile
+			if (String.IsNullOrEmpty(MyFtpAccountList.SelectedValue) != true)
+			{
+				ids.Add(Convert.ToInt32(MyFtpAccountList.SelectedValue));
+			}
+			// Add database to profile
+			if (String.IsNullOrEmpty(MyDatabaseList.SelectedValue) != true)
+			{
+				ids.Add(Convert.ToInt32(MyDatabaseList.SelectedValue));
+			}
+			// Add database user to profile
+			if (String.IsNullOrEmpty(MyDatabaseUserList.SelectedValue) != true)
+			{
+				ids.Add(Convert.ToInt32(MyDatabaseUserList.SelectedValue));
+			}
+			//
+			var result = ES.Services.WebServers.SaveWebDeployPublishingProfile(PanelRequest.ItemID, ids.ToArray());
+			//
+			if (!result.IsSuccess)
+			{
+				messageBox.ShowMessage(result, "WPUB_PROFILE_SAVE", "IIS7");
+				return;
+			}
+			//
+			messageBox.ShowSuccessMessage("WPUB_PROFILE_SAVE");
+		}
+
+		private void DisableChildControlsOfType(Control ctl, params Type[] ctlTypes)
+		{
+			foreach (Control cc in ctl.Controls)
+			{
+				if (Array.Exists(ctlTypes, x =>
+				{
+					return cc.GetType().Equals(x);
+				}))
+				{
+					cc.Visible = false;
+				}
+				// Disable child controls recursively if any
+				if (cc.Controls.Count > 0)
+				{
+					DisableChildControlsOfType(cc, ctlTypes);
+				}
+			}
+		}
+
+		private void EnableControlsInBulk(params Control[] ctls)
+		{
+			foreach (var item in ctls)
+			{
+				item.Visible = true;
+			}
+		}
+
+		private void ToggleWebDeployPublishingControls(WebVirtualDirectory item)
+		{
+			// Disable all child controls
+			DisableChildControlsOfType(tabWebDeployPublishing, typeof(PlaceHolder), typeof(Button), typeof(TextBox), typeof(Literal));
+
+			// Cleanup password text boxes
+			WDeployPublishingPasswordTextBox.Text = WDeployPublishingPasswordTextBox.Attributes["value"] = String.Empty;
+			WDeployPublishingConfirmPasswordTextBox.Text = WDeployPublishingConfirmPasswordTextBox.Attributes["value"] = String.Empty;
+
+			// Step 1: Web Deploy feature is not installed on the server
+			if (item.WebDeployPublishingAvailable == false)
+			{
+				// Enable panels
+				EnableControlsInBulk(PanelWDeployNotInstalled);
+				//
+				return;
+			}
+
+			// Step 2: Web Deploy feature is available but not publishing enabled for the web site yet
+			if (item.WebDeploySitePublishingEnabled == false)
+			{
+				// Enable controls
+				EnableControlsInBulk(
+					PanelWDeploySitePublishingDisabled,
+					PanelWDeployPublishingCredentials,
+					WDeployEnabePublishingButton,
+					WDeployPublishingAccountTextBox,
+					WDeployPublishingPasswordTextBox,
+					WDeployPublishingConfirmPasswordTextBox,
+					WDeployPublishingAccountRequiredFieldValidator);
+				//
+				WDeployPublishingAccountRequiredFieldValidator.Enabled = true;
+				//
+				return;
+			}
+			// Step 3: Publishing has been enabled for the web site
+			if (item.WebDeploySitePublishingEnabled == true)
+			{
+				// Enable controls
+				EnableControlsInBulk(
+					PanelWDeployPublishingCredentials,
+					WDeployChangePublishingPasswButton,
+					WDeployDisablePublishingButton,
+					WDeployPublishingAccountLiteral,
+					WDeployPublishingPasswordTextBox,
+					WDeployPublishingConfirmPasswordTextBox);
+				// Disable user name validation
+				WDeployPublishingAccountRequiredFieldValidator.Enabled = false;
+				// Display plain-text publishing account name
+				WDeployPublishingAccountLiteral.Text = item.WebDeployPublishingAccount;
+				// Miscellaneous
+				// Enable empty publishing password for stylistic purposes
+				WDeployPublishingPasswordTextBox.Text = PasswordControl.EMPTY_PASSWORD;
+				WDeployPublishingPasswordTextBox.Attributes["value"] = PasswordControl.EMPTY_PASSWORD;
+				// Enable empty publishing password confirmation for stylistic purposes
+				WDeployPublishingConfirmPasswordTextBox.Text = PasswordControl.EMPTY_PASSWORD;
+				WDeployPublishingConfirmPasswordTextBox.Attributes["value"] = PasswordControl.EMPTY_PASSWORD;
+			}
+			// Step 4: Publishing has been enabled and publishing profile has been built
+			if (item.WebDeploySitePublishingEnabled == true)
+			{
+				// Enable controls
+				EnableControlsInBulk(PanelWDeployManagePublishingProfile);
+				// Save web site name as a command argument for the link
+				WDeployDownloadPubProfileLink.CommandArgument = item.Name;
+			}
+		}
+
+		private void BindWebPublishingProfileDatabases()
+		{
+			MyDatabaseList.DataSource = ES.Services.DatabaseServers.GetSqlDatabases(PanelSecurity.PackageId, null, false);
+			MyDatabaseList.DataBind();
+			//
+			MyDatabaseList.Items.Insert(0, new ListItem(GetLocalizedString("WebPublishing.ChooseDatabasePrompt"), String.Empty));
+		}
+
+		private void BindWebPublishingProfileDatabaseUsers()
+		{
+			//
+			if (String.IsNullOrEmpty(MyDatabaseList.SelectedValue) == false)
+			{
+				var dbItem = ES.Services.DatabaseServers.GetSqlDatabase(Convert.ToInt32(MyDatabaseList.SelectedValue));
+				//
+				var sqlUsers = ES.Services.DatabaseServers.GetSqlUsers(PanelSecurity.PackageId, dbItem.GroupName, false);
+				//
+				MyDatabaseUserList.DataSource = Array.FindAll(sqlUsers, x => Array.Exists(dbItem.Users, y => y.Equals(x.Name)));
+				MyDatabaseUserList.DataBind();
+			}
+			else
+			{
+				MyDatabaseUserList.Items.Clear();
+			}
+			//
+			MyDatabaseUserList.Items.Insert(0, new ListItem(GetLocalizedString("WebPublishing.ChooseDatabaseUserPrompt"), String.Empty));
+		}
+
+		private void BindWebPublishingProfileFtpAccounts(WebVirtualDirectory item)
+		{
+			var ftpAccounts = ES.Services.FtpServers.GetFtpAccounts(PanelSecurity.PackageId, false);
+			//
+			MyFtpAccountList.DataSource = Array.FindAll(ftpAccounts, x => x.Folder.Equals(item.ContentPath));
+			MyFtpAccountList.DataBind();
+			//
+			MyFtpAccountList.Items.Insert(0, new ListItem(GetLocalizedString("WebPublishing.ChooseFtpAccountPrompt"), String.Empty));
+		}
+
+		#endregion
 
 		#region WmSvc Management
 

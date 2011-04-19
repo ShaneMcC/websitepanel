@@ -2427,6 +2427,16 @@ namespace WebsitePanel.Providers.Web
 			throw new NotImplementedException();
 		}
 
+		public void GrantWebDeployPublishingAccess(string siteName, string accountName, string accountPassword)
+		{
+			throw new NotSupportedException();
+		}
+
+		public void RevokeWebDeployPublishingAccess(string siteName, string accountName)
+		{
+			throw new NotSupportedException();
+		}
+
 		public void DeleteHeliconApeGroup(string siteId, string groupName)
 		{
 			throw new NotImplementedException();

@@ -705,4 +705,28 @@
     </VisualStudio>
   </ProjectExtensions>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" />
+	<PropertyGroup>
+		<IncludeSetAclProviderOnDestination>False</IncludeSetAclProviderOnDestination>
+		<ExcludeFilesFromPackage>True</ExcludeFilesFromPackage>
+		<CopyAllFilesToSingleFolderForPackageDependsOn>
+			PreDeployWebsitePanelProjectBinaries;
+			$(CopyAllFilesToSingleFolderForPackageDependsOn);
+		</CopyAllFilesToSingleFolderForPackageDependsOn>
+	</PropertyGroup>
+	<ItemGroup>
+		<ExcludeFromPackageFiles Include="**\SiteSettings.config">
+			<FromTarget>Project</FromTarget>
+		</ExcludeFromPackageFiles>
+		<ExcludeFromPackageFiles Include="**\Web.config">
+			<FromTarget>Project</FromTarget>
+		</ExcludeFromPackageFiles>
+	</ItemGroup>
+	<Target Name="PreDeployWebsitePanelProjectBinaries">
+		<ItemGroup>
+			<_CustomFiles Include="$(TargetDir)\WebsitePanel.*" />
+			<FilesForPackagingFromProject Include="@(_CustomFiles)">
+				<DestinationRelativePath>bin\%(Filename)%(Extension)</DestinationRelativePath>
+			</FilesForPackagingFromProject>
+		</ItemGroup>
+	</Target>
 </Project>
