@@ -51,7 +51,7 @@ namespace WebsitePanel.Providers.Utils
             if (String.IsNullOrEmpty(str))
                 return str;
 
-            Regex re = new Regex("%(\\w+)%", RegexOptions.IgnoreCase);
+            Regex re = new Regex("%(.+)%", RegexOptions.IgnoreCase);
             return re.Replace(str, new MatchEvaluator(EvaluateSystemVariable));
         }
 
