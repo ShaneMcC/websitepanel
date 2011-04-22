@@ -1,8 +1,10 @@
 <Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
 	<Import Project="C:\Program Files (x86)\MSBuild\MSBuildCommunityTasks\MSBuild.Community.Tasks.Targets"/>
 	<PropertyGroup>
-		<Version>1.2.0.24</Version>
-		<ReleaseDate>2011-04-10</ReleaseDate>
+		<Version>1.2.0.0</Version>
+		<FileVersion>1.2.0.29</FileVersion>
+		<VersionLabel>1.2.0 Beta</VersionLabel>
+		<ReleaseDate>2011-04-22</ReleaseDate>
 		<BuildConfiguration>Release</BuildConfiguration>
 		<SourcesPath>https://websitepanel.svn.sourceforge.net/svnroot/websitepanel/WebsitePanel/Trunk</SourcesPath>
 		<RootFolder>C:\Projects\Sourceforge\WebsitePanel</RootFolder>
@@ -14,7 +16,7 @@
 		<BuildFolder>$(TrunkFolder)\Build\$(BuildConfiguration)</BuildFolder>
 		<DeployFolder>$(TrunkFolder)\Deploy\$(BuildConfiguration)</DeployFolder>
 
-		<PreviousBuildFolder>C:\Projects\Sourceforge\WebsitePanel\Releases\1.1.0\Build</PreviousBuildFolder>
+		<PreviousBuildFolder>C:\Projects\Sourceforge\WebsitePanel\Releases\1.1.2\Build\$(BuildConfiguration)</PreviousBuildFolder>
 
 
 		<DiffCmd>$(TrunkFolder)\Tools\Diff.exe</DiffCmd>
@@ -41,7 +43,14 @@
 
 	</PropertyGroup>
 
-	<Target Name="CompileSources">
+	<Target Name="GenerateBuildVersionFiles">
+		<AssemblyInfo CodeLanguage="CS" OutputFile="$(TrunkFolder)\Sources\VersionInfo.cs" AssemblyCompany="SMB SAAS Systems Inc." AssemblyCopyright="Copyright © 2011 SMB SAAS Systems Inc."
+				AssemblyVersion="$(Version)" AssemblyFileVersion="$(FileVersion)" AssemblyInformationalVersion="$(VersionLabel)" />
+		<AssemblyInfo CodeLanguage="VB" OutputFile="$(TrunkFolder)\Sources\VersionInfo.vb" AssemblyCompany="SMB SAAS Systems Inc." AssemblyCopyright="Copyright © 2011 SMB SAAS Systems Inc."
+				AssemblyVersion="$(Version)" AssemblyFileVersion="$(FileVersion)" AssemblyInformationalVersion="$(VersionLabel)" />
+	</Target>
+
+	<Target Name="CompileSources" DependsOnTargets="GenerateBuildVersionFiles">
 		<!-- WebsitePanel -->
 		<MSBuild Projects="$(TrunkFolder)\Sources\WebSitePanel.Server.sln;$(TrunkFolder)\Sources\WebsitePanel.EnterpriseServer.sln;$(TrunkFolder)\Sources\WebsitePanel.WebPortal.sln" Properties="Configuration=$(BuildConfiguration)" />
 
@@ -297,7 +306,7 @@
 		<Exec Command="$(DiffCmd) %22$(PreviousBuildFolder)\EnterpriseServer%22 %22$(EnterpriseServerInstall)%22  %22$(EnterpriseServerUpdate)%22 /ex:web.config"/>
 		<Copy SourceFiles="$(TrunkFolder)\Database\update_db.sql" DestinationFolder="$(EnterpriseServerUpdate)\Setup" />
 		<!-- Update variables in the file -->
-		<FileUpdate Files="$(EnterpriseServerUpdate)\Setup\update_db.sql" Regex="\${release.version}" ReplacementText="$(Version)" />
+		<FileUpdate Files="$(EnterpriseServerUpdate)\Setup\update_db.sql" Regex="\${release.version}" ReplacementText="$(FileVersion)" />
 		<FileUpdate Files="$(EnterpriseServerUpdate)\Setup\update_db.sql" Regex="\${release.date}" ReplacementText="$(ReleaseDate)" />
 	</Target>
 
@@ -322,7 +331,7 @@
 		<!-- Update variables in files -->
 		<FileUpdate Files="$(DatabaseFolder)\install_db.sql" Regex="\${install.database}" ReplacementText="$(DataBaseName)" />
 		<FileUpdate Files="$(DatabaseFolder)\update_db.sql" Regex="\${install.database}" ReplacementText="$(DataBaseName)" />
-		<FileUpdate Files="$(DatabaseFolder)\update_db.sql" Regex="\${release.version}" ReplacementText="$(Version)" />
+		<FileUpdate Files="$(DatabaseFolder)\update_db.sql" Regex="\${release.version}" ReplacementText="$(FileVersion)" />
 		<FileUpdate Files="$(DatabaseFolder)\update_db.sql" Regex="\${release.date}" ReplacementText="$(ReleaseDate)" />
 
 		<Exec Command="$(SqlCmd) -i $(DatabaseFolder)\install_db.sql" />
@@ -396,10 +405,10 @@
 			<StandaloneInstallFiles Include="$(StandaloneInstall)\**\*.*" />
 		</ItemGroup>
 
-		<Zip Files="@(PortalInstallFiles)" ZipFileName="$(DeployFolder)\WebsitePanel-Portal-$(Version).zip" WorkingDirectory="$(PortalInstall)" />
-		<Zip Files="@(EnterpriseServerInstallFiles)" ZipFileName="$(DeployFolder)\WebsitePanel-EnterpriseServer-$(Version).zip" WorkingDirectory="$(EnterpriseServerInstall)" />
-		<Zip Files="@(ServerInstallFiles)" ZipFileName="$(DeployFolder)\WebsitePanel-Server-$(Version).zip" WorkingDirectory="$(ServerInstall)" />
-		<Zip Files="@(StandaloneInstallFiles)" ZipFileName="$(DeployFolder)\WebsitePanel-StandaloneServerSetup-$(Version).zip" WorkingDirectory="$(StandaloneInstall)" />
+		<Zip Files="@(PortalInstallFiles)" ZipFileName="$(DeployFolder)\WebsitePanel-Portal-$(FileVersion).zip" WorkingDirectory="$(PortalInstall)" />
+		<Zip Files="@(EnterpriseServerInstallFiles)" ZipFileName="$(DeployFolder)\WebsitePanel-EnterpriseServer-$(FileVersion).zip" WorkingDirectory="$(EnterpriseServerInstall)" />
+		<Zip Files="@(ServerInstallFiles)" ZipFileName="$(DeployFolder)\WebsitePanel-Server-$(FileVersion).zip" WorkingDirectory="$(ServerInstall)" />
+		<Zip Files="@(StandaloneInstallFiles)" ZipFileName="$(DeployFolder)\WebsitePanel-StandaloneServerSetup-$(FileVersion).zip" WorkingDirectory="$(StandaloneInstall)" />
 
 
 		<!-- zip updates -->
@@ -409,14 +418,14 @@
 			<ServerUpdateFiles Include="$(ServerUpdate)\**\*.*" />
 		</ItemGroup>
 
-		<Zip Files="@(PortalUpdateFiles)" ZipFileName="$(DeployFolder)\WebsitePanel-Portal-$(Version)-Update.zip" WorkingDirectory="$(PortalUpdate)" />
-		<Zip Files="@(EnterpriseServerUpdateFiles)" ZipFileName="$(DeployFolder)\WebsitePanel-EnterpriseServer-$(Version)-Update.zip" WorkingDirectory="$(EnterpriseServerUpdate)" />
-		<Zip Files="@(ServerUpdateFiles)" ZipFileName="$(DeployFolder)\WebsitePanel-Server-$(Version)-Update.zip" WorkingDirectory="$(ServerUpdate)" />
+		<Zip Files="@(PortalUpdateFiles)" ZipFileName="$(DeployFolder)\WebsitePanel-Portal-$(FileVersion)-Update.zip" WorkingDirectory="$(PortalUpdate)" />
+		<Zip Files="@(EnterpriseServerUpdateFiles)" ZipFileName="$(DeployFolder)\WebsitePanel-EnterpriseServer-$(FileVersion)-Update.zip" WorkingDirectory="$(EnterpriseServerUpdate)" />
+		<Zip Files="@(ServerUpdateFiles)" ZipFileName="$(DeployFolder)\WebsitePanel-Server-$(FileVersion)-Update.zip" WorkingDirectory="$(ServerUpdate)" />
 
 		<!-- zip tools -->
-		<Zip Files="@(ImportCsvInstallFiles)" ZipFileName="$(ToolsFolder)\WebsitePanel-Import-CsvBulk-$(Version).zip" WorkingDirectory="$(ImportCsvInstall)" />
-		<Zip Files="@(ImportEnterpriseInstallFiles)" ZipFileName="$(ToolsFolder)\WebsitePanel-Import-Enterprise-$(Version).zip" WorkingDirectory="$(ImportEnterpriseInstall)" />
-		<Zip Files="@(AWStatsViewerInstallFiles)" ZipFileName="$(ToolsFolder)\WebsitePanel-AWStatsViewer-$(Version).zip" WorkingDirectory="$(AWStatsViewerInstall)" />
+		<Zip Files="@(ImportCsvInstallFiles)" ZipFileName="$(ToolsFolder)\WebsitePanel-Import-CsvBulk-$(FileVersion).zip" WorkingDirectory="$(ImportCsvInstall)" />
+		<Zip Files="@(ImportEnterpriseInstallFiles)" ZipFileName="$(ToolsFolder)\WebsitePanel-Import-Enterprise-$(FileVersion).zip" WorkingDirectory="$(ImportEnterpriseInstall)" />
+		<Zip Files="@(AWStatsViewerInstallFiles)" ZipFileName="$(ToolsFolder)\WebsitePanel-AWStatsViewer-$(FileVersion).zip" WorkingDirectory="$(AWStatsViewerInstall)" />
 	</Target>
 
 </Project>
