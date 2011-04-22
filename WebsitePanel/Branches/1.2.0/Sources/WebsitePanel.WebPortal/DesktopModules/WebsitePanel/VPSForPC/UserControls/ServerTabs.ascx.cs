@@ -111,7 +111,7 @@ namespace WebsitePanel.Portal.VPSForPC.UserControls
             refreshTimer.Enabled = false;
 
             // check if VPS created with error
-            bool createError = (vm.ProvisioningStatus == VirtualMachineProvisioningStatus.Error);
+            bool createError = ((vm.ProvisioningStatus == VirtualMachineProvisioningStatus.Error) || (vm.State == VMComputerSystemStateInfo.CreationFailed));
 
             // load package context
             PackageContext cntx = PackagesHelper.GetCachedPackageContext(PanelSecurity.PackageId);

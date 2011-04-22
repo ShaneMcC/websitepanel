@@ -247,10 +247,18 @@ namespace WebsitePanel.Portal.ProviderControls
 		private bool CheckServerAndSetState(object obj, VMForPCSettingsName control, string conn, string name)
 		{
 			bool temp = false;
+            try
+            {
 			temp = ES.Services.VPSPC.CheckServerState(control, conn, name, PanelRequest.ServiceId);
-
+            }
+            catch (Exception ex)
+            {
+                messageBoxError.ShowErrorMessage("Server Error", ex);
+            }
+            finally
+            {
 			((WebControl)obj).CssClass = temp ? "enabled" : "disabled";
-
+            }
 			return temp;
 		}
 	}

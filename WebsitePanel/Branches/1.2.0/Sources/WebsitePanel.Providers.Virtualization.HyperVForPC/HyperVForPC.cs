@@ -50,6 +50,73 @@ using System.ServiceModel.Description;
 
 namespace WebsitePanel.Providers.VirtualizationForPC
 {
+
+	public class WSPVirtualMachineManagementServiceClient : VirtualMachineManagementServiceClient, IDisposable
+	{
+		public WSPVirtualMachineManagementServiceClient()
+		{
+		}
+
+		public WSPVirtualMachineManagementServiceClient(string endpointConfigurationName) :
+			base(endpointConfigurationName)
+		{
+		}
+
+		public WSPVirtualMachineManagementServiceClient(string endpointConfigurationName, string remoteAddress) :
+			base(endpointConfigurationName, remoteAddress)
+		{
+		}
+
+		public WSPVirtualMachineManagementServiceClient(string endpointConfigurationName, System.ServiceModel.EndpointAddress remoteAddress) :
+			base(endpointConfigurationName, remoteAddress)
+		{
+		}
+
+		public WSPVirtualMachineManagementServiceClient(System.ServiceModel.Channels.Binding binding, System.ServiceModel.EndpointAddress remoteAddress) :
+			base(binding, remoteAddress)
+		{
+		}
+
+		public void Dispose()
+		{
+			if ((this.State == CommunicationState.Opened || this.State == CommunicationState.Opening))
+				this.Close();
+		}
+	}
+
+	public class WSPMonitoringServiceClient : MonitoringServiceClient, IDisposable
+	{
+		public WSPMonitoringServiceClient()
+		{
+		}
+
+		public WSPMonitoringServiceClient(string endpointConfigurationName) :
+			base(endpointConfigurationName)
+		{
+		}
+
+		public WSPMonitoringServiceClient(string endpointConfigurationName, string remoteAddress) :
+			base(endpointConfigurationName, remoteAddress)
+		{
+		}
+
+		public WSPMonitoringServiceClient(string endpointConfigurationName, System.ServiceModel.EndpointAddress remoteAddress) :
+			base(endpointConfigurationName, remoteAddress)
+		{
+		}
+
+		public WSPMonitoringServiceClient(System.ServiceModel.Channels.Binding binding, System.ServiceModel.EndpointAddress remoteAddress) :
+			base(binding, remoteAddress)
+		{
+		}
+
+		public void Dispose()
+		{
+			if ((this.State == CommunicationState.Opened || this.State == CommunicationState.Opening))
+				this.Close();
+		}
+	}
+
 	public class HyperVForPC : HostingServiceProviderBase, IVirtualizationServerForPC
 	{
 		#region Constants
@@ -289,7 +356,7 @@ namespace WebsitePanel.Providers.VirtualizationForPC
 			VMInfo vm = new VMInfo();
 			try
 			{
-				using (VirtualMachineManagementServiceClient client = GetVMMSClient())
+				using (WSPVirtualMachineManagementServiceClient client = GetVMMSClient())
 				{
 					VirtualMachineInfo vminfo = client.GetVirtualMachineByName(vmId);
 
@@ -463,7 +530,7 @@ namespace WebsitePanel.Providers.VirtualizationForPC
 			{
 				if (!HostinfoByVMName.ContainsKey(vmName))
 				{
-					using (VirtualMachineManagementServiceClient client = GetVMMSClient())
+					using (WSPVirtualMachineManagementServiceClient client = GetVMMSClient())
 					{
 						VirtualMachineInfo vminfo = client.GetVirtualMachineByName(vmName);
 						if (vminfo != null)
@@ -484,7 +551,7 @@ namespace WebsitePanel.Providers.VirtualizationForPC
 
 			if (hostInfo != null)
 			{
-				using (VirtualMachineManagementServiceClient client = GetVMMSClient())
+				using (WSPVirtualMachineManagementServiceClient client = GetVMMSClient())
 				{
 					try
 					{
@@ -524,7 +591,7 @@ namespace WebsitePanel.Providers.VirtualizationForPC
 			// Evaluate paths
 			try
 			{
-				using (VirtualMachineManagementServiceClient client = GetVMMSClient())
+				using (WSPVirtualMachineManagementServiceClient client = GetVMMSClient())
 				{
 					TemplateInfo selTemplate = client.GetTemplateById(vm.TemplateId);
 
@@ -571,7 +638,6 @@ namespace WebsitePanel.Providers.VirtualizationForPC
 						selTemplate.VirtualDVDDrives = null;
 					}
 
-					//TODO Разобраться с конфигурацией сети
 					try
 					{
 						GuestOSProfileInfo gos = new GuestOSProfileInfo();
@@ -627,14 +693,28 @@ namespace WebsitePanel.Providers.VirtualizationForPC
 
 						if (vmWait.Status != SVMMService.VMComputerSystemStateInfo.CreationFailed)
 						{
+							if ((vmWait.Status != SVMMService.VMComputerSystemStateInfo.PowerOff)
+							 && (vmWait.Status != SVMMService.VMComputerSystemStateInfo.Stored))
+							{
+								client.ShutdownVirtualMachine(vmWait.Id);
+
+								while (vmWait.Status != SVMMService.VMComputerSystemStateInfo.Stored
+									&& vmWait.Status != SVMMService.VMComputerSystemStateInfo.PowerOff
+									&& vmWait.Status != SVMMService.VMComputerSystemStateInfo.UpdateFailed)
+								{
+									System.Threading.Thread.Sleep(5000);
+									vmWait = client.GetVirtualMachineByName(vmWait.Name);
+								}
+
+							}
+
 							ConfigureCreatedVMNetworkAdapters(vm);
 						}
 					}
 					catch (Exception ex)
 					{
 						vm.ProvisioningStatus = VirtualMachineProvisioningStatus.Error;
-						//
-						Log.WriteError(ex);
+						throw;
 					}
 				}
 			}
@@ -660,7 +740,7 @@ namespace WebsitePanel.Providers.VirtualizationForPC
 			{
 				steps.AppendLine("Start Connect to ScVMM (new VirtualMachineManagementServiceClient)");
 				//
-				using (VirtualMachineManagementServiceClient client = GetVMMSClient())
+				using (WSPVirtualMachineManagementServiceClient client = GetVMMSClient())
 				{
 					steps.AppendLine("Connected to ScVMM");
 					//
@@ -840,7 +920,7 @@ namespace WebsitePanel.Providers.VirtualizationForPC
 			try
 			{
 				steps.AppendLine("Start Connect to ScVNMM (new VirtualMachineManagementServiceClient)");
-				using (VirtualMachineManagementServiceClient client = GetVMMSClient())
+				using (WSPVirtualMachineManagementServiceClient client = GetVMMSClient())
 				{
 					steps.AppendLine("Connected to ScVNMM");
 					//
@@ -908,7 +988,7 @@ namespace WebsitePanel.Providers.VirtualizationForPC
 		{
 			string vmId = vm.Name;
 
-			using (VirtualMachineManagementServiceClient client = GetVMMSClient())
+			using (WSPVirtualMachineManagementServiceClient client = GetVMMSClient())
 			{
 
 				VirtualMachineInfo vmi = client.GetVirtualMachineByName(vm.Name);
@@ -967,7 +1047,7 @@ namespace WebsitePanel.Providers.VirtualizationForPC
 				{
 					// add private adapter
 					//AddNetworkAdapter(objVM, vm.PrivateSwitchId, vm.Name, vm.PrivateNicMacAddress, PRIVATE_NETWORK_ADAPTER_NAME, vm.LegacyNetworkAdapter);
-				} 
+				}
 				#endregion
 			}
 
@@ -995,12 +1075,14 @@ namespace WebsitePanel.Providers.VirtualizationForPC
 
 		public void ConfigureCreatedVMNetworkAdapters(VMInfo vmInfo)
 		{
-			using (VirtualMachineManagementServiceClient client = GetVMMSClient())
+			using (WSPVirtualMachineManagementServiceClient client = GetVMMSClient())
 			{
 				VirtualMachineInfo vm = client.GetVirtualMachineByName(vmInfo.Name);
-				// Shut down a VM before configuring network adapters...
-				if (vm.Status != SVMMService.VMComputerSystemStateInfo.PowerOff)
-					client.ShutdownVirtualMachine(vmInfo.VmGuid);
+
+				if (vm.Status != SVMMService.VMComputerSystemStateInfo.PowerOff && vm.Status != SVMMService.VMComputerSystemStateInfo.Stored)
+				{
+					throw new ApplicationException("Virtual machine should has status PowerOff to configure network adapters");
+				}
 				// Remove exists Network adapters
 				VirtualNetworkAdapterInfo[] existsNetworkAdapters = vm.VirtualNetworkAdapters;
 				foreach (VirtualNetworkAdapterInfo adapter in existsNetworkAdapters)
@@ -1040,14 +1122,12 @@ namespace WebsitePanel.Providers.VirtualizationForPC
 						new Guid(vmInfo.CurrentTaskId)
 						);
 				}
-				// Start VM after the changes have been completed
-				client.StartVirtualMachine(vmInfo.VmGuid);
 			}
 		}
 
 		public Virtualization.VirtualNetworkInfo[] GetVirtualNetworkByHostName(string hostName)
 		{
-			using (VirtualMachineManagementServiceClient client = GetVMMSClient())
+			using (WSPVirtualMachineManagementServiceClient client = GetVMMSClient())
 			{
 				HostInfo host = client.GetHostByName(hostName);
 				return GetVirtualNetworkByHostInfo(host);
@@ -1059,32 +1139,39 @@ namespace WebsitePanel.Providers.VirtualizationForPC
 		{
 			List<Virtualization.VirtualNetworkInfo> result = new List<Virtualization.VirtualNetworkInfo>();
 
-			using (VirtualMachineManagementServiceClient client = GetVMMSClient())
+			try
 			{
-				VirtualizationForPC.SVMMService.VirtualNetworkInfo[] networks = client.GetVirtualNetworkByHost(hostInfo);
-				foreach (var item in networks)
+				using (WSPVirtualMachineManagementServiceClient client = GetVMMSClient())
 				{
-					result.Add(
-						new Virtualization.VirtualNetworkInfo
-						{
-							BoundToVMHost = item.BoundToVMHost,
-							DefaultGatewayAddress = item.DefaultGatewayAddress,
-							Description = item.Description,
-							DNSServers = item.DNSServers,
-							EnablingIPAddress = item.EnablingIPAddress,
-							HighlyAvailable = item.HighlyAvailable,
-							HostBoundVlanId = item.HostBoundVlanId,
-							Id = item.Id,
-							Name = item.Name,
-							NetworkAddress = item.NetworkAddress,
-							NetworkMask = item.NetworkMask,
-							Tag = item.Tag,
-							VMHost = item.VMHost.ComputerName,
-							VMHostId = item.VMHostId,
-							WINServers = item.WINServers
-						});
+					VirtualizationForPC.SVMMService.VirtualNetworkInfo[] networks = client.GetVirtualNetworkByHost(hostInfo);
+					foreach (var item in networks)
+					{
+						result.Add(
+							new Virtualization.VirtualNetworkInfo
+							{
+								BoundToVMHost = item.BoundToVMHost,
+								DefaultGatewayAddress = item.DefaultGatewayAddress,
+								Description = item.Description,
+								DNSServers = item.DNSServers,
+								EnablingIPAddress = item.EnablingIPAddress,
+								HighlyAvailable = item.HighlyAvailable,
+								HostBoundVlanId = item.HostBoundVlanId,
+								Id = item.Id,
+								Name = item.Name,
+								NetworkAddress = item.NetworkAddress,
+								NetworkMask = item.NetworkMask,
+								Tag = item.Tag,
+								VMHost = item.VMHost.ComputerName,
+								VMHostId = item.VMHostId,
+								WINServers = item.WINServers
+							});
+					}
 				}
 			}
+			catch (Exception ex)
+			{
+			}
+
 			return result.ToArray();
 
 		}
@@ -1240,7 +1327,7 @@ namespace WebsitePanel.Providers.VirtualizationForPC
 
 			try
 			{
-				using (VirtualMachineManagementServiceClient client = GetVMMSClient())
+				using (WSPVirtualMachineManagementServiceClient client = GetVMMSClient())
 				{
 
 					VirtualMachineInfo vm = client.GetVirtualMachineByName(vmId);
@@ -1248,39 +1335,39 @@ namespace WebsitePanel.Providers.VirtualizationForPC
 					switch (newState)
 					{
 						case VirtualMachineRequestedState.Start:
-						{
-							client.StartVirtualMachine(vm.Id);
-							ret.Job.TargetState = Virtualization.VMComputerSystemStateInfo.Running;
-							break;
-						}
+							{
+								client.StartVirtualMachine(vm.Id);
+								ret.Job.TargetState = Virtualization.VMComputerSystemStateInfo.Running;
+								break;
+							}
 						case VirtualMachineRequestedState.Resume:
-						{
-							client.ResumeVirtualMachine(vm.Id);
-							ret.Job.TargetState = Virtualization.VMComputerSystemStateInfo.Running;
-							break;
-						}
+							{
+								client.ResumeVirtualMachine(vm.Id);
+								ret.Job.TargetState = Virtualization.VMComputerSystemStateInfo.Running;
+								break;
+							}
 						case VirtualMachineRequestedState.Pause:
-						{
-							client.PauseVirtualMachine(vm.Id);
-							ret.Job.TargetState = Virtualization.VMComputerSystemStateInfo.Paused;
-							break;
-						}
+							{
+								client.PauseVirtualMachine(vm.Id);
+								ret.Job.TargetState = Virtualization.VMComputerSystemStateInfo.Paused;
+								break;
+							}
 						case VirtualMachineRequestedState.ShutDown:
-						{
-							client.ShutdownVirtualMachine(vm.Id);
-							ret.Job.TargetState = Virtualization.VMComputerSystemStateInfo.Stored;
-							break;
-						}
+							{
+								client.ShutdownVirtualMachine(vm.Id);
+								ret.Job.TargetState = Virtualization.VMComputerSystemStateInfo.Stored;
+								break;
+							}
 						case VirtualMachineRequestedState.TurnOff:
-						{
-							client.StopVirtualMachine(vm.Id);
-							ret.Job.TargetState = Virtualization.VMComputerSystemStateInfo.PowerOff;
-							break;
-						}
+							{
+								client.StopVirtualMachine(vm.Id);
+								ret.Job.TargetState = Virtualization.VMComputerSystemStateInfo.PowerOff;
+								break;
+							}
 						default:
-						{
-							break;
-						}
+							{
+								break;
+							}
 					}
 
 					ret.Job.JobState = ConcreteJobState.Running;
@@ -1305,7 +1392,7 @@ namespace WebsitePanel.Providers.VirtualizationForPC
 			ReturnCode ret = ReturnCode.JobStarted;
 			try
 			{
-				using (VirtualMachineManagementServiceClient client = GetVMMSClient())
+				using (WSPVirtualMachineManagementServiceClient client = GetVMMSClient())
 				{
 
 					VirtualMachineInfo vm = client.GetVirtualMachineByName(vmId);
@@ -1389,7 +1476,7 @@ namespace WebsitePanel.Providers.VirtualizationForPC
 				// delete network adapters and ports
 				try
 				{
-					using (VirtualMachineManagementServiceClient client = GetVMMSClient())
+					using (WSPVirtualMachineManagementServiceClient client = GetVMMSClient())
 					{
 
 						if (vm.State == WebsitePanel.Providers.Virtualization.VMComputerSystemStateInfo.PowerOff)
@@ -1425,7 +1512,7 @@ namespace WebsitePanel.Providers.VirtualizationForPC
 
 		private void DeleteNetworkAdapters(Guid objVM)
 		{
-			using (VirtualMachineManagementServiceClient client = GetVMMSClient())
+			using (WSPVirtualMachineManagementServiceClient client = GetVMMSClient())
 			{
 				VirtualNetworkAdapterInfo[] adapters = client.GetVirtualNetworkAdaptersByVM(objVM);
 
@@ -1441,7 +1528,7 @@ namespace WebsitePanel.Providers.VirtualizationForPC
 
 		private void DeleteNetworkAdapter(VirtualNetworkAdapterInfo objVM, bool runAsunc)
 		{
-			using (VirtualMachineManagementServiceClient client = GetVMMSClient())
+			using (WSPVirtualMachineManagementServiceClient client = GetVMMSClient())
 			{
 				client.RemoveVirtualNetworkAdapter(objVM, runAsunc, null);
 			}
@@ -1473,41 +1560,6 @@ namespace WebsitePanel.Providers.VirtualizationForPC
 			// invoke method
 			objNetworkSvc.InvokeMethod("DeleteSwitchPort", inParams, null);
 		}
-
-		//public JobResult ExportVirtualMachine(string vmId, string exportPath)
-		//{
-		//    // load virtual machine object
-		//    ManagementObject objVm = GetVirtualMachineObject(vmId);
-
-		//    // check state
-		//    VMInfo vm = GetVirtualMachine(vmId);
-
-		//    // The virtual computer system must be in the powered off or saved state prior to calling this method.
-		//    if (vm.State == WebsitePanel.Providers.Virtualization.VMComputerSystemStateInfo.PowerOff
-		//        && vm.State == WebsitePanel.Providers.Virtualization.VMComputerSystemStateInfo.CreationFailed
-		//        && vm.State == WebsitePanel.Providers.Virtualization.VMComputerSystemStateInfo.CustomizationFailed)
-		//    {
-		//        // export machine
-
-		//        VirtualMachineManagementServiceClient client = new VirtualMachineManagementServiceClient();
-
-		//        ManagementObject objVmsvc = GetVirtualSystemManagementService();
-
-		//        // get method
-		//        ManagementBaseObject inParams = objVmsvc.GetMethodParameters("ExportVirtualSystem");
-		//        inParams["ComputerSystem"] = objVm;
-		//        inParams["CopyVmState"] = true;
-		//        inParams["ExportDirectory"] = FileUtils.EvaluateSystemVariables(exportPath);
-
-		//        // invoke method
-		//        ManagementBaseObject outParams = objVmsvc.InvokeMethod("ExportVirtualSystem", inParams, null);
-		//        return CreateJobResultFromWmiMethodResults(outParams);
-		//    }
-		//    else
-		//    {
-		//        throw new Exception("The virtual computer system must be in the powered off or saved state prior to calling Export method.");
-		//    }
-		//}
 		#endregion
 
 		#region Snapshots
@@ -1519,7 +1571,7 @@ namespace WebsitePanel.Providers.VirtualizationForPC
 
 			try
 			{
-				using (VirtualMachineManagementServiceClient client = GetVMMSClient())
+				using (WSPVirtualMachineManagementServiceClient client = GetVMMSClient())
 				{
 					VMCheckpointInfo[] chkPtnList = client.GetVirtualMachineByName(vmId).VMCheckpoints;
 
@@ -1563,7 +1615,7 @@ namespace WebsitePanel.Providers.VirtualizationForPC
 
 			try
 			{
-				using (VirtualMachineManagementServiceClient client = GetVMMSClient())
+				using (WSPVirtualMachineManagementServiceClient client = GetVMMSClient())
 				{
 					ret.Job = new ConcreteJob();
 					ret.Job.Id = vmId;
@@ -1612,10 +1664,10 @@ namespace WebsitePanel.Providers.VirtualizationForPC
 		public JobResult ApplySnapshot(string vmId, string snapshotId)
 		{
 			JobResult ret = new JobResult();
-
+			bool error = false;
 			try
 			{
-				using (VirtualMachineManagementServiceClient client = GetVMMSClient())
+				using (WSPVirtualMachineManagementServiceClient client = GetVMMSClient())
 				{
 					ret.Job = new ConcreteJob();
 					ret.Job.Id = vmId;
@@ -1624,18 +1676,23 @@ namespace WebsitePanel.Providers.VirtualizationForPC
 
 					client.RestoreVirtualMachineCheckpoint(snapshotId);
 				}
-				//
-				ret.ReturnValue = ReturnCode.OK;
 			}
-			catch (TimeoutException timeoutEx)
+			catch (TimeoutException ext)
 			{
+				error = true;
 				ret.ReturnValue = ReturnCode.JobStarted;
 			}
 			catch (Exception ex)
 			{
+				error = true;
 				ret.Job.ErrorDescription = ex.Message;
 				ret.Job.JobState = ConcreteJobState.Exception;
 				ret.ReturnValue = ReturnCode.Failed;
+			}
+
+			if (!error)
+			{
+				ret.ReturnValue = ReturnCode.OK;
 			}
 
 			return ret;
@@ -1647,7 +1704,7 @@ namespace WebsitePanel.Providers.VirtualizationForPC
 
 			try
 			{
-				using (VirtualMachineManagementServiceClient client = GetVMMSClient())
+				using (WSPVirtualMachineManagementServiceClient client = GetVMMSClient())
 				{
 					ret.Job = new ConcreteJob();
 					ret.Job.Id = vmId;
@@ -1690,7 +1747,7 @@ namespace WebsitePanel.Providers.VirtualizationForPC
 		{
 			//            ManagementBaseObject objSummary = GetSnapshotSummaryInformation(snapshotId, (SummaryInformationRequest)size);
 
-			using (VirtualMachineManagementServiceClient client = GetVMMSClient())
+			using (WSPVirtualMachineManagementServiceClient client = GetVMMSClient())
 			{
 
 				VirtualMachineInfo vminfo = client.GetVirtualMachineByName(snapshotId);
@@ -1964,7 +2021,7 @@ namespace WebsitePanel.Providers.VirtualizationForPC
 		{
 			List<LibraryItem> items = new List<LibraryItem>();
 
-			using (VirtualMachineManagementServiceClient client = GetVMMSClient())
+			using (WSPVirtualMachineManagementServiceClient client = GetVMMSClient())
 			{
 				TemplateInfo[] ti = client.GetTemplates();
 
@@ -1991,9 +2048,20 @@ namespace WebsitePanel.Providers.VirtualizationForPC
 		{
 			List<LibraryItem> items = new List<LibraryItem>();
 
-			using (VirtualMachineManagementServiceClient client = GetVMMSClient())
+			using (WSPVirtualMachineManagementServiceClient client = GetVMMSClient())
 			{
+
+				if (client.State != CommunicationState.Opened)
+				{
+					client.Open();
+				}
+
 				HostClusterInfo[] ci = client.GetHostClusters();
+
+				if (ci == null || ci.Length == 0)
+				{
+					throw new Exception("Clusters is not found.");
+				}
 
 				for (int i = 0; i < ci.Length; i++)
 				{
@@ -2014,7 +2082,10 @@ namespace WebsitePanel.Providers.VirtualizationForPC
 
 					items.Add(newItem);
 				}
+
+				client.Close();
 			}
+
 			return items.ToArray();
 		}
 
@@ -2022,9 +2093,28 @@ namespace WebsitePanel.Providers.VirtualizationForPC
 		{
 			List<LibraryItem> items = new List<LibraryItem>();
 
-			using (VirtualMachineManagementServiceClient client = GetVMMSClient())
+			using (WSPVirtualMachineManagementServiceClient client = GetVMMSClient())
 			{
-				HostInfo[] ti = client.GetHosts();
+				if (client.State != CommunicationState.Opened)
+				{
+					client.Open();
+				}
+
+				HostInfo[] ti = null;
+
+				try
+				{
+					ti = client.GetHosts();
+				}
+				catch (Exception ex)
+				{
+					throw new Exception("GetHost Failed", ex);
+				}
+
+				if (ti == null || ti.Length == 0)
+				{
+					throw new Exception("Hosts is not found.");
+				}
 
 				for (int i = 0; i < ti.Length; i++)
 				{
@@ -2046,7 +2136,6 @@ namespace WebsitePanel.Providers.VirtualizationForPC
 			}
 			return items.ToArray();
 		}
-
 
 		private string ConvertToUNC(string path)
 		{
@@ -2667,7 +2756,7 @@ exit", Convert.ToInt32(objDisk["Index"])));
 		{
 			int ret = 0;
 
-			using (VirtualMachineManagementServiceClient client = GetVMMSClient())
+			using (WSPVirtualMachineManagementServiceClient client = GetVMMSClient())
 			{
 				TemplateInfo selTemplate = client.GetTemplateById(new Guid(templateId));
 				ret = selTemplate.CPUMax;
@@ -2959,7 +3048,7 @@ exit", Convert.ToInt32(objDisk["Index"])));
 
 		private VirtualMachine CreateVirtualMachineFromWmiObject(ManagementObject objVm)
 		{
-			using (VirtualMachineManagementServiceClient client = GetVMMSClient())
+			using (WSPVirtualMachineManagementServiceClient client = GetVMMSClient())
 			{
 
 				if (objVm == null || objVm.Properties.Count == 0)
@@ -3330,40 +3419,37 @@ exit", Convert.ToInt32(objDisk["Index"])));
 				switch (control)
 				{
 					case VMForPCSettingsName.SCVMMServer:
-					{
-						if (!String.IsNullOrWhiteSpace(connString)
-							&& !String.IsNullOrWhiteSpace(connName))
 						{
-							EndpointAddress endPointAddress = new EndpointAddress(new Uri(connString)
-												, EndpointIdentity.CreateUpnIdentity(connName));
-
-							using (VirtualMachineManagementServiceClient check = new VirtualMachineManagementServiceClient(new WSHttpBinding("WSHttpBinding_IVirtualMachineManagementService"), endPointAddress))
+							if (!String.IsNullOrWhiteSpace(connString)
+								&& !String.IsNullOrWhiteSpace(connName))
 							{
-								check.Open();
-								ret = true;
-								check.Close();
+								EndpointAddress endPointAddress = GetEndPointAddress(connString, connName);
 
+								using (VirtualMachineManagementServiceClient check = new VirtualMachineManagementServiceClient(new WSHttpBinding("WSHttpBinding_IVirtualMachineManagementService"), endPointAddress))
+								{
+									check.Open();
+									ret = true;
+									check.Close();
+								}
 							}
+							break;
 						}
-						break;
-					}
 					case VMForPCSettingsName.SCOMServer:
-					{
-						if (!String.IsNullOrWhiteSpace(connString)
-							&& !String.IsNullOrWhiteSpace(connName))
 						{
-							EndpointAddress endPointAddress = new EndpointAddress(new Uri(connString)
-												, EndpointIdentity.CreateUpnIdentity(connName));
-
-							using (MonitoringServiceClient checkMonitoring = new MonitoringServiceClient(new WSHttpBinding("WSHttpBinding_IMonitoringService"), endPointAddress))
+							if (!String.IsNullOrWhiteSpace(connString)
+								&& !String.IsNullOrWhiteSpace(connName))
 							{
-								checkMonitoring.Open();
-								ret = true;
-								checkMonitoring.Close();
+								EndpointAddress endPointAddress = GetEndPointAddress(connString, connName);
+
+								using (MonitoringServiceClient checkMonitoring = new MonitoringServiceClient(new WSHttpBinding("WSHttpBinding_IMonitoringService"), endPointAddress))
+								{
+									checkMonitoring.Open();
+									ret = true;
+									checkMonitoring.Close();
+								}
 							}
+							break;
 						}
-						break;
-					}
 				}
 			}
 			catch (Exception ex)
@@ -3390,12 +3476,12 @@ exit", Convert.ToInt32(objDisk["Index"])));
 		public List<MonitoredObjectEvent> GetDeviceEvents(string serviceName, string displayName)
 		{
 			List<MonitoredObjectEvent> monitoredObjectEventCollection = new List<MonitoredObjectEvent>();
-			using (VirtualMachineManagementServiceClient context = GetVMMSClient())
+			using (WSPVirtualMachineManagementServiceClient context = GetVMMSClient())
 			{
 				VirtualMachineInfo vmi = context.GetVirtualMachineByName(displayName);
 				if (vmi != null)
 				{
-					using (MonitoringServiceClient client = GetMonitoringServiceClient())
+					using (WSPMonitoringServiceClient client = GetMonitoringServiceClient())
 					{
 						MonitoredObject monitoringObject = client.GetMonitoredObjectByDisplayName(vmi.HostName, vmi.ComputerName);
 						foreach (var item in monitoringObject.Events)
@@ -3421,12 +3507,12 @@ exit", Convert.ToInt32(objDisk["Index"])));
 		public List<MonitoredObjectAlert> GetMonitoringAlerts(string serviceName, string virtualMachineName)
 		{
 			List<MonitoredObjectAlert> result = new List<MonitoredObjectAlert>();
-			using (VirtualMachineManagementServiceClient context = GetVMMSClient())
+			using (WSPVirtualMachineManagementServiceClient context = GetVMMSClient())
 			{
 				VirtualMachineInfo vmi = context.GetVirtualMachineByName(virtualMachineName);
 				if (vmi != null)
 				{
-					using (MonitoringServiceClient client = GetMonitoringServiceClient())
+					using (WSPMonitoringServiceClient client = GetMonitoringServiceClient())
 					{
 						MonitoredObject mo = client.GetMonitoredObjectByDisplayName(vmi.HostName, vmi.ComputerName);
 
@@ -3467,65 +3553,59 @@ exit", Convert.ToInt32(objDisk["Index"])));
 
 			//return ret;
 
-			try
+
+			using (WSPMonitoringServiceClient client = GetMonitoringServiceClient())
 			{
-				using (MonitoringServiceClient client = GetMonitoringServiceClient())
+				client.Open();
+
+				PerformanceData[] pdOneVM = null;
+
+				switch (perf)
 				{
-					client.Open();
+					case PerformanceType.Processor:
+						pdOneVM = client.GetSingleVMHyperVCPUCounters(MonitoringServerNameSettings, VmName);
+						break;
+					case PerformanceType.Network:
+						pdOneVM = client.GetSingleVMHyperVVirtualNetwork(MonitoringServerNameSettings, VmName);
+						break;
+					case PerformanceType.Memory:
+						pdOneVM = client.GetSingleVMHyperVGuestMemoryPagesAllocated(MonitoringServerNameSettings, VmName);
+						break;
+					//case PerformanceType.DiskIO:
+					//    break;
 
-					PerformanceData[] pdOneVM = null;
-
-					switch (perf)
-					{
-						case PerformanceType.Processor:
-							pdOneVM = client.GetSingleVMHyperVCPUCounters(MonitoringServerNameSettings, VmName);
-							break;
-						case PerformanceType.Network:
-							pdOneVM = client.GetSingleVMHyperVVirtualNetwork(MonitoringServerNameSettings, VmName);
-							break;
-						case PerformanceType.Memory:
-							pdOneVM = client.GetSingleVMHyperVGuestMemoryPagesAllocated(MonitoringServerNameSettings, VmName);
-							break;
-						//case PerformanceType.DiskIO:
-						//    break;
-
-					}
-
-					if ((pdOneVM != null) && (pdOneVM.Length > 0))
-					{
-						WebsitePanel.Providers.VirtualizationForPC.MonitoringWebService.PerformanceDataValue[] retData =
-							client.GetMonitoringPerformanceValues(MonitoringServerNameSettings, pdOneVM[0], startPeriod, endPeriod);
-
-						int index = 1;
-
-						if (retData.Length > 100)
-						{
-							index = (int)Math.Ceiling(((double)retData.Length) / 100);
-						}
-
-						for (int i = 0; i < retData.Length; i = i + index)
-						{
-							WebsitePanel.Providers.VirtualizationForPC.MonitoringWebService.PerformanceDataValue curr = retData[i];
-
-							ret.Add(new Virtualization.PerformanceDataValue()
-							{
-								SampleValue = curr.SampleValue
-								,
-								TimeAdded = curr.TimeAdded
-								,
-								TimeSampled = curr.TimeSampled
-								,
-								ExtensionData = curr.ExtensionData
-							});
-						}
-					}
-
-					client.Close();
 				}
-			}
-			catch (Exception ex)
-			{
 
+				if ((pdOneVM != null) && (pdOneVM.Length > 0))
+				{
+					WebsitePanel.Providers.VirtualizationForPC.MonitoringWebService.PerformanceDataValue[] retData =
+						client.GetMonitoringPerformanceValues(MonitoringServerNameSettings, pdOneVM[0], startPeriod, endPeriod);
+
+					int index = 1;
+
+					if (retData.Length > 100)
+					{
+						index = (int)Math.Ceiling(((double)retData.Length) / 100);
+					}
+
+					for (int i = 0; i < retData.Length; i = i + index)
+					{
+						WebsitePanel.Providers.VirtualizationForPC.MonitoringWebService.PerformanceDataValue curr = retData[i];
+
+						ret.Add(new Virtualization.PerformanceDataValue()
+						{
+							SampleValue = curr.SampleValue
+							,
+							TimeAdded = curr.TimeAdded
+							,
+							TimeSampled = curr.TimeSampled
+							,
+							ExtensionData = curr.ExtensionData
+						});
+					}
+				}
+
+				client.Close();
 			}
 
 			return ret;
@@ -3550,7 +3630,7 @@ exit", Convert.ToInt32(objDisk["Index"])));
 			string result;
 			if (!computerNameByVMName.TryGetValue(virtualMachineName, out result))
 			{
-				using (VirtualMachineManagementServiceClient context = GetVMMSClient())
+				using (WSPVirtualMachineManagementServiceClient context = GetVMMSClient())
 				{
 					VirtualMachineInfo vmInfo = context.GetVirtualMachineByName(virtualMachineName);
 					computerNameByVMName[virtualMachineName] = result = (vmInfo != null) ? vmInfo.ComputerName : string.Empty;
@@ -3558,65 +3638,86 @@ exit", Convert.ToInt32(objDisk["Index"])));
 			}
 			return result;
 		}
+		private EndpointAddress GetEndPointAddress(string connString, string connName)
+		{
+			bool UseSPN = true;
+
+			if (!Boolean.TryParse(ConfigurationManager.AppSettings["UseSPN"], out UseSPN))
+			{
+				UseSPN = false;
+			}
+
+			EndpointAddress endPointAddress = null;
+
+			if (UseSPN)
+			{
+				endPointAddress = new EndpointAddress(new Uri(connString)
+								 , EndpointIdentity.CreateSpnIdentity(connName));
+			}
+			else
+			{
+				endPointAddress = new EndpointAddress(new Uri(connString)
+								 , EndpointIdentity.CreateUpnIdentity(connName));
+
+			}
+
+			return endPointAddress;
+		}
 
 		#endregion
 
 		#region Procxy
 
-
-		public VirtualMachineManagementServiceClient GetVMMSClient()
+		public WSPVirtualMachineManagementServiceClient GetVMMSClient()
 		{
-			VirtualMachineManagementServiceClient ret;
-			//
+			WSPVirtualMachineManagementServiceClient ret;
 			try
 			{
-
-				if (!String.IsNullOrWhiteSpace(SCVMMServer) && !String.IsNullOrWhiteSpace(SCVMMPrincipalName))
+				if (!String.IsNullOrWhiteSpace(SCVMMServer)
+					&& !String.IsNullOrWhiteSpace(SCVMMPrincipalName))
 				{
-					var endPointAddress = new EndpointAddress(new Uri(SCVMMServer), EndpointIdentity.CreateUpnIdentity(SCVMMPrincipalName));
-					//
-					ret = new VirtualMachineManagementServiceClient(new WSHttpBinding("WSHttpBinding_IVirtualMachineManagementService"), endPointAddress);
+					EndpointAddress endPointAddress = GetEndPointAddress(SCVMMServer, SCVMMPrincipalName);
+
+					ret = new WSPVirtualMachineManagementServiceClient(new WSHttpBinding("WSHttpBinding_IVirtualMachineManagementService"), endPointAddress);
+
+					VersionInfo ver = new VersionInfo();
 				}
 				else
 				{
-					ret = new VirtualMachineManagementServiceClient();
+					throw new Exception("SCVMMServer or SCVMMPrincipalName is empty");
 				}
 			}
 			catch (Exception ex)
 			{
-				Log.WriteError("HyperVForPC :: GetVMMSClient()", ex);
-				//
-				ret = null;
+				throw;
 			}
-			//
+
 			return ret;
 		}
 
-		public MonitoringServiceClient GetMonitoringServiceClient()
+		public WSPMonitoringServiceClient GetMonitoringServiceClient()
 		{
-			//
-			MonitoringServiceClient ret;
-			//
+			WSPMonitoringServiceClient ret;
+
 			try
 			{
-				if (!String.IsNullOrWhiteSpace(SCOMServer) && !String.IsNullOrWhiteSpace(SCOMPrincipalName))
+				if (!String.IsNullOrWhiteSpace(SCOMServer)
+					&& !String.IsNullOrWhiteSpace(SCOMPrincipalName))
 				{
-					var endPointAddress = new EndpointAddress(new Uri(SCOMServer), EndpointIdentity.CreateUpnIdentity(SCOMPrincipalName));
-					//
-					ret = new MonitoringServiceClient(new WSHttpBinding("WSHttpBinding_IMonitoringService"), endPointAddress);
+					EndpointAddress endPointAddress = GetEndPointAddress(SCOMServer, SCOMPrincipalName);
+
+					ret = new WSPMonitoringServiceClient(new WSHttpBinding("WSHttpBinding_IMonitoringService"), endPointAddress);
 				}
 				else
 				{
-					ret = new MonitoringServiceClient();
+					throw new Exception("MonitoringServer or MonitoringPrincipalName is empty");
 				}
 			}
 			catch (Exception ex)
 			{
-				Log.WriteError("HyperVForPC :: GetMonitoringServiceClient()", ex);
-				//
-				ret = null;
+				throw;
 			}
-			//
+
 			return ret;
 		}
 

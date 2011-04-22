@@ -31,6 +31,15 @@ namespace WebsitePanel.Portal.ProviderControls {
         protected global::System.Web.UI.WebControls.Localize locHyperVServer;
         
         /// <summary>
+        /// messageBoxError control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::WebsitePanel.Portal.UserControls.SimpleMessageBox messageBoxError;
+        
+        /// <summary>
         /// locConnectTypeName control.
         /// </summary>
         /// <remarks>

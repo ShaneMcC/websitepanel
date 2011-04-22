@@ -23,12 +23,21 @@ namespace WebsitePanel.Portal.VPSForPC
 
         protected void LoadCheckPoints() 
         {
-            VirtualMachineSnapshot[] checkPoints = ES.Services.VPSPC.GetVirtualMachineSnapshots(PanelRequest.ItemID);
-
-            treeCheckPoints.Nodes.Clear();
-            foreach(VirtualMachineSnapshot curr in checkPoints)
+            try
             {
-                treeCheckPoints.Nodes.Add(new TreeNode(curr.Name, curr.Id));
+                VirtualMachineSnapshot[] checkPoints = ES.Services.VPSPC.GetVirtualMachineSnapshots(PanelRequest.ItemID);
+
+                treeCheckPoints.Nodes.Clear();
+                foreach (VirtualMachineSnapshot curr in checkPoints)
+                {
+                    treeCheckPoints.Nodes.Add(new TreeNode(curr.Name, curr.Id));
+                }
+            }
+            catch (Exception ex)
+            {
+                messageBox.ShowErrorMessage("Load Snapshot error.", ex);
+                btnCreateCheckPoint.Enabled = false;
+                btnRestoreCheckPoint.Enabled = false;
             }
         }
 

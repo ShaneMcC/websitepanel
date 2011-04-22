@@ -1,5 +1,6 @@
 ﻿<%@ Control Language="C#" AutoEventWireup="true" CodeBehind="HyperVForPrivateCloud_Settings.ascx.cs"
 	Inherits="WebsitePanel.Portal.ProviderControls.HyperVForPrivateCloud_Settings" %>
+<%@ Register Src="../UserControls/SimpleMessageBox.ascx" TagName="SimpleMessageBox" TagPrefix="wsp" %>
 <asp:ValidationSummary ID="ValidationSummary" runat="server" ShowMessageBox="true"
 	ShowSummary="false" />
 <fieldset>
@@ -7,6 +8,7 @@
 		<asp:Localize ID="locHyperVServer" runat="server" meta:resourcekey="locHyperVServer"
 			Text="Host name"></asp:Localize>
 	</legend>
+    <wsp:SimpleMessageBox id="messageBoxError" runat="server" />
 	<table cellpadding="2" cellspacing="0" style="margin: 10px;">
 		<tr>
 			<td class="SubHead" style="width: 200px;">

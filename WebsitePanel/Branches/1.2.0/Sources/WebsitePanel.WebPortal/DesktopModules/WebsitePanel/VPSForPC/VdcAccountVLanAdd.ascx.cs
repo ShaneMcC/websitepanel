@@ -47,8 +47,8 @@ namespace WebsitePanel.Portal
 		{
 			// Validation for VLAN identifier
 			VLanIDValidatorRange.Type = ValidationDataType.Integer;
-			VLanIDValidatorRange.MinimumValue = UInt16.MinValue.ToString();
-			VLanIDValidatorRange.MaximumValue = UInt16.MaxValue.ToString();
+			VLanIDValidatorRange.MinimumValue = ushort.MinValue.ToString();
+			VLanIDValidatorRange.MaximumValue = ushort.MaxValue.ToString();
 			//
 			base.OnInit(e);
 		}
