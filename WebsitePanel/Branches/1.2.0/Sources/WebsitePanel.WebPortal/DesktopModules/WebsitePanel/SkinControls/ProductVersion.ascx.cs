@@ -56,12 +56,16 @@ namespace WebsitePanel.Portal.SkinControls
                 if (!String.IsNullOrEmpty(assemblyName))
                 {
                     object[] attrs = Assembly.GetExecutingAssembly().GetCustomAttributes(typeof(AssemblyInformationalVersionAttribute), true);
-                    if (attrs.Length > 0)
-                        litVersion.Text = ((AssemblyInformationalVersionAttribute)attrs[0]).InformationalVersion;
+					//
+					if (attrs.Length > 0)
+					{
+						var asmInfoVerAttrib = (AssemblyInformationalVersionAttribute)attrs[0];
+						litVersion.Text = asmInfoVerAttrib.InformationalVersion;
 #if DEBUG
-					var fileVersionAttr = ((AssemblyFileVersionAttribute)Assembly.GetExecutingAssembly().GetCustomAttributes(typeof(AssemblyFileVersionAttribute), true)[0]);
-					litVersion.Text = String.Format("{0} ({1})", litVersion.Text, fileVersionAttr.Version);
+						var fileVersionAttr = ((AssemblyFileVersionAttribute)Assembly.GetExecutingAssembly().GetCustomAttributes(typeof(AssemblyFileVersionAttribute), true)[0]);
+						litVersion.Text = String.Format("{0} ({1})", asmInfoVerAttrib.InformationalVersion, fileVersionAttr.Version);
 #endif
+					}
                 }
             }
             catch { /* skip */ }
