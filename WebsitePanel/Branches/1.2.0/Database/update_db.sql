@@ -1086,8 +1086,7 @@ BEGIN
 END
 GO
 
-INSERT INTO [dbo].[UserSettings] ([UserID], [SettingsName], [PropertyName], [PropertyValue]) VALUES(1, N'WebPolicy', N'PublishingProfile', N'
-<?xml version="1.0" encoding="utf-8"?>
+INSERT INTO [dbo].[UserSettings] ([UserID], [SettingsName], [PropertyName], [PropertyValue]) VALUES(1, N'WebPolicy', N'PublishingProfile', N'<?xml version="1.0" encoding="utf-8"?>
 <publishData>
 <ad:if test="#WebSite.WebDeploySitePublishingEnabled#">
 	<publishProfile
